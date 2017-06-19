@@ -105,10 +105,17 @@ void ConcurrentModuleWorker::Run()
 		auto module = job.module;
 		if (module == nullptr)
 		{
-			// Sleep if no work is available
-			Sleep();
+			if (cyclesBeforeSleep == 0)
+			{
+				// Sleep if no work is available
+				Sleep();
+			}
+			else
+				cyclesBeforeSleep--;
+			
 			continue;
 		}
+		cyclesBeforeSleep = 5;
 
 		// Execute the job here
 		module->Execute(job.offset, job.size);

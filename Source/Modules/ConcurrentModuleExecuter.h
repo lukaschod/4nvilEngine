@@ -28,6 +28,7 @@ private:
 	AutoResetEvent event;
 	std::thread* thread;
 	bool isRunning;
+	uint32_t cyclesBeforeSleep;
 	AUTOMATED_PROPERTY_GET(bool, isSleeping);
 };
 

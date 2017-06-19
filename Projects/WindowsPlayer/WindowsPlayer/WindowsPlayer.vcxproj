@@ -75,7 +75,7 @@
     <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,6 +134,7 @@
     <ClInclude Include="..\..\..\Source\Common\IOStream.h" />
     <ClInclude Include="..\..\..\Source\Graphics\GraphicsModule.h" />
     <ClInclude Include="..\..\..\Source\Math\Math.h" />
+    <ClInclude Include="..\..\..\Source\Math\Vector4.h" />
     <ClInclude Include="..\..\..\Source\Modules\CmdModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />

@@ -92,5 +92,8 @@
     <ClInclude Include="..\..\..\Source\Transforms\TransformsModule.h">
       <Filter>Source\Transforms</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Math\Vector4.h">
+      <Filter>Source\Program</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
