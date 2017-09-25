@@ -1,29 +1,29 @@
 #include <Modules\StaticModulePlanner.h>
+#include <Modules\Module.h>
+#include <Common\Collections\List.h>
 
 class StaticModulePlanNode
 {
 public:
-	std::vector<StaticModulePlanNode> childs;
-	Module* module = nullptr;
-	uint32_t depth = 0;
+	List<StaticModulePlanNode*> childs;
+	Module* module;
+	uint32_t concunrency;
+	uint32_t dependencies;
 
-	inline void Add(Module* module)
-	{
-		StaticModulePlanNode node;
-		node.depth = depth + 1;
-		node.module = module;
-		childs.push_back(node);
-	}
+	StaticModulePlanNode(Module* module) :
+		module(module),
+		concunrency(0),
+		dependencies(0)
+	{ }
 
 	StaticModulePlanNode* TryFindNode(Module* module)
 	{
 		if (this->module == module)
 			return this;
 
-		FOR_EACH(childs, itr)
+		for (auto child : childs)
 		{
-			auto& child = *itr;
-			auto node = child.TryFindNode(module);
+			auto node = child->TryFindNode(module);
 			if (node != nullptr)
 				return node;
 		}
@@ -34,48 +34,71 @@ public:
 class StaticModulePlan
 {
 public:
-	StaticModulePlanNode root;
+	StaticModulePlanNode* root;
+	List<StaticModulePlanNode*> nodes;
 
-	StaticModulePlan(std::vector<Module*>& modules)
+	StaticModulePlan(List<Module*>& modules)
 	{
-		auto addedCount = 0;
-		while (addedCount != modules.size())
+		root = new StaticModulePlanNode(nullptr);
+
+		nodes.reserve(modules.size());
+		for (auto module : modules)
+			nodes.push_back(new StaticModulePlanNode(module));
+
+		size_t addedCount = 0;
+		while (addedCount != nodes.size())
 		{
-			FOR_EACH(modules, itr)
+			for (auto node : nodes)
 			{
-				auto module = *itr;
-				if (TryFindNode(module) == nullptr && TryAdd(module))
-				{
+				if (TryAdd(node))
 					addedCount++;
-				}
 			}
 		}
 	}
 
-	inline bool TryAdd(Module* module)
+	inline bool TryAdd(StaticModulePlanNode* node)
 	{
-		DebugAssert(module != nullptr);
-		StaticModulePlanNode* maxDepthNode = &root;
+		// Check if it is not already in plan
+		auto module = node->module;
+		if (TryFindNode(module) != nullptr)
+			return false;
+		
 		auto& dependencies = module->Get_dependencies();
-		FOR_EACH(dependencies, itr)
+
+		// If thre is no dependencies we can freely add it to root
+		if (dependencies.empty())
+			root->childs.push_back(node);
+
+		// Check if all dependencies already in plan, if not we can't add it
+		for (auto dependancy : dependencies)
 		{
-			auto dependancy = *itr;
-			auto node = root.TryFindNode(dependancy);
-			if (node == nullptr)
+			auto dependancyNode = root->TryFindNode(dependancy);
+			if (dependancyNode == nullptr)
 				return false;
-			
-			if (maxDepthNode->depth < node->depth)
-			{
-				maxDepthNode = node;
-			}
 		}
-		maxDepthNode->Add(module);
+
+		// Include to all dependencies this module as continue
+		for (auto dependancy : dependencies)
+		{
+			auto dependancyNode = root->TryFindNode(dependancy);
+			dependancyNode->childs.push_back(node);
+		}
+
 		return true;
 	}
 
 	inline StaticModulePlanNode* TryFindNode(Module* module)
 	{
-		return root.TryFindNode(module);
+		return root->TryFindNode(module);
+	}
+
+	inline void Reset()
+	{
+		for (auto node : nodes)
+		{
+			node->dependencies = node->module->Get_dependencies().size();
+			node->concunrency = 1;
+		}
 	}
 };
 
@@ -89,7 +112,7 @@ StaticModulePlanner::~StaticModulePlanner()
 	SAFE_DELETE(plan);
 }
 
-void StaticModulePlanner::Recreate(std::vector<Module*>& modules)
+void StaticModulePlanner::Recreate(List<Module*>& modules)
 {
 	std::lock_guard<std::mutex> lock(readyModulesMutex);
 	SAFE_DELETE(plan);
@@ -99,13 +122,14 @@ void StaticModulePlanner::Recreate(std::vector<Module*>& modules)
 void StaticModulePlanner::Reset()
 {
 	std::lock_guard<std::mutex> lock(readyModulesMutex);
-	FOR_EACH(plan->root.childs, itr)
+	plan->Reset(); // Reset dependencies
+	for (auto child : plan->root->childs)
 	{
-		auto& child = *itr;
 		ModuleJob job;
-		job.module = child.module;
+		job.module = child->module;
 		job.offset = 0;
 		job.size = job.module->GetExecutionkSize();
+		job.userData = child;
 		readyJobs.push(job);
 	}
 	jobExecutingCount = 0;
@@ -119,19 +143,25 @@ ModuleJob StaticModulePlanner::TryGetNext()
 
 	// Here we split big jobs
 	auto job = readyJobs.front();
+
+	// Check if need to split the job into multiple ones
+	auto node = (StaticModulePlanNode*) job.userData;
+	
 	auto module = job.module;
-	auto splitTreshold = module->GetSplitExecutionTreshold();
-	if (job.size > splitTreshold)
+	auto splitTreshold = module->GetSplitExecutionSize(job.size);
+	if (splitTreshold != job.size)
 	{
 		auto& splitedJob = readyJobs.front();
-		splitedJob.offset += splitTreshold;
+		splitedJob.offset += (uint32_t)splitTreshold;
 		splitedJob.size -= splitTreshold;
 		job.size = splitTreshold;
+		node->concunrency++;
 	}
 	else
 	{
 		readyJobs.pop();
 	}
+
 	jobExecutingCount++;
 	return job;
 }
@@ -139,23 +169,33 @@ ModuleJob StaticModulePlanner::TryGetNext()
 void StaticModulePlanner::SetFinished(ModuleJob job)
 {
 	auto module = job.module;
-	DebugAssert(module != nullptr);
-
-	// This means that this job is not final for module, so we don't add childs until that
-	if (module->GetSplitExecutionTreshold() < job.size)
-		return;
+	ASSERT(module != nullptr);
 
 	std::lock_guard<std::mutex> lock(readyModulesMutex);
-	auto node = plan->TryFindNode(module); // TODO: Maybe we can optimize this without sacrificing design
-	DebugAssert(node != nullptr);
-	FOR_EACH(node->childs, itr)
+	//auto node = plan->TryFindNode(module); // TODO: Maybe we can optimize this without sacrificing design
+	auto node = (StaticModulePlanNode*)job.userData; // How about this?
+	ASSERT(node != nullptr);
+
+	// Check if all job shards are completed
+	if (--node->concunrency != 0)
 	{
-		auto& child = *itr;
-		ModuleJob job;
-		job.module = child.module;
-		job.offset = 0;
-		job.size = job.module->GetExecutionkSize();
-		readyJobs.push(job);
+		jobExecutingCount--;
+		return;
+	}
+
+	for (auto child : node->childs)
+	{
+		// If its not the last dependancy, skip it. It means it still depends on other modules
+		ASSERT_MSG(child->dependencies != 0, "Something must corrupted very hard");
+		if (--child->dependencies != 0)
+			continue;
+
+		ModuleJob childJob;
+		childJob.module = child->module;
+		childJob.offset = 0;
+		childJob.size = childJob.module->GetExecutionkSize();
+		childJob.userData = child;
+		readyJobs.push(childJob);
 	}
 
 	// Notify that all jobs are finished

@@ -12,7 +12,7 @@ class ConcurrentModuleExecuter;
 class ConcurrentModuleWorker
 {
 public:
-	ConcurrentModuleWorker(ConcurrentModuleExecuter* executer, IModulePlanner* planner);
+	ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner);
 	~ConcurrentModuleWorker();
 	void Reset();
 	void Start();
@@ -29,6 +29,8 @@ private:
 	std::thread* thread;
 	bool isRunning;
 	uint32_t cyclesBeforeSleep;
+	uint32_t index;
+	uint64_t executionIndex;
 	AUTOMATED_PROPERTY_GET(bool, isSleeping);
 };
 
@@ -43,7 +45,7 @@ public:
 	virtual bool IsRunning(){ return isRunning; };
 
 private:
-	std::vector<ConcurrentModuleWorker*> workers;
+	List<ConcurrentModuleWorker*> workers;
 	IModulePlanner* planner;
 	bool isRunning;
 };

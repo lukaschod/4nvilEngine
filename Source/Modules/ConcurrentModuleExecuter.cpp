@@ -6,21 +6,20 @@ ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint
 	planner(planner),
 	isRunning(false)
 {
-	FOR_INC(workerCount, i)
+	for (uint32_t i = 0; i < workerCount; i++)
 	{
-		auto worker = new ConcurrentModuleWorker(this, planner);
+		auto worker = new ConcurrentModuleWorker(i, this, planner);
 		workers.push_back(worker);
 	}
 
-	planner->Set_jobFinishCallback([this](uint32_t readyJobCount)
+	planner->Set_jobFinishCallback([this](size_t readyJobCount)
 	{
 		// Check if we need to wakeup some workers
-		FOR_EACH(workers, itr)
+		for (auto worker : workers)
 		{
 			if (readyJobCount == 0)
 				return;
 
-			auto worker = *itr;
 			if (worker->Get_isSleeping())
 				worker->Reset();
 			readyJobCount--;
@@ -35,41 +34,34 @@ ConcurrentModuleExecuter::~ConcurrentModuleExecuter()
 
 void ConcurrentModuleExecuter::Reset()
 {
-	FOR_EACH(workers, itr)
-	{
-		auto worker = *itr;
+	for (auto worker : workers)
 		worker->Reset();
-	}
 }
 
 void ConcurrentModuleExecuter::Start()
 {
 	isRunning = true;
-	FOR_EACH(workers, itr)
-	{
-		auto worker = *itr;
+	for (auto worker : workers)
 		worker->Start();
-	}
 }
 
 void ConcurrentModuleExecuter::Stop()
 {
 	isRunning = false;
-	FOR_EACH(workers, itr)
-	{
-		auto worker = *itr;
+	for (auto worker : workers)
 		worker->Stop();
-	}
 }
 
-ConcurrentModuleWorker::ConcurrentModuleWorker(ConcurrentModuleExecuter* executer, IModulePlanner* planner) :
+ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner) :
 	planner(planner),
 	thread(nullptr),
 	isRunning(false),
-	isSleeping(false)
+	isSleeping(false),
+	index(index),
+	executionIndex(0)
 {
-	DebugAssert(executer != nullptr);
-	DebugAssert(planner != nullptr);
+	ASSERT(executer != nullptr);
+	ASSERT(planner != nullptr);
 }
 
 ConcurrentModuleWorker::~ConcurrentModuleWorker()
@@ -84,7 +76,7 @@ void ConcurrentModuleWorker::Reset()
 
 void ConcurrentModuleWorker::Start()
 {
-	DebugAssert(!isRunning);
+	ASSERT(!isRunning);
 	SAFE_DELETE(thread);
 	isRunning = true;
 	thread = new std::thread(&ConcurrentModuleWorker::Run, this);
@@ -92,7 +84,7 @@ void ConcurrentModuleWorker::Start()
 
 void ConcurrentModuleWorker::Stop()
 {
-	DebugAssert(isRunning);
+	ASSERT(isRunning);
 	isRunning = false;
 }
 
@@ -117,8 +109,15 @@ void ConcurrentModuleWorker::Run()
 		}
 		cyclesBeforeSleep = 5;
 
+		ExecutionContext context;
+		context.workerIndex = index;
+		context.executingModule = module;
+		context.offset = job.offset;
+		context.size = job.size;
+
 		// Execute the job here
-		module->Execute(job.offset, job.size);
+		module->Execute(context);
+		executionIndex++;
 
 		// Notify planner that job is finished
 		planner->SetFinished(job);

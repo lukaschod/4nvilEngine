@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Common\EngineCommon.h>
+#include <Common\Collections\List.h>
 #include <stdlib.h>
 #include <cstring>
 
@@ -21,10 +22,13 @@ public:
 		Write((void*)&data, sizeof(T));
 	}
 
+	inline void Write(uint32_t v)
+	{
+		Write((void*) &v, sizeof(uint32_t));
+	}
+
 	inline void Write(void* data, size_t size)
 	{
-		DebugAssert(data != nullptr);
-		DebugAssert(size != 0);
 		MakeSureHaveSpace(size);
 		memcpy(this->data + offset, data, size);
 		offset += size;
@@ -38,10 +42,16 @@ public:
 
 	inline void Read(void* data, size_t size)
 	{
-		DebugAssert(data != nullptr);
-		DebugAssert(size != 0);
 		memcpy(data, this->data + offset, size);
 		offset += size;
+	}
+
+	template<typename T>
+	inline T& FastRead()
+	{
+		T& ptr = *(T*) (data + sizeof(T));
+		offset += sizeof(T);
+		return ptr;
 	}
 
 	inline void Cleanup()
@@ -49,15 +59,18 @@ public:
 		size = 0;
 	}
 
+	inline bool IsFull() { return size == offset; }
+
 private:
 	inline void MakeSureHaveSpace(size_t size)
 	{
 		auto totalOffset = offset + size;
+		this->size = totalOffset;
 		if (totalOffset > capacity)
 		{
-			data = (uint8_t*) realloc(data, totalOffset);
 			capacity = totalOffset;
-			this->size = totalOffset;
+			ASSERT(capacity < 500000);
+			data = (uint8_t*) realloc(data, capacity);
 		}
 	}
 
@@ -65,5 +78,5 @@ private:
 	uint8_t* data;
 	AUTOMATED_PROPERTY_GET(size_t, size);
 	AUTOMATED_PROPERTY_GET(size_t, capacity);
-	AUTOMATED_PROPERTY_GETSET(uint32_t, offset);
+	AUTOMATED_PROPERTY_GETSET(size_t, offset);
 };

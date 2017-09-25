@@ -13,7 +13,7 @@ class StaticModulePlanner : public IModulePlanner
 public:
 	StaticModulePlanner();
 	~StaticModulePlanner();
-	virtual void Recreate(std::vector<Module*>& modules) override;
+	virtual void Recreate(List<Module*>& modules) override;
 	virtual void Reset() override;
 	virtual ModuleJob TryGetNext() override;
 	virtual void SetFinished(ModuleJob module) override;

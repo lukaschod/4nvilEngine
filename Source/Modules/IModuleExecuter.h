@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Common\EngineCommon.h>
-#include <Modules\Module.h>
 #include <Modules\IModulePlanner.h>
 #include <vector>
+
+class Module;
 
 class IModuleExecuter
 {

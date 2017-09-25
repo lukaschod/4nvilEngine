@@ -1,9 +1,35 @@
 #pragma once
 
 #include <Common\EngineCommon.h>
+#include <cmath>
 
-class Math
+template<class T>
+struct Range
 {
-public:
-	inline static uint32_t Max(uint32_t first, uint32_t second) { return first > second ? first : second; }
+	Range() {}
+	Range(const T* pointer, size_t size) :
+		pointer(pointer),
+		size(size)
+	{
+	}
+
+	const T* pointer;
+	size_t size;
+};
+
+namespace Math
+{
+	template<typename T>
+	inline T Max(T first, T second) { return first > second ? first : second; }
+
+	template<typename T>
+	inline T Min(T first, T second) { return first < second ? first : second; }
+
+	template<typename T>
+	inline T Sqrt(T v) { return sqrt(v); }
+
+	inline float DegToRad(float v) { return 3.14f * (v / 180.0f); }
+
+	template<typename T>
+	inline T Sin(T v) { return sin(v); }
 };

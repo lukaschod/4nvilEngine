@@ -72,10 +72,11 @@
     <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\um;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\shared;C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,6 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>__x86_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,6 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>__x86_64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -119,30 +122,89 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\AutoResetEvent.cpp" />
-    <ClCompile Include="..\..\..\Source\Graphics\GraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdQueue.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsExecuterModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsPlannerModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\D12\D12Heap.cpp" />
+    <ClCompile Include="..\..\..\Source\Graphics\IGraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Log\LogModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Modules\UnitModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\Module.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />
-    <ClCompile Include="..\..\..\Source\Transforms\TransformsModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\CameraModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\ImageModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\MaterialModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\MeshModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\MeshRendererModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\SamplerModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\ShaderModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\StorageModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\SurfaceModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Transforms\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
+    <ClCompile Include="..\..\..\Source\WindowsPlayer\Views\WinViewModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Common\AutoResetEvent.h" />
+    <ClInclude Include="..\..\..\Source\Common\Collections\List.h" />
+    <ClInclude Include="..\..\..\Source\Common\Console.h" />
     <ClInclude Include="..\..\..\Source\Common\EngineCommon.h" />
     <ClInclude Include="..\..\..\Source\Common\IOStream.h" />
-    <ClInclude Include="..\..\..\Source\Graphics\GraphicsModule.h" />
+    <ClInclude Include="..\..\..\Source\Common\StopWatch.h" />
+    <ClInclude Include="..\..\..\Source\Common\String.h" />
+    <ClInclude Include="..\..\..\Source\Common\Testing.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdQueue.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12Common.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsExecuterModule.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsPlannerModule.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12Heap.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\IBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsModule.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\IGraphicsModule.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\ISwapChain.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\Shader.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\IRenderPass.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\ITexture.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h" />
+    <ClInclude Include="..\..\..\Source\Log\LogModule.h" />
+    <ClInclude Include="..\..\..\Source\Math\Color.h" />
     <ClInclude Include="..\..\..\Source\Math\Math.h" />
-    <ClInclude Include="..\..\..\Source\Math\Vector4.h" />
+    <ClInclude Include="..\..\..\Source\Math\Matrix.h" />
+    <ClInclude Include="..\..\..\Source\Math\Quaternion.h" />
+    <ClInclude Include="..\..\..\Source\Math\Rect.h" />
+    <ClInclude Include="..\..\..\Source\Math\Vector.h" />
+    <ClInclude Include="..\..\..\Source\Modules\CmdBufferPoolModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\CmdModule.h" />
+    <ClInclude Include="..\..\..\Source\Modules\CmdModuleHelper.h" />
+    <ClInclude Include="..\..\..\Source\Modules\UnitModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
     <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h" />
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h" />
-    <ClInclude Include="..\..\..\Source\Transforms\TransformsModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\CameraModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\MaterialModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\MeshModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\MeshRendererModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\RenderingLoopModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\SamplerModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\ShaderModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\StorageModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\SurfaceModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\ImageModule.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.h" />
+    <ClInclude Include="..\..\..\Source\Transforms\TransformModule.h" />
+    <ClInclude Include="..\..\..\Source\Views\IViewModule.h" />
+    <ClInclude Include="..\..\..\Source\WindowsPlayer\Views\WinViewModule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,16 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <assert.h>
-
-#define DebugAssert(Test) assert(Test)
-#define LogError(Message) assert(false)
-
-#define FOR_EACH(Vector, ItemName) \
-	for (auto ItemName = Vector.begin(); ItemName != Vector.end(); ItemName++)
-
-#define FOR_INC(Count, ItemName) \
-	for (auto ItemName = 0; ItemName < Count; ItemName++)
+#include <Common\Testing.h>
 
 #define AUTOMATED_PROPERTY_GETPTR(Type, Name) \
 	protected: Type Name; \
@@ -49,4 +40,7 @@
 		SAFE_DELETE(item); \
 		Vector.pop_back(); \
 	}
-		
+
+#define IMPLEMENT_ENUM_FLAG(Name) \
+inline Name operator|(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) | static_cast<int>(b)); } \
+inline Name operator&(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) & static_cast<int>(b)); }

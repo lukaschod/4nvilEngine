@@ -1,0 +1,57 @@
+#pragma once
+
+#include <Graphics\D12\D12Common.h>
+#include <Graphics\D12\D12Heap.h>
+#include <Graphics\D12\D12CmdAllocatorPool.h>
+#include <Graphics\D12\D12CmdQueue.h>
+#include <Graphics\IGraphicsModule.h>
+#include <Modules\CmdModule.h>
+
+struct D12Texture;
+struct D12Buffer;
+struct D12SwapChain;
+struct D12RenderPass;
+struct D12ShaderArguments;
+class D12GraphicsModule;
+class D12GraphicsExecuterModule;
+
+class D12GraphicsPlannerModule : public Module
+{
+public:
+	D12GraphicsPlannerModule(ID3D12Device* device);
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+	virtual void Execute(const ExecutionContext& context) override;
+	virtual size_t GetExecutionkSize() override;
+	virtual size_t GetSplitExecutionSize(size_t currentSize) override;
+	virtual const char* GetName() { return "D12GraphicsPlannerModule"; }
+
+	void RecordRequestSplit();
+	void RecordPushDebug(const char* name);
+	void RecordPopDebug();
+	void RecordSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+	void RecordSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+	void RecordSetRenderPass(const D12RenderPass* target);
+	void RecordUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
+	void RecordPresent(const D12SwapChain* swapchain);
+	void RecordDrawSimple(const DrawSimple& target);
+	void RecordSetHeap(const D12Heap* heap);
+
+	void Reset();
+	ID3D12CommandQueue* GetDirectQueue();
+	uint64_t GetRecordingBufferIndex();
+	uint64_t GetCompletedBufferIndex();
+
+private:
+	inline D12CmdBuffer* ContinueRecording();
+	inline void SplitRecording();
+	inline bool ExecuteCommand(const ExecutionContext& context, D12CmdBuffer* buffer, uint32_t commandCode);
+
+private:
+	D12CmdQueue* directQueue;
+	D12CmdAllocatorPool* directAllocatorPool;
+	List<D12CmdBuffer*> recordedCmdBuffers;
+
+	D12GraphicsExecuterModule* executer;
+	ID3D12CommandAllocator* commandAllocator;
+	ID3D12Device* device;
+};

@@ -1,0 +1,46 @@
+#pragma once
+
+#include <Common\EngineCommon.h>
+#include <Modules\UnitModule.h>
+#include <Rendering\MeshModule.h>
+#include <Rendering\MaterialModule.h>
+
+class TransformModule; struct Transform;
+class StorageModule; struct Storage;
+class MeshRendererModule;
+
+struct MeshRenderer : public Component
+{
+	MeshRenderer(MeshRendererModule* module) : 
+		Component((ComponentModule*)module), 
+		mesh(nullptr), 
+		material(nullptr) 
+	{}
+	const Mesh* mesh;
+	const Material* material;
+	const Storage* perMeshStorage;
+};
+
+class MeshRendererModule : public ComponentModule
+{
+public:
+	MeshRendererModule(uint32_t bufferCount, uint32_t workersCount);
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+	virtual void Execute(const ExecutionContext& context) override;
+	virtual void RecordDestroy(const ExecutionContext& context, const Component* target) override;
+	const MeshRenderer* RecordCreateMeshRenderer(const ExecutionContext& context);
+	void RecordSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+	void RecordSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+	const List<MeshRenderer*>& GetMeshRenderers();
+
+protected:
+	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+
+private:
+	List<MeshRenderer*> meshRenderers;
+	MaterialModule* materialModule;
+	MeshModule* meshModule;
+	StorageModule* storageModule;
+	TransformModule* transformModule;
+	UnitModule* unitModule;
+};

@@ -1,10 +1,11 @@
 #include <Modules\ModuleManager.h>
+#include <Modules\Module.h>
 #include <algorithm>
 
 ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecuter* executer)
 {
-	DebugAssert(planner != nullptr);
-	DebugAssert(executer != nullptr);
+	ASSERT(planner != nullptr);
+	ASSERT(executer != nullptr);
 	this->planner = planner;
 	this->executer = executer;
 
@@ -16,15 +17,14 @@ ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecuter* executer)
 
 ModuleManager::~ModuleManager()
 {
-	FOR_EACH(modules, itr)
-	{
-		auto module = *itr;
+	for (auto module : modules)
 		delete module;
-	}
 }
 
 void ModuleManager::Start()
 {
+	for (size_t i = 0; i < modules.size(); i++)
+		modules[i]->SetupExecuteOrder(this);
 	planner->Recreate(modules);
 	executer->Start();
 }
