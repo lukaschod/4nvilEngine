@@ -156,7 +156,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		// Create window
 		//auto view = viewModule->RecordCreateIView(context);
-		auto view2 = viewModule->RecordCreateIView(context);
+		//auto view2 = viewModule->RecordCreateIView(context);
 
 		/*{
 			auto mainCamera = unitModule->RecordCreateUnit(context);
@@ -192,7 +192,10 @@ float4 FragMain(VertData i) : SV_TARGET
 			unitModule->RecordAddComponent(context, mainCamera, camera);
 		}*/
 
+		for (int i = 0; i < 2; i++)
 		{
+			auto view = viewModule->RecordCreateIView(context);
+
 			auto mainCamera = unitModule->RecordCreateUnit(context);
 			movingCamera = mainCamera;
 
@@ -203,7 +206,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecordCreateSurface(context);
-			surfaceModule->RecordSetColor(context, surface, 0, SurfaceColor(view2->renderTarget, kLoadActionClear, kStoreActionStore));
+			surfaceModule->RecordSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
 			surfaceModule->RecordSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
 			auto camera = cameraModule->RecordCreateCamera(context);
 			cameraModule->RecordSetSurface(context, camera, surface);
