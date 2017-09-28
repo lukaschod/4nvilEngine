@@ -46,7 +46,7 @@ public:
 	void Push(D12CmdBuffer* buffer);
 	void Reset(D12CmdBuffer* buffer, ID3D12CommandAllocator* allocator);
 	void Close(D12CmdBuffer* buffer);
-	void Execute(D12CmdBuffer* buffer);
+	void Execute(D12CmdBuffer* buffer, bool isLast);
 
 	uint64_t GetCompletedBufferIndex();
 	void WaitForBufferIndexToComplete(uint64_t index);

@@ -23,5 +23,6 @@ private:
 
 	List<Context> executerContexts;
 	List<const D12CmdBuffer*> cmdBuffersToExecute;
+	List<ID3D12GraphicsCommandList*> batchedCommandLists;
 	AUTOMATED_PROPERTY_GET(uint64_t, completedBufferIndex);
 };

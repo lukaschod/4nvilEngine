@@ -137,6 +137,7 @@ void D12GraphicsPlannerModule::RecordUpdateBuffer(const D12Buffer* target, uint3
 
 void D12GraphicsPlannerModule::RecordPresent(const D12SwapChain* swapchain)
 {
+	SplitRecording();
 	auto buffer = ContinueRecording();
 	ASSERT(buffer->swapChain == nullptr);
 	buffer->swapChain = swapchain->GetIDXGISwapChain3();

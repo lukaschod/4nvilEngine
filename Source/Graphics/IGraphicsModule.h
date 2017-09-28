@@ -46,6 +46,7 @@ public:
 
 	virtual const ISwapChain* RecordCreateISwapChain(const ExecutionContext& context, const IView* view) = 0;
 	virtual void RecordPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
+	virtual void RecordFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 
 	virtual void RecordPushDebug(const ExecutionContext& context, const char* name) = 0;
 	virtual void RecordPopDebug(const ExecutionContext& context) = 0;

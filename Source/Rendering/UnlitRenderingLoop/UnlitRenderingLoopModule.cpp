@@ -65,6 +65,11 @@ void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 	auto& views = viewModule->GetViews();
 	for (auto view : views)
 	{
+		graphicsModule->RecordFinalBlit(context, view->swapChain, view->renderTarget->texture);
+	}
+
+	for (auto view : views)
+	{
 		graphicsModule->RecordPresent(context, view->swapChain, view->renderTarget->texture);
 	}
 }

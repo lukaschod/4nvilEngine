@@ -57,6 +57,7 @@ SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetTexture, const IShaderArguments*, co
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetFilter, const IShaderArguments*, const char*, const IFilter*);
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, ISwapChain, D12SwapChain, const IView*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, Present, const ISwapChain*, const ITexture*);
+SERIALIZE_METHOD_ARG2(D12GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, PushDebug, const char*);
@@ -92,7 +93,6 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(SetRenderPass, D12RenderPass*, target);
-		planner->RecordRequestSplit();
 		SetRenderPass(context, target);
 		DESERIALIZE_METHOD_END;
 
@@ -121,7 +121,18 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(Present, D12SwapChain*, target, D12Texture*, texture);
-		Present(context, target, texture);
+		planner->RecordPresent(target);
+		target->backBufferIndex = (target->backBufferIndex + 1) % target->backBufferCount;
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(FinalBlit, D12SwapChain*, target, D12Texture*, texture);
+		// Blit ofscreen buffer to swapchain backbuffer
+		auto backBuffer = target->GetBackBuffer();
+		BlitCopy(context, texture, backBuffer);
+
+		ASSERT(target->backBufferIndex == target->IDXGISwapChain3->GetCurrentBackBufferIndex());
+
+		SetTextureState(context, backBuffer, D3D12_RESOURCE_STATE_PRESENT);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CreateIBuffer, D12Buffer*, target);

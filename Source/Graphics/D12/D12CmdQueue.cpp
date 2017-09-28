@@ -70,12 +70,15 @@ void D12CmdQueue::Close(D12CmdBuffer* buffer)
 	buffer->commandList->Close();
 }
 
-void D12CmdQueue::Execute(D12CmdBuffer* buffer)
+void D12CmdQueue::Execute(D12CmdBuffer* buffer, bool isLast)
 {
-	ASSERT_SUCCEEDED(buffer->commandList != nullptr);
-	queue->ExecuteCommandLists(1, (ID3D12CommandList**)&buffer->commandList);
 	if (buffer->swapChain != nullptr)
 		buffer->swapChain->Present(1, 0);
+	else
+	{
+		ASSERT_SUCCEEDED(buffer->commandList != nullptr);
+		queue->ExecuteCommandLists(1, (ID3D12CommandList**) &buffer->commandList);
+	}
 	queue->Signal(fence, buffer->index);
 }
 

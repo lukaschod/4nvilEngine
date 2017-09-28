@@ -221,6 +221,7 @@ public:
 
 	virtual const ISwapChain* RecordCreateISwapChain(const ExecutionContext& context, const IView* view) override;
 	virtual void RecordPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
+	virtual void RecordFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 
 	virtual void RecordPushDebug(const ExecutionContext& context, const char* name) override;
 	virtual void RecordPopDebug(const ExecutionContext& context) override;

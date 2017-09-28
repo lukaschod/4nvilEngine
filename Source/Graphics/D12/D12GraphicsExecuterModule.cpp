@@ -28,11 +28,10 @@ void D12GraphicsExecuterModule::Execute(const ExecutionContext& context)
 	std::sort(cmdBuffersToExecute.begin(), cmdBuffersToExecute.end(), 
 		[](const D12CmdBuffer* first, const D12CmdBuffer* second) { return first->index < second->index; });
 
+	auto back = cmdBuffersToExecute.back();
 	for (auto cmdBuffer : cmdBuffersToExecute)
 	{
-		cmdBuffer->queue->Execute((D12CmdBuffer*)cmdBuffer); // TODO: Fix this const shit
-		//cmdBuffer->queue->WaitForBufferIndexToComplete(cmdBuffer->index);
-		
+		cmdBuffer->queue->Execute((D12CmdBuffer*)cmdBuffer, cmdBuffer == back); // TODO: Fix this const shit
 	}
 
 	// TODO: remove onc we have buffer caching
