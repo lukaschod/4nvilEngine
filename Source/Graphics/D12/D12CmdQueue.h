@@ -22,7 +22,7 @@ struct D12CmdBuffer
 		commandCount = 0;
 		this->index = index;
 		swapChain = nullptr;
-		stream.Set_offset(0);
+		stream.Reset();
 		memset(heaps, 0, kD12HeapTypeCount * sizeof(D12Heap*));
 	}
 

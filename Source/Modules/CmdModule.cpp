@@ -57,7 +57,7 @@ void CmdModule::Execute(const ExecutionContext& context)
 	{
 		// Reset buffer for executing
 		auto& stream = buffer->stream;
-		buffer->stream.Set_offset(0);
+		buffer->stream.Reset();
 		buffer->state = kCmdBufferStateExecuted;
 
 		for (int i = 0; i < buffer->commandCount; i++)

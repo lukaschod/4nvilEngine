@@ -7,6 +7,7 @@
 #include <Math\Matrix.h>
 #include <Common\StopWatch.h>
 
+#include <Foundation\TimeModule.h>
 #include <Log\LogModule.h>
 #include <Transforms\TransformModule.h>
 #include <Rendering\CameraModule.h>
@@ -154,10 +155,10 @@ float4 FragMain(VertData i) : SV_TARGET
 		}
 
 		// Create window
-		auto view = viewModule->RecordCreateIView(context);
+		//auto view = viewModule->RecordCreateIView(context);
 		auto view2 = viewModule->RecordCreateIView(context);
 
-		{
+		/*{
 			auto mainCamera = unitModule->RecordCreateUnit(context);
 
 			// Create transform
@@ -189,7 +190,7 @@ float4 FragMain(VertData i) : SV_TARGET
 			auto camera = cameraModule->RecordCreateCamera(context);
 			cameraModule->RecordSetSurface(context, camera, surface);
 			unitModule->RecordAddComponent(context, mainCamera, camera);
-		}
+		}*/
 
 		{
 			auto mainCamera = unitModule->RecordCreateUnit(context);
@@ -211,9 +212,9 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto testShader = CreateShader(context);
 		auto mesh = CreateMesh(context);
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 25; i++)
 		{
-			for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 25; j++)
 			{
 				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2, j*2, 0));
 			}
@@ -264,6 +265,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new CameraModule(buffersCount, workersCount));
 	moduleManager->AddModule(new UnlitRenderingLoopModule(buffersCount, workersCount));
 	moduleManager->AddModule(new TestModule());
+	moduleManager->AddModule(new TimeModule());
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())

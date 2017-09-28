@@ -62,7 +62,7 @@ void D12CmdQueue::Reset(D12CmdBuffer* buffer, ID3D12CommandAllocator* allocator)
 	{
 		ASSERT_SUCCEEDED(buffer->commandList->Reset(allocator, nullptr));
 	}
-	buffer->stream.Set_offset(0);
+	buffer->stream.Reset();
 }
 
 void D12CmdQueue::Close(D12CmdBuffer* buffer)

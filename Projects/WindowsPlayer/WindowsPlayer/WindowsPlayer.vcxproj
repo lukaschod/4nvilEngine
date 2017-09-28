@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\AutoResetEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.cpp" />
     <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsExecuterModule.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="..\..\..\Source\Common\StopWatch.h" />
     <ClInclude Include="..\..\..\Source\Common\String.h" />
     <ClInclude Include="..\..\..\Source\Common\Testing.h" />
+    <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h" />
     <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.h" />
     <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdQueue.h" />
     <ClInclude Include="..\..\..\Source\Graphics\D12\D12Common.h" />

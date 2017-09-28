@@ -39,7 +39,7 @@ void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 			if (mesh == nullptr || material == nullptr)
 				continue;
 
-			auto pipelines = material->pipelines;
+			auto& pipelines = material->pipelines;
 			for (auto pipeline : pipelines)
 			{
 				DrawSimple draw;
@@ -50,7 +50,7 @@ void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 				graphicsModule->RecordSetBuffer(context, draw.properties, "_PerCameraData", camera->perCameraStorage->buffer);
 				graphicsModule->RecordSetBuffer(context, draw.properties, "_PerMeshData", meshRenderer->perMeshStorage->buffer);
 				
-				for (auto subMesh : mesh->subMeshes)
+				for (auto& subMesh : mesh->subMeshes)
 				{
 					draw.offset = subMesh.offset;
 					draw.size = subMesh.size;

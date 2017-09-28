@@ -53,7 +53,7 @@ CmdBuffer* CmdBufferPoolModule::Pull(const ExecutionContext& context, uint64_t i
 void CmdBufferPoolModule::Reset(CmdBuffer* buffer, uint64_t index, const ExecutionContext& context)
 {
 	ASSERT(buffer->state == kCmdBufferStateNotUsed);
-	buffer->stream.Set_offset(0);
+	buffer->stream.Reset();
 	buffer->commandCount = 0;
 	buffer->index = index;
 	buffer->workerIndex = context.workerIndex;

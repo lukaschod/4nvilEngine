@@ -43,6 +43,9 @@
     <Filter Include="Source\Common\Collections">
       <UniqueIdentifier>{dae671b8-d8a2-49d5-9470-403fbc400df5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Foundation">
+      <UniqueIdentifier>{322eea23-1dcd-4357-a2e9-58dca386d495}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\SamplerModule.cpp">
       <Filter>Source\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp">
+      <Filter>Source\Foundation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\SamplerModule.h">
       <Filter>Source\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h">
+      <Filter>Source\Foundation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
