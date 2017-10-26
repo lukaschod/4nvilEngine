@@ -36,6 +36,6 @@ void D12GraphicsExecuterModule::Execute(const ExecutionContext& context)
 
 	// TODO: remove onc we have buffer caching
 	if (!cmdBuffersToExecute.empty())
-		cmdBuffersToExecute.back()->queue->WaitForBufferIndexToComplete(cmdBuffersToExecute.back()->index);
-	completedBufferIndex = cmdBuffersToExecute.back()->index;
+		cmdBuffersToExecute.back()->queue->WaitForBufferIndexToComplete(back->index);
+	completedBufferIndex = back->index;
 }

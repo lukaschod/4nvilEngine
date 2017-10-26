@@ -61,6 +61,7 @@ private:
 
 	List<D12CmdBuffer*> buffers;
 	std::queue<D12CmdBuffer*> readyBuffers;
-	D12CmdAllocatorPool* allocatorPool;
 	uint64_t pulledBufferCount;
+
+	List<ID3D12CommandList*> cmdsToExecute;
 };

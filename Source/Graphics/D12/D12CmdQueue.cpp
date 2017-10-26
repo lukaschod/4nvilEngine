@@ -73,13 +73,35 @@ void D12CmdQueue::Close(D12CmdBuffer* buffer)
 void D12CmdQueue::Execute(D12CmdBuffer* buffer, bool isLast)
 {
 	if (buffer->swapChain != nullptr)
+	{
+		if (!cmdsToExecute.empty())
+		{
+			queue->ExecuteCommandLists(cmdsToExecute.size(), cmdsToExecute.data());
+			//queue->Signal(fence, buffer->index);
+			//queue->ExecuteCommandLists(1/*cmds.size()*/, cmds.data() + 1);
+			cmdsToExecute.clear();
+		}
+
 		buffer->swapChain->Present(1, 0);
+
+		if (isLast)
+			queue->Signal(fence, buffer->index);
+	}
 	else
 	{
-		ASSERT_SUCCEEDED(buffer->commandList != nullptr);
-		queue->ExecuteCommandLists(1, (ID3D12CommandList**) &buffer->commandList);
+		cmdsToExecute.push_back(buffer->commandList);
+
+		if (isLast)
+		{
+			queue->ExecuteCommandLists(cmdsToExecute.size(), cmdsToExecute.data());
+			cmdsToExecute.clear();
+			queue->Signal(fence, buffer->index);
+		}
+
+		//ASSERT_SUCCEEDED(buffer->commandList != nullptr);
+		//queue->ExecuteCommandLists(1, (ID3D12CommandList**) &buffer->commandList);
+		//queue->Signal(fence, buffer->index);
 	}
-	queue->Signal(fence, buffer->index);
 }
 
 uint64_t D12CmdQueue::GetCompletedBufferIndex()

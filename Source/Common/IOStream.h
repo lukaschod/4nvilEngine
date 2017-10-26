@@ -43,12 +43,11 @@ public:
 		memcpy(data, this->data, size);
 		this->data += size;
 	}
-
 	template<typename T>
 	inline T& FastRead()
 	{
 		T& ptr = *(T*) data;
-		offset += sizeof(T);
+		this->data += sizeof(T);
 		return ptr;
 	}
 

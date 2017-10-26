@@ -50,11 +50,12 @@ size_t D12GraphicsPlannerModule::GetSplitExecutionSize(size_t currentSize)
 
 void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 {
-	auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
-	uint64_t lastBufferIndex = 0;
+	/*auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
+	D12CmdBuffer* buffer = nullptr;
+
 	for (uint32_t j = context.offset; j < context.offset + context.size; j++)
 	{
-		auto buffer = recordedCmdBuffers[j];
+		buffer = recordedCmdBuffers[j];
 		auto& stream = buffer->stream;
 		directQueue->Reset(buffer, allocatorPool);
 		for (int i = 0; i < buffer->commandCount; i++)
@@ -65,9 +66,45 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 		}
 		directQueue->Close(buffer);
 		executer->RecordCmdBuffer(context, buffer);
-		lastBufferIndex = buffer->index;
 	}
-	directAllocatorPool->Push(lastBufferIndex, allocatorPool);
+
+	directAllocatorPool->Push(buffer->index, allocatorPool);*/
+
+	auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
+	D12CmdBuffer* buffer = nullptr;
+	D12CmdBuffer* mainBuffer = recordedCmdBuffers[context.offset];
+
+	directQueue->Reset(mainBuffer, allocatorPool);
+	
+	for (uint32_t j = context.offset; j < context.offset + context.size; j++)
+	{
+		buffer = recordedCmdBuffers[j];
+		auto& stream = buffer->stream;
+		stream.Reset();
+
+		auto cachedCmdList = buffer->commandList;
+		buffer->commandList = mainBuffer->commandList;
+		for (int i = 0; i < buffer->commandCount; i++)
+		{
+			//uint32_t commandCode;
+			//stream.Read(commandCode);
+			auto& commandCode = stream.FastRead<uint32_t>();
+			ASSERT(ExecuteCommand(context, buffer, commandCode));
+		}
+		buffer->commandList = cachedCmdList;
+
+		
+
+		if (buffer->swapChain)
+			executer->RecordCmdBuffer(context, buffer);
+	}
+
+	directQueue->Close(mainBuffer);
+
+	
+	executer->RecordCmdBuffer(context, mainBuffer);
+
+	directAllocatorPool->Push(buffer->index, allocatorPool);
 }
 
 DECLARE_COMMAND_CODE(PushDebug);
@@ -114,12 +151,14 @@ void D12GraphicsPlannerModule::RecordSetBufferState(const D12Buffer* target, D3D
 }
 
 DECLARE_COMMAND_CODE(SetRenderPass);
-void D12GraphicsPlannerModule::RecordSetRenderPass(const D12RenderPass* target)
+void D12GraphicsPlannerModule::RecordSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
 	stream.Write(kCommandCodeSetRenderPass);
-	stream.Write(*target); // We need copy here, because renderpass lives on cpu
+	recordingOptimizer.MarkSetRenderPass((D12RenderPass*)target);
+	stream.Write((void*)target, sizeof(D12RenderPass)); // We need copy here, because renderpass lives on cpu
+	stream.Write(ignoreLoadActions);
 	buffer->commandCount++;
 }
 
@@ -146,6 +185,14 @@ void D12GraphicsPlannerModule::RecordPresent(const D12SwapChain* swapchain)
 DECLARE_COMMAND_CODE(DrawSimple);
 void D12GraphicsPlannerModule::RecordDrawSimple(const DrawSimple& target)
 {
+	// Lets try to split big command lists this way we can distribut work accross workers
+	if (recordingOptimizer.ShouldSplitRecording())
+	{
+		SplitRecording();
+		RecordSetHeap((const D12Heap**) recordingOptimizer.lastHeaps);
+		RecordSetRenderPass(recordingOptimizer.lastRenderPass, true);
+	}
+
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
 	stream.Write(kCommandCodeDrawSimple);
@@ -175,15 +222,17 @@ void D12GraphicsPlannerModule::RecordDrawSimple(const DrawSimple& target)
 	}
 
 	buffer->commandCount++;
+	recordingOptimizer.MarkDraw();
 }
 
 DECLARE_COMMAND_CODE(SetHeap);
-void D12GraphicsPlannerModule::RecordSetHeap(const D12Heap* heap)
+void D12GraphicsPlannerModule::RecordSetHeap(const D12Heap** heap)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
 	stream.Write(kCommandCodeSetHeap);
-	stream.Write(heap);
+	recordingOptimizer.MarkSetHeap((D12Heap**) heap);
+	stream.Write(heap, sizeof(D12Heap*) * kD12HeapTypeCount);
 	buffer->commandCount++;
 }
 
@@ -225,7 +274,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(target->resource, currentState, nextState));
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(SetRenderPass, D12RenderPass, target);
+		DESERIALIZE_METHOD_ARG2_START(SetRenderPass, D12RenderPass, target, bool, ignoreLoadActions);
 		auto count = target.colorDescriptorsCount;
 		ASSERT(count != 0);
 		if (target.depth.texture != nullptr)
@@ -240,6 +289,9 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 			buffer->heaps[kD12HeapTypeSRVs]->Get_heap(),
 			buffer->heaps[kD12HeapTypeSamplers]->Get_heap() };
 		commandList->SetDescriptorHeaps(2, heaps);
+
+		if (ignoreLoadActions)
+			return true;
 
 		for (int i = 0; i < count; i++)
 		{
@@ -282,20 +334,20 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 			case kD12RootParamterTypeTableSRV:
 			{
 				ASSERT(buffer->heaps[kD12HeapTypeSRVs] != nullptr);
-				D12HeapMemory value; stream.Read<D12HeapMemory>(value);
+				auto& value = stream.FastRead<D12HeapMemory>();
 				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[kD12HeapTypeSRVs]->GetGpuHandle(value));
 				break;
 			}
 			case kD12RootParamterTypeTableSamplers:
 			{
 				ASSERT(buffer->heaps[kD12HeapTypeSamplers] != nullptr);
-				D12HeapMemory value; stream.Read<D12HeapMemory>(value);
+				auto& value = stream.FastRead<D12HeapMemory>();
 				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[kD12HeapTypeSamplers]->GetGpuHandle(value));
 				break;
 			}
 			case kD12RootParamterTypeConstantBuffer:
 			{
-				D3D12_GPU_VIRTUAL_ADDRESS value; stream.Read<D3D12_GPU_VIRTUAL_ADDRESS>(value);
+				auto& value = stream.FastRead<D3D12_GPU_VIRTUAL_ADDRESS>();
 				commandList->SetGraphicsRootConstantBufferView((UINT) i, value);
 				break;
 			}
@@ -311,8 +363,8 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		commandList->DrawInstanced(target.size, 1, target.offset, 0);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(SetHeap, D12Heap*, heap);
-		buffer->heaps[heap->Get_type()] = heap;
+		DESERIALIZE_METHOD_START(SetHeap);
+		stream.Read(buffer->heaps, sizeof(D12Heap*) * kD12HeapTypeCount);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

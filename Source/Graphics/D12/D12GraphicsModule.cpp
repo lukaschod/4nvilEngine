@@ -414,8 +414,13 @@ void D12GraphicsModule::SetRenderPass(const ExecutionContext & context, const D1
 	{
 		SetTextureState(context, depthTexture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	}
-	planner->RecordSetHeap(srvHeap);
-	planner->RecordSetHeap(samplersHeap);
+	D12Heap* heaps[kD12HeapTypeCount] = {
+		srvHeap,
+		samplersHeap,
+		nullptr,
+		nullptr,
+		nullptr};
+	planner->RecordSetHeap((const D12Heap**) heaps);
 	planner->RecordSetRenderPass(target);
 }
 

@@ -30,11 +30,11 @@ public:
 	void RecordPopDebug();
 	void RecordSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
 	void RecordSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
-	void RecordSetRenderPass(const D12RenderPass* target);
+	void RecordSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions = false);
 	void RecordUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
 	void RecordPresent(const D12SwapChain* swapchain);
 	void RecordDrawSimple(const DrawSimple& target);
-	void RecordSetHeap(const D12Heap* heap);
+	void RecordSetHeap(const D12Heap** heap);
 
 	void Reset();
 	ID3D12CommandQueue* GetDirectQueue();
@@ -50,6 +50,19 @@ private:
 	D12CmdQueue* directQueue;
 	D12CmdAllocatorPool* directAllocatorPool;
 	List<D12CmdBuffer*> recordedCmdBuffers;
+
+	struct RecordingOptimizer
+	{
+		inline void MarkSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
+		inline void MarkDraw() { drawCount++; }
+		inline void MarkSetHeap(D12Heap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12Heap*) * kD12HeapTypeCount); }
+		inline bool ShouldSplitRecording() { return drawCount == 25; }
+		
+		D12RenderPass* lastRenderPass;
+		D12Heap* lastHeaps[kD12HeapTypeCount];
+		size_t drawCount;
+	};
+	RecordingOptimizer recordingOptimizer;
 
 	D12GraphicsExecuterModule* executer;
 	ID3D12CommandAllocator* commandAllocator;

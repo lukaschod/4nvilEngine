@@ -62,8 +62,7 @@ void CmdModule::Execute(const ExecutionContext& context)
 
 		for (int i = 0; i < buffer->commandCount; i++)
 		{
-			uint32_t commandCode;
-			stream.Read(commandCode);
+			auto& commandCode = stream.FastRead<uint32_t>();
 			ASSERT(ExecuteCommand(context, stream, commandCode));
 		}
 	}
