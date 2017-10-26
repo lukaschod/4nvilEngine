@@ -12,11 +12,11 @@ void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 DECLARE_COMMAND_CODE(CreateSampler);
-const Sampler* SamplerModule::RecordCreateSampler(const ExecutionContext& context, const SamplerOptions& options)
+const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto filter = graphicsModule->RecordCreateIFilter(context, options);
+	auto filter = graphicsModule->RecCreateIFilter(context, options);
 	auto target = new Sampler(options, filter);
 	stream.Write(kCommandCodeCreateSampler);
 	stream.Write(target);

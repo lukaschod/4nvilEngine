@@ -55,9 +55,9 @@ class MaterialModule : public CmdModule
 public:
 	MaterialModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Material* RecordCreateMaterial(const ExecutionContext& context);
-	void RecordSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
-	void RecordSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
+	const Material* RecCreateMaterial(const ExecutionContext& context);
+	void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
+	void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

@@ -65,7 +65,7 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 			ASSERT(ExecuteCommand(context, buffer, commandCode));
 		}
 		directQueue->Close(buffer);
-		executer->RecordCmdBuffer(context, buffer);
+		executer->RecCmdBuffer(context, buffer);
 	}
 
 	directAllocatorPool->Push(buffer->index, allocatorPool);*/
@@ -96,19 +96,19 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 		
 
 		if (buffer->swapChain)
-			executer->RecordCmdBuffer(context, buffer);
+			executer->RecCmdBuffer(context, buffer);
 	}
 
 	directQueue->Close(mainBuffer);
 
 	
-	executer->RecordCmdBuffer(context, mainBuffer);
+	executer->RecCmdBuffer(context, mainBuffer);
 
 	directAllocatorPool->Push(buffer->index, allocatorPool);
 }
 
 DECLARE_COMMAND_CODE(PushDebug);
-void D12GraphicsPlannerModule::RecordPushDebug(const char* name)
+void D12GraphicsPlannerModule::RecPushDebug(const char* name)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -118,7 +118,7 @@ void D12GraphicsPlannerModule::RecordPushDebug(const char* name)
 }
 
 DECLARE_COMMAND_CODE(PopDebug);
-void D12GraphicsPlannerModule::RecordPopDebug()
+void D12GraphicsPlannerModule::RecPopDebug()
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -127,7 +127,7 @@ void D12GraphicsPlannerModule::RecordPopDebug()
 }
 
 DECLARE_COMMAND_CODE(SetTextureState);
-void D12GraphicsPlannerModule::RecordSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
+void D12GraphicsPlannerModule::RecSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -139,7 +139,7 @@ void D12GraphicsPlannerModule::RecordSetTextureState(const D12Texture* target, D
 }
 
 DECLARE_COMMAND_CODE(SetBufferState);
-void D12GraphicsPlannerModule::RecordSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
+void D12GraphicsPlannerModule::RecSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -151,7 +151,7 @@ void D12GraphicsPlannerModule::RecordSetBufferState(const D12Buffer* target, D3D
 }
 
 DECLARE_COMMAND_CODE(SetRenderPass);
-void D12GraphicsPlannerModule::RecordSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions)
+void D12GraphicsPlannerModule::RecSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -163,7 +163,7 @@ void D12GraphicsPlannerModule::RecordSetRenderPass(const D12RenderPass* target, 
 }
 
 DECLARE_COMMAND_CODE(UpdateBuffer);
-void D12GraphicsPlannerModule::RecordUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data)
+void D12GraphicsPlannerModule::RecUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data)
 { 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -174,7 +174,7 @@ void D12GraphicsPlannerModule::RecordUpdateBuffer(const D12Buffer* target, uint3
 	buffer->commandCount++;
 }
 
-void D12GraphicsPlannerModule::RecordPresent(const D12SwapChain* swapchain)
+void D12GraphicsPlannerModule::RecPresent(const D12SwapChain* swapchain)
 {
 	SplitRecording();
 	auto buffer = ContinueRecording();
@@ -183,14 +183,14 @@ void D12GraphicsPlannerModule::RecordPresent(const D12SwapChain* swapchain)
 }
 
 DECLARE_COMMAND_CODE(DrawSimple);
-void D12GraphicsPlannerModule::RecordDrawSimple(const DrawSimple& target)
+void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
 {
 	// Lets try to split big command lists this way we can distribut work accross workers
 	if (recordingOptimizer.ShouldSplitRecording())
 	{
 		SplitRecording();
-		RecordSetHeap((const D12Heap**) recordingOptimizer.lastHeaps);
-		RecordSetRenderPass(recordingOptimizer.lastRenderPass, true);
+		RecSetHeap((const D12Heap**) recordingOptimizer.lastHeaps);
+		RecSetRenderPass(recordingOptimizer.lastRenderPass, true);
 	}
 
 	auto buffer = ContinueRecording();
@@ -226,7 +226,7 @@ void D12GraphicsPlannerModule::RecordDrawSimple(const DrawSimple& target)
 }
 
 DECLARE_COMMAND_CODE(SetHeap);
-void D12GraphicsPlannerModule::RecordSetHeap(const D12Heap** heap)
+void D12GraphicsPlannerModule::RecSetHeap(const D12Heap** heap)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -236,7 +236,7 @@ void D12GraphicsPlannerModule::RecordSetHeap(const D12Heap** heap)
 	buffer->commandCount++;
 }
 
-void D12GraphicsPlannerModule::RecordRequestSplit()
+void D12GraphicsPlannerModule::RecRequestSplit()
 {
 	SplitRecording();
 }

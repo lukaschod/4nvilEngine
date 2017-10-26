@@ -13,11 +13,11 @@ void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 DECLARE_COMMAND_CODE(CreateImage);
-const Image* ImageModule::RecordCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height)
+const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto texture = graphicsModule->RecordCreateITexture(context, width, height);
+	auto texture = graphicsModule->RecCreateITexture(context, width, height);
 	auto target = new Image(texture);
 	stream.Write(kCommandCodeCreateImage);
 	stream.Write(target);

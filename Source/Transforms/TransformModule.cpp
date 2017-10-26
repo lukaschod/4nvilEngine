@@ -66,7 +66,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, IOStream& 
 		for (auto child : transform->childs)
 		{
 			auto unit = child->unit;
-			unit->module->RecordDestroy(context, unit);
+			unit->module->RecDestroy(context, unit);
 		}
 		DESERIALIZE_METHOD_END;
 

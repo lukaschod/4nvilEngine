@@ -70,7 +70,7 @@
 
 #define SERIALIZE_METHOD_RESOURCE(Module, ReturnType, CreateType) \
 	DECLARE_COMMAND_CODE(Create##ReturnType); \
-	const ReturnType* Module::RecordCreate##ReturnType(const ExecutionContext& context) \
+	const ReturnType* Module::RecCreate##ReturnType(const ExecutionContext& context) \
 	{ \
 		auto unit = (ReturnType*)new CreateType(); \
 		auto buffer = GetRecordingBuffer(context); \
@@ -83,7 +83,7 @@
 
 #define SERIALIZE_METHOD_RESOURCE2(Module, ReturnType, CreateType, ArgumentType1, ArgumentType2) \
 	DECLARE_COMMAND_CODE(Create##ReturnType); \
-	const ReturnType* Module::RecordCreate##ReturnType(const ExecutionContext& context, ArgumentType1 argument1, ArgumentType2 argument2) \
+	const ReturnType* Module::RecCreate##ReturnType(const ExecutionContext& context, ArgumentType1 argument1, ArgumentType2 argument2) \
 	{ \
 		auto unit = (ReturnType*)new CreateType(); \
 		auto buffer = GetRecordingBuffer(context); \

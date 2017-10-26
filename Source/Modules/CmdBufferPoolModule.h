@@ -20,10 +20,10 @@ struct CmdBuffer
 		state(kCmdBufferStateNotUsed)
 	{}
 
-	/// Recorded commands buffer
+	/// Reced commands buffer
 	IOStream stream;
 
-	/// Recorded commandcount
+	/// Reced commandcount
 	size_t commandCount;
 
 	/// Index of the cmdbuffer

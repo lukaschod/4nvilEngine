@@ -7,7 +7,7 @@ LogModule::LogModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bu
 SERIALIZE_METHOD_ARG1(LogModule, Message, const char*);
 
 DECLARE_COMMAND_CODE(MessageF);
-void LogModule::RecordMessageF(const ExecutionContext& context, const char* format, ...)
+void LogModule::RecMessageF(const ExecutionContext& context, const char* format, ...)
 {
 	va_list arguments;
 	va_start(arguments, format);

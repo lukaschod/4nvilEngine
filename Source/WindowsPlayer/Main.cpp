@@ -98,27 +98,27 @@ float4 FragMain(VertData i) : SV_TARGET
 		shaderDesc->parameters.push_back(ShaderParameter("_PerCameraData", kShaderParameterTypeConstantBuffer));
 		shaderDesc->parameters.push_back(ShaderParameter("_PerMeshData", kShaderParameterTypeConstantBuffer));
 
-		auto shader = shaderModule->RecordCreateShader(context);
-		shaderModule->RecordSetShaderPipeline(context, shader, 0, shaderDesc);
+		auto shader = shaderModule->RecCreateShader(context);
+		shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
 		return shader;
 	}
 
 	const Unit* CreateQuad(const ExecutionContext& context, const Shader* shader, const Mesh* mesh, Vector3f position)
 	{
-		auto triangle = unitModule->RecordCreateUnit(context);
+		auto triangle = unitModule->RecCreateUnit(context);
 
 		// Create transform
-		auto transform = transformModuke->RecordCreateTransform(context);
-		transformModuke->RecordSetPosition(context, transform, position);
-		unitModule->RecordAddComponent(context, triangle, transform);
+		auto transform = transformModuke->RecCreateTransform(context);
+		transformModuke->RecSetPosition(context, transform, position);
+		unitModule->RecAddComponent(context, triangle, transform);
 
-		auto material = materialModule->RecordCreateMaterial(context);
-		materialModule->RecordSetShader(context, material, shader);
+		auto material = materialModule->RecCreateMaterial(context);
+		materialModule->RecSetShader(context, material, shader);
 
-		auto meshRenderer = meshRendererModule->RecordCreateMeshRenderer(context);
-		meshRendererModule->RecordSetMaterial(context, meshRenderer, material);
-		meshRendererModule->RecordSetMesh(context, meshRenderer, mesh);
-		unitModule->RecordAddComponent(context, triangle, meshRenderer);
+		auto meshRenderer = meshRendererModule->RecCreateMeshRenderer(context);
+		meshRendererModule->RecSetMaterial(context, meshRenderer, material);
+		meshRendererModule->RecSetMesh(context, meshRenderer, mesh);
+		unitModule->RecAddComponent(context, triangle, meshRenderer);
 		return triangle;
 	}
 
@@ -137,9 +137,9 @@ float4 FragMain(VertData i) : SV_TARGET
 		VertexLayout vertexLayout;
 		vertexLayout.attributes.push_back(VertexAttributeLayout(kVertexAttributeTypePosition, kColorFormatR32G32B32A32));
 
-		auto mesh = meshModule->RecordCreateMesh(context, vertexLayout);
-		meshModule->RecordSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
-		meshModule->RecordSetSubMesh(context, mesh, 0, SubMesh(6));
+		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
+		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
+		meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
 		return mesh;
 	}
 
@@ -150,67 +150,67 @@ float4 FragMain(VertData i) : SV_TARGET
 		if (frame != 0)
 		{
 			auto transform = unitModule->GetComponent<Transform>(movingCamera);
-			transformModuke->RecordSetPosition(context, transform, transform->localPosition + Vector3f(Math::Sin(frame / 10.0f), 0, 0));
+			transformModuke->RecSetPosition(context, transform, transform->localPosition + Vector3f(Math::Sin(frame / 10.0f), 0, 0));
 			return;
 		}
 
 		// Create window
-		//auto view = viewModule->RecordCreateIView(context);
-		//auto view2 = viewModule->RecordCreateIView(context);
+		//auto view = viewModule->RecCreateIView(context);
+		//auto view2 = viewModule->RecCreateIView(context);
 
 		/*{
-			auto mainCamera = unitModule->RecordCreateUnit(context);
+			auto mainCamera = unitModule->RecCreateUnit(context);
 
 			// Create transform
-			auto transform = transformModuke->RecordCreateTransform(context);
-			transformModuke->RecordSetPosition(context, transform, Vector3f(0, 0, -1));
-			unitModule->RecordAddComponent(context, mainCamera, transform);
+			auto transform = transformModuke->RecCreateTransform(context);
+			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -1));
+			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
-			auto surface = surfaceModule->RecordCreateSurface(context);
-			surfaceModule->RecordSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
-			surfaceModule->RecordSetViewport(context, surface, Viewport(Rectf(0.5f, 0, 0.5f, 1)));
-			auto camera = cameraModule->RecordCreateCamera(context);
-			cameraModule->RecordSetSurface(context, camera, surface);
-			unitModule->RecordAddComponent(context, mainCamera, camera);
+			auto surface = surfaceModule->RecCreateSurface(context);
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
+			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0.5f, 0, 0.5f, 1)));
+			auto camera = cameraModule->RecCreateCamera(context);
+			cameraModule->RecSetSurface(context, camera, surface);
+			unitModule->RecAddComponent(context, mainCamera, camera);
 		}
 
 		{
-			auto mainCamera = unitModule->RecordCreateUnit(context);
+			auto mainCamera = unitModule->RecCreateUnit(context);
 
 			// Create transform
-			auto transform = transformModuke->RecordCreateTransform(context);
-			transformModuke->RecordSetPosition(context, transform, Vector3f(0, 0, -10));
-			unitModule->RecordAddComponent(context, mainCamera, transform);
+			auto transform = transformModuke->RecCreateTransform(context);
+			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -10));
+			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
-			auto surface = surfaceModule->RecordCreateSurface(context);
-			surfaceModule->RecordSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionLoad, kStoreActionStore));
-			surfaceModule->RecordSetViewport(context, surface, Viewport(Rectf(0, 0, 0.5f, 1)));
-			auto camera = cameraModule->RecordCreateCamera(context);
-			cameraModule->RecordSetSurface(context, camera, surface);
-			unitModule->RecordAddComponent(context, mainCamera, camera);
+			auto surface = surfaceModule->RecCreateSurface(context);
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionLoad, kStoreActionStore));
+			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 0.5f, 1)));
+			auto camera = cameraModule->RecCreateCamera(context);
+			cameraModule->RecSetSurface(context, camera, surface);
+			unitModule->RecAddComponent(context, mainCamera, camera);
 		}*/
 
 		for (int i = 0; i < 2; i++)
 		{
-			auto view = viewModule->RecordCreateIView(context);
+			auto view = viewModule->RecCreateIView(context);
 
-			auto mainCamera = unitModule->RecordCreateUnit(context);
+			auto mainCamera = unitModule->RecCreateUnit(context);
 			movingCamera = mainCamera;
 
 			// Create transform
-			auto transform = transformModuke->RecordCreateTransform(context);
-			transformModuke->RecordSetPosition(context, transform, Vector3f(0, 0, -10));
-			unitModule->RecordAddComponent(context, mainCamera, transform);
+			auto transform = transformModuke->RecCreateTransform(context);
+			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -10));
+			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
-			auto surface = surfaceModule->RecordCreateSurface(context);
-			surfaceModule->RecordSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
-			surfaceModule->RecordSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
-			auto camera = cameraModule->RecordCreateCamera(context);
-			cameraModule->RecordSetSurface(context, camera, surface);
-			unitModule->RecordAddComponent(context, mainCamera, camera);
+			auto surface = surfaceModule->RecCreateSurface(context);
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
+			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
+			auto camera = cameraModule->RecCreateCamera(context);
+			cameraModule->RecSetSurface(context, camera, surface);
+			unitModule->RecAddComponent(context, mainCamera, camera);
 		}
 
 		auto testShader = CreateShader(context);

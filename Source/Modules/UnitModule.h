@@ -6,7 +6,7 @@
 
 #define RECORD_CMD_CREATE2(Module, ReturnType, CreateType) \
 	DECLARE_COMMAND_CODE(Create##ReturnType); \
-	const ReturnType* Module::RecordCreate##ReturnType(const ExecutionContext& context) \
+	const ReturnType* Module::RecCreate##ReturnType(const ExecutionContext& context) \
 	{ \
 		ReturnType* unit = (ReturnType*)new CreateType(this); \
 		auto buffer = GetRecordingBuffer(context); \
@@ -41,7 +41,7 @@ public:
 	{
 	}
 
-	virtual void RecordDestroy(const ExecutionContext& context, const Component* unit) = 0;
+	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) = 0;
 };
 
 struct Unit
@@ -58,9 +58,9 @@ class UnitModule : public CmdModule
 {
 public:
 	UnitModule(uint32_t bufferCount, uint32_t workersCount);
-	const Unit* RecordCreateUnit(const ExecutionContext& context);
-	void RecordDestroy(const ExecutionContext& context, const Unit* unit);
-	void RecordAddComponent(const ExecutionContext& context, const Unit* unit, const Component* component);
+	const Unit* RecCreateUnit(const ExecutionContext& context);
+	void RecDestroy(const ExecutionContext& context, const Unit* unit);
+	void RecAddComponent(const ExecutionContext& context, const Unit* unit, const Component* component);
 
 	template<class T>
 	const T* GetComponent(const Component* target)

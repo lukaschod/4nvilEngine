@@ -39,9 +39,9 @@ class MeshModule : public CmdModule
 public:
 	MeshModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Mesh* RecordCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout);
-	void RecordSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8_t>& vertices);
-	void RecordSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32_t index, const SubMesh& submesh);
+	const Mesh* RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout);
+	void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8_t>& vertices);
+	void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32_t index, const SubMesh& submesh);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

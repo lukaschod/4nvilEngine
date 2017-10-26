@@ -9,7 +9,7 @@ D12GraphicsExecuterModule::D12GraphicsExecuterModule(uint32_t workersCount) :
 {
 }
 
-void D12GraphicsExecuterModule::RecordCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer)
+void D12GraphicsExecuterModule::RecCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer)
 {
 	auto& executerContext = executerContexts[context.workerIndex];
 	executerContext.recordedCmds.push_back(buffer);

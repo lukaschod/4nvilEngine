@@ -24,22 +24,22 @@ void CameraModule::Execute(const ExecutionContext& context)
 	for (auto target : cameras)
 	{
 		auto transform = unitModule->GetComponent<Transform>(target);
-		transformModule->RecordCalculateWorldToView(context, transform);
+		transformModule->RecCalculateWorldToView(context, transform);
 		target->worldToCameraMatrix = transform->worldToView;
 		target->worldToCameraMatrix.Multiply(target->projectionMatrix);
 		target->worldToCameraMatrix = Matrix4x4f::Transpose(target->worldToCameraMatrix);
-		storageModule->RecordUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
+		storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
 	}
 }
 
 const List<Camera*>& CameraModule::GetCameras() { return cameras; }
 
 DECLARE_COMMAND_CODE(CreateCamera);
-const Camera* CameraModule::RecordCreateCamera(const ExecutionContext& context)
+const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto storage = storageModule->RecordCreateStorage(context, sizeof(Matrix4x4f));
+	auto storage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 	auto target = new Camera(this, storage);
 	stream.Write(kCommandCodeCreateCamera);
 	stream.Write(target);

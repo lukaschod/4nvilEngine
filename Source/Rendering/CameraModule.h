@@ -42,9 +42,9 @@ public:
 	CameraModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Camera* RecordCreateCamera(const ExecutionContext& context);
-	virtual void RecordDestroy(const ExecutionContext& context, const Component* target) override;
-	void RecordSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
+	const Camera* RecCreateCamera(const ExecutionContext& context);
+	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+	void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
 	const List<Camera*>& GetCameras();
 
 protected:

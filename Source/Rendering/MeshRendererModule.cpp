@@ -24,7 +24,7 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	for (auto meshRenderer : meshRenderers)
 	{
 		auto transform = unitModule->GetComponent<Transform>(meshRenderer);
-		storageModule->RecordUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
+		storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
 	}
 }
 
@@ -40,7 +40,7 @@ bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, IOStrea
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateMeshRenderer, MeshRenderer*, target);
-		target->perMeshStorage = storageModule->RecordCreateStorage(context, sizeof(Matrix4x4f));
+		target->perMeshStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 		meshRenderers.push_back(target);
 		DESERIALIZE_METHOD_END;
 

@@ -121,7 +121,7 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(Present, D12SwapChain*, target, D12Texture*, texture);
-		planner->RecordPresent(target);
+		planner->RecPresent(target);
 		target->backBufferIndex = (target->backBufferIndex + 1) % target->backBufferCount;
 		DESERIALIZE_METHOD_END;
 
@@ -144,11 +144,11 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(PushDebug, const char*, name);
-		planner->RecordPushDebug(name);
+		planner->RecPushDebug(name);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_START(PopDebug);
-		planner->RecordPopDebug();
+		planner->RecPopDebug();
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(BindDrawSimple, DrawSimple, target);
@@ -164,7 +164,7 @@ void D12GraphicsModule::SetTextureState(const ExecutionContext& context, D12Text
 		return;
 
 	ASSERT(target->resource != nullptr);
-	planner->RecordSetTextureState(target, target->currentState, state);
+	planner->RecSetTextureState(target, target->currentState, state);
 	target->currentState = state;
 }
 
@@ -174,7 +174,7 @@ void D12GraphicsModule::SetBufferState(const ExecutionContext& context, D12Buffe
 		return;
 
 	ASSERT(target->resource != nullptr);
-	planner->RecordSetBufferState(target, target->currentState, state);
+	planner->RecSetBufferState(target, target->currentState, state);
 	target->currentState = state;
 }
 
@@ -420,13 +420,13 @@ void D12GraphicsModule::SetRenderPass(const ExecutionContext & context, const D1
 		nullptr,
 		nullptr,
 		nullptr};
-	planner->RecordSetHeap((const D12Heap**) heaps);
-	planner->RecordSetRenderPass(target);
+	planner->RecSetHeap((const D12Heap**) heaps);
+	planner->RecSetRenderPass(target);
 }
 
 void D12GraphicsModule::UpdateBuffer(D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data)
 {
-	planner->RecordUpdateBuffer(target, targetOffset, data);
+	planner->RecUpdateBuffer(target, targetOffset, data);
 }
 
 inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, const DrawSimple& target)
@@ -468,7 +468,7 @@ inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, c
 		}
 		}
 	}
-	planner->RecordDrawSimple(target);
+	planner->RecDrawSimple(target);
 }
 
 void D12GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
@@ -499,7 +499,7 @@ void D12GraphicsModule::BlitCopy(const ExecutionContext& context, D12Texture* sr
 
 void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* swapChain, D12Texture* offscreen)
 {
-	planner->RecordRequestSplit();
+	planner->RecRequestSplit();
 
 	// Blit ofscreen buffer to swapchain backbuffer
 	auto backBuffer = swapChain->GetBackBuffer();
@@ -509,7 +509,7 @@ void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* s
 
 	// Present backbuffer on screen
 	SetTextureState(context, backBuffer, D3D12_RESOURCE_STATE_PRESENT);
-	planner->RecordPresent(swapChain);
+	planner->RecPresent(swapChain);
 
 	swapChain->backBufferIndex = (swapChain->backBufferIndex + 1) % swapChain->backBufferCount;
 }

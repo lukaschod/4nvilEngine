@@ -27,10 +27,10 @@ public:
 	MeshRendererModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual void RecordDestroy(const ExecutionContext& context, const Component* target) override;
-	const MeshRenderer* RecordCreateMeshRenderer(const ExecutionContext& context);
-	void RecordSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
-	void RecordSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+	const MeshRenderer* RecCreateMeshRenderer(const ExecutionContext& context);
+	void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+	void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
 	const List<MeshRenderer*>& GetMeshRenderers();
 
 protected:

@@ -21,7 +21,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateSurface, Surface*, target);
-		target->renderPass = graphicsModule->RecordCreateIRenderPass(context);
+		target->renderPass = graphicsModule->RecCreateIRenderPass(context);
 		surfaces.push_back(target);
 		DESERIALIZE_METHOD_END;
 
@@ -32,7 +32,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 		attachment.loadAction = color.loadAction;
 		attachment.storeAction = color.storeAction;
 		attachment.clearColor = color.clearColor;
-		graphicsModule->RecordSetColorAttachment(context, target->renderPass, index, attachment);
+		graphicsModule->RecSetColorAttachment(context, target->renderPass, index, attachment);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetDepth, Surface*, target, SurfaceDepth, depth);
@@ -42,11 +42,11 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 		attachment.loadAction = depth.loadAction;
 		attachment.storeAction = depth.storeAction;
 		attachment.clearDepth = depth.clearDepth;
-		graphicsModule->RecordSetDepthAttachment(context, target->renderPass, attachment);
+		graphicsModule->RecSetDepthAttachment(context, target->renderPass, attachment);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetViewport, Surface*, target, Viewport, viewport);
-		graphicsModule->RecordSetViewport(context, target->renderPass, viewport);
+		graphicsModule->RecSetViewport(context, target->renderPass, viewport);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

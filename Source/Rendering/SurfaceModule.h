@@ -53,10 +53,10 @@ class SurfaceModule : public CmdModule
 public:
 	SurfaceModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Surface* RecordCreateSurface(const ExecutionContext& context);
-	void RecordSetColor(const ExecutionContext& context, const Surface* target, uint32_t index, const SurfaceColor& color);
-	void RecordSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
-	void RecordSetViewport(const ExecutionContext& context, const Surface* target, const Viewport& viewport);
+	const Surface* RecCreateSurface(const ExecutionContext& context);
+	void RecSetColor(const ExecutionContext& context, const Surface* target, uint32_t index, const SurfaceColor& color);
+	void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
+	void RecSetViewport(const ExecutionContext& context, const Surface* target, const Viewport& viewport);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

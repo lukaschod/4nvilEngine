@@ -25,16 +25,16 @@ public:
 	virtual size_t GetSplitExecutionSize(size_t currentSize) override;
 	virtual const char* GetName() { return "D12GraphicsPlannerModule"; }
 
-	void RecordRequestSplit();
-	void RecordPushDebug(const char* name);
-	void RecordPopDebug();
-	void RecordSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
-	void RecordSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
-	void RecordSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions = false);
-	void RecordUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
-	void RecordPresent(const D12SwapChain* swapchain);
-	void RecordDrawSimple(const DrawSimple& target);
-	void RecordSetHeap(const D12Heap** heap);
+	void RecRequestSplit();
+	void RecPushDebug(const char* name);
+	void RecPopDebug();
+	void RecSetTextureState(const D12Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+	void RecSetBufferState(const D12Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+	void RecSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions = false);
+	void RecUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
+	void RecPresent(const D12SwapChain* swapchain);
+	void RecDrawSimple(const DrawSimple& target);
+	void RecSetHeap(const D12Heap** heap);
 
 	void Reset();
 	ID3D12CommandQueue* GetDirectQueue();
@@ -51,7 +51,7 @@ private:
 	D12CmdAllocatorPool* directAllocatorPool;
 	List<D12CmdBuffer*> recordedCmdBuffers;
 
-	struct RecordingOptimizer
+	struct RecingOptimizer
 	{
 		inline void MarkSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
 		inline void MarkDraw() { drawCount++; }
@@ -62,7 +62,7 @@ private:
 		D12Heap* lastHeaps[kD12HeapTypeCount];
 		size_t drawCount;
 	};
-	RecordingOptimizer recordingOptimizer;
+	RecingOptimizer recordingOptimizer;
 
 	D12GraphicsExecuterModule* executer;
 	ID3D12CommandAllocator* commandAllocator;

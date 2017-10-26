@@ -14,7 +14,7 @@ void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 DECLARE_COMMAND_CODE(CreateMaterial);
-const Material* MaterialModule::RecordCreateMaterial(const ExecutionContext& context)
+const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& context)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
@@ -50,7 +50,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& s
 		material->shader = shader;
 		for (auto shaderPipeline : shader->pipelines)
 		{
-			auto properties = graphicsModule->RecordCreateIShaderArguments(context, shaderPipeline);
+			auto properties = graphicsModule->RecCreateIShaderArguments(context, shaderPipeline);
 			auto pipeline = new MaterialPipeline(shaderPipeline, properties);
 			material->pipelines.push_back(pipeline);
 		}
@@ -64,7 +64,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& s
 				{
 				case kMaterialPropertyTypeStorage:
 					auto storage = (const Storage*) property.value;
-					graphicsModule->RecordSetBuffer(context, pipeline->properties, property.name.c_str(), storage->buffer);
+					graphicsModule->RecSetBuffer(context, pipeline->properties, property.name.c_str(), storage->buffer);
 				}
 			}
 		}
@@ -76,7 +76,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& s
 		SetProperty(materialProperties, name, kMaterialPropertyTypeStorage, (void*) storage);
 		for (auto pipeline : material->pipelines)
 		{
-			graphicsModule->RecordSetBuffer(context, pipeline->properties, name, storage->buffer);
+			graphicsModule->RecSetBuffer(context, pipeline->properties, name, storage->buffer);
 		}
 		DESERIALIZE_METHOD_END;
 	}

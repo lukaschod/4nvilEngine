@@ -21,6 +21,6 @@ class IViewModule : public CmdModule
 {
 public:
 	IViewModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
-	virtual const IView* RecordCreateIView(const ExecutionContext& context) = 0;
+	virtual const IView* RecCreateIView(const ExecutionContext& context) = 0;
 	virtual const List<const IView*>& GetViews() = 0;
 };

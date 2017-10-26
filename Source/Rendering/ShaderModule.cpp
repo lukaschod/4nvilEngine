@@ -23,7 +23,7 @@ bool ShaderModule::ExecuteCommand(const ExecutionContext& context, IOStream& str
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, uint32_t, index, const ShaderPipelineDesc*, desc);
-		auto pipeline = graphicsModule->RecordCreateIShaderPipeline(context, desc);
+		auto pipeline = graphicsModule->RecCreateIShaderPipeline(context, desc);
 		target->pipelines.push_back(pipeline);
 		DESERIALIZE_METHOD_END;
 	}

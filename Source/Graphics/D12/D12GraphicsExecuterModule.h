@@ -13,7 +13,7 @@ public:
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual const char* GetName() override { return "D12GraphicsExecuterModule"; }
 
-	void RecordCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer);
+	void RecCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer);
 
 private:
 	struct Context

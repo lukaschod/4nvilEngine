@@ -7,7 +7,7 @@
 
 #define SERIALIZE_METHOD_TEMPLATE(Module, Name, ReturnType, DeclareArguments, WriteArguments, BodyPrefix, BodyPostFix) \
 	DECLARE_COMMAND_CODE(Name); \
-	ReturnType Module::Record##Name(const ExecutionContext& context DeclareArguments) \
+	ReturnType Module::Rec##Name(const ExecutionContext& context DeclareArguments) \
 	{ \
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \

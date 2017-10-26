@@ -96,17 +96,17 @@ void WinViewModule::Execute(const ExecutionContext& context)
 }
 
 DECLARE_COMMAND_CODE(CreateIView);
-const IView* WinViewModule::RecordCreateIView(const ExecutionContext& context)
+const IView* WinViewModule::RecCreateIView(const ExecutionContext& context)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto width = 2096;
 	auto height = 1280;
-	auto renderTarget = imageModule->RecordCreateImage(context, width, height);
+	auto renderTarget = imageModule->RecCreateImage(context, width, height);
 	auto target = new WinView(renderTarget);
 	target->width = width;
 	target->height = height;
-	auto swapChain = graphicsModule->RecordCreateISwapChain(context, target);
+	auto swapChain = graphicsModule->RecCreateISwapChain(context, target);
 	target->swapChain = swapChain;
 	stream.Write(kCommandCodeCreateIView);
 	stream.Write(target);

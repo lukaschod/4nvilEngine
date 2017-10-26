@@ -17,7 +17,7 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, IOStream& strea
 		DESERIALIZE_METHOD_ARG1_START(Destroy, Unit*, unit);
 		units.remove(unit);
 		for (auto component : unit->components)
-			component->module->RecordDestroy(context, component);
+			component->module->RecDestroy(context, component);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(AddComponent, Unit*, unit, Component*, component);

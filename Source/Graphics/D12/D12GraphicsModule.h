@@ -200,33 +200,33 @@ public:
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual const char* GetName() { return "D12GraphicsModule"; }
 
-	virtual const ITexture* RecordCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height) override;
+	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height) override;
 
-	virtual const IFilter* RecordCreateIFilter(const ExecutionContext& context, const FilterOptions& options) override;
+	virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) override;
 
-	virtual const IRenderPass* RecordCreateIRenderPass(const ExecutionContext& context) override;
-	virtual void RecordSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32_t index, const ColorAttachment& attachment) override;
-	virtual void RecordSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
-	virtual void RecordSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
-	virtual void RecordSetRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
+	virtual const IRenderPass* RecCreateIRenderPass(const ExecutionContext& context) override;
+	virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32_t index, const ColorAttachment& attachment) override;
+	virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
+	virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
+	virtual void RecSetRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
 
-	virtual const IShaderPipeline* RecordCreateIShaderPipeline(const ExecutionContext& context, const ShaderPipelineDesc* desc) override;
-	virtual const IShaderArguments* RecordCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline) override;
-	virtual void RecordSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) override;
-	virtual void RecordSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
-	virtual void RecordSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
+	virtual const IShaderPipeline* RecCreateIShaderPipeline(const ExecutionContext& context, const ShaderPipelineDesc* desc) override;
+	virtual const IShaderArguments* RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline) override;
+	virtual void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) override;
+	virtual void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
+	virtual void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
 
-	virtual const IBuffer* RecordCreateIBuffer(const ExecutionContext& context, size_t size) override;
-	virtual void RecordUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) override;
+	virtual const IBuffer* RecCreateIBuffer(const ExecutionContext& context, size_t size) override;
+	virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) override;
 
-	virtual const ISwapChain* RecordCreateISwapChain(const ExecutionContext& context, const IView* view) override;
-	virtual void RecordPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
-	virtual void RecordFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
+	virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view) override;
+	virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
+	virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 
-	virtual void RecordPushDebug(const ExecutionContext& context, const char* name) override;
-	virtual void RecordPopDebug(const ExecutionContext& context) override;
+	virtual void RecPushDebug(const ExecutionContext& context, const char* name) override;
+	virtual void RecPopDebug(const ExecutionContext& context) override;
 
-	virtual void RecordBindDrawSimple(const ExecutionContext& context, const DrawSimple& target) override;
+	virtual void RecBindDrawSimple(const ExecutionContext& context, const DrawSimple& target) override;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

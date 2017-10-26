@@ -20,8 +20,8 @@ class StorageModule : public CmdModule
 public:
 	StorageModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Storage* RecordCreateStorage(const ExecutionContext& context, uint32_t size);
-	void RecordUpdateStorage(const ExecutionContext& context, const Storage* target, uint32_t targetOffset, Range<void>& data);
+	const Storage* RecCreateStorage(const ExecutionContext& context, uint32_t size);
+	void RecUpdateStorage(const ExecutionContext& context, const Storage* target, uint32_t targetOffset, Range<void>& data);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

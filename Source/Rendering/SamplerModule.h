@@ -22,7 +22,7 @@ class SamplerModule : public CmdModule
 public:
 	SamplerModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Sampler* RecordCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
+	const Sampler* RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
 
 	inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
 

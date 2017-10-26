@@ -29,8 +29,8 @@ void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 		if (surface == nullptr)
 			continue;
 
-		graphicsModule->RecordPushDebug(context, "Camera.Render");
-		graphicsModule->RecordSetRenderPass(context, surface->renderPass);
+		graphicsModule->RecPushDebug(context, "Camera.Render");
+		graphicsModule->RecSetRenderPass(context, surface->renderPass);
 
 		for (auto meshRenderer : meshRenderers)
 		{
@@ -47,29 +47,29 @@ void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 				draw.properties = pipeline->properties;
 				draw.vertexBuffer = mesh->vertexBuffer;
 				
-				graphicsModule->RecordSetBuffer(context, draw.properties, "_PerCameraData", camera->perCameraStorage->buffer);
-				graphicsModule->RecordSetBuffer(context, draw.properties, "_PerMeshData", meshRenderer->perMeshStorage->buffer);
+				graphicsModule->RecSetBuffer(context, draw.properties, "_PerCameraData", camera->perCameraStorage->buffer);
+				graphicsModule->RecSetBuffer(context, draw.properties, "_PerMeshData", meshRenderer->perMeshStorage->buffer);
 				
 				for (auto& subMesh : mesh->subMeshes)
 				{
 					draw.offset = subMesh.offset;
 					draw.size = subMesh.size;
-					graphicsModule->RecordBindDrawSimple(context, draw);
+					graphicsModule->RecBindDrawSimple(context, draw);
 				}
 			}
 		}
 
-		graphicsModule->RecordPopDebug(context);
+		graphicsModule->RecPopDebug(context);
 	}
 
 	auto& views = viewModule->GetViews();
 	for (auto view : views)
 	{
-		graphicsModule->RecordFinalBlit(context, view->swapChain, view->renderTarget->texture);
+		graphicsModule->RecFinalBlit(context, view->swapChain, view->renderTarget->texture);
 	}
 
 	for (auto view : views)
 	{
-		graphicsModule->RecordPresent(context, view->swapChain, view->renderTarget->texture);
+		graphicsModule->RecPresent(context, view->swapChain, view->renderTarget->texture);
 	}
 }

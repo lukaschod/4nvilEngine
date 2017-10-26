@@ -12,7 +12,7 @@ void MeshModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 DECLARE_COMMAND_CODE(CreateMesh);
-const Mesh* MeshModule::RecordCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout)
+const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
@@ -37,8 +37,8 @@ bool MeshModule::ExecuteCommand(const ExecutionContext& context, IOStream& strea
 		DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<uint8_t>, vertices);
 		target->vertices = vertices;
 
-		target->vertexBuffer = graphicsModule->RecordCreateIBuffer(context, vertices.size);
-		graphicsModule->RecordUpdateBuffer(context, target->vertexBuffer, (void*) target->vertices.pointer, target->vertices.size);
+		target->vertexBuffer = graphicsModule->RecCreateIBuffer(context, vertices.size);
+		graphicsModule->RecUpdateBuffer(context, target->vertexBuffer, (void*) target->vertices.pointer, target->vertices.size);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, uint32_t, index, SubMesh, submesh);

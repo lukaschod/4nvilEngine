@@ -32,11 +32,11 @@ public:
 	TransformModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 
-	const Transform* RecordCreateTransform(const ExecutionContext& context);
-	virtual void RecordDestroy(const ExecutionContext& context, const Component* unit) override;
-	void RecordSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
-	void RecordSetPosition(const ExecutionContext& context, const Transform* target, const Vector3f& position);
-	void RecordCalculateWorldToView(const ExecutionContext& context, const Transform* target);
+	const Transform* RecCreateTransform(const ExecutionContext& context);
+	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
+	void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
+	void RecSetPosition(const ExecutionContext& context, const Transform* target, const Vector3f& position);
+	void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
