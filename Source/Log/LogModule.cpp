@@ -14,7 +14,7 @@ void LogModule::RecMessageF(const ExecutionContext& context, const char* format,
 
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeMessageF);
+	stream.Write(CommandCodeMessageF);
 	stream.Write(format);
 	stream.Write(arguments);
 	buffer->commandCount++;

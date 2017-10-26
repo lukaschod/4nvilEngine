@@ -18,7 +18,7 @@ const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, 
 	auto& stream = buffer->stream;
 	auto filter = graphicsModule->RecCreateIFilter(context, options);
 	auto target = new Sampler(options, filter);
-	stream.Write(kCommandCodeCreateSampler);
+	stream.Write(CommandCodeCreateSampler);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

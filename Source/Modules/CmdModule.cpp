@@ -36,7 +36,7 @@ CmdBuffer* CmdModule::GetRecordingBuffer(const ExecutionContext& context)
 	return buffer;
 }
 
-size_t CmdModule::GetExecutionkSize() { return 1; }
+size_t CmdModule::GetExecutionSize() { return 1; }
 
 void CmdModule::Execute(const ExecutionContext& context)
 {
@@ -58,7 +58,7 @@ void CmdModule::Execute(const ExecutionContext& context)
 		// Reset buffer for executing
 		auto& stream = buffer->stream;
 		buffer->stream.Reset();
-		buffer->state = kCmdBufferStateExecuted;
+		buffer->state = CmdBufferStateExecuted;
 
 		for (int i = 0; i < buffer->commandCount; i++)
 		{

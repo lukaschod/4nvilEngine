@@ -128,7 +128,7 @@ void StaticModulePlanner::Reset()
 		ModuleJob job;
 		job.module = child->module;
 		job.offset = 0;
-		job.size = job.module->GetExecutionkSize();
+		job.size = job.module->GetExecutionSize();
 		job.userData = child;
 		readyJobs.push(job);
 	}
@@ -193,7 +193,7 @@ void StaticModulePlanner::SetFinished(ModuleJob job)
 		ModuleJob childJob;
 		childJob.module = child->module;
 		childJob.offset = 0;
-		childJob.size = childJob.module->GetExecutionkSize();
+		childJob.size = childJob.module->GetExecutionSize();
 		childJob.userData = child;
 		readyJobs.push(childJob);
 	}

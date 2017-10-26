@@ -20,7 +20,7 @@ const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& contex
 	auto& stream = buffer->stream;
 	auto properties = new MaterialProperties();
 	auto target = new Material(properties);
-	stream.Write(kCommandCodeCreateMaterial);
+	stream.Write(CommandCodeCreateMaterial);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;
@@ -62,7 +62,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& s
 			{
 				switch (property.type)
 				{
-				case kMaterialPropertyTypeStorage:
+				case MaterialPropertyTypeStorage:
 					auto storage = (const Storage*) property.value;
 					graphicsModule->RecSetBuffer(context, pipeline->properties, property.name.c_str(), storage->buffer);
 				}
@@ -73,7 +73,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& s
 
 		DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const char*, name, const Storage*, storage);
 		auto materialProperties = (MaterialProperties*) material->properties;
-		SetProperty(materialProperties, name, kMaterialPropertyTypeStorage, (void*) storage);
+		SetProperty(materialProperties, name, MaterialPropertyTypeStorage, (void*) storage);
 		for (auto pipeline : material->pipelines)
 		{
 			graphicsModule->RecSetBuffer(context, pipeline->properties, name, storage->buffer);

@@ -41,7 +41,7 @@ const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context)
 	auto& stream = buffer->stream;
 	auto storage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 	auto target = new Camera(this, storage);
-	stream.Write(kCommandCodeCreateCamera);
+	stream.Write(CommandCodeCreateCamera);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

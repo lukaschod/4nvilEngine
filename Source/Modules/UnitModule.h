@@ -11,7 +11,7 @@
 		ReturnType* unit = (ReturnType*)new CreateType(this); \
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \
-		stream.Write(kCommandCodeCreate##ReturnType); \
+		stream.Write(CommandCodeCreate##ReturnType); \
 		stream.Write(unit); \
 		buffer->commandCount++; \
 		return unit; \

@@ -21,7 +21,7 @@ public:
 	D12GraphicsPlannerModule(ID3D12Device* device);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual size_t GetExecutionkSize() override;
+	virtual size_t GetExecutionSize() override;
 	virtual size_t GetSplitExecutionSize(size_t currentSize) override;
 	virtual const char* GetName() { return "D12GraphicsPlannerModule"; }
 
@@ -53,13 +53,13 @@ private:
 
 	struct RecingOptimizer
 	{
-		inline void MarkSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
-		inline void MarkDraw() { drawCount++; }
-		inline void MarkSetHeap(D12Heap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12Heap*) * kD12HeapTypeCount); }
+		inline void MarSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
+		inline void MarDraw() { drawCount++; }
+		inline void MarSetHeap(D12Heap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12Heap*) * D12HeapTypeCount); }
 		inline bool ShouldSplitRecording() { return drawCount == 25; }
 		
 		D12RenderPass* lastRenderPass;
-		D12Heap* lastHeaps[kD12HeapTypeCount];
+		D12Heap* lastHeaps[D12HeapTypeCount];
 		size_t drawCount;
 	};
 	RecingOptimizer recordingOptimizer;

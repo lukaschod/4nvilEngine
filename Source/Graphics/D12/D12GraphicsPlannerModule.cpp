@@ -39,10 +39,10 @@ uint64_t D12GraphicsPlannerModule::GetCompletedBufferIndex()
 	return executer->Get_completedBufferIndex();
 }
 
-size_t D12GraphicsPlannerModule::GetExecutionkSize() { return recordedCmdBuffers.size(); }
+size_t D12GraphicsPlannerModule::GetExecutionSize() { return recordedCmdBuffers.size(); }
 size_t D12GraphicsPlannerModule::GetSplitExecutionSize(size_t currentSize) 
 { 
-	if (currentSize == GetExecutionkSize())
+	if (currentSize == GetExecutionSize())
 		return recordedCmdBuffers.size() % 4 + recordedCmdBuffers.size() / 4;
 	else
 		return recordedCmdBuffers.size() / 4;
@@ -112,7 +112,7 @@ void D12GraphicsPlannerModule::RecPushDebug(const char* name)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodePushDebug);
+	stream.Write(CommandCodePushDebug);
 	stream.Write(name);
 	buffer->commandCount++;
 }
@@ -122,7 +122,7 @@ void D12GraphicsPlannerModule::RecPopDebug()
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodePopDebug);
+	stream.Write(CommandCodePopDebug);
 	buffer->commandCount++;
 }
 
@@ -131,7 +131,7 @@ void D12GraphicsPlannerModule::RecSetTextureState(const D12Texture* target, D3D1
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeSetTextureState);
+	stream.Write(CommandCodeSetTextureState);
 	stream.Write(target);
 	stream.Write(currentState);
 	stream.Write(nextState);
@@ -143,7 +143,7 @@ void D12GraphicsPlannerModule::RecSetBufferState(const D12Buffer* target, D3D12_
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeSetBufferState);
+	stream.Write(CommandCodeSetBufferState);
 	stream.Write(target);
 	stream.Write(currentState);
 	stream.Write(nextState);
@@ -155,8 +155,8 @@ void D12GraphicsPlannerModule::RecSetRenderPass(const D12RenderPass* target, boo
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeSetRenderPass);
-	recordingOptimizer.MarkSetRenderPass((D12RenderPass*)target);
+	stream.Write(CommandCodeSetRenderPass);
+	recordingOptimizer.MarSetRenderPass((D12RenderPass*)target);
 	stream.Write((void*)target, sizeof(D12RenderPass)); // We need copy here, because renderpass lives on cpu
 	stream.Write(ignoreLoadActions);
 	buffer->commandCount++;
@@ -167,7 +167,7 @@ void D12GraphicsPlannerModule::RecUpdateBuffer(const D12Buffer* target, uint32_t
 { 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeUpdateBuffer);
+	stream.Write(CommandCodeUpdateBuffer);
 	stream.Write(target);
 	stream.Write(targetOffset);
 	stream.Write(data);
@@ -195,7 +195,7 @@ void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeDrawSimple);
+	stream.Write(CommandCodeDrawSimple);
 	stream.Write(target);
 
 	auto& rootParameters = ((D12ShaderPipeline*) target.pipeline)->rootParameters;
@@ -207,13 +207,13 @@ void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
 
 		switch (rootParameter.type)
 		{
-		case kD12RootParamterTypeTableSRV:
-		case kD12RootParamterTypeTableSamplers:
+		case D12RootParamterTypeTableSRV:
+		case D12RootParamterTypeTableSamplers:
 		{
 			stream.Write(rootArgument.memory);
 			break;
 		}
-		case kD12RootParamterTypeConstantBuffer:
+		case D12RootParamterTypeConstantBuffer:
 		{
 			stream.Write(rootArgument.subData);
 			break;
@@ -222,7 +222,7 @@ void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
 	}
 
 	buffer->commandCount++;
-	recordingOptimizer.MarkDraw();
+	recordingOptimizer.MarDraw();
 }
 
 DECLARE_COMMAND_CODE(SetHeap);
@@ -230,9 +230,9 @@ void D12GraphicsPlannerModule::RecSetHeap(const D12Heap** heap)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(kCommandCodeSetHeap);
-	recordingOptimizer.MarkSetHeap((D12Heap**) heap);
-	stream.Write(heap, sizeof(D12Heap*) * kD12HeapTypeCount);
+	stream.Write(CommandCodeSetHeap);
+	recordingOptimizer.MarSetHeap((D12Heap**) heap);
+	stream.Write(heap, sizeof(D12Heap*) * D12HeapTypeCount);
 	buffer->commandCount++;
 }
 
@@ -286,8 +286,8 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 
 		// TODO: make it dynamic maybe, need to find out if staticlly assigning heaps is costly and having it assigned
 		ID3D12DescriptorHeap* heaps[] = {
-			buffer->heaps[kD12HeapTypeSRVs]->Get_heap(),
-			buffer->heaps[kD12HeapTypeSamplers]->Get_heap() };
+			buffer->heaps[D12HeapTypeSRVs]->Get_heap(),
+			buffer->heaps[D12HeapTypeSamplers]->Get_heap() };
 		commandList->SetDescriptorHeaps(2, heaps);
 
 		if (ignoreLoadActions)
@@ -296,7 +296,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		for (int i = 0; i < count; i++)
 		{
 			auto& color = target.colors[i];
-			if (color.loadAction == kLoadActionClear)
+			if (color.loadAction == LoadActionClear)
 			{
 				const float clearColor[] = { color.clearColor.r, color.clearColor.g, color.clearColor.b, color.clearColor.a };
 				commandList->ClearRenderTargetView(target.colorDescriptors[i], clearColor, 0, nullptr);
@@ -304,7 +304,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		}
 
 		auto& depth = target.depth;
-		if (depth.texture != nullptr && depth.loadAction == kLoadActionClear)
+		if (depth.texture != nullptr && depth.loadAction == LoadActionClear)
 		{
 			commandList->ClearDepthStencilView(target.depthDescriptor, D3D12_CLEAR_FLAG_DEPTH, target.depth.clearDepth, 0, 0, nullptr);
 		}
@@ -331,21 +331,21 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 			
 			switch (rootParameter.type)
 			{
-			case kD12RootParamterTypeTableSRV:
+			case D12RootParamterTypeTableSRV:
 			{
-				ASSERT(buffer->heaps[kD12HeapTypeSRVs] != nullptr);
+				ASSERT(buffer->heaps[D12HeapTypeSRVs] != nullptr);
 				auto& value = stream.FastRead<D12HeapMemory>();
-				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[kD12HeapTypeSRVs]->GetGpuHandle(value));
+				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[D12HeapTypeSRVs]->GetGpuHandle(value));
 				break;
 			}
-			case kD12RootParamterTypeTableSamplers:
+			case D12RootParamterTypeTableSamplers:
 			{
-				ASSERT(buffer->heaps[kD12HeapTypeSamplers] != nullptr);
+				ASSERT(buffer->heaps[D12HeapTypeSamplers] != nullptr);
 				auto& value = stream.FastRead<D12HeapMemory>();
-				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[kD12HeapTypeSamplers]->GetGpuHandle(value));
+				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[D12HeapTypeSamplers]->GetGpuHandle(value));
 				break;
 			}
-			case kD12RootParamterTypeConstantBuffer:
+			case D12RootParamterTypeConstantBuffer:
 			{
 				auto& value = stream.FastRead<D3D12_GPU_VIRTUAL_ADDRESS>();
 				commandList->SetGraphicsRootConstantBufferView((UINT) i, value);
@@ -364,7 +364,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_START(SetHeap);
-		stream.Read(buffer->heaps, sizeof(D12Heap*) * kD12HeapTypeCount);
+		stream.Read(buffer->heaps, sizeof(D12Heap*) * D12HeapTypeCount);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

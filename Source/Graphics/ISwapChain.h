@@ -8,9 +8,9 @@ struct ISwapChain
 {
 	ISwapChain(const IView* view) :
 		view(view),
-		backBufferCount(2)
+		bacBufferCount(2)
 	{
 	}
 	const IView* view;
-	const uint32_t backBufferCount;
+	const uint32_t bacBufferCount;
 };

@@ -18,7 +18,7 @@ const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, 
 	auto& stream = buffer->stream;
 	auto gfxBuffer = graphicsModule->RecCreateIBuffer(context, size);
 	auto target = new Storage(gfxBuffer);
-	stream.Write(kCommandCodeCreateStorage);
+	stream.Write(CommandCodeCreateStorage);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

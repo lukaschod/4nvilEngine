@@ -9,7 +9,7 @@
 
 enum MaterialPropertyType
 {
-	kMaterialPropertyTypeStorage,
+	MaterialPropertyTypeStorage,
 };
 
 struct MaterialProperty

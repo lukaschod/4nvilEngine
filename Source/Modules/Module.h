@@ -22,7 +22,7 @@ public:
 	Module() {}
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) {}
 	virtual void Execute(const ExecutionContext& context) = 0;
-	virtual size_t GetExecutionkSize() { return 1; }
+	virtual size_t GetExecutionSize() { return 1; }
 	virtual size_t GetSplitExecutionSize(size_t currentSize) { return 1; }
 	virtual const char* GetName() { return "Unamed";  }
 

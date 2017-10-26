@@ -17,7 +17,7 @@ const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const Ver
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = new Mesh(vertexLayout);
-	stream.Write(kCommandCodeCreateMesh);
+	stream.Write(CommandCodeCreateMesh);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

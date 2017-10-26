@@ -51,25 +51,25 @@ void D12Heap::Free(D12HeapMemory& memory)
 	while (current != end)
 	{
 		auto next = current->next;
-		auto mergableWithBlockAbove = current->pointer + current->size == memory.pointer;
-		auto mergableWithBlockBelow = next->pointer == memory.pointer + memory.size;
+		auto mergableWithBlocAbove = current->pointer + current->size == memory.pointer;
+		auto mergableWithBlocBelow = next->pointer == memory.pointer + memory.size;
 		
 		// 1) Fred memory can be merged with block above
-		if (mergableWithBlockAbove && !mergableWithBlockBelow)
+		if (mergableWithBlocAbove && !mergableWithBlocBelow)
 		{
 			current->size += memory.size;
 			return;
 		}
 
 		// 2) Fred memory can be merged with block below
-		if (!mergableWithBlockAbove && mergableWithBlockBelow)
+		if (!mergableWithBlocAbove && mergableWithBlocBelow)
 		{
 			next->pointer -= memory.size;
 			return;
 		}
 
 		// 3) Fred memory can be merged with blocks above and below
-		if (mergableWithBlockAbove && mergableWithBlockBelow)
+		if (mergableWithBlocAbove && mergableWithBlocBelow)
 		{
 			current->size += memory.size + next->size;
 			Connect(current, next->next);
@@ -100,27 +100,27 @@ void D12Heap::Grow(size_t capacity)
 		srvHeapDesc.NumDescriptors = (UINT)capacity;
 		switch (type)
 		{
-		case kD12HeapTypeSRVs:
+		case D12HeapTypeSRVs:
 			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			stride = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
 			break;
-		case kD12HeapTypeSamplers:
+		case D12HeapTypeSamplers:
 			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			stride = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
 			break;
-		case kD12HeapTypeRTVs:
+		case D12HeapTypeRTVs:
 			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			stride = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
 			break;
-		case kD12HeapTypeSRVsCPU:
+		case D12HeapTypeSRVsCPU:
 			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			stride = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
 			break;
-		case kD12HeapTypeSamplersCPU:
+		case D12HeapTypeSamplersCPU:
 			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			stride = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);

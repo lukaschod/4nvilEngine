@@ -23,7 +23,7 @@ struct D12CmdBuffer
 		this->index = index;
 		swapChain = nullptr;
 		stream.Reset();
-		memset(heaps, 0, kD12HeapTypeCount * sizeof(D12Heap*));
+		memset(heaps, 0, D12HeapTypeCount * sizeof(D12Heap*));
 	}
 
 	const D3D12_COMMAND_LIST_TYPE type;
@@ -33,7 +33,7 @@ struct D12CmdBuffer
 	ID3D12GraphicsCommandList* commandList;
 	IDXGISwapChain* swapChain;
 	uint64_t index;
-	D12Heap* heaps[kD12HeapTypeCount];
+	D12Heap* heaps[D12HeapTypeCount];
 };
 
 class D12CmdQueue

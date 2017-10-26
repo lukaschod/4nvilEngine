@@ -9,14 +9,14 @@
 
 enum MeshTopology
 {
-	kMeshTopologyTriangles,
+	MeshTopologyTriangles,
 };
 
 struct SubMesh
 {
 	SubMesh() {}
 	SubMesh(uint32_t offset, uint32_t size, MeshTopology topology) : offset(offset), size(size), topology(topology) {}
-	SubMesh(uint32_t size) : SubMesh(0, size, kMeshTopologyTriangles) {}
+	SubMesh(uint32_t size) : SubMesh(0, size, MeshTopologyTriangles) {}
 	uint32_t offset;
 	uint32_t size;
 	MeshTopology topology;

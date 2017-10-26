@@ -7,10 +7,10 @@
 
 enum ShaderParameterType
 {
-	kShaderParameterTypeBuffer,
-	kShaderParameterTypeConstantBuffer,
-	kShaderParameterTypeTexture,
-	kShaderParameterTypeSampler,
+	ShaderParameterTypeBuffer,
+	ShaderParameterTypeConstantBuffer,
+	ShaderParameterTypeTexture,
+	ShaderParameterTypeSampler,
 };
 
 struct ShaderParameter
@@ -23,28 +23,28 @@ struct ShaderParameter
 
 enum ZWrite
 {
-	kZWriteOn,
+	ZWriteOn,
 };
 
 enum ZTest
 {
-	kZTestLEqual,
+	ZTestLEqual,
 };
 
 struct ShaderStates
 {
 	ShaderStates() : 
-		zWrite(kZWriteOn), 
-		zTest(kZTestLEqual) {}
+		zWrite(ZWriteOn), 
+		zTest(ZTestLEqual) {}
 	ZWrite zWrite;
 	ZTest zTest;
 };
 
 enum ShaderProgramType
 {
-	kShaderProgramTypeVertex,
-	kShaderProgramTypeFragment,
-	kShaderProgramTypeCount,
+	ShaderProgramTypeVertex,
+	ShaderProgramTypeFragment,
+	ShaderProgramTypeCount,
 };
 
 struct ShaderProgram
@@ -72,7 +72,7 @@ struct ShaderPipelineDesc
 {
 	List<ShaderParameter> parameters;
 	ShaderStates states;
-	ShaderProgram programs[kShaderProgramTypeCount];
+	ShaderProgram programs[ShaderProgramTypeCount];
 	VertexLayout vertexLayout;
 	uint32_t varation;
 	String name;

@@ -11,8 +11,8 @@ struct SurfaceColor
 	SurfaceColor() {}
 	SurfaceColor(const Image* image) :
 		image(image),
-		loadAction(kLoadActionClear),
-		storeAction(kStoreActionStore),
+		loadAction(LoadActionClear),
+		storeAction(StoreActionStore),
 		clearColor(0, 0.2f, 0.4f, 0)
 	{
 	}

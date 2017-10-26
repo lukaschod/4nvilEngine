@@ -19,7 +19,7 @@ const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32
 	auto& stream = buffer->stream;
 	auto texture = graphicsModule->RecCreateITexture(context, width, height);
 	auto target = new Image(texture);
-	stream.Write(kCommandCodeCreateImage);
+	stream.Write(CommandCodeCreateImage);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

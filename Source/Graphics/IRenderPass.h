@@ -10,20 +10,20 @@
 
 enum StoreAction
 {
-	kStoreActionStore,
+	StoreActionStore,
 };
 
 enum LoadAction
 {
-	kLoadActionLoad,
-	kLoadActionClear,
-	kLoadActionDontCare,
+	LoadActionLoad,
+	LoadActionClear,
+	LoadActionDontCare,
 };
 
 struct ColorAttachment
 {
-	ColorAttachment() : ColorAttachment(nullptr, kStoreActionStore, kLoadActionLoad) {}
-	ColorAttachment(const ITexture* texture) : ColorAttachment(texture, kStoreActionStore, kLoadActionLoad) {}
+	ColorAttachment() : ColorAttachment(nullptr, StoreActionStore, LoadActionLoad) {}
+	ColorAttachment(const ITexture* texture) : ColorAttachment(texture, StoreActionStore, LoadActionLoad) {}
 	ColorAttachment(const ITexture* texture, StoreAction storeAction, LoadAction loadAction) :
 		texture(texture), storeAction(storeAction), loadAction(loadAction), clearColor(Colorf(0, 0.2f, 0.4f, 0))
 	{
@@ -41,7 +41,7 @@ struct DepthAttachment
 		texture(texture), storeAction(storeAction), loadAction(loadAction), clearDepth(0)
 	{
 	}
-	DepthAttachment() : DepthAttachment(nullptr, kStoreActionStore, kLoadActionLoad) {}
+	DepthAttachment() : DepthAttachment(nullptr, StoreActionStore, LoadActionLoad) {}
 
 	const ITexture* texture;
 	StoreAction storeAction;

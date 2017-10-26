@@ -17,9 +17,9 @@ struct IFilter
 
 enum TextureUsageFlags
 {
-	kTextureUsageFlagNone = 0,
-	kTextureUsageFlagRender = 1 << 0,
-	kTextureUsageFlagShader = 1 << 1,
+	TextureUsageFlagNone = 0,
+	TextureUsageFlagRender = 1 << 0,
+	TextureUsageFlagShader = 1 << 1,
 };
 
 IMPLEMENT_ENUM_FLAG(TextureUsageFlags);
@@ -30,7 +30,7 @@ struct ITexture
 	ITexture(uint32_t width, uint32_t height) : 
 		width(width), 
 		height(height), 
-		usage(kTextureUsageFlagRender | kTextureUsageFlagShader)
+		usage(TextureUsageFlagRender | TextureUsageFlagShader)
 	{
 	}
 	uint32_t width;

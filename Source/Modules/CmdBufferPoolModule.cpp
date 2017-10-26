@@ -18,10 +18,10 @@ void CmdBufferPoolModule::Execute(const ExecutionContext & context)
 	{
 		auto& poolContext = contexts[i];
 		for (auto buffer : poolContext.cmdBuffers)
-			if (buffer->state == kCmdBufferStateExecuted)
+			if (buffer->state == CmdBufferStateExecuted)
 			{
 				poolContext.readyCmdBuffers.push(buffer);
-				buffer->state = kCmdBufferStateNotUsed;
+				buffer->state = CmdBufferStateNotUsed;
 			}
 	}
 }
@@ -52,11 +52,11 @@ CmdBuffer* CmdBufferPoolModule::Pull(const ExecutionContext& context, uint64_t i
 
 void CmdBufferPoolModule::Reset(CmdBuffer* buffer, uint64_t index, const ExecutionContext& context)
 {
-	ASSERT(buffer->state == kCmdBufferStateNotUsed);
+	ASSERT(buffer->state == CmdBufferStateNotUsed);
 	buffer->stream.Reset();
 	buffer->commandCount = 0;
 	buffer->index = index;
 	buffer->workerIndex = context.workerIndex;
 	buffer->executingModule = context.executingModule;
-	buffer->state = kCmdBufferStateUsed;
+	buffer->state = CmdBufferStateUsed;
 }

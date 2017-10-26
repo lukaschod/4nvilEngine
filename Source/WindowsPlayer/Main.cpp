@@ -85,18 +85,18 @@ float4 FragMain(VertData i) : SV_TARGET
 			)";
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(kVertexAttributeTypePosition, kColorFormatR32G32B32A32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatR32G32B32A32));
 
 		auto shaderDesc = new ShaderPipelineDesc();
 		shaderDesc->name = "Test";
 		shaderDesc->source = (const uint8_t*) source;
 		shaderDesc->sourceSize = strlen(source);
-		shaderDesc->states.zTest = kZTestLEqual;
-		shaderDesc->states.zWrite = kZWriteOn;
+		shaderDesc->states.zTest = ZTestLEqual;
+		shaderDesc->states.zWrite = ZWriteOn;
 		shaderDesc->varation = 0;
 		shaderDesc->vertexLayout = vertexLayout;
-		shaderDesc->parameters.push_back(ShaderParameter("_PerCameraData", kShaderParameterTypeConstantBuffer));
-		shaderDesc->parameters.push_back(ShaderParameter("_PerMeshData", kShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_PerCameraData", ShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_PerMeshData", ShaderParameterTypeConstantBuffer));
 
 		auto shader = shaderModule->RecCreateShader(context);
 		shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
@@ -135,7 +135,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		};
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(kVertexAttributeTypePosition, kColorFormatR32G32B32A32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatR32G32B32A32));
 
 		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
 		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
@@ -168,7 +168,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecCreateSurface(context);
-			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionClear, StoreActionStore));
 			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0.5f, 0, 0.5f, 1)));
 			auto camera = cameraModule->RecCreateCamera(context);
 			cameraModule->RecSetSurface(context, camera, surface);
@@ -185,7 +185,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecCreateSurface(context);
-			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionLoad, kStoreActionStore));
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionLoad, StoreActionStore));
 			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 0.5f, 1)));
 			auto camera = cameraModule->RecCreateCamera(context);
 			cameraModule->RecSetSurface(context, camera, surface);
@@ -206,7 +206,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecCreateSurface(context);
-			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, kLoadActionClear, kStoreActionStore));
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionClear, StoreActionStore));
 			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
 			auto camera = cameraModule->RecCreateCamera(context);
 			cameraModule->RecSetSurface(context, camera, surface);

@@ -122,17 +122,17 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 
 		DESERIALIZE_METHOD_ARG2_START(Present, D12SwapChain*, target, D12Texture*, texture);
 		planner->RecPresent(target);
-		target->backBufferIndex = (target->backBufferIndex + 1) % target->backBufferCount;
+		target->bacBufferIndex = (target->bacBufferIndex + 1) % target->bacBufferCount;
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(FinalBlit, D12SwapChain*, target, D12Texture*, texture);
 		// Blit ofscreen buffer to swapchain backbuffer
-		auto backBuffer = target->GetBackBuffer();
-		BlitCopy(context, texture, backBuffer);
+		auto bacBuffer = target->GetBacBuffer();
+		BlitCopy(context, texture, bacBuffer);
 
-		ASSERT(target->backBufferIndex == target->IDXGISwapChain3->GetCurrentBackBufferIndex());
+		ASSERT(target->bacBufferIndex == target->IDXGISwapChain3->GetCurrentBackBufferIndex());
 
-		SetTextureState(context, backBuffer, D3D12_RESOURCE_STATE_PRESENT);
+		SetTextureState(context, bacBuffer, D3D12_RESOURCE_STATE_PRESENT);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CreateIBuffer, D12Buffer*, target);
@@ -190,7 +190,7 @@ void D12GraphicsModule::SetBuffer(D12ShaderArguments* target, const char* name, 
 		auto& rootParameter = rootParameters[i];
 		switch (rootParameter.type)
 		{
-		/*case kD12RootParamterTypeTableSRV:
+		/*case D12RootParamterTypeTableSRV:
 		{
 			for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
 			{
@@ -218,7 +218,7 @@ void D12GraphicsModule::SetBuffer(D12ShaderArguments* target, const char* name, 
 			break;
 		}*/
 
-		case kD12RootParamterTypeConstantBuffer:
+		case D12RootParamterTypeConstantBuffer:
 		{
 			auto& rootSubParameter = rootParameter.supParameters[0];
 			if (strcmp(rootSubParameter.name, name) != 0)
@@ -243,7 +243,7 @@ void D12GraphicsModule::SetTexture(D12ShaderArguments* target, const char* name,
 		auto& rootArgument = rootArguments[i];
 		switch (rootParameter.type)
 		{
-		case kD12RootParamterTypeTableSRV:
+		case D12RootParamterTypeTableSRV:
 		{
 			for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
 			{
@@ -305,7 +305,7 @@ void D12GraphicsModule::SetFilter(D12ShaderArguments* target, const char* name, 
 		auto& rootArgument = rootArguments[i];
 		switch (rootParameter.type)
 		{
-		case kD12RootParamterTypeTableSamplers:
+		case D12RootParamterTypeTableSamplers:
 		{
 			for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
 			{
@@ -414,7 +414,7 @@ void D12GraphicsModule::SetRenderPass(const ExecutionContext & context, const D1
 	{
 		SetTextureState(context, depthTexture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	}
-	D12Heap* heaps[kD12HeapTypeCount] = {
+	D12Heap* heaps[D12HeapTypeCount] = {
 		srvHeap,
 		samplersHeap,
 		nullptr,
@@ -440,7 +440,7 @@ inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, c
 		auto& rootParameter = rootParameters[i];
 		switch (rootParameter.type)
 		{
-		case kD12RootParamterTypeTableSRV:
+		case D12RootParamterTypeTableSRV:
 		{
 			auto& rootArgument = rootArguments[i];
 			for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
@@ -460,7 +460,7 @@ inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, c
 			}
 			break;
 		}
-		case kD12RootParamterTypeTableSamplers:
+		case D12RootParamterTypeTableSamplers:
 		{
 			auto& rootArgument = rootArguments[i];
 			rootArgument.IsCurrentlyUsedByDraw = true;
@@ -490,7 +490,7 @@ void D12GraphicsModule::BlitCopy(const ExecutionContext& context, D12Texture* sr
 		InitializeBlitCopy(blitCopy);
 	}
 
-	SetColorAttachment(context, blitCopy->renderPass, 0, ColorAttachment(dest, kStoreActionStore, kLoadActionDontCare));
+	SetColorAttachment(context, blitCopy->renderPass, 0, ColorAttachment(dest, StoreActionStore, LoadActionDontCare));
 	SetRenderPass(context, blitCopy->renderPass);
 
 	SetTexture((D12ShaderArguments*) blitCopy->properties, "_MainTex", src);
@@ -502,16 +502,16 @@ void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* s
 	planner->RecRequestSplit();
 
 	// Blit ofscreen buffer to swapchain backbuffer
-	auto backBuffer = swapChain->GetBackBuffer();
-	BlitCopy(context, offscreen, backBuffer);
+	auto bacBuffer = swapChain->GetBacBuffer();
+	BlitCopy(context, offscreen, bacBuffer);
 
-	ASSERT(swapChain->backBufferIndex == swapChain->IDXGISwapChain3->GetCurrentBackBufferIndex());
+	ASSERT(swapChain->bacBufferIndex == swapChain->IDXGISwapChain3->GetCurrentBackBufferIndex());
 
 	// Present backbuffer on screen
-	SetTextureState(context, backBuffer, D3D12_RESOURCE_STATE_PRESENT);
+	SetTextureState(context, bacBuffer, D3D12_RESOURCE_STATE_PRESENT);
 	planner->RecPresent(swapChain);
 
-	swapChain->backBufferIndex = (swapChain->backBufferIndex + 1) % swapChain->backBufferCount;
+	swapChain->bacBufferIndex = (swapChain->bacBufferIndex + 1) % swapChain->bacBufferCount;
 }
 
 bool D12GraphicsModule::Initialize()
@@ -543,16 +543,16 @@ bool D12GraphicsModule::Initialize()
 	if (FAILED(result))
 		return false;
 
-	// This is the highest version the sample supports. If CheckFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
+	// This is the highest version the sample supports. If ChecFeatureSupport succeeds, the HighestVersion returned will not be greater than this.
 	rootSignatureFeatures.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
 	if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &rootSignatureFeatures, sizeof(rootSignatureFeatures))))
 		rootSignatureFeatures.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 
-	srvHeap = new D12Heap(device, kD12HeapTypeSRVs, 100);
-	rtvHeap = new D12Heap(device, kD12HeapTypeRTVs, 100);
-	samplersHeap = new D12Heap(device, kD12HeapTypeSamplers, 100);
-	srvCpuHeap = new D12Heap(device, kD12HeapTypeSRVsCPU, 100);
-	samplersCpuHeap = new D12Heap(device, kD12HeapTypeSamplersCPU, 100);
+	srvHeap = new D12Heap(device, D12HeapTypeSRVs, 100);
+	rtvHeap = new D12Heap(device, D12HeapTypeRTVs, 100);
+	samplersHeap = new D12Heap(device, D12HeapTypeSamplers, 100);
+	srvCpuHeap = new D12Heap(device, D12HeapTypeSRVsCPU, 100);
+	samplersCpuHeap = new D12Heap(device, D12HeapTypeSamplersCPU, 100);
 
 	ID3D12CommandAllocator* alloc;
 	ASSERT_SUCCEEDED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&alloc)));
@@ -565,14 +565,14 @@ bool D12GraphicsModule::Initialize()
 void D12GraphicsModule::InitializeSwapCain(D12SwapChain* swapChain)
 {
 	auto view = swapChain->view;
-	auto backBufferCount = swapChain->backBufferCount;
+	auto bacBufferCount = swapChain->bacBufferCount;
 
 	swapChain->width = view->width;
 	swapChain->height = view->height;
 
 	// Describe and create the swap chain.
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.BufferCount = backBufferCount;
+	swapChainDesc.BufferCount = bacBufferCount;
 	swapChainDesc.Width = swapChain->width;
 	swapChainDesc.Height = swapChain->height;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -599,27 +599,27 @@ void D12GraphicsModule::InitializeSwapCain(D12SwapChain* swapChain)
 
 	ASSERT_SUCCEEDED(swapChain1->QueryInterface(IID_PPV_ARGS(&swapChain->IDXGISwapChain3)));
 	auto d12SwapChain = swapChain->IDXGISwapChain3;
-	swapChain->backBufferIndex = d12SwapChain->GetCurrentBackBufferIndex();
+	swapChain->bacBufferIndex = d12SwapChain->GetCurrentBackBufferIndex();
 
-	auto memory = rtvHeap->Allocate(backBufferCount);
+	auto memory = rtvHeap->Allocate(bacBufferCount);
 
 	// Create backbuffers
-	swapChain->backBuffers = new D12Texture*[backBufferCount];
-	for (uint32_t i = 0; i < backBufferCount; i++)
+	swapChain->bacBuffers = new D12Texture*[bacBufferCount];
+	for (uint32_t i = 0; i < bacBufferCount; i++)
 	{
-		auto backBufferMemory = D12HeapMemory(memory.pointer + i, 1);
+		auto bacBufferMemory = D12HeapMemory(memory.pointer + i, 1);
 
-		ID3D12Resource* backBufferResource;
-		ASSERT_SUCCEEDED(d12SwapChain->GetBuffer(i, IID_PPV_ARGS(&backBufferResource)));
-		device->CreateRenderTargetView(backBufferResource, nullptr, rtvHeap->GetCpuHandle(backBufferMemory));
+		ID3D12Resource* bacBufferResource;
+		ASSERT_SUCCEEDED(d12SwapChain->GetBuffer(i, IID_PPV_ARGS(&bacBufferResource)));
+		device->CreateRenderTargetView(bacBufferResource, nullptr, rtvHeap->GetCpuHandle(bacBufferMemory));
 
-		auto backBuffer = new D12Texture(swapChain->width, swapChain->height);
-		backBuffer->usage = kTextureUsageFlagRender;
-		backBuffer->rtvMemory = backBufferMemory;
-		backBuffer->resource = backBufferResource;
-		backBuffer->currentState = D3D12_RESOURCE_STATE_PRESENT;
-		swapChain->backBuffers[i] = backBuffer;
-		SetName(backBufferResource, L"BackBuffer %d (SwapChain %d)", i, resourceCounter);
+		auto bacBuffer = new D12Texture(swapChain->width, swapChain->height);
+		bacBuffer->usage = TextureUsageFlagRender;
+		bacBuffer->rtvMemory = bacBufferMemory;
+		bacBuffer->resource = bacBufferResource;
+		bacBuffer->currentState = D3D12_RESOURCE_STATE_PRESENT;
+		swapChain->bacBuffers[i] = bacBuffer;
+		SetName(bacBufferResource, L"BacBuffer %d (SwapChain %d)", i, resourceCounter);
 	}
 }
 
@@ -631,7 +631,7 @@ void D12GraphicsModule::InitializeTexture(D12Texture* texture)
 	textureDesc.Width = texture->width;
 	textureDesc.Height = texture->height;
 	textureDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-	if (texture->usage & kTextureUsageFlagRender)
+	if (texture->usage & TextureUsageFlagRender)
 		textureDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 	textureDesc.DepthOrArraySize = 1;
 	textureDesc.SampleDesc.Count = 1;
@@ -642,7 +642,7 @@ void D12GraphicsModule::InitializeTexture(D12Texture* texture)
 	bool useClearVlaue = false;
 
 	// If we match the clear values with render pass, we win performance
-	if (texture->usage & kTextureUsageFlagRender)
+	if (texture->usage & TextureUsageFlagRender)
 	{
 		clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		clearValue.Color[0] = 0;
@@ -661,7 +661,7 @@ void D12GraphicsModule::InitializeTexture(D12Texture* texture)
 		IID_PPV_ARGS(&texture->resource)));
 
 	// Create SRV
-	if (texture->usage & kTextureUsageFlagShader)
+	if (texture->usage & TextureUsageFlagShader)
 	{
 		texture->srvMemory = srvCpuHeap->Allocate(1);
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -673,7 +673,7 @@ void D12GraphicsModule::InitializeTexture(D12Texture* texture)
 	}
 
 	// Create RTV
-	if (texture->usage & kTextureUsageFlagRender)
+	if (texture->usage & TextureUsageFlagRender)
 	{
 		texture->rtvMemory = rtvHeap->Allocate(1);
 		device->CreateRenderTargetView(texture->resource, nullptr, rtvHeap->GetCpuHandle(texture->rtvMemory));
@@ -739,11 +739,11 @@ void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)
 	if (error.Get() != NULL)
 		ERROR((const char*) error.Get()->GetBufferPointer());
 
-	pipeline->programs[kShaderProgramTypeVertex] = ShaderProgram(new uint8_t[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
-	pipeline->programs[kShaderProgramTypeFragment] = ShaderProgram(new uint8_t[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
+	pipeline->programs[ShaderProgramTypeVertex] = ShaderProgram(new uint8_t[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
+	pipeline->programs[ShaderProgramTypeFragment] = ShaderProgram(new uint8_t[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
 
-	memcpy((void*) pipeline->programs[kShaderProgramTypeVertex].code, (const uint8_t*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
-	memcpy((void*) pipeline->programs[kShaderProgramTypeFragment].code, (const uint8_t*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
+	memcpy((void*) pipeline->programs[ShaderProgramTypeVertex].code, (const uint8_t*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
+	memcpy((void*) pipeline->programs[ShaderProgramTypeFragment].code, (const uint8_t*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
 }
 
 void D12GraphicsModule::InitializePipeline(D12ShaderPipeline* pipeline)
@@ -760,17 +760,17 @@ void D12GraphicsModule::InitializePipeline(D12ShaderPipeline* pipeline)
 	ComPtr<ID3DBlob> vertexShader;
 	ComPtr<ID3DBlob> fragmentShader;
 	{
-		if (pipeline->programs[kShaderProgramTypeVertex].available)
+		if (pipeline->programs[ShaderProgramTypeVertex].available)
 		{
-			auto shaderProgram = pipeline->programs[kShaderProgramTypeVertex];
+			auto shaderProgram = pipeline->programs[ShaderProgramTypeVertex];
 			ASSERT_SUCCEEDED(D3DCreateBlob(shaderProgram.size, &vertexShader));
 			memcpy(vertexShader.Get()->GetBufferPointer(), shaderProgram.code, shaderProgram.size);
 			psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShader.Get());
 		}
 
-		if (pipeline->programs[kShaderProgramTypeFragment].available)
+		if (pipeline->programs[ShaderProgramTypeFragment].available)
 		{
-			auto shaderProgram = pipeline->programs[kShaderProgramTypeFragment];
+			auto shaderProgram = pipeline->programs[ShaderProgramTypeFragment];
 			ASSERT_SUCCEEDED(D3DCreateBlob(shaderProgram.size, &fragmentShader));
 			memcpy(fragmentShader.Get()->GetBufferPointer(), shaderProgram.code, shaderProgram.size);
 			psoDesc.PS = CD3DX12_SHADER_BYTECODE(fragmentShader.Get());
@@ -785,26 +785,26 @@ void D12GraphicsModule::InitializePipeline(D12ShaderPipeline* pipeline)
 		{
 			switch (parameter.type)
 			{
-			case kShaderParameterTypeConstantBuffer:
+			case ShaderParameterTypeConstantBuffer:
 			{
 				rootParameters.push_back(D12RootParamter::AsConstantBuffer(parameter.name.c_str()));
 				break;
 			}
-			case kShaderParameterTypeBuffer:
+			case ShaderParameterTypeBuffer:
 			{
-				auto& rootParamter = pipeline->FindRootParameter(kD12RootParamterTypeTableSRV);
+				auto& rootParamter = pipeline->FindRootParameter(D12RootParamterTypeTableSRV);
 				rootParamter.supParameters.push_back(D12RootSubParamter(parameter.name.c_str(), D3D12_DESCRIPTOR_RANGE_TYPE_SRV));
 				break;
 			}
-			case kShaderParameterTypeTexture:
+			case ShaderParameterTypeTexture:
 			{
-				auto& rootParamter = pipeline->FindRootParameter(kD12RootParamterTypeTableSRV);
+				auto& rootParamter = pipeline->FindRootParameter(D12RootParamterTypeTableSRV);
 				rootParamter.supParameters.push_back(D12RootSubParamter(parameter.name.c_str(), D3D12_DESCRIPTOR_RANGE_TYPE_SRV, true));
 				break;
 			}
-			case kShaderParameterTypeSampler:
+			case ShaderParameterTypeSampler:
 			{
-				auto& rootParamter = pipeline->FindRootParameter(kD12RootParamterTypeTableSamplers);
+				auto& rootParamter = pipeline->FindRootParameter(D12RootParamterTypeTableSamplers);
 				rootParamter.supParameters.push_back(D12RootSubParamter(parameter.name.c_str(), D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER));
 				break;
 			}
@@ -816,12 +816,12 @@ void D12GraphicsModule::InitializePipeline(D12ShaderPipeline* pipeline)
 			auto& rootParameter = rootParameters[i];
 			switch (rootParameter.type)
 			{
-			case kD12RootParamterTypeConstantBuffer:
+			case D12RootParamterTypeConstantBuffer:
 			{
 				d12RootParameters[i].InitAsConstantBufferView(i, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_DATA_VOLATILE, D3D12_SHADER_VISIBILITY_ALL);
 				break;
 			}
-			case kD12RootParamterTypeTableSRV:
+			case D12RootParamterTypeTableSRV:
 			{
 				uint32_t srvCount = 0;
 				rootParameter.GetCounts(&srvCount, nullptr);
@@ -832,7 +832,7 @@ void D12GraphicsModule::InitializePipeline(D12ShaderPipeline* pipeline)
 				d12RootParameters[i].InitAsDescriptorTable(1, ranges, D3D12_SHADER_VISIBILITY_ALL);
 				break;
 			}
-			case kD12RootParamterTypeTableSamplers:
+			case D12RootParamterTypeTableSamplers:
 			{
 				uint32_t samplersCount = 0;
 				rootParameter.GetCounts(nullptr, &samplersCount);
@@ -908,19 +908,19 @@ void D12GraphicsModule::InitializeProperties(D12ShaderArguments* target)
 	{
 		switch (rootParameter.type)
 		{
-		case kD12RootParamterTypeTableSRV:
+		case D12RootParamterTypeTableSRV:
 		{
 			auto memory = srvHeap->Allocate(rootParameter.supParameters.size());
 			rootArguments.push_back(D12RootArgument(memory));
 			break;
 		}
-		case kD12RootParamterTypeTableSamplers:
+		case D12RootParamterTypeTableSamplers:
 		{
 			auto memory = samplersHeap->Allocate(rootParameter.supParameters.size());
 			rootArguments.push_back(D12RootArgument(memory));
 			break;
 		}
-		case kD12RootParamterTypeConstantBuffer:
+		case D12RootParamterTypeConstantBuffer:
 		{
 			rootArguments.push_back(D12RootArgument(0));
 			break;
@@ -964,19 +964,19 @@ float4 FragMain(VertData i) : SV_TARGET
 			)";
 
 	VertexLayout vertexLayout;
-	vertexLayout.attributes.push_back(VertexAttributeLayout(kVertexAttributeTypePosition, kColorFormatR32G32B32));
-	vertexLayout.attributes.push_back(VertexAttributeLayout(kVertexAttributeTypeTexCoord0, kColorFormatR32G32));
+	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatR32G32B32));
+	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypeTexCoord0, ColorFormatR32G32));
 
 	auto shaderDesc = new ShaderPipelineDesc();
 	shaderDesc->name = "Test";
 	shaderDesc->source = (const uint8_t*) source;
 	shaderDesc->sourceSize = strlen(source);
-	shaderDesc->states.zTest = kZTestLEqual;
-	shaderDesc->states.zWrite = kZWriteOn;
+	shaderDesc->states.zTest = ZTestLEqual;
+	shaderDesc->states.zWrite = ZWriteOn;
 	shaderDesc->varation = 0;
 	shaderDesc->vertexLayout = vertexLayout;
-	shaderDesc->parameters.push_back(ShaderParameter("_MainTex", kShaderParameterTypeTexture));
-	shaderDesc->parameters.push_back(ShaderParameter("_MainTexSampler", kShaderParameterTypeSampler));
+	shaderDesc->parameters.push_back(ShaderParameter("_MainTex", ShaderParameterTypeTexture));
+	shaderDesc->parameters.push_back(ShaderParameter("_MainTexSampler", ShaderParameterTypeSampler));
 	target->pipeline = new D12ShaderPipeline(shaderDesc);
 	InitializePipeline((D12ShaderPipeline*)target->pipeline);
 
@@ -1012,11 +1012,11 @@ DXGI_FORMAT D12GraphicsModule::Convert(ColorFormat format)
 	// TODO: Table lookup
 	switch (format)
 	{
-	case kColorFormatR32G32B32A32:
+	case ColorFormatR32G32B32A32:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
-	case kColorFormatR32G32B32:
+	case ColorFormatR32G32B32:
 		return DXGI_FORMAT_R32G32B32_FLOAT;
-	case kColorFormatR32G32:
+	case ColorFormatR32G32:
 		return DXGI_FORMAT_R32G32_FLOAT;
 	}
 	
@@ -1029,9 +1029,9 @@ const char* D12GraphicsModule::Convert(VertexAttributeType type)
 	// TODO: Table lookup
 	switch (type)
 	{
-	case kVertexAttributeTypePosition:
+	case VertexAttributeTypePosition:
 		return "POSITION";
-	case kVertexAttributeTypeTexCoord0:
+	case VertexAttributeTypeTexCoord0:
 		return "TEXCOORD";
 	}
 
@@ -1043,11 +1043,11 @@ uint32_t D12GraphicsModule::GetSize(ColorFormat format)
 {
 	switch (format)
 	{
-	case kColorFormatR32G32B32A32:
+	case ColorFormatR32G32B32A32:
 		return sizeof(float) * 4;
-	case kColorFormatR32G32B32:
+	case ColorFormatR32G32B32:
 		return sizeof(float) * 3;
-	case kColorFormatR32G32:
+	case ColorFormatR32G32:
 		return sizeof(float) * 2;
 	}
 

@@ -71,9 +71,9 @@ struct D12RootSubParamter
 
 enum D12RootParamterType
 {
-	kD12RootParamterTypeTableSRV,
-	kD12RootParamterTypeTableSamplers,
-	kD12RootParamterTypeConstantBuffer,
+	D12RootParamterTypeTableSRV,
+	D12RootParamterTypeTableSamplers,
+	D12RootParamterTypeConstantBuffer,
 };
 
 struct D12RootParamter
@@ -83,7 +83,7 @@ struct D12RootParamter
 
 	static D12RootParamter AsConstantBuffer(const char* name)
 	{
-		D12RootParamter parameter(kD12RootParamterTypeConstantBuffer);
+		D12RootParamter parameter(D12RootParamterTypeConstantBuffer);
 		parameter.supParameters.push_back(D12RootSubParamter(name, (D3D12_DESCRIPTOR_RANGE_TYPE)-1));
 		return parameter;
 	}
@@ -167,17 +167,17 @@ struct D12SwapChain : public ISwapChain
 {
 	D12SwapChain(const IView* view) :
 		ISwapChain(view),
-		backBufferIndex(0),
-		backBuffers(nullptr),
+		bacBufferIndex(0),
+		bacBuffers(nullptr),
 		IDXGISwapChain3(nullptr)
 	{
 	}
 
 	inline IDXGISwapChain3* GetIDXGISwapChain3() const { return IDXGISwapChain3; }
-	inline D12Texture* GetBackBuffer() const { return backBuffers[backBufferIndex]; }
+	inline D12Texture* GetBacBuffer() const { return bacBuffers[bacBufferIndex]; }
 
-	D12Texture** backBuffers;
-	uint32_t backBufferIndex;
+	D12Texture** bacBuffers;
+	uint32_t bacBufferIndex;
 	uint32_t width;
 	uint32_t height;
 

@@ -6,8 +6,8 @@
 
 enum VertexAttributeType
 {
-	kVertexAttributeTypePosition,
-	kVertexAttributeTypeTexCoord0,
+	VertexAttributeTypePosition,
+	VertexAttributeTypeTexCoord0,
 };
 
 struct VertexAttributeLayout

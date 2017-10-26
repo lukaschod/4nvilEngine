@@ -4,9 +4,9 @@
 
 enum ColorFormat
 {
-	kColorFormatR32G32B32A32,
-	kColorFormatR32G32B32,
-	kColorFormatR32G32,
+	ColorFormatR32G32B32A32,
+	ColorFormatR32G32B32,
+	ColorFormatR32G32,
 };
 
 // RGBA

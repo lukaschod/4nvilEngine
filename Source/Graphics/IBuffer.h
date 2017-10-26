@@ -4,15 +4,15 @@
 
 enum BufferUsageFlags
 {
-	kBufferUsageFlagNone = 0,
-	kBufferUsageFlagsShader = 1 << 0,
+	BufferUsageFlagNone = 0,
+	BufferUsageFlagsShader = 1 << 0,
 };
 
 struct IBuffer
 {
 	IBuffer(size_t size) : 
 		data(new uint8_t[size], size),
-		usage(kBufferUsageFlagsShader)
+		usage(BufferUsageFlagsShader)
 	{}
 
 	inline size_t GetSize() const { return data.size; }

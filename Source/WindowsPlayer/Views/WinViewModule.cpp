@@ -108,7 +108,7 @@ const IView* WinViewModule::RecCreateIView(const ExecutionContext& context)
 	target->height = height;
 	auto swapChain = graphicsModule->RecCreateISwapChain(context, target);
 	target->swapChain = swapChain;
-	stream.Write(kCommandCodeCreateIView);
+	stream.Write(CommandCodeCreateIView);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;

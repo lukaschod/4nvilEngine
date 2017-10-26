@@ -3,7 +3,7 @@
 #define NOARG
 #define COMMA ,
 
-#define DECLARE_COMMAND_CODE(Name) static const int kCommandCode##Name = __COUNTER__;
+#define DECLARE_COMMAND_CODE(Name) static const int CommandCode##Name = __COUNTER__;
 
 #define SERIALIZE_METHOD_TEMPLATE(Module, Name, ReturnType, DeclareArguments, WriteArguments, BodyPrefix, BodyPostFix) \
 	DECLARE_COMMAND_CODE(Name); \
@@ -12,7 +12,7 @@
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \
 		BodyPrefix \
-		stream.Write(kCommandCode##Name); \
+		stream.Write(CommandCode##Name); \
 		WriteArguments \
 		buffer->commandCount++; \
 		BodyPostFix \
@@ -66,8 +66,8 @@
 	}
 
 #define SERIALIZE_METHOD_BATCH_ARG1(Module, Name, BatchName, ArgumentType1) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1, stream.Write(argument1);, SERIALIZE_BATCH(kCommandCode##BatchName, argument1), NOARG)
+	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1, stream.Write(argument1);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)
 #define SERIALIZE_METHOD_BATCH_ARG2(Module, Name, BatchName, ArgumentType1, ArgumentType2) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2, stream.Write(argument1); stream.Write(argument2);, SERIALIZE_BATCH(kCommandCode##BatchName, argument1), NOARG)
+	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2, stream.Write(argument1); stream.Write(argument2);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)
 #define SERIALIZE_METHOD_BATCH_ARG3(Module, Name, BatchName, ArgumentType1, ArgumentType2, ArgumentType3) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2 COMMA ArgumentType3 argument3, stream.Write(argument1); stream.Write(argument2); stream.Write(argument3);, SERIALIZE_BATCH(kCommandCode##BatchName, argument1), NOARG)
+	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2 COMMA ArgumentType3 argument3, stream.Write(argument1); stream.Write(argument2); stream.Write(argument3);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)

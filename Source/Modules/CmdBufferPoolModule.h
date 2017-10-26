@@ -8,16 +8,16 @@
 
 enum CmdBufferState
 {
-	kCmdBufferStateNotUsed,
-	kCmdBufferStateUsed,
-	kCmdBufferStateExecuted,
+	CmdBufferStateNotUsed,
+	CmdBufferStateUsed,
+	CmdBufferStateExecuted,
 };
 
 struct CmdBuffer
 {
 	CmdBuffer() : 
 		commandCount(0),
-		state(kCmdBufferStateNotUsed)
+		state(CmdBufferStateNotUsed)
 	{}
 
 	/// Reced commands buffer

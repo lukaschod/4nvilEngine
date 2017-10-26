@@ -7,29 +7,29 @@
 #include <Modules\CmdBufferPoolModule.h>
 
 /*#define DESERIALIZE_METHOD_START(Name) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG1_START(Name, ArgumentType1, ArgumentName1) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1 ArgumentName1; stream.Read(ArgumentName1); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG2_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1 ArgumentName1; stream.Read(ArgumentName1); \
 	ArgumentType2 ArgumentName2; stream.Read(ArgumentName2); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG3_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1 ArgumentName1; stream.Read(ArgumentName1); \
 	ArgumentType2 ArgumentName2; stream.Read(ArgumentName2); \
 	ArgumentType3 ArgumentName3; stream.Read(ArgumentName3); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG4_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3, ArgumentType4, ArgumentName4) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1 ArgumentName1; stream.Read(ArgumentName1); \
 	ArgumentType2 ArgumentName2; stream.Read(ArgumentName2); \
 	ArgumentType3 ArgumentName3; stream.Read(ArgumentName3); \
@@ -37,29 +37,29 @@
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);*/
 
 #define DESERIALIZE_METHOD_START(Name) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG1_START(Name, ArgumentType1, ArgumentName1) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG2_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG3_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
 	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_ARG4_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3, ArgumentType4, ArgumentName4) \
-	case kCommandCode##Name: { \
+	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
 	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
@@ -75,7 +75,7 @@
 		auto unit = (ReturnType*)new CreateType(); \
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \
-		stream.Write(kCommandCodeCreate##ReturnType); \
+		stream.Write(CommandCodeCreate##ReturnType); \
 		stream.Write(unit); \
 		buffer->commandCount++; \
 		return unit; \
@@ -88,7 +88,7 @@
 		auto unit = (ReturnType*)new CreateType(); \
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \
-		stream.Write(kCommandCodeCreate##ReturnType); \
+		stream.Write(CommandCodeCreate##ReturnType); \
 		stream.Write(unit); \
 		stream.Write(argument1); \
 		stream.Write(argument2); \
@@ -104,7 +104,7 @@ public:
 	CmdModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual size_t GetExecutionkSize() override;
+	virtual size_t GetExecutionSize() override;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) = 0;

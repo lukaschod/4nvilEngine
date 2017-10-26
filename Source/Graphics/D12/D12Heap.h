@@ -5,12 +5,12 @@
 
 enum D12HeapType
 {
-	kD12HeapTypeSRVs,
-	kD12HeapTypeSamplers,
-	kD12HeapTypeRTVs,
-	kD12HeapTypeSRVsCPU,
-	kD12HeapTypeSamplersCPU,
-	kD12HeapTypeCount,
+	D12HeapTypeSRVs,
+	D12HeapTypeSamplers,
+	D12HeapTypeRTVs,
+	D12HeapTypeSRVsCPU,
+	D12HeapTypeSamplersCPU,
+	D12HeapTypeCount,
 };
 
 struct D12HeapMemory
