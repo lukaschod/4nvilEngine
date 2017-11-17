@@ -38,6 +38,11 @@
 		Console::Print("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
+#else
+#	define ASSERT(isFalse) (void)(isFalse)
+#	define ASSERT_MSG(isFalse, ...) (void)(isFalse)
+#	define ERROR(...)
+#endif
 
 #	define TRACE(...) \
 	{ \
@@ -45,12 +50,6 @@
 		Console::Printf(__VA_ARGS__); \
 		Console::Print("\n"); \
 	}
-#else
-#	define ASSERT(isFalse) (void)(isFalse)
-#	define ASSERT_MSG(isFalse, ...) (void)(isFalse)
-#	define ERROR(...)
-#	define TRACE(...)
-#endif
 
 //#define EXT_DEBUG
 

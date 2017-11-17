@@ -45,7 +45,9 @@ public:
 	const Camera* RecCreateCamera(const ExecutionContext& context);
 	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
 	void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
-	const List<Camera*>& GetCameras();
+
+public:
+	const List<Camera*>& GetCameras() const;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

@@ -2,8 +2,9 @@
 #include <Transforms\TransformModule.h>
 #include <Graphics\IGraphicsModule.h>
 
-MeshRendererModule::MeshRendererModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	ComponentModule(bufferCount, bufferIndexStep)
+MeshRendererModule::MeshRendererModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: ComponentModule(bufferCount, bufferIndexStep)
+	, perAllRendererStorage(nullptr)
 {
 }
 
@@ -19,6 +20,9 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void MeshRendererModule::Execute(const ExecutionContext& context)
 {
+	if (perAllRendererStorage == nullptr)
+		perAllRendererStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
+
 	CmdModule::Execute(context);
 
 	for (auto meshRenderer : meshRenderers)
@@ -28,7 +32,8 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	}
 }
 
-const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() { return meshRenderers; }
+const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return meshRenderers; }
+const Storage * MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
 
 SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);
@@ -50,6 +55,7 @@ bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, IOStrea
 
 		DESERIALIZE_METHOD_ARG2_START(SetMaterial, MeshRenderer*, target, const Material*, material);
 		target->material = material;
+		materialModule->RecSetStorage(context, target->material, "_perCameraData", perAllRendererStorage);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

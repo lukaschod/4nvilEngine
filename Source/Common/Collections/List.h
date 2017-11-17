@@ -3,6 +3,7 @@
 #include <Common\EngineCommon.h>
 #include <vector>
 
+
 template<class T>
 class List : public std::vector<T>
 {

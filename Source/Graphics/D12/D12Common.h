@@ -22,9 +22,7 @@ using Microsoft::WRL::ComPtr;
 #define D12_DEBUG_TRACE(...)
 #endif
 
-#ifdef RELEASE
-#define ASSERT_SUCCEEDED(hr) (void)(hr)
-#else
+#ifdef DEBUG
 #define ASSERT_SUCCEEDED(hr) \
 	if (FAILED(hr)) \
 	{ \
@@ -38,4 +36,6 @@ using Microsoft::WRL::ComPtr;
 		Console::Print("\n"); \
 		__debugbreak(); \
 	}
+#else
+	#define ASSERT_SUCCEEDED(hr) (void)(hr)
 #endif

@@ -62,7 +62,7 @@ SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, PushDebug, const char*);
 SERIALIZE_METHOD(D12GraphicsModule, PopDebug);
-SERIALIZE_METHOD_ARG1(D12GraphicsModule, BindDrawSimple, const DrawSimple&);
+SERIALIZE_METHOD_ARG1(D12GraphicsModule, Draw, const DrawDesc&);
 
 bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
 {
@@ -151,8 +151,8 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		planner->RecPopDebug();
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(BindDrawSimple, DrawSimple, target);
-		BindDrawSimple(context, target);
+		DESERIALIZE_METHOD_ARG1_START(Draw, DrawDesc, target);
+		Draw(context, target);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;
@@ -429,7 +429,7 @@ void D12GraphicsModule::UpdateBuffer(D12Buffer* target, uint32_t targetOffset, R
 	planner->RecUpdateBuffer(target, targetOffset, data);
 }
 
-inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, const DrawSimple& target)
+inline void D12GraphicsModule::Draw(const ExecutionContext& context, const DrawDesc& target)
 {
 	auto pipeline = (D12ShaderPipeline*) target.pipeline;
 	auto arguments = (D12ShaderArguments*) target.properties;
@@ -468,7 +468,7 @@ inline void D12GraphicsModule::BindDrawSimple(const ExecutionContext& context, c
 		}
 		}
 	}
-	planner->RecDrawSimple(target);
+	planner->RecDraw(target);
 }
 
 void D12GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
@@ -493,8 +493,8 @@ void D12GraphicsModule::BlitCopy(const ExecutionContext& context, D12Texture* sr
 	SetColorAttachment(context, blitCopy->renderPass, 0, ColorAttachment(dest, StoreActionStore, LoadActionDontCare));
 	SetRenderPass(context, blitCopy->renderPass);
 
-	SetTexture((D12ShaderArguments*) blitCopy->properties, "_MainTex", src);
-	BindDrawSimple(context, *blitCopy);
+	SetTexture((D12ShaderArguments*) blitCopy->properties, "_mainTex", src);
+	Draw(context, *blitCopy);
 }
 
 void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* swapChain, D12Texture* offscreen)
@@ -516,7 +516,7 @@ void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* s
 
 bool D12GraphicsModule::Initialize()
 {
-	UINT dxgiFactoryFlags;
+	UINT dxgiFactoryFlags = 0;
 #if defined(_DEBUG)
 	// Enable the debug layer (requires the Graphics Tools "optional feature").
 	// NOTE: Enabling the debug layer after device creation will invalidate the active device.
@@ -946,8 +946,8 @@ struct VertData
 	float2 uv : TEXCOORD;
 };
 
-Texture2D _MainTex : register(t0);
-SamplerState _MainTexSampler : register(s0);
+Texture2D _mainTex : register(t0);
+SamplerState _mainTexSampler : register(s0);
 
 VertData VertMain(AppData i)
 {
@@ -959,7 +959,7 @@ VertData VertMain(AppData i)
 
 float4 FragMain(VertData i) : SV_TARGET
 {
-	return _MainTex.Sample(_MainTexSampler, float2(i.uv.x, 1 - i.uv.y));
+	return _mainTex.Sample(_mainTexSampler, float2(i.uv.x, 1 - i.uv.y));
 }
 			)";
 
@@ -975,8 +975,8 @@ float4 FragMain(VertData i) : SV_TARGET
 	shaderDesc->states.zWrite = ZWriteOn;
 	shaderDesc->varation = 0;
 	shaderDesc->vertexLayout = vertexLayout;
-	shaderDesc->parameters.push_back(ShaderParameter("_MainTex", ShaderParameterTypeTexture));
-	shaderDesc->parameters.push_back(ShaderParameter("_MainTexSampler", ShaderParameterTypeSampler));
+	shaderDesc->parameters.push_back(ShaderParameter("_mainTex", ShaderParameterTypeTexture));
+	shaderDesc->parameters.push_back(ShaderParameter("_mainTexSampler", ShaderParameterTypeSampler));
 	target->pipeline = new D12ShaderPipeline(shaderDesc);
 	InitializePipeline((D12ShaderPipeline*)target->pipeline);
 
@@ -1004,7 +1004,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 	target->filter = new D12Filter(FilterOptions());
 	InitializeFilter(target->filter);
-	SetFilter((D12ShaderArguments*) target->properties, "_MainTexSampler", target->filter);
+	SetFilter((D12ShaderArguments*) target->properties, "_mainTexSampler", target->filter);
 }
 
 DXGI_FORMAT D12GraphicsModule::Convert(ColorFormat format)

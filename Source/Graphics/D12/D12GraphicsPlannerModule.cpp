@@ -3,8 +3,9 @@
 #include <Graphics\D12\D12GraphicsExecuterModule.h>
 #include <Graphics\D12\D12Heap.h>
 
-D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device) :
-	device(device)
+D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device) 
+	: device(device)
+	, drawOptimizers(4)
 {
 	directQueue = new D12CmdQueue(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 	directAllocatorPool = new D12CmdAllocatorPool(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -101,10 +102,12 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 
 	directQueue->Close(mainBuffer);
 
-	
 	executer->RecCmdBuffer(context, mainBuffer);
 
 	directAllocatorPool->Push(buffer->index, allocatorPool);
+
+	auto& drawOptimizer = drawOptimizers[context.workerIndex];
+	drawOptimizer.Clear();
 }
 
 DECLARE_COMMAND_CODE(PushDebug);
@@ -182,8 +185,8 @@ void D12GraphicsPlannerModule::RecPresent(const D12SwapChain* swapchain)
 	buffer->swapChain = swapchain->GetIDXGISwapChain3();
 }
 
-DECLARE_COMMAND_CODE(DrawSimple);
-void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
+DECLARE_COMMAND_CODE(Draw);
+void D12GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 {
 	// Lets try to split big command lists this way we can distribut work accross workers
 	if (recordingOptimizer.ShouldSplitRecording())
@@ -195,7 +198,7 @@ void D12GraphicsPlannerModule::RecDrawSimple(const DrawSimple& target)
 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeDrawSimple);
+	stream.Write(CommandCodeDraw);
 	stream.Write(target);
 
 	auto& rootParameters = ((D12ShaderPipeline*) target.pipeline)->rootParameters;
@@ -318,10 +321,18 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		target->resource->Unmap(0, nullptr);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(DrawSimple, DrawSimple, target);
+		DESERIALIZE_METHOD_ARG1_START(Draw, DrawDesc, target);
+		auto& drawOptimizer = drawOptimizers[context.workerIndex];
+
+		// If we used same pipeline lets skip
 		auto pipeline = (const D12ShaderPipeline*) target.pipeline;
-		commandList->SetPipelineState(pipeline->pipelineState);
-		commandList->SetGraphicsRootSignature(pipeline->rootSignature);
+		if (drawOptimizer.lastPipeline != pipeline)
+		{
+			commandList->SetPipelineState(pipeline->pipelineState);
+			commandList->SetGraphicsRootSignature(pipeline->rootSignature);
+			drawOptimizer.lastPipeline = pipeline;
+		}
+		
 		auto& rootParameters = ((D12ShaderPipeline*) target.pipeline)->rootParameters;
 		auto& rootArguments = ((D12ShaderArguments*) target.properties)->rootArguments;
 		for (size_t i = 0; i < rootParameters.size(); i++)
@@ -335,31 +346,58 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 			{
 				ASSERT(buffer->heaps[D12HeapTypeSRVs] != nullptr);
 				auto& value = stream.FastRead<D12HeapMemory>();
-				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[D12HeapTypeSRVs]->GetGpuHandle(value));
+				auto handle = buffer->heaps[D12HeapTypeSRVs]->GetGpuHandle(value);
+				
+				if (handle.ptr != drawOptimizer.rootArguments[i])
+				{
+					commandList->SetGraphicsRootDescriptorTable((UINT) i, handle);
+					drawOptimizer.rootArguments[i] = handle.ptr;
+				}
+				
 				break;
 			}
 			case D12RootParamterTypeTableSamplers:
 			{
 				ASSERT(buffer->heaps[D12HeapTypeSamplers] != nullptr);
 				auto& value = stream.FastRead<D12HeapMemory>();
-				commandList->SetGraphicsRootDescriptorTable((UINT) i, buffer->heaps[D12HeapTypeSamplers]->GetGpuHandle(value));
+				auto handle = buffer->heaps[D12HeapTypeSamplers]->GetGpuHandle(value);
+
+				if (handle.ptr != drawOptimizer.rootArguments[i])
+				{
+					commandList->SetGraphicsRootDescriptorTable((UINT) i, handle);
+					drawOptimizer.rootArguments[i] = handle.ptr;
+				}
+				
 				break;
 			}
 			case D12RootParamterTypeConstantBuffer:
 			{
 				auto& value = stream.FastRead<D3D12_GPU_VIRTUAL_ADDRESS>();
-				commandList->SetGraphicsRootConstantBufferView((UINT) i, value);
+
+				if (value != drawOptimizer.rootArguments[i])
+				{
+					commandList->SetGraphicsRootConstantBufferView((UINT) i, value);
+					drawOptimizer.rootArguments[i] = value;
+				}
+				
 				break;
 			}
 			}
 		}
-		auto vertexBufferView = pipeline->vertexBuffer;
-		auto vertexBuffer = (const D12Buffer*) target.vertexBuffer;
-		vertexBufferView.BufferLocation = vertexBuffer->resource->GetGPUVirtualAddress();
-		vertexBufferView.SizeInBytes = (UINT) vertexBuffer->data.size;
-		ASSERT(vertexBufferView.SizeInBytes % vertexBufferView.StrideInBytes == 0);
-		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
+
+		// If we used same pipeline and vertex buffer lets skip
+		if (drawOptimizer.lastPipeline != pipeline || drawOptimizer.lastVertexBuffer != target.vertexBuffer)
+		{
+			auto vertexBufferView = pipeline->vertexBuffer;
+			auto vertexBuffer = (const D12Buffer*) target.vertexBuffer;
+			vertexBufferView.BufferLocation = vertexBuffer->resource->GetGPUVirtualAddress();
+			vertexBufferView.SizeInBytes = (UINT) vertexBuffer->data.size;
+			ASSERT(vertexBufferView.SizeInBytes % vertexBufferView.StrideInBytes == 0);
+			commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
+			drawOptimizer.lastVertexBuffer = target.vertexBuffer;
+		}
+
 		commandList->DrawInstanced(target.size, 1, target.offset, 0);
 		DESERIALIZE_METHOD_END;
 

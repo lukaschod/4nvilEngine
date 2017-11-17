@@ -72,7 +72,8 @@
     <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\um;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\shared;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\um;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\shared;C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
@@ -90,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>__x86_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86_64;DEBUG;_HAS_ITERATOR_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

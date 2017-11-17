@@ -33,7 +33,7 @@ public:
 	void RecSetRenderPass(const D12RenderPass* target, bool ignoreLoadActions = false);
 	void RecUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
 	void RecPresent(const D12SwapChain* swapchain);
-	void RecDrawSimple(const DrawSimple& target);
+	void RecDraw(const DrawDesc& target);
 	void RecSetHeap(const D12Heap** heap);
 
 	void Reset();
@@ -56,13 +56,28 @@ private:
 		inline void MarSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
 		inline void MarDraw() { drawCount++; }
 		inline void MarSetHeap(D12Heap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12Heap*) * D12HeapTypeCount); }
-		inline bool ShouldSplitRecording() { return drawCount == 25; }
+		inline bool ShouldSplitRecording() { return drawCount == 500; }
 		
 		D12RenderPass* lastRenderPass;
 		D12Heap* lastHeaps[D12HeapTypeCount];
 		size_t drawCount;
 	};
 	RecingOptimizer recordingOptimizer;
+
+	struct DrawOptimizer
+	{
+		DrawOptimizer() { Clear(); }
+		void Clear()
+		{
+			lastPipeline = nullptr; 
+			lastVertexBuffer = nullptr; memset(rootArguments, 0, sizeof(UINT64) * 30);
+		}
+		const IShaderPipeline* lastPipeline;
+		const IBuffer* lastVertexBuffer;
+		UINT64 rootArguments[30];
+
+	};
+	List<DrawOptimizer> drawOptimizers;
 
 	D12GraphicsExecuterModule* executer;
 	ID3D12CommandAllocator* commandAllocator;

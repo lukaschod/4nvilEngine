@@ -31,7 +31,10 @@ public:
 	const MeshRenderer* RecCreateMeshRenderer(const ExecutionContext& context);
 	void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
 	void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
-	const List<MeshRenderer*>& GetMeshRenderers();
+
+public:
+	const List<MeshRenderer*>& GetMeshRenderers() const;
+	const Storage* GetPerAllRendererStorage() const;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
@@ -43,4 +46,5 @@ private:
 	StorageModule* storageModule;
 	TransformModule* transformModule;
 	UnitModule* unitModule;
+	const Storage* perAllRendererStorage;
 };

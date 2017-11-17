@@ -32,7 +32,7 @@ void CameraModule::Execute(const ExecutionContext& context)
 	}
 }
 
-const List<Camera*>& CameraModule::GetCameras() { return cameras; }
+const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
 
 DECLARE_COMMAND_CODE(CreateCamera);
 const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context)

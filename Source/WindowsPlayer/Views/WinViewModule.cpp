@@ -100,8 +100,8 @@ const IView* WinViewModule::RecCreateIView(const ExecutionContext& context)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto width = 2096;
-	auto height = 1280;
+	auto width = 2048;
+	auto height = 1536;
 	auto renderTarget = imageModule->RecCreateImage(context, width, height);
 	auto target = new WinView(renderTarget);
 	target->width = width;

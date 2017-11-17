@@ -11,7 +11,7 @@
 
 struct IView;
 
-struct DrawSimple
+struct DrawDesc
 {
 	const IShaderPipeline* pipeline;
 	const IShaderArguments* properties;
@@ -51,5 +51,5 @@ public:
 	virtual void RecPushDebug(const ExecutionContext& context, const char* name) = 0;
 	virtual void RecPopDebug(const ExecutionContext& context) = 0;
 
-	virtual void RecBindDrawSimple(const ExecutionContext& context, const DrawSimple& target) = 0;
+	virtual void RecDraw(const ExecutionContext& context, const DrawDesc& target) = 0;
 };

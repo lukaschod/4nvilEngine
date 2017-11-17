@@ -7,6 +7,7 @@
 #include <Rendering\MeshRendererModule.h>
 #include <Views\IViewModule.h>
 
+class StorageModule;
 class MaterialModule;
 
 class UnlitRenderingLoopModule : public CmdModule
@@ -25,4 +26,5 @@ private:
 	IGraphicsModule* graphicsModule;
 	IViewModule* viewModule;
 	MaterialModule* materialModule;
+	StorageModule* storageModule;
 };

@@ -184,7 +184,7 @@ struct D12SwapChain : public ISwapChain
 	IDXGISwapChain3* IDXGISwapChain3;
 };
 
-struct D12BlitCopy : public DrawSimple
+struct D12BlitCopy : public DrawDesc
 {
 	D12RenderPass* renderPass;
 	D12Filter* filter;
@@ -226,7 +226,7 @@ public:
 	virtual void RecPushDebug(const ExecutionContext& context, const char* name) override;
 	virtual void RecPopDebug(const ExecutionContext& context) override;
 
-	virtual void RecBindDrawSimple(const ExecutionContext& context, const DrawSimple& target) override;
+	virtual void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
@@ -259,7 +259,7 @@ private:
 	inline void SetViewport(const ExecutionContext& context, D12RenderPass* target, const Viewport& viewport);
 	inline void SetRenderPass(const ExecutionContext& context, const D12RenderPass* target);
 	inline void UpdateBuffer(D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
-	inline void BindDrawSimple(const ExecutionContext& context, const DrawSimple& target);
+	inline void Draw(const ExecutionContext& context, const DrawDesc& target);
 	inline void SetName(ID3D12Object* object, const wchar_t* format, ...);
 
 private:

@@ -51,14 +51,14 @@ public:
 		auto source =
 			R"(
 
-cbuffer PerCameraData : register(b0)
+cbuffer _perCameraData : register(b0)
 {
-	float4x4 worldToCamera;
+	float4x4 _worldToCamera;
 };
 
-cbuffer PerMeshData : register(b1)
+cbuffer _perMeshData : register(b1)
 {
-	float4x4 objectToWorld;
+	float4x4 _objectToWorld;
 };
 
 struct AppData
@@ -74,7 +74,7 @@ struct VertData
 VertData VertMain(AppData i)
 {
 	VertData o;
-	o.position = mul(worldToCamera, mul(objectToWorld, i.position));
+	o.position = mul(_worldToCamera, mul(_objectToWorld, i.position));
 	return o;
 }
 
@@ -95,8 +95,8 @@ float4 FragMain(VertData i) : SV_TARGET
 		shaderDesc->states.zWrite = ZWriteOn;
 		shaderDesc->varation = 0;
 		shaderDesc->vertexLayout = vertexLayout;
-		shaderDesc->parameters.push_back(ShaderParameter("_PerCameraData", ShaderParameterTypeConstantBuffer));
-		shaderDesc->parameters.push_back(ShaderParameter("_PerMeshData", ShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterTypeConstantBuffer));
 
 		auto shader = shaderModule->RecCreateShader(context);
 		shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
@@ -192,7 +192,7 @@ float4 FragMain(VertData i) : SV_TARGET
 			unitModule->RecAddComponent(context, mainCamera, camera);
 		}*/
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			auto view = viewModule->RecCreateIView(context);
 
@@ -215,9 +215,9 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto testShader = CreateShader(context);
 		auto mesh = CreateMesh(context);
-		for (int i = 0; i < 25; i++)
+		for (int i = 0; i < 100; i++)
 		{
-			for (int j = 0; j < 25; j++)
+			for (int j = 0; j < 100; j++)
 			{
 				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2, j*2, 0));
 			}
