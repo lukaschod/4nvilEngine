@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Graphics\VertexLayout.h>
-#include <Common\Collections\List.h>
-#include <Common\String.h>
+#include <Tools\Collections\List.h>
+#include <Tools\String.h>
 
 enum ShaderParameterType
 {

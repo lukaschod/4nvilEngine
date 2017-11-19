@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Common\AutoResetEvent.h>
+#include <Tools\Common.h>
+#include <Tools\Threading\AutoResetEvent.h>
 #include <Modules\IModuleExecuter.h>
 #include <Modules\IModulePlanner.h>
-#include <Common\Collections\List.h>
+#include <Tools\Collections\List.h>
 
 class Module;
 

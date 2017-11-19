@@ -1,5 +1,5 @@
 #include <Foundation\TimeModule.h>
-#include <Math\Math.h>
+#include <Tools\Math\Math.h>
 
 TimeModule::TimeModule() :
 	passedFrameCount(0)

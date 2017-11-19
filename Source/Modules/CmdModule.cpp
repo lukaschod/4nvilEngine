@@ -1,5 +1,5 @@
 #include <Modules\CmdModule.h>
-#include <Math\Math.h>
+#include <Tools\Math\Math.h>
 
 CmdModule::CmdModule(uint32_t bufferCount, uint32_t workersCount) :
 	backbufferIndex(0),

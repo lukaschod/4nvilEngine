@@ -1,6 +1,6 @@
 #include <Modules\StaticModulePlanner.h>
 #include <Modules\Module.h>
-#include <Common\Collections\List.h>
+#include <Tools\Collections\List.h>
 
 class StaticModulePlanNode
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Rendering\RenderingLoopModule.h>
 #include <Rendering\CameraModule.h>

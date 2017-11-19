@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Common\IOStream.h>
+#include <Tools\Common.h>
+#include <Tools\IOStream.h>
 #include <Modules\Module.h>
 #include <Modules\CmdModuleHelper.h>
 #include <Modules\CmdBufferPoolModule.h>

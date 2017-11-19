@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Common\Collections\List.h>
-#include <Math\Color.h>
+#include <Tools\Common.h>
+#include <Tools\Collections\List.h>
+#include <Tools\Math\Color.h>
 
 enum VertexAttributeType
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Graphics\ITexture.h>
-#include <Common\Collections\List.h>
-#include <Math\Color.h>
-#include <Math\Rect.h>
+#include <Tools\Collections\List.h>
+#include <Tools\Math\Color.h>
+#include <Tools\Math\Rect.h>
 
 #define COLOR_ATTACHMENT_MAX_COUNT 4
 

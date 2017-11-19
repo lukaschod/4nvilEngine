@@ -1,14 +1,14 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Modules\UnitModule.h>
-#include <Math\Rect.h>
-#include <Math\Matrix.h>
+#include <Tools\Common.h>
+#include <Foundation\UnitModule.h>
+#include <Tools\Math\Rect.h>
+#include <Tools\Math\Matrix.h>
 #include <Rendering\SurfaceModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\IRenderPass.h>
 #include <Graphics\ITexture.h>
-#include <Common\Collections\List.h>
+#include <Tools\Collections\List.h>
 
 class StorageModule; struct Storage;
 class CameraModule;

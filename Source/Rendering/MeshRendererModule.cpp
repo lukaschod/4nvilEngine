@@ -1,5 +1,5 @@
 #include <Rendering\MeshRendererModule.h>
-#include <Transforms\TransformModule.h>
+#include <Foundation\TransformModule.h>
 #include <Graphics\IGraphicsModule.h>
 
 MeshRendererModule::MeshRendererModule(uint32_t bufferCount, uint32_t bufferIndexStep) 

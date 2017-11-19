@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Common\String.h>
+#include <Tools\Common.h>
+#include <Tools\String.h>
 #include <Modules\CmdModule.h>
 #include <Rendering\ImageModule.h>
-#include <Math\Rect.h>
+#include <Tools\Math\Rect.h>
 
 struct IView
 {

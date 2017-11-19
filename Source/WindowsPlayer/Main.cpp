@@ -1,15 +1,15 @@
 #include <Modules\ModuleManager.h>
-#include <Modules\UnitModule.h>
 #include <Modules\ConcurrentModuleExecuter.h>
 #include <Modules\StaticModulePlanner.h>
 
-#include <Math\Vector.h>
-#include <Math\Matrix.h>
-#include <Common\StopWatch.h>
+#include <Tools\Math\Vector.h>
+#include <Tools\Math\Matrix.h>
+#include <Tools\StopWatch.h>
 
+#include <Foundation\UnitModule.h>
 #include <Foundation\TimeModule.h>
-#include <Log\LogModule.h>
-#include <Transforms\TransformModule.h>
+#include <Foundation\LogModule.h>
+#include <Foundation\TransformModule.h>
 #include <Rendering\CameraModule.h>
 #include <Rendering\ImageModule.h>
 #include <Rendering\MaterialModule.h>
@@ -20,8 +20,9 @@
 #include <Rendering\StorageModule.h>
 #include <Rendering\SurfaceModule.h>
 #include <Rendering\SamplerModule.h>
-#include <Graphics\D12\D12GraphicsModule.h>
-#include <WindowsPlayer\Views\WinViewModule.h>
+
+#include <Windows\Graphics\D12\D12GraphicsModule.h>
+#include <Windows\Views\WinViewModule.h>
 
 class TestModule : public Module
 {

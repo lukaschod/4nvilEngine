@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Common\StopWatch.h>
+#include <Tools\Common.h>
+#include <Tools\StopWatch.h>
 #include <Modules\Module.h>
 
 class TimeModule : public Module

@@ -1,7 +1,7 @@
 #include <Rendering\CameraModule.h>
 #include <Rendering\StorageModule.h>
 #include <Graphics\IGraphicsModule.h>
-#include <Transforms\TransformModule.h>
+#include <Foundation\TransformModule.h>
 
 CameraModule::CameraModule(uint32_t bufferCount, uint32_t bufferIndexStep) : 
 	ComponentModule(bufferCount, bufferIndexStep)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Modules\CmdModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\ITexture.h>

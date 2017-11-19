@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Modules\CmdModule.h>
-#include <Common\Collections\List.h>
+#include <Tools\Collections\List.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\VertexLayout.h>
 #include <Graphics\IBuffer.h>

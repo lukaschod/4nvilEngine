@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Modules\CmdModule.h>
 #include <Graphics\IRenderPass.h>
 #include <Graphics\ITexture.h>
 #include <Graphics\Shader.h>
 #include <Graphics\IBuffer.h>
 #include <Graphics\ISwapChain.h>
-#include <Math\Rect.h>
+#include <Tools\Math\Rect.h>
 
 struct IView;
 

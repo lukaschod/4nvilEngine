@@ -10,23 +10,8 @@
     <Filter Include="Source\WindowsPlayer">
       <UniqueIdentifier>{71a4dc94-a4cb-46ac-882a-853756778184}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Common">
-      <UniqueIdentifier>{59a80876-8f24-4fc5-bfd1-1f20719246e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics">
       <UniqueIdentifier>{a486f1ae-b5f4-40cc-a3ed-11290979acbf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Transforms">
-      <UniqueIdentifier>{756eaff1-1c90-4626-805c-10e17f710fa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Log">
-      <UniqueIdentifier>{68e3bac5-b5b6-4952-88d1-0340dac6bdb2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Math">
-      <UniqueIdentifier>{33fca1dc-5913-49a0-9e6a-4fe2343e9f86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Graphics\D12">
-      <UniqueIdentifier>{b1ba02ed-7d31-406d-8ff3-beb9813ccbfe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Rendering">
       <UniqueIdentifier>{1c961c67-dd90-4b0a-9969-2ae593e98855}</UniqueIdentifier>
@@ -37,14 +22,32 @@
     <Filter Include="Source\Views">
       <UniqueIdentifier>{af8287dc-e596-4367-82fb-d55f044a95e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\WindowsPlayer\Views">
-      <UniqueIdentifier>{a43889f6-ceb7-4a67-9336-2d87d079b5fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Common\Collections">
-      <UniqueIdentifier>{dae671b8-d8a2-49d5-9470-403fbc400df5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Foundation">
       <UniqueIdentifier>{322eea23-1dcd-4357-a2e9-58dca386d495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows">
+      <UniqueIdentifier>{724f55fe-8a27-433c-864d-9c8eb5b001f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows\Graphics">
+      <UniqueIdentifier>{96b0d8ca-bca7-4689-b401-2beb8e2bee2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows\Graphics\D12">
+      <UniqueIdentifier>{b2900fe4-f61a-41a8-82df-8a9558f83050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows\Views">
+      <UniqueIdentifier>{060aac22-eedd-4fb6-8060-7bef78fad9cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tools">
+      <UniqueIdentifier>{bbe352c4-5290-4a60-9e14-bdaaa6e24b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tools\Collections">
+      <UniqueIdentifier>{2227842c-eb0c-4596-8a70-947d54742367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tools\Math">
+      <UniqueIdentifier>{f521024d-ab55-4b28-94d9-27093f39b827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tools\Threading">
+      <UniqueIdentifier>{057be305-8769-4490-a7d3-6fda33297ca0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,18 +68,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp">
       <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Common\AutoResetEvent.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Log\LogModule.cpp">
-      <Filter>Source\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\UnitModule.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsModule.cpp">
-      <Filter>Source\Graphics\D12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\MeshModule.cpp">
       <Filter>Source\Rendering</Filter>
@@ -105,29 +96,8 @@
     <ClCompile Include="..\..\..\Source\Rendering\CameraModule.cpp">
       <Filter>Source\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Transforms\TransformModule.cpp">
-      <Filter>Source\Transforms</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\MaterialModule.cpp">
       <Filter>Source\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\WindowsPlayer\Views\WinViewModule.cpp">
-      <Filter>Source\WindowsPlayer\Views</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsPlannerModule.cpp">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12Heap.cpp">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12GraphicsExecuterModule.cpp">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.cpp">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\D12\D12CmdQueue.cpp">
-      <Filter>Source\Graphics\D12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp">
       <Filter>Source\Modules</Filter>
@@ -138,22 +108,46 @@
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp">
+      <Filter>Source\Windows\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp">
+      <Filter>Source\Tools\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\LogModule.cpp">
+      <Filter>Source\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp">
+      <Filter>Source\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp">
+      <Filter>Source\Foundation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\EngineCommon.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\Module.h">
       <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Math.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\IOStream.h">
-      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h">
       <Filter>Source\Modules</Filter>
@@ -167,35 +161,8 @@
     <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\AutoResetEvent.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\CmdModule.h">
       <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Log\LogModule.h">
-      <Filter>Source\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\StopWatch.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Vector.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Matrix.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Rect.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\UnitModule.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Color.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsModule.h">
-      <Filter>Source\Graphics\D12</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h">
       <Filter>Source\Graphics</Filter>
@@ -211,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\ShaderModule.h">
       <Filter>Source\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\String.h">
-      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Graphics\IRenderPass.h">
       <Filter>Source\Graphics</Filter>
@@ -248,9 +212,6 @@
     <ClInclude Include="..\..\..\Source\Rendering\CameraModule.h">
       <Filter>Source\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Transforms\TransformModule.h">
-      <Filter>Source\Transforms</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\MaterialModule.h">
       <Filter>Source\Rendering</Filter>
     </ClInclude>
@@ -260,47 +221,92 @@
     <ClInclude Include="..\..\..\Source\Graphics\ISwapChain.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsPlannerModule.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12Common.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12Heap.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12GraphicsExecuterModule.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\Collections\List.h">
-      <Filter>Source\Common\Collections</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\Console.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Common\Testing.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdAllocatorPool.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Graphics\D12\D12CmdQueue.h">
-      <Filter>Source\Graphics\D12</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\CmdBufferPoolModule.h">
       <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Math\Quaternion.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\WindowsPlayer\Views\WinViewModule.h">
-      <Filter>Source\WindowsPlayer\Views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\SamplerModule.h">
       <Filter>Source\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h">
       <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Common.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Views\WinViewModule.h">
+      <Filter>Source\Windows\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Console.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IOStream.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\StopWatch.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\String.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Testing.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Threading\AutoResetEvent.h">
+      <Filter>Source\Tools\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Color.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Math.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Matrix.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Quaternion.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Rect.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Collections\List.h">
+      <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\LogModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\TransformModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\UnitModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Common.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Common.h">
+      <Filter>Source\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

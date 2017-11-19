@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
-#include <Modules\UnitModule.h>
+#include <Tools\Common.h>
+#include <Foundation\UnitModule.h>
 #include <Rendering\MeshModule.h>
 #include <Rendering\MaterialModule.h>
 

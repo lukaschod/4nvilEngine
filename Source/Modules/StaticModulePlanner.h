@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Common\EngineCommon.h>
+#include <Tools\Common.h>
 #include <Modules\IModulePlanner.h>
 #include <vector>
 #include <queue>
