@@ -63,6 +63,12 @@ HWND WinViewModule::TryCreateWindow(const char* name, uint32_t width, uint32_t h
 	if (defaultWindowClassName == nullptr && !RegisterDefaultWindowClass())
 		return nullptr;
 
+	// TODO: Fix this normally to respect to actual current screen
+	/*HDC screen = GetDC(0);
+	float dpiX = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSX));
+	float dpiY = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSY));
+	ReleaseDC(0, screen);*/
+
 	ASSERT(defaultWindowClassName != nullptr);
 	HWND hwnd = CreateWindowEx(
 		WS_EX_CLIENTEDGE,
@@ -71,6 +77,8 @@ HWND WinViewModule::TryCreateWindow(const char* name, uint32_t width, uint32_t h
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, width, height,
 		NULL, NULL, instanceHandle, NULL);
+
+	auto dpi = GetDpiForWindow(hwnd);
 
 	if (hwnd == nullptr)
 		return nullptr;

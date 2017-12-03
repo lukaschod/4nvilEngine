@@ -4,6 +4,7 @@
 #include <Graphics\IGraphicsModule.h>
 #include <Windows\Views\WinViewModule.h>
 #include <Windows\Graphics\D12\D12Heap.h>
+#include <Foundation\MemoryModule.h>
 
 struct D12RenderPass : public IRenderPass
 {
@@ -55,6 +56,7 @@ struct D12Buffer : public IBuffer
 
 	ID3D12Resource* resource;
 	D3D12_RESOURCE_STATES currentState;
+	D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
 };
 
 struct D12RootSubParamter
@@ -276,4 +278,6 @@ private:
 	ID3D12Device* device;
 	IDXGIFactory4* factory;
 	D3D12_FEATURE_DATA_ROOT_SIGNATURE rootSignatureFeatures;
+
+	MemoryModule* memoryModule;
 };

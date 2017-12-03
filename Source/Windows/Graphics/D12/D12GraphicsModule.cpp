@@ -2,11 +2,11 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
 
-D12GraphicsModule::D12GraphicsModule(uint32_t bufferCount, uint32_t bufferIndexStep) : 
-	IGraphicsModule(bufferCount, bufferIndexStep),
-	device(nullptr),
-	factory(nullptr),
-	resourceCounter(0)
+D12GraphicsModule::D12GraphicsModule(uint32_t bufferCount, uint32_t bufferIndexStep)
+	: IGraphicsModule(bufferCount, bufferIndexStep)
+	, device(nullptr)
+	, factory(nullptr)
+	, resourceCounter(0)
 {}
 
 void D12GraphicsModule::Execute(const ExecutionContext& context)
@@ -41,6 +41,7 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	moduleManager->AddModule(new D12GraphicsPlannerModule(device));
 	moduleManager->AddModule(new D12GraphicsExecuterModule(4));
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 }
 
 SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
@@ -58,11 +59,23 @@ SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetFilter, const IShaderArguments*, con
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, ISwapChain, D12SwapChain, const IView*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, Present, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
-SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
+//SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, PushDebug, const char*);
 SERIALIZE_METHOD(D12GraphicsModule, PopDebug);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, Draw, const DrawDesc&);
+
+DECLARE_COMMAND_CODE(CreateIBuffer);
+const IBuffer* D12GraphicsModule::RecCreateIBuffer(const ExecutionContext& context, size_t size)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = memoryModule->New<D12Buffer>(0, size);
+	stream.Write(CommandCodeCreateIBuffer);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
 
 bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
 {
@@ -136,6 +149,8 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CreateIBuffer, D12Buffer*, target);
+		static int counter = 0;
+		TRACE("%d %d", counter++, &stream);
 		InitializeBuffer(target);
 		DESERIALIZE_METHOD_END;
 
@@ -224,7 +239,9 @@ void D12GraphicsModule::SetBuffer(D12ShaderArguments* target, const char* name, 
 			if (strcmp(rootSubParameter.name, name) != 0)
 				continue;
 
-			rootArguments[i].subData = (uint64_t*) buffer->resource->GetGPUVirtualAddress();
+			// TODO: Check if we can really cache the gpu virtual address safely
+			 rootArguments[i].subData = (uint64_t*) buffer->cachedResourceGpuVirtualAddress;
+			// rootArguments[i].subData = (uint64_t*) buffer->resource->GetGPUVirtualAddress();
 			break;
 		}
 		}
@@ -715,6 +732,7 @@ void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 		target->currentState,
 		nullptr,
 		IID_PPV_ARGS(&target->resource)));
+	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();
 }
 
 void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)

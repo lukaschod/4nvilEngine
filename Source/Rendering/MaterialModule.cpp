@@ -11,6 +11,7 @@ void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	CmdModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	ExecuteAfter<ShaderModule>(moduleManager);
+	ExecuteAfter<StorageModule>(moduleManager);
 }
 
 DECLARE_COMMAND_CODE(CreateMaterial);

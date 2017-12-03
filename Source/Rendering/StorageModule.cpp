@@ -31,7 +31,9 @@ bool StorageModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateStorage, Storage*, target);
-		target->buffer = graphicsModule->RecCreateIBuffer(context, target->size);
+		static int counter = 0;
+		TRACE("%d", counter++);
+		//target->buffer = graphicsModule->RecCreateIBuffer(context, target->size);
 		storages.push_back(target);
 		DESERIALIZE_METHOD_END
 

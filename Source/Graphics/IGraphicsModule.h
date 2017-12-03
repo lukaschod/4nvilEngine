@@ -23,7 +23,7 @@ struct DrawDesc
 class IGraphicsModule : public CmdModule
 {
 public:
-	IGraphicsModule(uint32_t bufferCount, uint32_t workersCount);
+	IGraphicsModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
 
 	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height) = 0;
 

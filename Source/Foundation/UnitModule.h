@@ -4,21 +4,6 @@
 #include <Modules\CmdModule.h>
 #include <Tools\Collections\List.h>
 
-#define RECORD_CMD_CREATE2(Module, ReturnType, CreateType) \
-	DECLARE_COMMAND_CODE(Create##ReturnType); \
-	const ReturnType* Module::RecCreate##ReturnType(const ExecutionContext& context) \
-	{ \
-		ReturnType* unit = (ReturnType*)new CreateType(this); \
-		auto buffer = GetRecordingBuffer(context); \
-		auto& stream = buffer->stream; \
-		stream.Write(CommandCodeCreate##ReturnType); \
-		stream.Write(unit); \
-		buffer->commandCount++; \
-		return unit; \
-	}
-
-#define RECORD_CMD_CREATE(Module, UnitType) RECORD_CMD_CREATE2(Module, UnitType, UnitType)
-
 class ComponentModule;
 class UnitModule;
 struct Unit;

@@ -45,6 +45,8 @@ bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, IOStrea
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateMeshRenderer, MeshRenderer*, target);
+		static int counter = 0;
+		TRACE("%d", counter++);
 		target->perMeshStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 		meshRenderers.push_back(target);
 		DESERIALIZE_METHOD_END;

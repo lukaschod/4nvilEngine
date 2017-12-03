@@ -14,7 +14,7 @@ CmdBufferPoolModule::~CmdBufferPoolModule()
 void CmdBufferPoolModule::Execute(const ExecutionContext & context)
 {
 	EXT_TRACE("CmdBufferPoolModule::Execute");
-	for (int i = 0; i < workerCount; i++)
+	for (uint32_t i = 0; i < workerCount; i++)
 	{
 		auto& poolContext = contexts[i];
 		for (auto buffer : poolContext.cmdBuffers)

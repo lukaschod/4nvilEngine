@@ -32,4 +32,13 @@ namespace Math
 
 	template<typename T>
 	inline T Sin(T v) { return sin(v); }
+
+	template<typename T>
+	inline T Log2(T v) { return log2(v); }
+
+	template<typename T>
+	inline T Pow(T x, T y) { return pow(x, y); }
+
+	template<typename T>
+	inline T Pow2(T y) { return 2 << y; }
 };

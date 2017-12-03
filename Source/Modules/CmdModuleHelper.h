@@ -55,19 +55,34 @@
 #define SERIALIZE_METHOD_CREATECMP(Module, Name) \
 	SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, NOARG, WRITE_TARGET, auto target = new Name(this);, RETURN_TARGET)
 
-#define SERIALIZE_BATCH(Index, Target) \
-	if (buffer->lastRecordingBatchIndex != Index || buffer->lastRecordingBatchTarget != Target) \
-	{ \
-		stream.Write(buffer->lastRecordingBatchIndex); \
-		stream.Write(buffer->lastRecordingBatchTarget); \
-		buffer->commandCount++; \
-		buffer->lastRecordingBatchIndex = Index; \
-		buffer->lastRecordingBatchTarget = Target; \
-	}
+#define DESERIALIZE_METHOD_START(Name) \
+	case CommandCode##Name: { \
+	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
-#define SERIALIZE_METHOD_BATCH_ARG1(Module, Name, BatchName, ArgumentType1) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1, stream.Write(argument1);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)
-#define SERIALIZE_METHOD_BATCH_ARG2(Module, Name, BatchName, ArgumentType1, ArgumentType2) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2, stream.Write(argument1); stream.Write(argument2);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)
-#define SERIALIZE_METHOD_BATCH_ARG3(Module, Name, BatchName, ArgumentType1, ArgumentType2, ArgumentType3) \
-	 SERIALIZE_METHOD_TEMPLATE(Module, Name, void, COMMA ArgumentType1 argument1 COMMA ArgumentType2 argument2 COMMA ArgumentType3 argument3, stream.Write(argument1); stream.Write(argument2); stream.Write(argument3);, SERIALIZE_BATCH(CommandCode##BatchName, argument1), NOARG)
+#define DESERIALIZE_METHOD_ARG1_START(Name, ArgumentType1, ArgumentName1) \
+	case CommandCode##Name: { \
+	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
+	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+
+#define DESERIALIZE_METHOD_ARG2_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2) \
+	case CommandCode##Name: { \
+	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
+	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
+	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+
+#define DESERIALIZE_METHOD_ARG3_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3) \
+	case CommandCode##Name: { \
+	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
+	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
+	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
+	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+
+#define DESERIALIZE_METHOD_ARG4_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3, ArgumentType4, ArgumentName4) \
+	case CommandCode##Name: { \
+	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
+	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
+	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
+	ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); \
+	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+
+#define DESERIALIZE_METHOD_END return true; }

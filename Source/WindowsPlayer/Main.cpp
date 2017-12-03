@@ -216,9 +216,9 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto testShader = CreateShader(context);
 		auto mesh = CreateMesh(context);
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 200; i++)
 		{
-			for (int j = 0; j < 100; j++)
+			for (int j = 0; j < 200; j++)
 			{
 				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2, j*2, 0));
 			}
@@ -270,6 +270,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new UnlitRenderingLoopModule(buffersCount, workersCount));
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new TimeModule());
+	moduleManager->AddModule(new MemoryModule());
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())

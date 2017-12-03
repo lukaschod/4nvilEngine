@@ -68,6 +68,14 @@ private:
 			data += capacity;
 			end += requiredCapacity;
 		}
+		/*if (totalOffset > end)
+		{
+			auto capacity = data - begin;
+			auto requiredCapacity = (end - begin) * 2;
+			begin = (uint8_t*) realloc(begin, requiredCapacity);
+			data = begin + capacity;
+			end = begin + requiredCapacity;
+		}*/
 	}
 
 private:
