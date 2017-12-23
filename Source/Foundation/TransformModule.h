@@ -7,6 +7,7 @@
 #include <queue>
 
 class TransformModule;
+class MemoryModule;
 
 struct Transform : public Component
 {
@@ -31,6 +32,7 @@ class TransformModule : public ComponentModule
 public:
 	TransformModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
 	const Transform* RecCreateTransform(const ExecutionContext& context);
 	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
@@ -42,6 +44,7 @@ protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
 
 private:
+	MemoryModule* memoryModule;
 	Transform* root;
 	std::queue<Transform*> transformsToCalculate;
 	std::vector<Transform*> worldToViewToCalculate;

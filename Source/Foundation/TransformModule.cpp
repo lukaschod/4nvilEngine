@@ -1,4 +1,6 @@
 #include <Foundation\TransformModule.h>
+#include <Foundation\MemoryModule.h>
+#include <Tools\Collections\AllocatorFixedBlock.h>
 #include <Tools\Math\Math.h>
 
 TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount) : 
@@ -40,7 +42,26 @@ void TransformModule::Execute(const ExecutionContext& context)
 	}
 }
 
-SERIALIZE_METHOD_CREATECMP(TransformModule, Transform);
+void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
+{
+	CmdModule::SetupExecuteOrder(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(0, new AllocatorFixedBlock(sizeof(Transform)));
+}
+
+DECLARE_COMMAND_CODE(CreateTransform);
+const Transform* TransformModule::RecCreateTransform(const ExecutionContext& context)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = memoryModule->New<Transform>(0, this);
+	stream.Write(CommandCodeCreateTransform);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
+//SERIALIZE_METHOD_CREATECMP(TransformModule, Transform);
+
 SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);

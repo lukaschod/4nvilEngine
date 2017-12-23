@@ -42,6 +42,8 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	moduleManager->AddModule(new D12GraphicsExecuterModule(4));
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(1, new AllocatorFixedBlock(sizeof(D12ShaderArguments)));
+	memoryModule->SetAllocator(2, new AllocatorFixedBlock(sizeof(D12Buffer)));
 }
 
 SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
@@ -52,30 +54,42 @@ SERIALIZE_METHOD_ARG2(D12GraphicsModule, SetDepthAttachment, const IRenderPass*,
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, SetRenderPass, const IRenderPass*);
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IShaderPipeline, D12ShaderPipeline, const ShaderPipelineDesc*);
-SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IShaderArguments, D12ShaderArguments, const IShaderPipeline*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetBuffer, const IShaderArguments*, const char*, const IBuffer*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetTexture, const IShaderArguments*, const char*, const ITexture*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetFilter, const IShaderArguments*, const char*, const IFilter*);
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, ISwapChain, D12SwapChain, const IView*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, Present, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
-//SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, PushDebug, const char*);
 SERIALIZE_METHOD(D12GraphicsModule, PopDebug);
 SERIALIZE_METHOD_ARG1(D12GraphicsModule, Draw, const DrawDesc&);
+
+DECLARE_COMMAND_CODE(CreateIShaderArguments);
+const IShaderArguments* D12GraphicsModule::RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = memoryModule->New<D12ShaderArguments>(1, pipeline);
+	stream.Write(CommandCodeCreateIShaderArguments);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
+//SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IShaderArguments, D12ShaderArguments, const IShaderPipeline*);
 
 DECLARE_COMMAND_CODE(CreateIBuffer);
 const IBuffer* D12GraphicsModule::RecCreateIBuffer(const ExecutionContext& context, size_t size)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<D12Buffer>(0, size);
+	auto target = memoryModule->New<D12Buffer>(2, size);
 	stream.Write(CommandCodeCreateIBuffer);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;
 }
+//SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
 
 bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
 {
@@ -149,8 +163,6 @@ bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CreateIBuffer, D12Buffer*, target);
-		static int counter = 0;
-		TRACE("%d %d", counter++, &stream);
 		InitializeBuffer(target);
 		DESERIALIZE_METHOD_END;
 

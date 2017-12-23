@@ -151,6 +151,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\SurfaceModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp" />
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\ImageModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\List.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\HeapRow.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />

@@ -51,14 +51,20 @@ public:
 		return ptr;
 	}
 
-	void Reset()
+	inline void Reset()
 	{
 		data = begin;
+	}
+
+	inline size_t GetCapacity()
+	{
+		return end - begin;
 	}
 
 private:
 	inline void MakeSureHaveSpace(size_t size)
 	{
+		/*ASSERT(data - begin <= end - begin);
 		auto totalOffset = data + size;
 		if (totalOffset > end)
 		{
@@ -67,15 +73,15 @@ private:
 			end = begin = data = (uint8_t*) realloc(begin, requiredCapacity);
 			data += capacity;
 			end += requiredCapacity;
-		}
-		/*if (totalOffset > end)
+		}*/
+		while (data + size > end)
 		{
 			auto capacity = data - begin;
 			auto requiredCapacity = (end - begin) * 2;
 			begin = (uint8_t*) realloc(begin, requiredCapacity);
 			data = begin + capacity;
 			end = begin + requiredCapacity;
-		}*/
+		}
 	}
 
 private:

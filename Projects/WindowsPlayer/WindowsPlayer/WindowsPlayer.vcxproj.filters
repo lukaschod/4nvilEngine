@@ -147,6 +147,9 @@
     <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.cpp">
+      <Filter>Source\Tools\Collections</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h">
       <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.h">
+      <Filter>Source\Tools\Collections</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

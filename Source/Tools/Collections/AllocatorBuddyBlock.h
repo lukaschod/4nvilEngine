@@ -1,7 +1,8 @@
 #pragma once
 
-#include <Tools\Common.h>
+/*#include <Tools\Common.h>
 #include <Tools\Collections\List.h>
+#include <mutex>
 
 class AllocatorBuddyBlock
 {
@@ -27,4 +28,6 @@ private:
 	BlockHeader begin;
 	BlockHeader end;
 	List<void*> totalBlocks;
-};
+
+	std::mutex allocationMutex;
+};*/

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Tools\Collections\AllocatorBuddyBlock.h>
+#include <Tools\Collections\AllocatorFixedBlock.h>
 #include <Modules\Module.h>
 #include <map>
 
@@ -15,21 +15,32 @@ public:
 	T* New(uint32_t memoryType, N ... args)
 	{
 		auto allocator = allocators.find(memoryType);
-		if (allocator == allocators.end())
-		{
-			allocator = allocators[memoryType] = new AllocatorBuddyBlock(sizeof(T) * 100);
-		}
-		auto target = allocator->second->AddHeapBlock(sizeof(T));
+		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
+
+		auto target = (T*)allocator->second->Allocate();
 		new(target) T(std::forward<N>(args)...);
-		//return new T(std::forward<N>(args)...);
+		return target;
+	}
+
+	void SetAllocator(uint32_t memoryType, IAllocator* allocator)
+	{
+		auto allocatorDup = allocators.find(memoryType);
+		ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)), 
+			"Allocator was already set for memory type %d", memoryType);
+
+		allocators[memoryType] = allocator;
 	}
 
 	template<class T>
-	void Delete(T* target)
+	void Delete(uint32_t memoryType, T* target)
 	{
-		delete target;
+		auto allocator = allocators.find(memoryType);
+		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
+
+		allocator->second->Free(target);
+		target->~T();
 	}
 
 private:
-	std::map<uint32_t, AllocatorBuddyBlock*> allocators;
+	std::map<uint32_t, IAllocator*> allocators;
 };

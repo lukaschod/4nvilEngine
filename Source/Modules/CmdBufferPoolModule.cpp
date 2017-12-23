@@ -24,6 +24,17 @@ void CmdBufferPoolModule::Execute(const ExecutionContext & context)
 				buffer->state = CmdBufferStateNotUsed;
 			}
 	}
+
+	/*int totalBufferSize = 0;
+	for (uint32_t i = 0; i < workerCount; i++)
+	{
+		auto& poolContext = contexts[i];
+		for (auto buffer : poolContext.cmdBuffers)
+		{
+			totalBufferSize += buffer->stream.GetCapacity();
+		}
+	}
+	TRACE("Capacity of all streams in cmdbuffers %d MB", totalBufferSize / (1000 * 1000));*/
 }
 
 CmdBuffer* CmdBufferPoolModule::Pull(const ExecutionContext& context, uint64_t index)

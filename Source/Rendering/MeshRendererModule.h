@@ -8,6 +8,7 @@
 class TransformModule; struct Transform;
 class StorageModule; struct Storage;
 class MeshRendererModule;
+class MemoryModule;
 
 struct MeshRenderer : public Component
 {
@@ -46,5 +47,6 @@ private:
 	StorageModule* storageModule;
 	TransformModule* transformModule;
 	UnitModule* unitModule;
+	MemoryModule* memoryModule;
 	const Storage* perAllRendererStorage;
 };

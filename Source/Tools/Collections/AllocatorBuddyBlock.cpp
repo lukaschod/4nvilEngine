@@ -1,4 +1,4 @@
-#include <Tools\Collections\AllocatorBuddyBlock.h>
+/*#include <Tools\Collections\AllocatorBuddyBlock.h>
 #include <Tools\Math\Math.h>
 
 AllocatorBuddyBlock::AllocatorBuddyBlock(size_t capacity)
@@ -16,6 +16,8 @@ AllocatorBuddyBlock::AllocatorBuddyBlock(size_t capacity)
 
 void* AllocatorBuddyBlock::Allocate(size_t size)
 {
+	std::lock_guard<std::mutex> lock(allocationMutex);
+
 	auto block = TryFindBlock(size);
 
 	// Grow heap if no free block is found
@@ -77,4 +79,4 @@ void AllocatorBuddyBlock::Connect(BlockHeader* first, BlockHeader* second)
 {
 	first->next = second;
 	second->prev = first;
-}
+}*/

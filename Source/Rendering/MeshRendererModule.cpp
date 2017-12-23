@@ -1,5 +1,6 @@
 #include <Rendering\MeshRendererModule.h>
 #include <Foundation\TransformModule.h>
+#include <Foundation\MemoryModule.h>
 #include <Graphics\IGraphicsModule.h>
 
 MeshRendererModule::MeshRendererModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
@@ -16,6 +17,8 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	storageModule = ExecuteBefore<StorageModule>(moduleManager);
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
 	unitModule = ExecuteAfter<UnitModule>(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(3, new AllocatorFixedBlock(sizeof(MeshRenderer)));
 }
 
 void MeshRendererModule::Execute(const ExecutionContext& context)
@@ -35,10 +38,22 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return meshRenderers; }
 const Storage * MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
 
-SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMaterial, const MeshRenderer*, const Material*);
 SERIALIZE_METHOD_ARG1(MeshRendererModule, Destroy, const Component*);
+
+DECLARE_COMMAND_CODE(CreateMeshRenderer);
+const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionContext& context)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = memoryModule->New<MeshRenderer>(3, this);
+	stream.Write(CommandCodeCreateMeshRenderer);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
+//SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 
 bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
 {
