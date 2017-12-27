@@ -9,6 +9,7 @@ struct D12CmdBuffer;
 class D12GraphicsExecuterModule : public Module
 {
 public:
+	D12GraphicsExecuterModule() {}
 	D12GraphicsExecuterModule(uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual const char* GetName() override { return "D12GraphicsExecuterModule"; }

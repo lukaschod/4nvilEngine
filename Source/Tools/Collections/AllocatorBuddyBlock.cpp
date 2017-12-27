@@ -32,11 +32,13 @@ void* AllocatorBuddyBlock::Allocate(size_t size)
 	// Shrink the block
 	if (block->size > size)
 	{
+		// Create shrinked block
 		auto shrinkedBlock = (BlockHeader*)(block + sizeof(BlockHeader) + size);
 		shrinkedBlock->size = block->size - size;
-		shrinkedBlock->prev = block->prev;
-		shrinkedBlock->next = block->next;
+		Connect(block->prev, shrinkedBlock);
+		Connect(shrinkedBlock, block->next);
 
+		// Set old one as allocated
 		block->size = size;
 
 		return shrinkedBlock;

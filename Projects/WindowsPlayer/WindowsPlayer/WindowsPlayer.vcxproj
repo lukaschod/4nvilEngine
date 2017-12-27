@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\..\Source\Modules\Module.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\CameraModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\ImageModule.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,7 @@
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
     <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h" />
+    <ClInclude Include="..\..\..\Source\Modules\PipeModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Rendering\CameraModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\MaterialModule.h" />
@@ -198,7 +201,6 @@
     <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\List.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Collections\HeapRow.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
     <ClInclude Include="..\..\..\Source\Tools\IOStream.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.h" />
     <ClInclude Include="..\..\..\Source\Windows\Views\WinViewModule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

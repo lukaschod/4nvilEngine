@@ -19,7 +19,10 @@ public:
 	WinViewModule(uint32_t bufferCount, uint32_t workersCount, HINSTANCE instanceHandle);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual const IView* RecCreateIView(const ExecutionContext& context) override;
+	const IView* AllocateView() const;
+
+public:
+	virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) override;
 	virtual const List<const IView*>& GetViews() override;
 
 protected:

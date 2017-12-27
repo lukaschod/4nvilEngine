@@ -20,7 +20,10 @@ class StorageModule : public CmdModule
 public:
 	StorageModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Storage* RecCreateStorage(const ExecutionContext& context, uint32_t size);
+	const Storage* AllocateStorage(size_t size) const;
+
+public:
+	const Storage* RecCreateStorage(const ExecutionContext& context, uint32_t size, const Storage* storage = nullptr);
 	void RecUpdateStorage(const ExecutionContext& context, const Storage* target, uint32_t targetOffset, Range<void>& data);
 
 protected:

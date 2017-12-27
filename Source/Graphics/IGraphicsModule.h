@@ -24,8 +24,12 @@ class IGraphicsModule : public CmdModule
 {
 public:
 	IGraphicsModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
+	virtual const IBuffer* AllocateBuffer(size_t size) = 0;
+	virtual const ITexture* AllocateTexture(uint32_t width, uint32_t height) = 0;
+	virtual const ISwapChain* AllocateSwapChain(const IView* view) = 0;
 
-	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height) = 0;
+public:
+	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture = nullptr) = 0;
 
 	virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) = 0;
 
@@ -41,10 +45,10 @@ public:
 	virtual void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) = 0;
 	virtual void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) = 0;
 
-	virtual const IBuffer* RecCreateIBuffer(const ExecutionContext& context, size_t size) = 0;
+	virtual const IBuffer* RecCreateIBuffer(const ExecutionContext& context, size_t size, const IBuffer* buffer = nullptr) = 0;
 	virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) = 0;
 
-	virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view) = 0;
+	virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain = nullptr) = 0;
 	virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 	virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 

@@ -5,12 +5,14 @@ AllocatorFixedBlock::AllocatorFixedBlock(size_t elementSize)
 	: elementSize(elementSize)
 	, capacity(0)
 {
+	elementSize += elementSize % sizeof(void*); // Align according the curent target
+	ASSERT(elementSize % 4 == 0); // TODO: Make memory alligned allocations
 	AddHeapBlock(128);
 }
 
 void* AllocatorFixedBlock::Allocate()
 {
-	std::lock_guard<std::mutex> lock(allocationMutex);
+	std::lock_guard<std::mutex> lock(allocationMutex );
 
 	// Grow heap if no free block is found
 	if (freeBlockHeaders.empty())

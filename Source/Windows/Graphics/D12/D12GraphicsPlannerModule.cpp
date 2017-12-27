@@ -317,7 +317,8 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		UINT8* pVertexDataBegin;
 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
 		ASSERT_SUCCEEDED(target->resource->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-		memcpy(pVertexDataBegin + targetOffset, data.pointer, data.size);
+		//memcpy(pVertexDataBegin + targetOffset, data.pointer, data.size);
+		memcpy(pVertexDataBegin + targetOffset + target->memory.pointer, data.pointer, data.size);
 		target->resource->Unmap(0, nullptr);
 		DESERIALIZE_METHOD_END;
 
@@ -390,7 +391,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		{
 			auto vertexBufferView = pipeline->vertexBuffer;
 			auto vertexBuffer = (const D12Buffer*) target.vertexBuffer;
-			vertexBufferView.BufferLocation = vertexBuffer->resource->GetGPUVirtualAddress();
+			vertexBufferView.BufferLocation = vertexBuffer->cachedResourceGpuVirtualAddress;
 			vertexBufferView.SizeInBytes = (UINT) vertexBuffer->data.size;
 			ASSERT(vertexBufferView.SizeInBytes % vertexBufferView.StrideInBytes == 0);
 			commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

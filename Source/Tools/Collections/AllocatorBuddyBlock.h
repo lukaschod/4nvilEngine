@@ -1,8 +1,16 @@
-#pragma once
+/*#pragma once
 
-/*#include <Tools\Common.h>
+#include <Tools\Common.h>
 #include <Tools\Collections\List.h>
 #include <mutex>
+
+class IAllocatorMemory
+{
+public:
+	virtual void Allocate(size_t size) = 0;
+	virtual void Free(size_t size) = 0;
+
+};
 
 class AllocatorBuddyBlock
 {

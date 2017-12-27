@@ -215,11 +215,15 @@ public:
 		return -1;
 	}
 
-	void safe_push_back(T item)
+	bool safe_push_back(T item)
 	{
 		auto index = find(item);
 		if (index == -1)
+		{
 			push_back(item);
+			return true;
+		}
+		return false;
 	}
 
 	void push_back_list(List<T>& list)

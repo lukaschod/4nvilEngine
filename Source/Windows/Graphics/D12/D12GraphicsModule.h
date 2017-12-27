@@ -4,6 +4,7 @@
 #include <Graphics\IGraphicsModule.h>
 #include <Windows\Views\WinViewModule.h>
 #include <Windows\Graphics\D12\D12Heap.h>
+#include <Windows\Graphics\D12\D12HeapBuffer.h>
 #include <Foundation\MemoryModule.h>
 
 struct D12RenderPass : public IRenderPass
@@ -54,6 +55,7 @@ struct D12Buffer : public IBuffer
 		currentState(D3D12_RESOURCE_STATE_COPY_DEST)
 	{}
 
+	D12HeapMemory memory;
 	ID3D12Resource* resource;
 	D3D12_RESOURCE_STATES currentState;
 	D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
@@ -201,8 +203,12 @@ public:
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual const char* GetName() { return "D12GraphicsModule"; }
+	virtual const IBuffer* AllocateBuffer(size_t size) override;
+	virtual const ITexture* AllocateTexture(uint32_t width, uint32_t height) override;
+	virtual const ISwapChain* AllocateSwapChain(const IView* view) override;
 
-	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height) override;
+public:
+	virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture) override;
 
 	virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) override;
 
@@ -218,10 +224,10 @@ public:
 	virtual void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
 	virtual void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
 
-	virtual const IBuffer* RecCreateIBuffer(const ExecutionContext& context, size_t size) override;
+	virtual const IBuffer* RecCreateIBuffer(const ExecutionContext& context, size_t size, const IBuffer* buffer = nullptr) override;
 	virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) override;
 
-	virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view) override;
+	virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain = nullptr) override;
 	virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 	virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 
@@ -269,6 +275,7 @@ private:
 	D12Heap* srvHeap;
 	D12Heap* rtvHeap;
 	D12Heap* samplersHeap;
+	D12HeapBuffer* bufferUploadHeap;
 	List<std::pair<uint64_t, D12HeapMemory>> srvHeapMemoryToFree;
 	List<std::pair<uint64_t, D12HeapMemory>> samplersHeapMemoryToFree;
 	uint64_t resourceCounter;

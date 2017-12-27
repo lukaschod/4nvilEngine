@@ -6,7 +6,10 @@
 #include <Modules\CmdModuleHelper.h>
 #include <Modules\CmdBufferPoolModule.h>
 
-class CmdModule : public Module
+// TODO: Remove it
+#include <Modules\PipeModule.h>
+typedef PipeModule CmdModule;
+/*class CmdModule : public Module
 {
 public:
 	CmdModule(uint32_t bufferCount, uint32_t workersCount);
@@ -32,4 +35,4 @@ private:
 	CmdBufferPoolModule* cmdBufferPoolModule;
 
 	uint64_t bufferCounter;
-};
+};*/

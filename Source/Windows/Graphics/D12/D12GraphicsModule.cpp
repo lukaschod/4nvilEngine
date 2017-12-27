@@ -46,7 +46,21 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	memoryModule->SetAllocator(2, new AllocatorFixedBlock(sizeof(D12Buffer)));
 }
 
-SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
+const IBuffer* D12GraphicsModule::AllocateBuffer(size_t size)
+{
+	return memoryModule->New<D12Buffer>(2, size);
+}
+
+const ITexture* D12GraphicsModule::AllocateTexture(uint32_t width, uint32_t height)
+{
+	return new D12Texture(width, height);
+}
+
+const ISwapChain* D12GraphicsModule::AllocateSwapChain(const IView * view)
+{
+	return new D12SwapChain(view);
+}
+
 SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IFilter, D12Filter, const FilterOptions&);
 SERIALIZE_METHOD_CREATEGEN(D12GraphicsModule, IRenderPass, D12RenderPass);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetColorAttachment, const IRenderPass*, uint32_t, const ColorAttachment&);
@@ -57,7 +71,6 @@ SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IShaderPipeline, D12ShaderPip
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetBuffer, const IShaderArguments*, const char*, const IBuffer*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetTexture, const IShaderArguments*, const char*, const ITexture*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, SetFilter, const IShaderArguments*, const char*, const IFilter*);
-SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, ISwapChain, D12SwapChain, const IView*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, Present, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG2(D12GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG3(D12GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
@@ -79,17 +92,43 @@ const IShaderArguments* D12GraphicsModule::RecCreateIShaderArguments(const Execu
 //SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IShaderArguments, D12ShaderArguments, const IShaderPipeline*);
 
 DECLARE_COMMAND_CODE(CreateIBuffer);
-const IBuffer* D12GraphicsModule::RecCreateIBuffer(const ExecutionContext& context, size_t size)
+const IBuffer* D12GraphicsModule::RecCreateIBuffer(const ExecutionContext& context, size_t size, const IBuffer* gfxBuffer)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<D12Buffer>(2, size);
+	auto target = gfxBuffer == nullptr ? AllocateBuffer(size) : gfxBuffer;
 	stream.Write(CommandCodeCreateIBuffer);
 	stream.Write(target);
 	buffer->commandCount++;
 	return target;
 }
 //SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, IBuffer, D12Buffer, size_t);
+
+DECLARE_COMMAND_CODE(CreateISwapChain);
+const ISwapChain* D12GraphicsModule::RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = swapChain == nullptr ? AllocateSwapChain(view) : swapChain;
+	stream.Write(CommandCodeCreateISwapChain);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
+//SERIALIZE_METHOD_CREATEGEN_ARG1(D12GraphicsModule, ISwapChain, D12SwapChain, const IView*);
+
+DECLARE_COMMAND_CODE(CreateITexture);
+const ITexture* D12GraphicsModule::RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture)
+{
+	auto buffer = GetRecordingBuffer(context);
+	auto& stream = buffer->stream;
+	auto target = texture == nullptr ? AllocateTexture(width, height) : texture;
+	stream.Write(CommandCodeCreateITexture);
+	stream.Write(target);
+	buffer->commandCount++;
+	return target;
+}
+//SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
 
 bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
 {
@@ -383,7 +422,10 @@ void D12GraphicsModule::SetColorAttachment(const ExecutionContext& context, D12R
 
 	auto texture = (D12Texture*) attachment.texture;
 	if (texture != nullptr)
+	{
 		target->colorDescriptors[index] = rtvHeap->GetCpuHandle(texture->rtvMemory);
+		ASSERT(texture->rtvMemory.size != 0);
+	}
 
 	target->colorDescriptorsCount = 0;
 	for (int i = 0; i < COLOR_ATTACHMENT_MAX_COUNT; i++)
@@ -577,11 +619,13 @@ bool D12GraphicsModule::Initialize()
 	if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &rootSignatureFeatures, sizeof(rootSignatureFeatures))))
 		rootSignatureFeatures.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 
-	srvHeap = new D12Heap(device, D12HeapTypeSRVs, 100);
-	rtvHeap = new D12Heap(device, D12HeapTypeRTVs, 100);
-	samplersHeap = new D12Heap(device, D12HeapTypeSamplers, 100);
-	srvCpuHeap = new D12Heap(device, D12HeapTypeSRVsCPU, 100);
-	samplersCpuHeap = new D12Heap(device, D12HeapTypeSamplersCPU, 100);
+	srvHeap = new D12Heap(device, D12HeapTypeSRVs, 128);
+	rtvHeap = new D12Heap(device, D12HeapTypeRTVs, 128);
+	samplersHeap = new D12Heap(device, D12HeapTypeSamplers, 128);
+	srvCpuHeap = new D12Heap(device, D12HeapTypeSRVsCPU, 128);
+	samplersCpuHeap = new D12Heap(device, D12HeapTypeSamplersCPU, 128);
+
+	bufferUploadHeap = new D12HeapBuffer(device, 200*201*256);
 
 	ID3D12CommandAllocator* alloc;
 	ASSERT_SUCCEEDED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&alloc)));
@@ -737,14 +781,18 @@ void D12GraphicsModule::InitializeRenderPass(D12RenderPass* renderPass)
 void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 {
 	target->currentState = D3D12_RESOURCE_STATE_GENERIC_READ;
-	ASSERT_SUCCEEDED(device->CreateCommittedResource(
+	/*ASSERT_SUCCEEDED(device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(target->data.size),
 		target->currentState,
 		nullptr,
 		IID_PPV_ARGS(&target->resource)));
-	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();
+	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();*/
+	auto size = Math::GetClosestTo(target->GetSize(), (size_t)256);
+	target->memory = bufferUploadHeap->Allocate(size);
+	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetOffset(target->memory);
+	target->resource = bufferUploadHeap->Get_heap();
 }
 
 void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)

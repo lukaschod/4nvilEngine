@@ -12,13 +12,18 @@ void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	samplerModule = ExecuteBefore<SamplerModule>(moduleManager);
 }
 
+const Image* ImageModule::AllocateImage(uint32_t width, uint32_t height) const
+{
+	auto texture = graphicsModule->AllocateTexture(width, height);
+	return new Image(texture);
+}
+
 DECLARE_COMMAND_CODE(CreateImage);
-const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height)
+const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto texture = graphicsModule->RecCreateITexture(context, width, height);
-	auto target = new Image(texture);
+	auto target = image == nullptr ? AllocateImage(width, height) : image;
 	stream.Write(CommandCodeCreateImage);
 	stream.Write(target);
 	buffer->commandCount++;
@@ -32,6 +37,7 @@ bool ImageModule::ExecuteCommand(const ExecutionContext& context, IOStream& stre
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateImage, Image*, target);
+		graphicsModule->RecCreateITexture(context, 0, 0, target->texture);
 		images.push_back(target);
 		DESERIALIZE_METHOD_END;
 

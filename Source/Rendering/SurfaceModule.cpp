@@ -9,6 +9,7 @@ void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
 	CmdModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
+	ExecuteAfter<ImageModule>(moduleManager);
 }
 
 SERIALIZE_METHOD_CREATE(SurfaceModule, Surface);

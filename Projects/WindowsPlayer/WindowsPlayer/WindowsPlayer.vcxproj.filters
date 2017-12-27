@@ -150,6 +150,12 @@
     <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.cpp">
       <Filter>Source\Tools\Collections</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -317,9 +323,6 @@
     <ClInclude Include="..\..\..\Source\Windows\Common.h">
       <Filter>Source\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Collections\HeapRow.h">
-      <Filter>Source\Tools\Collections</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.h">
       <Filter>Source\Tools\Collections</Filter>
     </ClInclude>
@@ -328,6 +331,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.h">
       <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Modules\PipeModule.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#include <Modules\CmdModule.h>
+/*#include <Modules\CmdModule.h>
 #include <Tools\Math\Math.h>
 
 CmdModule::CmdModule(uint32_t bufferCount, uint32_t workersCount) :
@@ -66,4 +66,4 @@ void CmdModule::Execute(const ExecutionContext& context)
 			ASSERT(ExecuteCommand(context, stream, commandCode));
 		}
 	}
-}
+}*/

@@ -16,7 +16,7 @@ class TransformModule; struct Transform;
 
 struct Camera : public Component
 {
-	Camera(CameraModule* module, const Storage* perCameraStorage) : 
+	Camera(const CameraModule* module, const Storage* perCameraStorage) : 
 		Component((ComponentModule*)module),
 		perCameraStorage(perCameraStorage),
 		surface(nullptr),
@@ -42,12 +42,13 @@ public:
 	CameraModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Camera* RecCreateCamera(const ExecutionContext& context);
-	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
-	void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
+	const List<Camera*>& GetCameras() const;
+	const Camera* AllocateCamera() const;
 
 public:
-	const List<Camera*>& GetCameras() const;
+	const Camera* RecCreateCamera(const ExecutionContext& context, const Camera* camera = nullptr);
+	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+	void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;

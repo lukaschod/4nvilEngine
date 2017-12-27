@@ -2,14 +2,16 @@
 #include <Graphics\IGraphicsModule.h>
 
 MaterialModule::MaterialModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+	PipeModule(bufferCount, bufferIndexStep)
 {
 }
 
 void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
+
+	// TODO: Do we really need them?
 	ExecuteAfter<ShaderModule>(moduleManager);
 	ExecuteAfter<StorageModule>(moduleManager);
 }

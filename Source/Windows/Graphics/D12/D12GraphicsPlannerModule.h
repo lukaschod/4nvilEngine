@@ -18,6 +18,7 @@ class D12GraphicsExecuterModule;
 class D12GraphicsPlannerModule : public Module
 {
 public:
+	D12GraphicsPlannerModule() {}
 	D12GraphicsPlannerModule(ID3D12Device* device);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;

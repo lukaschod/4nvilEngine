@@ -41,4 +41,13 @@ namespace Math
 
 	template<typename T>
 	inline T Pow2(T y) { return 2 << y; }
+
+	template<typename T>
+	inline T GetClosestTo(T value, T number)
+	{
+		if (value <= number)
+			return number;
+		else
+			return value + value % 256;
+	}
 };

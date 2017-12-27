@@ -104,19 +104,26 @@ void WinViewModule::Execute(const ExecutionContext& context)
 	}
 }
 
+const IView* WinViewModule::AllocateView() const
+{
+	// TODO: Make it passible
+	auto width = 2048;
+	auto height = 1536;
+
+	auto renderTarget = imageModule->AllocateImage(width, height);
+	auto view = new WinView(renderTarget);
+	view->width = width;
+	view->height = height;
+	view->swapChain = graphicsModule->AllocateSwapChain(view);
+	return view;
+}
+
 DECLARE_COMMAND_CODE(CreateIView);
-const IView* WinViewModule::RecCreateIView(const ExecutionContext& context)
+const IView* WinViewModule::RecCreateIView(const ExecutionContext& context, const IView* view)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto width = 2048;
-	auto height = 1536;
-	auto renderTarget = imageModule->RecCreateImage(context, width, height);
-	auto target = new WinView(renderTarget);
-	target->width = width;
-	target->height = height;
-	auto swapChain = graphicsModule->RecCreateISwapChain(context, target);
-	target->swapChain = swapChain;
+	auto target = view == nullptr ? AllocateView() : view;
 	stream.Write(CommandCodeCreateIView);
 	stream.Write(target);
 	buffer->commandCount++;
@@ -128,6 +135,8 @@ bool WinViewModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateIView, WinView*, target);
+		imageModule->RecCreateImage(context, 0, 0, target->renderTarget);
+		graphicsModule->RecCreateISwapChain(context, nullptr, target->swapChain);
 		target->windowHandle = TryCreateWindow("Unnamed", target->width, target->height);
 		ASSERT(target->windowHandle != nullptr);
 		views.push_back(target);

@@ -26,7 +26,10 @@ class ImageModule : public CmdModule
 public:
 	ImageModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Image* RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height);
+	const Image* AllocateImage(uint32_t width, uint32_t height) const;
+
+public:
+	const Image* RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image = nullptr);
 	void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
 
 protected:

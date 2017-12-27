@@ -11,13 +11,18 @@ void StorageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
+const Storage* StorageModule::AllocateStorage(size_t size) const
+{
+	auto buffer = graphicsModule->AllocateBuffer(size);
+	return new Storage(buffer);
+}
+
 DECLARE_COMMAND_CODE(CreateStorage);
-const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, uint32_t size)
+const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, uint32_t size, const Storage* storage)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto gfxBuffer = graphicsModule->RecCreateIBuffer(context, size);
-	auto target = new Storage(gfxBuffer);
+	auto target = storage == nullptr ? AllocateStorage(size) : storage;
 	stream.Write(CommandCodeCreateStorage);
 	stream.Write(target);
 	buffer->commandCount++;
@@ -31,9 +36,7 @@ bool StorageModule::ExecuteCommand(const ExecutionContext& context, IOStream& st
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateStorage, Storage*, target);
-		static int counter = 0;
-		TRACE("%d", counter++);
-		//target->buffer = graphicsModule->RecCreateIBuffer(context, target->size);
+		graphicsModule->RecCreateIBuffer(context, target->buffer->GetSize(), target->buffer);
 		storages.push_back(target);
 		DESERIALIZE_METHOD_END
 

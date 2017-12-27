@@ -11,7 +11,7 @@ class MemoryModule;
 
 struct Transform : public Component
 {
-	Transform(TransformModule* module) : 
+	Transform(const TransformModule* module) : 
 		Component((ComponentModule*)module), 
 		parent(nullptr)
 	{ }
@@ -33,8 +33,10 @@ public:
 	TransformModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+	const Transform* AllocateTransform() const;
 
-	const Transform* RecCreateTransform(const ExecutionContext& context);
+public:
+	const Transform* RecCreateTransform(const ExecutionContext& context, const Transform* transform = nullptr);
 	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
 	void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
 	void RecSetPosition(const ExecutionContext& context, const Transform* target, const Vector3f& position);

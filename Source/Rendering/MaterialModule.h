@@ -50,7 +50,7 @@ struct Material
 	List<const MaterialPipeline*> pipelines;
 };
 
-class MaterialModule : public CmdModule
+class MaterialModule : public PipeModule
 {
 public:
 	MaterialModule(uint32_t bufferCount, uint32_t workersCount);

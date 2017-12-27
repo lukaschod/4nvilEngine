@@ -244,8 +244,13 @@ float4 FragMain(VertData i) : SV_TARGET
 	uint32_t frame;
 };
 
+#include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
+	auto planner2 = new D12GraphicsPlannerModule();
+	printf("%s", planner2->GetName());
+
 	auto workersCount = 4;
 	auto buffersCount = 2;
 	auto planner = new StaticModulePlanner();

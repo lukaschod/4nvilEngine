@@ -34,13 +34,18 @@ void CameraModule::Execute(const ExecutionContext& context)
 
 const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
 
+const Camera* CameraModule::AllocateCamera() const
+{
+	auto storage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
+	return new Camera(this, storage);
+}
+
 DECLARE_COMMAND_CODE(CreateCamera);
-const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context)
+const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, const Camera* camera)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto storage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
-	auto target = new Camera(this, storage);
+	auto target = camera == nullptr ? AllocateCamera() : camera;
 	stream.Write(CommandCodeCreateCamera);
 	stream.Write(target);
 	buffer->commandCount++;
@@ -55,6 +60,7 @@ bool CameraModule::ExecuteCommand(const ExecutionContext& context, IOStream& str
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateCamera, Camera*, target);
+		storageModule->RecCreateStorage(context, 0, target->perCameraStorage);
 		cameras.push_back(target);
 		DESERIALIZE_METHOD_END;
 

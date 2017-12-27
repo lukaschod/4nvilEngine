@@ -49,12 +49,17 @@ void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
 	memoryModule->SetAllocator(0, new AllocatorFixedBlock(sizeof(Transform)));
 }
 
+const Transform* TransformModule::AllocateTransform() const
+{
+	return memoryModule->New<Transform>(0, this);
+}
+
 DECLARE_COMMAND_CODE(CreateTransform);
-const Transform* TransformModule::RecCreateTransform(const ExecutionContext& context)
+const Transform* TransformModule::RecCreateTransform(const ExecutionContext& context, const Transform* transform)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<Transform>(0, this);
+	auto target = transform == nullptr ? AllocateTransform() : transform;
 	stream.Write(CommandCodeCreateTransform);
 	stream.Write(target);
 	buffer->commandCount++;
