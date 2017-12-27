@@ -15,8 +15,8 @@ enum D12HeapType
 
 struct D12HeapMemory
 {
-	D12HeapMemory() : 
-		D12HeapMemory(0, 0) 
+	D12HeapMemory()
+		: D12HeapMemory(0, 0) 
 	{
 	}
 	D12HeapMemory(uint64_t pointer, size_t size) :
@@ -31,11 +31,11 @@ struct D12HeapMemory
 
 struct D12UnusedHeapMemory
 {
-	D12UnusedHeapMemory(uint64_t pointer, size_t size) :
-		pointer(pointer),
-		size(size),
-		next(nullptr),
-		previous(nullptr)
+	D12UnusedHeapMemory(uint64_t pointer, size_t size)
+		: pointer(pointer)
+		, size(size)
+		, next(nullptr)
+		, previous(nullptr)
 	{
 	}
 

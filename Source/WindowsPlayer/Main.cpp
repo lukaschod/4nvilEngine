@@ -27,9 +27,9 @@
 class TestModule : public Module
 {
 public:
-	TestModule() : 
-		Module(),
-		frame(0)
+	TestModule()
+		: Module()
+		, frame(0)
 	{}
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override

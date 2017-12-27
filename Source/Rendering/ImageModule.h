@@ -8,11 +8,11 @@
 
 struct Image
 {
-	Image(const ITexture* texture) :
-		texture(texture),
-		sampler(nullptr),
-		width(texture->width),
-		height(texture->height) 
+	Image(const ITexture* texture)
+		: texture(texture)
+		, sampler(nullptr)
+		, width(texture->width)
+		, height(texture->height)
 	{}
 
 	const ITexture* texture;

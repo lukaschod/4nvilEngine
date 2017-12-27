@@ -10,10 +10,10 @@ public:
 	uint32_t concunrency;
 	uint32_t dependencies;
 
-	StaticModulePlanNode(Module* module) :
-		module(module),
-		concunrency(0),
-		dependencies(0)
+	StaticModulePlanNode(Module* module) 
+		: module(module)
+		, concunrency(0)
+		, dependencies(0)
 	{ }
 
 	StaticModulePlanNode* TryFindNode(Module* module)

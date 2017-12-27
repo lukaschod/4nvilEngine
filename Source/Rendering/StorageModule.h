@@ -7,9 +7,9 @@
 
 struct Storage
 {
-	Storage(const IBuffer* buffer) :
-		buffer(buffer),
-		size(buffer->GetSize())
+	Storage(const IBuffer* buffer)
+		: buffer(buffer)
+		, size(buffer->GetSize())
 	{}
 	const IBuffer* buffer;
 	const size_t size;

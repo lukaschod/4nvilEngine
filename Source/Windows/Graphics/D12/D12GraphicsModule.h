@@ -9,8 +9,8 @@
 
 struct D12RenderPass : public IRenderPass
 {
-	D12RenderPass() :
-		IRenderPass()
+	D12RenderPass()
+		: IRenderPass()
 	{
 		memset(colorDescriptors, 0, sizeof(D3D12_CPU_DESCRIPTOR_HANDLE));
 		colorDescriptorsCount = 0;
@@ -25,8 +25,8 @@ struct D12RenderPass : public IRenderPass
 
 struct D12Filter : public IFilter
 {
-	D12Filter(const FilterOptions& options) : 
-		IFilter(options)
+	D12Filter(const FilterOptions& options)
+		: IFilter(options)
 	{
 	}
 	D12HeapMemory srvMemory;
@@ -34,10 +34,10 @@ struct D12Filter : public IFilter
 
 struct D12Texture : public ITexture
 {
-	D12Texture(uint32_t width, uint32_t height) :
-		ITexture(width, height),
-		resource(nullptr),
-		currentState(D3D12_RESOURCE_STATE_COPY_DEST)
+	D12Texture(uint32_t width, uint32_t height)
+		: ITexture(width, height)
+		, resource(nullptr)
+		, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
 	{
 	}
 
@@ -49,10 +49,10 @@ struct D12Texture : public ITexture
 
 struct D12Buffer : public IBuffer
 {
-	D12Buffer(size_t size) : 
-		IBuffer(size),
-		resource(nullptr),
-		currentState(D3D12_RESOURCE_STATE_COPY_DEST)
+	D12Buffer(size_t size)
+		: IBuffer(size)
+		, resource(nullptr)
+		, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
 	{}
 
 	D12HeapMemory memory;
@@ -63,10 +63,10 @@ struct D12Buffer : public IBuffer
 
 struct D12RootSubParamter
 {
-	D12RootSubParamter(const char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, bool isTexture = false) :
-		name(name),
-		type(type),
-		isTexture(isTexture)
+	D12RootSubParamter(const char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, bool isTexture = false)
+		: name(name)
+		, type(type)
+		, isTexture(isTexture)
 	{ }
 	const D3D12_DESCRIPTOR_RANGE_TYPE type;
 	const char* const name;
@@ -116,8 +116,8 @@ struct D12RootParamter
 
 struct D12ShaderPipeline : public IShaderPipeline
 {
-	D12ShaderPipeline(const ShaderPipelineDesc* desc) :
-		IShaderPipeline(desc)
+	D12ShaderPipeline(const ShaderPipelineDesc* desc)
+		: IShaderPipeline(desc)
 	{
 	}
 
@@ -140,9 +140,9 @@ struct D12ShaderPipeline : public IShaderPipeline
 
 struct D12RootArgument
 {
-	D12RootArgument(D12HeapMemory& memory) :
-		memory(memory),
-		IsCurrentlyUsedByDraw(false)
+	D12RootArgument(D12HeapMemory& memory)
+		: memory(memory)
+		, IsCurrentlyUsedByDraw(false)
 	{
 		subData = new uint64_t(memory.size);
 		memset(subData, 0, sizeof(uint64_t) * memory.size);

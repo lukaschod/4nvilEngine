@@ -133,7 +133,6 @@
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Graphics\IGraphicsModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp" />

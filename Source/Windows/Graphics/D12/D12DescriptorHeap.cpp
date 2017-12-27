@@ -1,8 +1,8 @@
 #include <Windows\Graphics\D12\D12DescriptorHeap.h>
 
-D12DescriptorHeap::D12DescriptorHeap(ID3D12Device* device, D12HeapType type, size_t capacity) :
-	device(device),
-	type(type)
+D12DescriptorHeap::D12DescriptorHeap(ID3D12Device* device, D12HeapType type, size_t capacity) 
+	: device(device)
+	, type(type)
 {
 	Grow(capacity);
 }

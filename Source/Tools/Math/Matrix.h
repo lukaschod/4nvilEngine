@@ -12,7 +12,10 @@ class Matrix4x4
 public:
 	inline Matrix4x4() {}
 	inline Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w)
-		: x(x), y(y), z(z), w(w) 
+		: x(x)
+		, y(y)
+		, z(z)
+		, w(w)
 	{ }
 
 	inline Vector4<T> Multiply(const Vector4<T>& v)

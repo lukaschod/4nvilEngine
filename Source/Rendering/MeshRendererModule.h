@@ -12,10 +12,10 @@ class MemoryModule;
 
 struct MeshRenderer : public Component
 {
-	MeshRenderer(MeshRendererModule* module) : 
-		Component((ComponentModule*)module), 
-		mesh(nullptr), 
-		material(nullptr) 
+	MeshRenderer(MeshRendererModule* module)
+		: Component((ComponentModule*)module)
+		, mesh(nullptr)
+		, material(nullptr)
 	{}
 	const Mesh* mesh;
 	const Material* material;

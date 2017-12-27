@@ -1,7 +1,7 @@
 #include <Rendering\SamplerModule.h>
 
-SamplerModule::SamplerModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+SamplerModule::SamplerModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

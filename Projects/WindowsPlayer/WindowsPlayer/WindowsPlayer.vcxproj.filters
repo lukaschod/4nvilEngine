@@ -72,9 +72,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\MeshModule.cpp">
       <Filter>Source\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Graphics\IGraphicsModule.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\ShaderModule.cpp">
       <Filter>Source\Rendering</Filter>
     </ClCompile>

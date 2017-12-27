@@ -1,7 +1,7 @@
 #include <Rendering\ImageModule.h>
 
-ImageModule::ImageModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+ImageModule::ImageModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

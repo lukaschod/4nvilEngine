@@ -14,10 +14,10 @@ enum MaterialPropertyType
 
 struct MaterialProperty
 {
-	MaterialProperty(const char* name, MaterialPropertyType type) : 
-		name(name), 
-		type(type), 
-		value(nullptr) 
+	MaterialProperty(const char* name, MaterialPropertyType type)
+		: name(name)
+		, type(type)
+		, value(nullptr)
 	{}
 	const String name;
 	const MaterialPropertyType type;

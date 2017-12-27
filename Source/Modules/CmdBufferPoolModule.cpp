@@ -1,7 +1,7 @@
 #include "CmdBufferPoolModule.h"
 
-CmdBufferPoolModule::CmdBufferPoolModule(uint32_t workerCount) :
-	workerCount(workerCount)
+CmdBufferPoolModule::CmdBufferPoolModule(uint32_t workerCount) 
+	: workerCount(workerCount)
 {
 	contexts = new CmdBufferPoolModule::Context[workerCount];
 }

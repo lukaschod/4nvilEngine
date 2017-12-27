@@ -3,9 +3,9 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <algorithm>
 
-D12GraphicsExecuterModule::D12GraphicsExecuterModule(uint32_t workersCount) :
-	executerContexts(workersCount),
-	completedBufferIndex(0)
+D12GraphicsExecuterModule::D12GraphicsExecuterModule(uint32_t workersCount)
+	: executerContexts(workersCount)
+	, completedBufferIndex(0)
 {
 }
 

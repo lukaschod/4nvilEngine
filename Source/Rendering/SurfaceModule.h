@@ -9,19 +9,19 @@
 struct SurfaceColor
 {
 	SurfaceColor() {}
-	SurfaceColor(const Image* image) :
-		image(image),
-		loadAction(LoadActionClear),
-		storeAction(StoreActionStore),
-		clearColor(0, 0.2f, 0.4f, 0)
+	SurfaceColor(const Image* image)
+		: image(image)
+		, loadAction(LoadActionClear)
+		, storeAction(StoreActionStore)
+		, clearColor(0, 0.2f, 0.4f, 0)
 	{
 	}
 
-	SurfaceColor(const Image* image, LoadAction loadAction, StoreAction storeAction) :
-		image(image),
-		loadAction(loadAction),
-		storeAction(storeAction),
-		clearColor(0, 0.2f, 0.4f, 0)
+	SurfaceColor(const Image* image, LoadAction loadAction, StoreAction storeAction)
+		: image(image)
+		, loadAction(loadAction)
+		, storeAction(storeAction)
+		, clearColor(0, 0.2f, 0.4f, 0)
 	{
 	}
 	

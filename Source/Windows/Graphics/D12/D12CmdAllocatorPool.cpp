@@ -1,8 +1,8 @@
 #include "D12CmdAllocatorPool.h"
 
-D12CmdAllocatorPool::D12CmdAllocatorPool(ID3D12Device * device, D3D12_COMMAND_LIST_TYPE type) :
-	device(device),
-	type(type)
+D12CmdAllocatorPool::D12CmdAllocatorPool(ID3D12Device * device, D3D12_COMMAND_LIST_TYPE type)
+	: device(device)
+	, type(type)
 {
 }
 

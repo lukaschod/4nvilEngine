@@ -10,10 +10,10 @@ class D12CmdQueue;
 
 struct D12CmdBuffer
 {
-	D12CmdBuffer(D12CmdQueue* queue, D3D12_COMMAND_LIST_TYPE type) :
-		type(type),
-		queue(queue),
-		commandList(nullptr)
+	D12CmdBuffer(D12CmdQueue* queue, D3D12_COMMAND_LIST_TYPE type)
+		: type(type)
+		, queue(queue)
+		, commandList(nullptr)
 	{
 	}
 

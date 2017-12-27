@@ -1,7 +1,7 @@
 #include <Rendering\MeshModule.h>
 
-MeshModule::MeshModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+MeshModule::MeshModule(uint32_t bufferCount, uint32_t bufferIndexStep)
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

@@ -7,9 +7,9 @@ template<class T>
 struct Range
 {
 	Range() {}
-	Range(const T* pointer, size_t size) :
-		pointer(pointer),
-		size(size)
+	Range(const T* pointer, size_t size)
+		: pointer(pointer)
+		, size(size)
 	{
 	}
 

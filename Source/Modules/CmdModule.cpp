@@ -1,9 +1,9 @@
 /*#include <Modules\CmdModule.h>
 #include <Tools\Math\Math.h>
 
-CmdModule::CmdModule(uint32_t bufferCount, uint32_t workersCount) :
-	backbufferIndex(0),
-	contexts(workersCount)
+CmdModule::CmdModule(uint32_t bufferCount, uint32_t workersCount) 
+	: backbufferIndex(0)
+	, contexts(workersCount)
 {
 	bufferCounter = 0;
 }

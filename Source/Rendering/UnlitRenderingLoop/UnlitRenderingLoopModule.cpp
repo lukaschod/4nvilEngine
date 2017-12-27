@@ -2,8 +2,8 @@
 #include <Rendering\MaterialModule.h>
 #include <Rendering\StorageModule.h>
 
-UnlitRenderingLoopModule::UnlitRenderingLoopModule(uint32_t bufferCount, uint32_t workersCount) :
-	CmdModule(bufferCount, workersCount)
+UnlitRenderingLoopModule::UnlitRenderingLoopModule(uint32_t bufferCount, uint32_t workersCount) 
+	: CmdModule(bufferCount, workersCount)
 {
 }
 

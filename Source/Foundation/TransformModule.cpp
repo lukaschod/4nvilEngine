@@ -3,8 +3,8 @@
 #include <Tools\Collections\FixedBlockHeap.h>
 #include <Tools\Math\Math.h>
 
-TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount) : 
-	ComponentModule(bufferCount, workersCount)
+TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount) 
+	: ComponentModule(bufferCount, workersCount)
 {
 	root = new Transform(this);
 	root->localPosition = Vector3f(0, 0, 0);

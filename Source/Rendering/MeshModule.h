@@ -24,9 +24,9 @@ struct SubMesh
 
 struct Mesh
 {
-	Mesh(const VertexLayout& vertexLayout) : 
-		vertexLayout(vertexLayout), 
-		vertexBuffer(nullptr) 
+	Mesh(const VertexLayout& vertexLayout)
+		: vertexLayout(vertexLayout)
+		, vertexBuffer(nullptr) 
 	{}
 	const VertexLayout vertexLayout;
 	const IBuffer* vertexBuffer;

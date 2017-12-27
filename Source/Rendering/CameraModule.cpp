@@ -3,8 +3,8 @@
 #include <Graphics\IGraphicsModule.h>
 #include <Foundation\TransformModule.h>
 
-CameraModule::CameraModule(uint32_t bufferCount, uint32_t bufferIndexStep) : 
-	ComponentModule(bufferCount, bufferIndexStep)
+CameraModule::CameraModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: ComponentModule(bufferCount, bufferIndexStep)
 {
 }
 

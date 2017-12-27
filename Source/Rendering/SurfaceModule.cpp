@@ -1,7 +1,7 @@
 #include <Rendering\SurfaceModule.h>
 
-SurfaceModule::SurfaceModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+SurfaceModule::SurfaceModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

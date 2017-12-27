@@ -1,7 +1,7 @@
 #include <Rendering\ShaderModule.h>
 
-ShaderModule::ShaderModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+ShaderModule::ShaderModule(uint32_t bufferCount, uint32_t bufferIndexStep)
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

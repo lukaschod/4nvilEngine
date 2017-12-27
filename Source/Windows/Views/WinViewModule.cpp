@@ -1,9 +1,9 @@
 #include <Windows\Views\WinViewModule.h>
 #include <Windows\Common.h>
 
-WinViewModule::WinViewModule(uint32_t bufferCount, uint32_t bufferIndexStep, HINSTANCE instanceHandle) :
-	IViewModule(bufferCount, bufferIndexStep),
-	instanceHandle(instanceHandle)
+WinViewModule::WinViewModule(uint32_t bufferCount, uint32_t bufferIndexStep, HINSTANCE instanceHandle)
+	: IViewModule(bufferCount, bufferIndexStep)
+	, instanceHandle(instanceHandle)
 {
 }
 

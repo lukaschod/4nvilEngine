@@ -1,8 +1,8 @@
 #include <Foundation\TimeModule.h>
 #include <Tools\Math\Math.h>
 
-TimeModule::TimeModule() :
-	passedFrameCount(0)
+TimeModule::TimeModule() 
+	: passedFrameCount(0)
 {
 	stopWatch.Start();
 }

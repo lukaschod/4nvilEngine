@@ -2,9 +2,9 @@
 #include <algorithm>
 #include "ConcurrentModuleExecuter.h"
 
-ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint32_t workerCount) :
-	planner(planner),
-	isRunning(false)
+ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint32_t workerCount) 
+	: planner(planner)
+	, isRunning(false)
 {
 	for (uint32_t i = 0; i < workerCount; i++)
 	{

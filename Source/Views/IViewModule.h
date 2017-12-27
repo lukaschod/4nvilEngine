@@ -8,8 +8,8 @@
 
 struct IView
 {
-	IView(const Image* renderTarget) :
-		renderTarget(renderTarget)
+	IView(const Image* renderTarget)
+		: renderTarget(renderTarget)
 	{ }
 	const Image* renderTarget;
 	const ISwapChain* swapChain;

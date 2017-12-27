@@ -7,8 +7,8 @@
 
 struct WinView : public IView
 {
-	WinView(const Image* renderTarget) :
-		IView(renderTarget)
+	WinView(const Image* renderTarget)
+		: IView(renderTarget)
 	{}
 	HWND windowHandle;
 };

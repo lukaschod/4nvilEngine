@@ -789,7 +789,7 @@ void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 		nullptr,
 		IID_PPV_ARGS(&target->resource)));
 	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();*/
-	auto size = Math::GetClosestTo(target->GetSize(), (size_t)256);
+	auto size = Math::GetPadded(target->GetSize(), (size_t)256);
 	target->memory = bufferUploadHeap->Allocate(size);
 	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetOffset(target->memory);
 	target->resource = bufferUploadHeap->Get_heap();

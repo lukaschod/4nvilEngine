@@ -16,14 +16,14 @@ class TransformModule; struct Transform;
 
 struct Camera : public Component
 {
-	Camera(const CameraModule* module, const Storage* perCameraStorage) : 
-		Component((ComponentModule*)module),
-		perCameraStorage(perCameraStorage),
-		surface(nullptr),
-		aspect(1),
-		nearClipPlane(0.3f),
-		farClipPlane(1000),
-		fieldOfView(60)
+	Camera(const CameraModule* module, const Storage* perCameraStorage)
+		:  Component((ComponentModule*)module)
+		, perCameraStorage(perCameraStorage)
+		, surface(nullptr)
+		, aspect(1)
+		, nearClipPlane(0.3f)
+		, farClipPlane(1000)
+		, fieldOfView(60)
 	{}
 
 	const Surface* surface;

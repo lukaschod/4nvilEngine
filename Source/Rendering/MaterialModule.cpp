@@ -1,8 +1,8 @@
 #include <Rendering\MaterialModule.h>
 #include <Graphics\IGraphicsModule.h>
 
-MaterialModule::MaterialModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	PipeModule(bufferCount, bufferIndexStep)
+MaterialModule::MaterialModule(uint32_t bufferCount, uint32_t bufferIndexStep)
+	: PipeModule(bufferCount, bufferIndexStep)
 {
 }
 

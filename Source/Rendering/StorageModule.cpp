@@ -1,7 +1,7 @@
 #include <Rendering\StorageModule.h>
 
-StorageModule::StorageModule(uint32_t bufferCount, uint32_t bufferIndexStep) :
-	CmdModule(bufferCount, bufferIndexStep)
+StorageModule::StorageModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
+	: CmdModule(bufferCount, bufferIndexStep)
 {
 }
 

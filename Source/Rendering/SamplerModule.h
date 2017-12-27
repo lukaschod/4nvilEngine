@@ -11,8 +11,8 @@ struct SamplerOptions : public FilterOptions
 
 struct Sampler
 {
-	Sampler(const SamplerOptions& options, const IFilter* filter) :
-		filter(filter)
+	Sampler(const SamplerOptions& options, const IFilter* filter)
+		: filter(filter)
 	{ }
 	const IFilter* filter;
 };
