@@ -59,7 +59,7 @@ public:
 	void RecSetViewport(const ExecutionContext& context, const Surface* target, const Viewport& viewport);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	List<Surface*> surfaces;

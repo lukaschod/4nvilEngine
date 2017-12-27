@@ -20,7 +20,7 @@ void LogModule::RecMessageF(const ExecutionContext& context, const char* format,
 	buffer->commandCount++;
 }
 
-bool LogModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool LogModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

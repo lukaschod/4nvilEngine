@@ -32,7 +32,7 @@ const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32
 
 SERIALIZE_METHOD_ARG2(ImageModule, SetSampler, const Image*, const Sampler*);
 
-bool ImageModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool ImageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

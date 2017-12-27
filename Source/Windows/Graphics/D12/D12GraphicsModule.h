@@ -3,8 +3,8 @@
 #include <Windows\Graphics\D12\D12Common.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Windows\Views\WinViewModule.h>
-#include <Windows\Graphics\D12\D12Heap.h>
-#include <Windows\Graphics\D12\D12HeapBuffer.h>
+#include <Windows\Graphics\D12\D12DescriptorHeap.h>
+#include <Windows\Graphics\D12\D12BufferHeap.h>
 #include <Foundation\MemoryModule.h>
 
 struct D12RenderPass : public IRenderPass
@@ -237,7 +237,7 @@ public:
 	virtual void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	inline bool Initialize();
@@ -272,15 +272,15 @@ private:
 
 private:
 	D12GraphicsPlannerModule* planner;
-	D12Heap* srvHeap;
-	D12Heap* rtvHeap;
-	D12Heap* samplersHeap;
-	D12HeapBuffer* bufferUploadHeap;
+	D12DescriptorHeap* srvHeap;
+	D12DescriptorHeap* rtvHeap;
+	D12DescriptorHeap* samplersHeap;
+	D12BufferHeap* bufferUploadHeap;
 	List<std::pair<uint64_t, D12HeapMemory>> srvHeapMemoryToFree;
 	List<std::pair<uint64_t, D12HeapMemory>> samplersHeapMemoryToFree;
 	uint64_t resourceCounter;
-	D12Heap* srvCpuHeap;
-	D12Heap* samplersCpuHeap;
+	D12DescriptorHeap* srvCpuHeap;
+	D12DescriptorHeap* samplersCpuHeap;
 
 	ID3D12Device* device;
 	IDXGIFactory4* factory;

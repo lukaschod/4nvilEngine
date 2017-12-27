@@ -14,7 +14,7 @@ void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 SERIALIZE_METHOD_CREATE(ShaderModule, Shader);
 SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, uint32_t, const ShaderPipelineDesc*);
 
-bool ShaderModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool ShaderModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

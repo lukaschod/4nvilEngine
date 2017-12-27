@@ -6,7 +6,7 @@ SERIALIZE_METHOD_CREATECMP(UnitModule, Unit);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
 
-bool UnitModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool UnitModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

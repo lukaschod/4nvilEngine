@@ -45,14 +45,14 @@ struct D12UnusedHeapMemory
 	D12UnusedHeapMemory* next;
 };
 
-class D12Heap
+class D12DescriptorHeap
 {
 public:
-	D12Heap(ID3D12Device* device, D12HeapType type, size_t capacity);
+	D12DescriptorHeap(ID3D12Device* device, D12HeapType type, size_t capacity);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHandle(const D12HeapMemory& memory) const;
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle(const D12HeapMemory& memory) const;
 	D12HeapMemory Allocate(size_t size);
-	void Free(D12HeapMemory& memory);
+	void Deallocate(D12HeapMemory& memory);
 
 private:
 	void Grow(size_t capacity);

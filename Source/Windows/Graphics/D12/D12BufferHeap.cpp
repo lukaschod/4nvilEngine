@@ -1,17 +1,17 @@
-#include <Windows\Graphics\D12\D12HeapBuffer.h>
+#include <Windows\Graphics\D12\D12BufferHeap.h>
 
-D12HeapBuffer::D12HeapBuffer(ID3D12Device* device, size_t capacity) 
+D12BufferHeap::D12BufferHeap(ID3D12Device* device, size_t capacity) 
 	: device(device)
 {
 	Grow(capacity);
 }
 
-D3D12_GPU_VIRTUAL_ADDRESS D12HeapBuffer::GetOffset(const D12HeapMemory& memory) const
+D3D12_GPU_VIRTUAL_ADDRESS D12BufferHeap::GetOffset(const D12HeapMemory& memory) const
 {
 	return heap->GetGPUVirtualAddress() + memory.pointer;
 }
 
-D12HeapMemory D12HeapBuffer::Allocate(size_t size)
+D12HeapMemory D12BufferHeap::Allocate(size_t size)
 {
 	auto unusedMemory = FindMemory(size);
 	if (unusedMemory == end)
@@ -35,7 +35,7 @@ D12HeapMemory D12HeapBuffer::Allocate(size_t size)
 	return D12HeapMemory(unusedMemory->pointer, unusedMemory->size);
 }
 
-void D12HeapBuffer::Free(D12HeapMemory& memory)
+void D12BufferHeap::Deallocate(D12HeapMemory& memory)
 {
 	auto current = begin;
 	while (current != end)
@@ -82,7 +82,7 @@ void D12HeapBuffer::Free(D12HeapMemory& memory)
 	ERROR("Memory is corrupted");
 }
 
-void D12HeapBuffer::Grow(size_t capacity)
+void D12BufferHeap::Grow(size_t capacity)
 {
 	if (heap == nullptr)
 	{
@@ -110,7 +110,7 @@ void D12HeapBuffer::Grow(size_t capacity)
 	ERROR("NotImplemented");
 }
 
-D12UnusedHeapMemory* D12HeapBuffer::FindMemory(size_t size)
+D12UnusedHeapMemory* D12BufferHeap::FindMemory(size_t size)
 {
 	D12UnusedHeapMemory* iterator = begin;
 	while (iterator != end)
@@ -123,7 +123,7 @@ D12UnusedHeapMemory* D12HeapBuffer::FindMemory(size_t size)
 	return end;
 }
 
-void D12HeapBuffer::Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second)
+void D12BufferHeap::Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second)
 {
 	first->next = second;
 	second->previous = first;

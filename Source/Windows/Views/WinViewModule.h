@@ -26,7 +26,7 @@ public:
 	virtual const List<const IView*>& GetViews() override;
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	bool RegisterDefaultWindowClass();

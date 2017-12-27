@@ -1,7 +1,7 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
 #include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
-#include <Windows\Graphics\D12\D12Heap.h>
+#include <Windows\Graphics\D12\D12DescriptorHeap.h>
 
 D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device) 
 	: device(device)
@@ -192,7 +192,7 @@ void D12GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 	if (recordingOptimizer.ShouldSplitRecording())
 	{
 		SplitRecording();
-		RecSetHeap((const D12Heap**) recordingOptimizer.lastHeaps);
+		RecSetHeap((const D12DescriptorHeap**) recordingOptimizer.lastHeaps);
 		RecSetRenderPass(recordingOptimizer.lastRenderPass, true);
 	}
 
@@ -229,13 +229,13 @@ void D12GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 }
 
 DECLARE_COMMAND_CODE(SetHeap);
-void D12GraphicsPlannerModule::RecSetHeap(const D12Heap** heap)
+void D12GraphicsPlannerModule::RecSetHeap(const D12DescriptorHeap** heap)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
 	stream.Write(CommandCodeSetHeap);
-	recordingOptimizer.MarSetHeap((D12Heap**) heap);
-	stream.Write(heap, sizeof(D12Heap*) * D12HeapTypeCount);
+	recordingOptimizer.MarSetHeap((D12DescriptorHeap**) heap);
+	stream.Write(heap, sizeof(D12DescriptorHeap*) * D12HeapTypeCount);
 	buffer->commandCount++;
 }
 
@@ -403,7 +403,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_START(SetHeap);
-		stream.Read(buffer->heaps, sizeof(D12Heap*) * D12HeapTypeCount);
+		stream.Read(buffer->heaps, sizeof(D12DescriptorHeap*) * D12HeapTypeCount);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

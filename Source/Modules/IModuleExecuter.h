@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\IModulePlanner.h>
 #include <vector>
 
 class Module;

@@ -18,7 +18,7 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
 	unitModule = ExecuteAfter<UnitModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(3, new AllocatorFixedBlock(sizeof(MeshRenderer)));
+	memoryModule->SetAllocator(3, new FixedBlockHeap(sizeof(MeshRenderer)));
 	ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
@@ -56,7 +56,7 @@ const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionCon
 }
 //SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 
-bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

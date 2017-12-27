@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Windows\Graphics\D12\D12Common.h>
-#include <Windows\Graphics\D12\D12Heap.h>
+#include <Windows\Graphics\D12\D12DescriptorHeap.h>
 #include <Windows\Graphics\D12\D12CmdAllocatorPool.h>
-#include <Tools\IOStream.h>
+#include <Tools\IO\MemoryStream.h>
 #include <queue>
 
 class D12CmdQueue;
@@ -23,17 +23,17 @@ struct D12CmdBuffer
 		this->index = index;
 		swapChain = nullptr;
 		stream.Reset();
-		memset(heaps, 0, D12HeapTypeCount * sizeof(D12Heap*));
+		memset(heaps, 0, D12HeapTypeCount * sizeof(D12DescriptorHeap*));
 	}
 
 	const D3D12_COMMAND_LIST_TYPE type;
 	D12CmdQueue* const queue;
-	IOStream stream;
+	MemoryStream stream;
 	size_t commandCount;
 	ID3D12GraphicsCommandList* commandList;
 	IDXGISwapChain* swapChain;
 	uint64_t index;
-	D12Heap* heaps[D12HeapTypeCount];
+	D12DescriptorHeap* heaps[D12HeapTypeCount];
 };
 
 class D12CmdQueue

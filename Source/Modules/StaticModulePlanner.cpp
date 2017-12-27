@@ -96,7 +96,7 @@ public:
 	{
 		for (auto node : nodes)
 		{
-			node->dependencies = node->module->Get_dependencies().size();
+			node->dependencies = (uint32_t)node->module->Get_dependencies().size();
 			node->concunrency = 1;
 		}
 	}

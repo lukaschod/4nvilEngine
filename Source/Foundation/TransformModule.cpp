@@ -1,6 +1,6 @@
 #include <Foundation\TransformModule.h>
 #include <Foundation\MemoryModule.h>
-#include <Tools\Collections\AllocatorFixedBlock.h>
+#include <Tools\Collections\FixedBlockHeap.h>
 #include <Tools\Math\Math.h>
 
 TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount) : 
@@ -46,7 +46,7 @@ void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
 	CmdModule::SetupExecuteOrder(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(0, new AllocatorFixedBlock(sizeof(Transform)));
+	memoryModule->SetAllocator(0, new FixedBlockHeap(sizeof(Transform)));
 }
 
 const Transform* TransformModule::AllocateTransform() const
@@ -72,7 +72,7 @@ SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transf
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
-bool TransformModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

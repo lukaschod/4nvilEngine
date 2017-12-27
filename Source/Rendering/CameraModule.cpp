@@ -55,7 +55,7 @@ const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, con
 SERIALIZE_METHOD_ARG2(CameraModule, SetSurface, const Camera*, const Surface*);
 SERIALIZE_METHOD_ARG1(CameraModule, Destroy, const Component*);
 
-bool CameraModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool CameraModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

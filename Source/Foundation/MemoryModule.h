@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Tools\Collections\AllocatorFixedBlock.h>
+#include <Tools\Collections\FixedBlockHeap.h>
 #include <Modules\Module.h>
 #include <map>
 
@@ -22,7 +22,7 @@ public:
 		return target;
 	}
 
-	void SetAllocator(uint32_t memoryType, IAllocator* allocator)
+	void SetAllocator(uint32_t memoryType, IHeap* allocator)
 	{
 		auto allocatorDup = allocators.find(memoryType);
 		ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)), 
@@ -37,10 +37,10 @@ public:
 		auto allocator = allocators.find(memoryType);
 		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
 
-		allocator->second->Free(target);
+		allocator->second->Deallocate(target);
 		target->~T();
 	}
 
 private:
-	std::map<uint32_t, IAllocator*> allocators;
+	std::map<uint32_t, IHeap*> allocators;
 };

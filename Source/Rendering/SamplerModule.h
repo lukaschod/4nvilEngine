@@ -27,7 +27,7 @@ public:
 	inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	List<Sampler*> samplers;

@@ -33,7 +33,7 @@ public:
 	void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	List<Image*> images;

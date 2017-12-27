@@ -32,7 +32,7 @@ const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& contex
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
 
-bool MaterialModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

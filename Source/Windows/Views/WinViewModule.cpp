@@ -130,7 +130,7 @@ const IView* WinViewModule::RecCreateIView(const ExecutionContext& context, cons
 	return target;
 }
 
-bool WinViewModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool WinViewModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

@@ -17,7 +17,7 @@ SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32_t, const S
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetDepth, const Surface*, const SurfaceDepth&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetViewport, const Surface*, const Viewport&);
 
-bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

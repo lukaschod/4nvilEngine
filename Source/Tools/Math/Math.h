@@ -43,11 +43,11 @@ namespace Math
 	inline T Pow2(T y) { return 2 << y; }
 
 	template<typename T>
-	inline T GetClosestTo(T value, T number)
+	inline T GetPadded(T value, T padding)
 	{
-		if (value <= number)
-			return number;
+		if (value <= padding)
+			return padding;
 		else
-			return value + value % 256;
+			return value + value % padding;
 	}
 };

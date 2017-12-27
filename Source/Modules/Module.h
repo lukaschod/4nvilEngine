@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\ModuleManager.h>
 #include <Tools\Collections\List.h>
+#include <Modules\ModuleManager.h>
 #include <typeinfo>
 
 class IGraphicsModule;

@@ -20,7 +20,7 @@ public:
 	void RecSetShaderPipeline(const ExecutionContext& context, const Shader* target, uint32_t index, const ShaderPipelineDesc* desc);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	List<Shader*> shaders;

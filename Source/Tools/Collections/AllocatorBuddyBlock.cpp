@@ -50,7 +50,7 @@ void* AllocatorBuddyBlock::Allocate(size_t size)
 	return block;
 }
 
-void AllocatorBuddyBlock::Free(void* pointer)
+void AllocatorBuddyBlock::Deallocate(void* pointer)
 {
 }
 

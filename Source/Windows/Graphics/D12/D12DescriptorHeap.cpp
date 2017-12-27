@@ -1,27 +1,27 @@
-#include <Windows\Graphics\D12\D12Heap.h>
+#include <Windows\Graphics\D12\D12DescriptorHeap.h>
 
-D12Heap::D12Heap(ID3D12Device* device, D12HeapType type, size_t capacity) :
+D12DescriptorHeap::D12DescriptorHeap(ID3D12Device* device, D12HeapType type, size_t capacity) :
 	device(device),
 	type(type)
 {
 	Grow(capacity);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE D12Heap::GetGpuHandle(const D12HeapMemory& memory) const
+D3D12_GPU_DESCRIPTOR_HANDLE D12DescriptorHeap::GetGpuHandle(const D12HeapMemory& memory) const
 {
 	auto handle = heap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += stride * memory.pointer;
 	return handle;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE D12Heap::GetCpuHandle(const D12HeapMemory& memory) const
+D3D12_CPU_DESCRIPTOR_HANDLE D12DescriptorHeap::GetCpuHandle(const D12HeapMemory& memory) const
 {
 	auto handle = heap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += stride * memory.pointer;
 	return handle;
 }
 
-D12HeapMemory D12Heap::Allocate(size_t size)
+D12HeapMemory D12DescriptorHeap::Allocate(size_t size)
 {
 	auto unusedMemory = FindMemory(size);
 	if (unusedMemory == end)
@@ -45,7 +45,7 @@ D12HeapMemory D12Heap::Allocate(size_t size)
 	return D12HeapMemory(unusedMemory->pointer, unusedMemory->size);
 }
 
-void D12Heap::Free(D12HeapMemory& memory)
+void D12DescriptorHeap::Deallocate(D12HeapMemory& memory)
 {
 	auto current = begin;
 	while (current != end)
@@ -92,7 +92,7 @@ void D12Heap::Free(D12HeapMemory& memory)
 	ERROR("Memory is corrupted");
 }
 
-void D12Heap::Grow(size_t capacity)
+void D12DescriptorHeap::Grow(size_t capacity)
 {
 	if (heap == nullptr)
 	{
@@ -145,7 +145,7 @@ void D12Heap::Grow(size_t capacity)
 	ERROR("NotImplemented");
 }
 
-D12UnusedHeapMemory* D12Heap::FindMemory(size_t size)
+D12UnusedHeapMemory* D12DescriptorHeap::FindMemory(size_t size)
 {
 	D12UnusedHeapMemory* iterator = begin;
 	while (iterator != end)
@@ -158,7 +158,7 @@ D12UnusedHeapMemory* D12Heap::FindMemory(size_t size)
 	return end;
 }
 
-void D12Heap::Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second)
+void D12DescriptorHeap::Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second)
 {
 	first->next = second;
 	second->previous = first;

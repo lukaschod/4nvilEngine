@@ -8,7 +8,7 @@ class IAllocatorMemory
 {
 public:
 	virtual void Allocate(size_t size) = 0;
-	virtual void Free(size_t size) = 0;
+	virtual void Deallocate(size_t size) = 0;
 
 };
 
@@ -18,7 +18,7 @@ public:
 	AllocatorBuddyBlock(size_t capacity);
 
 	void* Allocate(size_t size);
-	void Free(void* pointer);
+	void Deallocate(void* pointer);
 
 private:
 	struct BlockHeader

@@ -49,15 +49,15 @@
     <Filter Include="Source\Tools\Threading">
       <UniqueIdentifier>{057be305-8769-4490-a7d3-6fda33297ca0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Tools\IO">
+      <UniqueIdentifier>{42c40ba2-fb6b-406d-8a1e-5742ff323acb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp">
       <Filter>Source\WindowsPlayer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\Module.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp">
@@ -123,9 +123,6 @@
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp">
       <Filter>Source\Windows\Views</Filter>
     </ClCompile>
@@ -147,14 +144,17 @@
     <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.cpp">
-      <Filter>Source\Tools\Collections</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.cpp">
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.cpp">
       <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.cpp">
+      <Filter>Source\Tools\Collections</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,16 +263,10 @@
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Heap.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Windows\Views\WinViewModule.h">
       <Filter>Source\Windows\Views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Console.h">
-      <Filter>Source\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\IOStream.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\StopWatch.h">
@@ -329,14 +323,23 @@
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorFixedBlock.h">
-      <Filter>Source\Tools\Collections</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\PipeModule.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12HeapBuffer.h">
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.h">
       <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h">
+      <Filter>Source\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.h">
+      <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Collections\IHeap.h">
+      <Filter>Source\Tools\Collections</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

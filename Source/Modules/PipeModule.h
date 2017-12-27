@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Tools\IOStream.h>
+#include <Tools\IO\MemoryStream.h>
 #include <Modules\Module.h>
 #include <Modules\CmdModuleHelper.h>
 #include <Modules\CmdBufferPoolModule.h>
@@ -16,7 +16,7 @@ public:
 	virtual size_t GetExecutionSize() override;
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) = 0;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) = 0;
 	virtual void OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore) override;
 	void SortPipes();
 	CmdBuffer* GetRecordingBuffer(const ExecutionContext& context);

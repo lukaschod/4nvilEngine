@@ -18,7 +18,7 @@ public:
 	virtual void Execute(const ExecutionContext& context);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) { return true; }
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) { return true; }
 
 private:
 	CameraModule* cameraModule;

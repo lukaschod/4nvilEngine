@@ -24,7 +24,7 @@ const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, 
 	return target;
 }
 
-bool SamplerModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool SamplerModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{

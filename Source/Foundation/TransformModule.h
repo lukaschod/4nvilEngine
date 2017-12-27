@@ -43,7 +43,7 @@ public:
 	void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
 
 private:
 	MemoryModule* memoryModule;

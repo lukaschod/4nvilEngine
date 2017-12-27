@@ -11,7 +11,7 @@ D12GraphicsModule::D12GraphicsModule(uint32_t bufferCount, uint32_t bufferIndexS
 
 void D12GraphicsModule::Execute(const ExecutionContext& context)
 {
-	// Free all memory that is not used by GPU
+	// Deallocate all memory that is not used by GPU
 	auto completedBufferIndex = planner->GetCompletedBufferIndex();
 	for (size_t i = srvHeapMemoryToFree.size(); i-->0 ;)
 	{
@@ -19,7 +19,7 @@ void D12GraphicsModule::Execute(const ExecutionContext& context)
 		if (memory.first > completedBufferIndex)
 			continue;
 		srvHeapMemoryToFree.pop_back();
-		srvHeap->Free(memory.second);
+		srvHeap->Deallocate(memory.second);
 	}
 	for (size_t i = samplersHeapMemoryToFree.size(); i-->0;)
 	{
@@ -27,7 +27,7 @@ void D12GraphicsModule::Execute(const ExecutionContext& context)
 		if (memory.first > completedBufferIndex)
 			continue;
 		samplersHeapMemoryToFree.pop_back();
-		samplersHeap->Free(memory.second);
+		samplersHeap->Deallocate(memory.second);
 	}
 
 	planner->Reset();
@@ -42,8 +42,8 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	moduleManager->AddModule(new D12GraphicsExecuterModule(4));
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(1, new AllocatorFixedBlock(sizeof(D12ShaderArguments)));
-	memoryModule->SetAllocator(2, new AllocatorFixedBlock(sizeof(D12Buffer)));
+	memoryModule->SetAllocator(1, new FixedBlockHeap(sizeof(D12ShaderArguments)));
+	memoryModule->SetAllocator(2, new FixedBlockHeap(sizeof(D12Buffer)));
 }
 
 const IBuffer* D12GraphicsModule::AllocateBuffer(size_t size)
@@ -130,7 +130,7 @@ const ITexture* D12GraphicsModule::RecCreateITexture(const ExecutionContext& con
 }
 //SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
 
-bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, IOStream& stream, uint32_t commandCode)
+bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
 {
 	switch (commandCode)
 	{
@@ -485,13 +485,13 @@ void D12GraphicsModule::SetRenderPass(const ExecutionContext & context, const D1
 	{
 		SetTextureState(context, depthTexture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	}
-	D12Heap* heaps[D12HeapTypeCount] = {
+	D12DescriptorHeap* heaps[D12HeapTypeCount] = {
 		srvHeap,
 		samplersHeap,
 		nullptr,
 		nullptr,
 		nullptr};
-	planner->RecSetHeap((const D12Heap**) heaps);
+	planner->RecSetHeap((const D12DescriptorHeap**) heaps);
 	planner->RecSetRenderPass(target);
 }
 
@@ -619,13 +619,13 @@ bool D12GraphicsModule::Initialize()
 	if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &rootSignatureFeatures, sizeof(rootSignatureFeatures))))
 		rootSignatureFeatures.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
 
-	srvHeap = new D12Heap(device, D12HeapTypeSRVs, 128);
-	rtvHeap = new D12Heap(device, D12HeapTypeRTVs, 128);
-	samplersHeap = new D12Heap(device, D12HeapTypeSamplers, 128);
-	srvCpuHeap = new D12Heap(device, D12HeapTypeSRVsCPU, 128);
-	samplersCpuHeap = new D12Heap(device, D12HeapTypeSamplersCPU, 128);
+	srvHeap = new D12DescriptorHeap(device, D12HeapTypeSRVs, 128);
+	rtvHeap = new D12DescriptorHeap(device, D12HeapTypeRTVs, 128);
+	samplersHeap = new D12DescriptorHeap(device, D12HeapTypeSamplers, 128);
+	srvCpuHeap = new D12DescriptorHeap(device, D12HeapTypeSRVsCPU, 128);
+	samplersCpuHeap = new D12DescriptorHeap(device, D12HeapTypeSamplersCPU, 128);
 
-	bufferUploadHeap = new D12HeapBuffer(device, 200*201*256);
+	bufferUploadHeap = new D12BufferHeap(device, 200*201*256);
 
 	ID3D12CommandAllocator* alloc;
 	ASSERT_SUCCEEDED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&alloc)));
@@ -1042,8 +1042,8 @@ float4 FragMain(VertData i) : SV_TARGET
 			)";
 
 	VertexLayout vertexLayout;
-	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatR32G32B32));
-	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypeTexCoord0, ColorFormatR32G32));
+	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatRGB24));
+	vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypeTexCoord0, ColorFormatRG16));
 
 	auto shaderDesc = new ShaderPipelineDesc();
 	shaderDesc->name = "Test";
@@ -1090,11 +1090,11 @@ DXGI_FORMAT D12GraphicsModule::Convert(ColorFormat format)
 	// TODO: Table lookup
 	switch (format)
 	{
-	case ColorFormatR32G32B32A32:
+	case ColorFormatRGBA32:
 		return DXGI_FORMAT_R32G32B32A32_FLOAT;
-	case ColorFormatR32G32B32:
+	case ColorFormatRGB24:
 		return DXGI_FORMAT_R32G32B32_FLOAT;
-	case ColorFormatR32G32:
+	case ColorFormatRG16:
 		return DXGI_FORMAT_R32G32_FLOAT;
 	}
 	
@@ -1121,11 +1121,11 @@ uint32_t D12GraphicsModule::GetSize(ColorFormat format)
 {
 	switch (format)
 	{
-	case ColorFormatR32G32B32A32:
+	case ColorFormatRGBA32:
 		return sizeof(float) * 4;
-	case ColorFormatR32G32B32:
+	case ColorFormatRGB24:
 		return sizeof(float) * 3;
-	case ColorFormatR32G32:
+	case ColorFormatRG16:
 		return sizeof(float) * 2;
 	}
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows\Graphics\D12\D12Common.h>
-#include <Windows\Graphics\D12\D12Heap.h>
+#include <Windows\Graphics\D12\D12DescriptorHeap.h>
 #include <Windows\Graphics\D12\D12CmdAllocatorPool.h>
 #include <Windows\Graphics\D12\D12CmdQueue.h>
 #include <Graphics\IGraphicsModule.h>
@@ -35,7 +35,7 @@ public:
 	void RecUpdateBuffer(const D12Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
 	void RecPresent(const D12SwapChain* swapchain);
 	void RecDraw(const DrawDesc& target);
-	void RecSetHeap(const D12Heap** heap);
+	void RecSetHeap(const D12DescriptorHeap** heap);
 
 	void Reset();
 	ID3D12CommandQueue* GetDirectQueue();
@@ -56,11 +56,11 @@ private:
 	{
 		inline void MarSetRenderPass(D12RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
 		inline void MarDraw() { drawCount++; }
-		inline void MarSetHeap(D12Heap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12Heap*) * D12HeapTypeCount); }
+		inline void MarSetHeap(D12DescriptorHeap** heaps) { memcpy((void*)lastHeaps, (void*)heaps, sizeof(D12DescriptorHeap*) * D12HeapTypeCount); }
 		inline bool ShouldSplitRecording() { return drawCount == 500; }
 		
 		D12RenderPass* lastRenderPass;
-		D12Heap* lastHeaps[D12HeapTypeCount];
+		D12DescriptorHeap* lastHeaps[D12HeapTypeCount];
 		size_t drawCount;
 	};
 	RecingOptimizer recordingOptimizer;

@@ -2,22 +2,16 @@
 
 #include <Tools\Common.h>
 #include <Tools\Collections\List.h>
+#include <Tools\Collections\IHeap.h>
 #include <mutex>
 
-class IAllocator
+class FixedBlockHeap : public IHeap
 {
 public:
-	virtual void* Allocate() = 0;
-	virtual void Free(void* pointer) = 0;
-};
-
-class AllocatorFixedBlock : public IAllocator
-{
-public:
-	AllocatorFixedBlock(size_t elementSize);
+	FixedBlockHeap(size_t elementSize);
 
 	virtual void* Allocate() override;
-	virtual void Free(void* pointer) override;
+	virtual void Deallocate(void* pointer) override;
 
 private:
 	struct BlockHeader

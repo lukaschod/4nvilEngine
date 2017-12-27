@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Tools\IOStream.h>
+#include <Tools\IO\MemoryStream.h>
 #include <Modules\Module.h>
 #include <queue>
 #include <mutex>
@@ -21,7 +21,7 @@ struct CmdBuffer
 	{}
 
 	/// Reced commands buffer
-	IOStream stream;
+	MemoryStream stream;
 
 	/// Reced commandcount
 	size_t commandCount;
