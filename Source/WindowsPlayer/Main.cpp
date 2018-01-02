@@ -45,6 +45,7 @@ public:
 		graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 		unitModule = ExecuteBefore<UnitModule>(moduleManager);
 		transformModuke = ExecuteBefore<TransformModule>(moduleManager);
+		logModule = ExecuteBefore<LogModule>(moduleManager);
 	}
 
 	const Shader* CreateShader(const ExecutionContext& context)
@@ -155,6 +156,8 @@ float4 FragMain(VertData i) : SV_TARGET
 			return;
 		}
 
+		logModule->RecMessageF(context, "Initializing test scene %d\n", 1);
+
 		// Create window
 		//auto view = viewModule->RecCreateIView(context);
 		//auto view2 = viewModule->RecCreateIView(context);
@@ -241,6 +244,7 @@ float4 FragMain(VertData i) : SV_TARGET
 	CameraModule* cameraModule;
 	SurfaceModule* surfaceModule;
 	IGraphicsModule* graphicsModule;
+	LogModule* logModule;
 	uint32_t frame;
 };
 

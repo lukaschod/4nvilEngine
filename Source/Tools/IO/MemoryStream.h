@@ -41,6 +41,7 @@ public:
 		memcpy(data, this->data, size);
 		this->data += size;
 	}
+
 	template<typename T>
 	inline T& FastRead()
 	{
@@ -81,5 +82,5 @@ private:
 private:
 	uint8_t* begin;
 	uint8_t* end;
-	AUTOMATED_PROPERTY_GET(uint8_t*, data);
+	AUTOMATED_PROPERTY_GETSET(uint8_t*, data);
 };

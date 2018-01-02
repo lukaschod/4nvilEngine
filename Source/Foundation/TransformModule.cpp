@@ -29,8 +29,12 @@ void TransformModule::Execute(const ExecutionContext& context)
 
 		auto parent = next->parent;
 		ASSERT(parent != nullptr);
-	
-		next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
+		
+		if (next->dirtyLocalObjectToWorldMatrix)
+		{
+			next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
+			next->dirtyLocalObjectToWorldMatrix = false;
+		}
 		next->objectToWorld = parent->objectToWorld;
 		next->objectToWorld.Multiply(next->localObjectToWorld);
 		next->objectToWorld = Matrix4x4f::Transpose(next->objectToWorld);
@@ -107,6 +111,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStre
 
 		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition = position;
+		transform->dirtyLocalObjectToWorldMatrix = true;
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);

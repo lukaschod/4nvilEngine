@@ -91,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>__x86_64;DEBUG;_HAS_ITERATOR_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86_64;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -149,8 +149,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\StorageModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\SurfaceModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Collections\BuddyHeapManager.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\IO\FileStream.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp" />
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp" />
@@ -196,12 +197,16 @@
     <ClInclude Include="..\..\..\Source\Rendering\SurfaceModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\ImageModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Collections\AllocatorBuddyBlock.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Collections\BuddyHeapManager.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\IHeap.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Collections\LinkedList.h" />
     <ClInclude Include="..\..\..\Source\Tools\Collections\List.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Collections\StringBuilder.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h" />
     <ClInclude Include="..\..\..\Source\Tools\Math\Color.h" />
     <ClInclude Include="..\..\..\Source\Tools\Math\Math.h" />
