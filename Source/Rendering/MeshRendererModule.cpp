@@ -3,15 +3,14 @@
 #include <Foundation\MemoryModule.h>
 #include <Graphics\IGraphicsModule.h>
 
-MeshRendererModule::MeshRendererModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
-	: ComponentModule(bufferCount, bufferIndexStep)
-	, perAllRendererStorage(nullptr)
+MeshRendererModule::MeshRendererModule()
+	: perAllRendererStorage(nullptr)
 {
 }
 
 void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	meshModule = ExecuteBefore<MeshModule>(moduleManager);
 	materialModule = ExecuteBefore<MaterialModule>(moduleManager);
 	storageModule = ExecuteBefore<StorageModule>(moduleManager);
@@ -27,7 +26,7 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	if (perAllRendererStorage == nullptr)
 		perAllRendererStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 
 	for (auto meshRenderer : meshRenderers)
 	{

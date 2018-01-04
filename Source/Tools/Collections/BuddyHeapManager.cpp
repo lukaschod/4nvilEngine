@@ -1,19 +1,19 @@
 #include <Tools\Collections\BuddyHeapManager.h>
 
-BuddyHeapManager::BuddyHeapManager(size_t capacity)
-	: capacity(capacity)
+BuddyHeapManager::BuddyHeapManager(const HeapMemory& bounds)
+	: bounds(bounds)
 {
-	ASSERT(capacity != 0);
-	freeBlocks.Add(HeapBlock(0, capacity));
+	ASSERT(bounds.size != 0);
+	freeBlocks.Add(bounds);
 }
 
-HeapBlock BuddyHeapManager::Allocate(size_t size)
+HeapMemory BuddyHeapManager::Allocate(size_t size)
 {
 	ASSERT(size != 0);
 
 	auto itr = TryFindFreeBlock(size);
 	if (itr == freeBlocks.end())
-		return HeapBlock(0, 0);
+		return HeapMemory(0, 0);
 
 	auto& block = *itr;
 	auto blockSize = block.size;
@@ -24,18 +24,22 @@ HeapBlock BuddyHeapManager::Allocate(size_t size)
 		return block;
 	}
 
-	freeBlocks.Insert(itr, HeapBlock(block.address + size, blockSize - size));
-	return HeapBlock(block.address, size);
+	auto address = block.address;
+	block.address += size;
+	block.size -= size;
+	return HeapMemory(address, size);
 }
 
-void BuddyHeapManager::Deallocate(HeapBlock& block)
+bool BuddyHeapManager::Deallocate(const HeapMemory& block)
 {
-	ASSERT(0 <= block.address && block.address + block.size <= capacity);
 	ASSERT(block.size != 0);
+
+	if (!Contains(block))
+		return false;
 
 	auto itr = TryFindClosestBlock(block);
 	if (itr == freeBlocks.end())
-		return;
+		return false;
 
 	auto& firstBlock = itr.link->value;
 	auto& secondBlock = itr.link->next->value;
@@ -53,33 +57,39 @@ void BuddyHeapManager::Deallocate(HeapBlock& block)
 	{
 		if (isBottomOverlaps)
 		{
-			secondBlock.address -= firstBlock.size;
+			secondBlock.address += firstBlock.size;
 			secondBlock.size += firstBlock.size + block.size;
 			freeBlocks.Remove(itr);
-			return;
+			return true;
 		}
 		else
 		{
 			firstBlock.size += block.size;
-			return;
+			return true;
 		}
 	}
 	else
 	{
 		if (isBottomOverlaps)
 		{
-			secondBlock.address -= block.size;
-			return;
+			secondBlock.address += block.size;
+			return true;
 		}
 		else
 		{
 			freeBlocks.Insert(itr, block);
-			return;
+			return true;
 		}
 	}
+	return true;
 }
 
-LinkedList<HeapBlock>::Iterator BuddyHeapManager::TryFindFreeBlock(size_t size)
+bool BuddyHeapManager::Contains(const HeapMemory& memory)
+{
+	return bounds.address <= memory.address && memory.address + memory.size <= bounds.address + bounds.size;
+}
+
+LinkedList<HeapMemory>::Iterator BuddyHeapManager::TryFindFreeBlock(size_t size)
 {
 	auto& itr = freeBlocks.begin();
 	for (; itr != freeBlocks.end(); ++itr)
@@ -90,7 +100,7 @@ LinkedList<HeapBlock>::Iterator BuddyHeapManager::TryFindFreeBlock(size_t size)
 	return itr;
 }
 
-LinkedList<HeapBlock>::Iterator BuddyHeapManager::TryFindClosestBlock(HeapBlock& block)
+LinkedList<HeapMemory>::Iterator BuddyHeapManager::TryFindClosestBlock(const HeapMemory& block)
 {
 	auto& itr = freeBlocks.begin();
 	for (; itr != freeBlocks.end(); ++itr)

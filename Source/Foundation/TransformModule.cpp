@@ -3,8 +3,7 @@
 #include <Tools\Collections\FixedBlockHeap.h>
 #include <Tools\Math\Math.h>
 
-TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount) 
-	: ComponentModule(bufferCount, workersCount)
+TransformModule::TransformModule() 
 {
 	root = new Transform(this);
 	root->localPosition = Vector3f(0, 0, 0);
@@ -15,7 +14,7 @@ TransformModule::TransformModule(uint32_t bufferCount, uint32_t workersCount)
 
 void TransformModule::Execute(const ExecutionContext& context)
 {
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 
 	// Do BFS to re-calculate new transformations
 	// TODO: Find performance BFS vs DFS, but my guess BFS better because cache might be used much more better
@@ -48,7 +47,7 @@ void TransformModule::Execute(const ExecutionContext& context)
 
 void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 	memoryModule->SetAllocator(0, new FixedBlockHeap(sizeof(Transform)));
 }

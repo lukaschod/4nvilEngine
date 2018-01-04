@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Tools\Collections\List.h>
 
 class ComponentModule;
@@ -19,13 +19,9 @@ struct Component
 	ComponentModule* module;
 };
 
-class ComponentModule : public CmdModule
+class ComponentModule : public PipeModule
 {
 public:
-	ComponentModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount)
-	{
-	}
-
 	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) = 0;
 };
 
@@ -39,10 +35,9 @@ struct Unit
 	UnitModule* module;
 };
 
-class UnitModule : public CmdModule
+class UnitModule : public PipeModule
 {
 public:
-	UnitModule(uint32_t bufferCount, uint32_t workersCount);
 	const Unit* RecCreateUnit(const ExecutionContext& context);
 	void RecDestroy(const ExecutionContext& context, const Unit* unit);
 	void RecAddComponent(const ExecutionContext& context, const Unit* unit, const Component* component);

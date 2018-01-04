@@ -5,7 +5,7 @@
 #include <Windows\Graphics\D12\D12CmdAllocatorPool.h>
 #include <Windows\Graphics\D12\D12CmdQueue.h>
 #include <Graphics\IGraphicsModule.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 
 struct D12Texture;
 struct D12Buffer;
@@ -18,7 +18,6 @@ class D12GraphicsExecuterModule;
 class D12GraphicsPlannerModule : public Module
 {
 public:
-	D12GraphicsPlannerModule() {}
 	D12GraphicsPlannerModule(ID3D12Device* device);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\ITexture.h>
 
@@ -17,10 +17,9 @@ struct Sampler
 	const IFilter* filter;
 };
 
-class SamplerModule : public CmdModule
+class SamplerModule : public PipeModule
 {
 public:
-	SamplerModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Sampler* RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
 

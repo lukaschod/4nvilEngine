@@ -1,13 +1,8 @@
 #include <Rendering\MeshModule.h>
 
-MeshModule::MeshModule(uint32_t bufferCount, uint32_t bufferIndexStep)
-	: CmdModule(bufferCount, bufferIndexStep)
-{
-}
-
 void MeshModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 

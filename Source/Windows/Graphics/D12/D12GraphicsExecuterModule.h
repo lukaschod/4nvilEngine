@@ -2,15 +2,15 @@
 
 #include <Windows\Graphics\D12\D12Common.h>
 #include <Windows\Graphics\D12\D12CmdQueue.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 
 struct D12CmdBuffer;
 
 class D12GraphicsExecuterModule : public Module
 {
 public:
-	D12GraphicsExecuterModule() {}
-	D12GraphicsExecuterModule(uint32_t workersCount);
+	D12GraphicsExecuterModule();
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual const char* GetName() override { return "D12GraphicsExecuterModule"; }
 

@@ -10,10 +10,9 @@
 class PipeModule : public Module
 {
 public:
-	PipeModule(uint32_t bufferCount, uint32_t workersCount);
+	PipeModule();
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual size_t GetExecutionSize() override;
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) = 0;

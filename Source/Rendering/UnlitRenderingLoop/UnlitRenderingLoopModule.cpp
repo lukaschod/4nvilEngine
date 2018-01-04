@@ -2,14 +2,9 @@
 #include <Rendering\MaterialModule.h>
 #include <Rendering\StorageModule.h>
 
-UnlitRenderingLoopModule::UnlitRenderingLoopModule(uint32_t bufferCount, uint32_t workersCount) 
-	: CmdModule(bufferCount, workersCount)
-{
-}
-
 void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	cameraModule = ExecuteAfter<CameraModule>(moduleManager);
 	meshRendererModule = ExecuteAfter<MeshRendererModule>(moduleManager);
 	graphicsModule = ExecuteAfter<IGraphicsModule>(moduleManager);
@@ -21,7 +16,7 @@ void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 {
 	EXT_TRACE("UnlitRenderingLoopModule::Execute");
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 
 	auto& cameras = cameraModule->GetCameras();
 	auto& meshRenderers = meshRendererModule->GetMeshRenderers();

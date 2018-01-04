@@ -4,19 +4,17 @@
 #include <Tools\Collections\StringBuilder.h>
 #include <stdarg.h>
 
-LogModule::LogModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount){}
-
 void LogModule::Execute(const ExecutionContext& context)
 {
 	if (!output.IsOpened())
 		OpenStream();
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 }
 
-SERIALIZE_METHOD_ARG1(LogModule, Message, const char*);
+SERIALIZE_METHOD_ARG1(LogModule, Write, const char*);
 
-DECLARE_COMMAND_CODE(MessageF);
-void LogModule::RecMessageF(const ExecutionContext& context, const char* format, ...)
+DECLARE_COMMAND_CODE(WriteFmt);
+void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format, ...)
 {
 	// Construct message
 	va_list ap;
@@ -31,7 +29,7 @@ void LogModule::RecMessageF(const ExecutionContext& context, const char* format,
 
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeMessageF);
+	stream.Write(CommandCodeWriteFmt);
 	stream.Write(size);
 	stream.Write((void*)message, size);
 	buffer->commandCount++;
@@ -54,12 +52,12 @@ bool LogModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& st
 {
 	switch (commandCode)
 	{
-		DESERIALIZE_METHOD_ARG1_START(Message, const char*, message);
+		DESERIALIZE_METHOD_ARG1_START(Write, const char*, message);
 		output.WriteFmt(message);
 		output.Flush();
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(MessageF, size_t, size);
+		DESERIALIZE_METHOD_ARG1_START(WriteFmt, size_t, size);
 		const char* message = (const char*)stream.Get_data();
 		stream.Set_data(stream.Get_data() + size);
 		output.WriteFmt(message);

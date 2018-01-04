@@ -12,6 +12,7 @@ namespace Directory
 		static char path[MAX_PATH];
 		static bool pathValid = false;
 
+		// Store executable path on demand
 #if _WIN32
 		if (!pathValid)
 		{

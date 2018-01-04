@@ -166,7 +166,7 @@ ModuleJob StaticModulePlanner::TryGetNext()
 	return job;
 }
 
-void StaticModulePlanner::SetFinished(ModuleJob job)
+void StaticModulePlanner::SetFinished(const ModuleJob& job)
 {
 	auto module = job.module;
 	ASSERT(module != nullptr);

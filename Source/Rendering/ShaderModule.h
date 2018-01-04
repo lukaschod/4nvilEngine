@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Rendering\ImageModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\IRenderPass.h>
@@ -11,10 +11,9 @@ struct Shader
 	List<const IShaderPipeline*> pipelines;
 };
 
-class ShaderModule : public CmdModule
+class ShaderModule : public PipeModule
 {
 public:
-	ShaderModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Shader* RecCreateShader(const ExecutionContext& context);
 	void RecSetShaderPipeline(const ExecutionContext& context, const Shader* target, uint32_t index, const ShaderPipelineDesc* desc);

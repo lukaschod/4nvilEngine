@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 
-class IRenderingLoopModule : public CmdModule
+class IRenderingLoopModule : public PipeModule
 {
-public:
-	IRenderingLoopModule(uint32_t bufferCount, uint32_t workersCount);
 };

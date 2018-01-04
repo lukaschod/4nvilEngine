@@ -19,7 +19,6 @@ struct ExecutionContext
 class Module
 {
 public:
-	Module() {}
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) {}
 	virtual void Execute(const ExecutionContext& context) = 0;
 	virtual size_t GetExecutionSize() { return 1; }

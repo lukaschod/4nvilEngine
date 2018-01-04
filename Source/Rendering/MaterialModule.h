@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Rendering\ShaderModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Rendering\StorageModule.h>
@@ -53,7 +53,6 @@ struct Material
 class MaterialModule : public PipeModule
 {
 public:
-	MaterialModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Material* RecCreateMaterial(const ExecutionContext& context);
 	void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);

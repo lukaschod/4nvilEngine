@@ -1,13 +1,8 @@
 #include <Rendering\StorageModule.h>
 
-StorageModule::StorageModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
-	: CmdModule(bufferCount, bufferIndexStep)
-{
-}
-
 void StorageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 

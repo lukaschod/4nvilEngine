@@ -15,27 +15,27 @@
 #	define ASSERT_MSG(isFalse, ...) \
 	if (!(bool)(isFalse)) \
 	{ \
-		Console::Print("ERROR: Assertion failed \'" #isFalse "\'\n"); \
-		Console::Print("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
-		Console::Print("    Info:"); \
-		Console::Printf(__VA_ARGS__); \
-		Console::Print("\n"); \
+		Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
+		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Console::Write("    Info:"); \
+		Console::WriteFmt(__VA_ARGS__); \
+		Console::Write("\n"); \
 		__debugbreak(); \
 	}
 #	define ASSERT(isFalse) \
 	if (!(bool)(isFalse)) \
 	{ \
-		Console::Print("ERROR: Assertion failed \'" #isFalse "\'\n"); \
-		Console::Print("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
+		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
 
 #	define ERROR(...) \
 	{ \
-		Console::Print("ERROR:"); \
-		Console::Printf(__VA_ARGS__); \
-		Console::Print("\n"); \
-		Console::Print("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Console::Write("ERROR:"); \
+		Console::WriteFmt(__VA_ARGS__); \
+		Console::Write("\n"); \
+		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
 #else
@@ -46,9 +46,9 @@
 
 #	define TRACE(...) \
 	{ \
-		Console::Print("TRACE:"); \
-		Console::Printf(__VA_ARGS__); \
-		Console::Print("\n"); \
+		Console::Write("TRACE:"); \
+		Console::WriteFmt(__VA_ARGS__); \
+		Console::Write("\n"); \
 	}
 
 //#define EXT_DEBUG

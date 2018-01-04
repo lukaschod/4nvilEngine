@@ -39,7 +39,6 @@ struct Camera : public Component
 class CameraModule : public ComponentModule
 {
 public:
-	CameraModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const List<Camera*>& GetCameras() const;

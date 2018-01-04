@@ -1,4 +1,4 @@
-#include "CmdBufferPoolModule.h"
+/*#include "CmdBufferPoolModule.h"
 
 CmdBufferPoolModule::CmdBufferPoolModule(uint32_t workerCount) 
 	: workerCount(workerCount)
@@ -24,17 +24,6 @@ void CmdBufferPoolModule::Execute(const ExecutionContext & context)
 				buffer->state = CmdBufferStateNotUsed;
 			}
 	}
-
-	/*int totalBufferSize = 0;
-	for (uint32_t i = 0; i < workerCount; i++)
-	{
-		auto& poolContext = contexts[i];
-		for (auto buffer : poolContext.cmdBuffers)
-		{
-			totalBufferSize += buffer->stream.GetCapacity();
-		}
-	}
-	TRACE("Capacity of all streams in cmdbuffers %d MB", totalBufferSize / (1000 * 1000));*/
 }
 
 CmdBuffer* CmdBufferPoolModule::Pull(const ExecutionContext& context, uint64_t index)
@@ -70,4 +59,4 @@ void CmdBufferPoolModule::Reset(CmdBuffer* buffer, uint64_t index, const Executi
 	buffer->workerIndex = context.workerIndex;
 	buffer->executingModule = context.executingModule;
 	buffer->state = CmdBufferStateUsed;
-}
+}*/

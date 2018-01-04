@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\ITexture.h>
 #include <Rendering\SamplerModule.h>
@@ -21,10 +21,9 @@ struct Image
 	const uint32_t height;
 };
 
-class ImageModule : public CmdModule
+class ImageModule : public PipeModule
 {
 public:
-	ImageModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Image* AllocateImage(uint32_t width, uint32_t height) const;
 

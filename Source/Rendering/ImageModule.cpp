@@ -1,13 +1,8 @@
 #include <Rendering\ImageModule.h>
 
-ImageModule::ImageModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
-	: CmdModule(bufferCount, bufferIndexStep)
-{
-}
-
 void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	samplerModule = ExecuteBefore<SamplerModule>(moduleManager);
 }

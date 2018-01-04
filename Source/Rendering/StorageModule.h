@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\IBuffer.h>
 
@@ -15,10 +15,9 @@ struct Storage
 	const size_t size;
 };
 
-class StorageModule : public CmdModule
+class StorageModule : public PipeModule
 {
 public:
-	StorageModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Storage* AllocateStorage(size_t size) const;
 

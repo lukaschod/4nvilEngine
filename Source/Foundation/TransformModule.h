@@ -32,7 +32,7 @@ struct Transform : public Component
 class TransformModule : public ComponentModule
 {
 public:
-	TransformModule(uint32_t bufferCount, uint32_t workersCount);
+	TransformModule();
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Transform* AllocateTransform() const;

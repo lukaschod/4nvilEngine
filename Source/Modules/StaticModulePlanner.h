@@ -16,7 +16,7 @@ public:
 	virtual void Recreate(List<Module*>& modules) override;
 	virtual void Reset() override;
 	virtual ModuleJob TryGetNext() override;
-	virtual void SetFinished(ModuleJob module) override;
+	virtual void SetFinished(const ModuleJob& module) override;
 
 private:
 	StaticModulePlan* plan;

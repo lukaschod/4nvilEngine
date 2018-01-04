@@ -1,15 +1,14 @@
 #include <Windows\Views\WinViewModule.h>
 #include <Windows\Common.h>
 
-WinViewModule::WinViewModule(uint32_t bufferCount, uint32_t bufferIndexStep, HINSTANCE instanceHandle)
-	: IViewModule(bufferCount, bufferIndexStep)
-	, instanceHandle(instanceHandle)
+WinViewModule::WinViewModule(HINSTANCE instanceHandle)
+	: instanceHandle(instanceHandle)
 {
 }
 
 void WinViewModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	imageModule = ExecuteBefore<ImageModule>(moduleManager);
 }
@@ -91,7 +90,7 @@ HWND WinViewModule::TryCreateWindow(const char* name, uint32_t width, uint32_t h
 
 void WinViewModule::Execute(const ExecutionContext& context)
 {
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 
 	MSG msg;
 	for (auto view : views)

@@ -2,7 +2,7 @@
 
 #include <Tools\Common.h>
 #include <Tools\String.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Rendering\ImageModule.h>
 #include <Tools\Math\Rect.h>
 
@@ -17,10 +17,9 @@ struct IView
 	uint32_t height;
 };
 
-class IViewModule : public CmdModule
+class IViewModule : public PipeModule
 {
 public:
-	IViewModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
 	virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) = 0;
 	virtual const List<const IView*>& GetViews() = 0;
 };

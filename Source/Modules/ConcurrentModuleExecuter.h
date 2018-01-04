@@ -43,6 +43,7 @@ public:
 	virtual void Start() override;
 	virtual void Stop() override;
 	virtual bool IsRunning(){ return isRunning; };
+	virtual uint32_t GetWorkerCount() override { return (uint32_t)workers.size(); }
 
 private:
 	List<ConcurrentModuleWorker*> workers;

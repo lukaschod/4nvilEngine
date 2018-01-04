@@ -1,130 +1,88 @@
 #include <Windows\Graphics\D12\D12BufferHeap.h>
+#include <Tools\Math\Math.h>
 
-D12BufferHeap::D12BufferHeap(ID3D12Device* device, size_t capacity) 
+D12BufferHeap::D12BufferHeap(ID3D12Device* device, size_t capacity, size_t alignment)
 	: device(device)
+	, alignment(alignment)
 {
 	Grow(capacity);
 }
 
-D3D12_GPU_VIRTUAL_ADDRESS D12BufferHeap::GetOffset(const D12HeapMemory& memory) const
+D12BufferHeap::~D12BufferHeap()
 {
-	return heap->GetGPUVirtualAddress() + memory.pointer;
+	for (int i = 0; i < heapManagers.size(); i++)
+	{
+		delete heapManagers[i];
+		resources[i]->Release();
+	}
 }
 
-D12HeapMemory D12BufferHeap::Allocate(size_t size)
+D3D12_GPU_VIRTUAL_ADDRESS D12BufferHeap::GetVirtualAddress(const HeapMemory& memory) const
 {
-	auto unusedMemory = FindMemory(size);
-	if (unusedMemory == end)
-	{
-		Grow(capacity * 2);
-		return Allocate(size);
-	}
-
-	// Shrink the unused memory
-	if (unusedMemory->size > size)
-	{
-		auto allocationPointer = unusedMemory->pointer;
-		unusedMemory->size -= size;
-		unusedMemory->pointer += size;
-		return D12HeapMemory(allocationPointer, size);
-	}
-
-	// Remove block
-	Connect(unusedMemory->previous, unusedMemory->next);
-	delete unusedMemory;
-	return D12HeapMemory(unusedMemory->pointer, unusedMemory->size);
+	auto index = FindIndex(memory);
+	return resources[index]->GetGPUVirtualAddress() + memory.address - heapManagers[index]->GetBounds().address;
 }
 
-void D12BufferHeap::Deallocate(D12HeapMemory& memory)
+ID3D12Resource* D12BufferHeap::GetResource(const HeapMemory& memory) const
 {
-	auto current = begin;
-	while (current != end)
+	auto index = FindIndex(memory);
+	return resources[index];
+}
+
+size_t D12BufferHeap::GetOffset(const HeapMemory& memory) const
+{
+	auto index = FindIndex(memory);
+	return memory.address - heapManagers[index]->GetBounds().address;
+}
+
+HeapMemory D12BufferHeap::Allocate(size_t size)
+{
+	size = Math::GetPadded(size, alignment);
+	while (true)
 	{
-		auto next = current->next;
-		auto mergableWithBlocAbove = current->pointer + current->size == memory.pointer;
-		auto mergableWithBlocBelow = next->pointer == memory.pointer + memory.size;
-		
-		// 1) Fred memory can be merged with block above
-		if (mergableWithBlocAbove && !mergableWithBlocBelow)
+		auto heapManager = heapManagers.back();
+		auto address = heapManager->Allocate(size);
+		if (address.size == 0)
 		{
-			current->size += memory.size;
-			return;
+			Grow(capacity);
+			continue;
 		}
-
-		// 2) Fred memory can be merged with block below
-		if (!mergableWithBlocAbove && mergableWithBlocBelow)
-		{
-			next->pointer -= memory.size;
-			return;
-		}
-
-		// 3) Fred memory can be merged with blocks above and below
-		if (mergableWithBlocAbove && mergableWithBlocBelow)
-		{
-			current->size += memory.size + next->size;
-			Connect(current, next->next);
-			delete next;
-			return;
-		}
-
-		// 4) Fred memory needs new block
-		if (current->pointer + current->size < memory.pointer && next->pointer > memory.pointer + memory.size)
-		{
-			auto created = new D12UnusedHeapMemory(memory.pointer, memory.size);
-			Connect(current, created);
-			Connect(created, next);
-			return;
-		}
-
-		current = next;
+		return address;
 	}
+}
 
-	ERROR("Memory is corrupted");
+void D12BufferHeap::Deallocate(const HeapMemory& memory)
+{
+	for (auto heapManager : heapManagers)
+		if (heapManager->Deallocate(memory))
+			return;
+	ERROR("Invalid HeapMemory");
 }
 
 void D12BufferHeap::Grow(size_t capacity)
 {
-	if (heap == nullptr)
-	{
-		ASSERT_SUCCEEDED(device->CreateCommittedResource(
-			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-			D3D12_HEAP_FLAG_NONE,
-			&CD3DX12_RESOURCE_DESC::Buffer(capacity),
-				D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&heap)));
+	ID3D12Resource* resource;
+	ASSERT_SUCCEEDED(device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(capacity),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&resource)));
+	resources.push_back(resource);
 
-		begin = new D12UnusedHeapMemory(0, 0);
-		end = new D12UnusedHeapMemory(UINT64_MAX - 1, 0);
-
-		auto memory = new D12UnusedHeapMemory(0, capacity);
-		memory->previous = begin;
-		memory->next = end;
-		begin->next = memory;
-		end->previous = memory;
-
-		this->capacity = capacity;
-		return;
-	}
-
-	ERROR("NotImplemented");
+	heapManagers.push_back(new BuddyHeapManager(HeapMemory(this->capacity, capacity)));
+	this->capacity += capacity;
 }
 
-D12UnusedHeapMemory* D12BufferHeap::FindMemory(size_t size)
+int D12BufferHeap::FindIndex(const HeapMemory& memory) const
 {
-	D12UnusedHeapMemory* iterator = begin;
-	while (iterator != end)
+	for (int i = 0; i < heapManagers.size(); i++)
 	{
-		if (iterator->size > size)
-			return iterator;
-
-		iterator = iterator->next;
+		if (heapManagers[i]->Contains(memory))
+			return i;
 	}
-	return end;
-}
 
-void D12BufferHeap::Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second)
-{
-	first->next = second;
-	second->previous = first;
+	ERROR("Invalid HeapMemory");
+	return -1;
 }

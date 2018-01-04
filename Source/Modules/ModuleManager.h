@@ -34,6 +34,7 @@ public:
 	}
 
 	inline const List<Module*>& GetModules() const { return modules; }
+	inline uint32_t GetWorkerCount() const { return executer->GetWorkerCount(); }
 
 private:
 	List<Module*> modules;

@@ -3,14 +3,9 @@
 #include <Graphics\IGraphicsModule.h>
 #include <Foundation\TransformModule.h>
 
-CameraModule::CameraModule(uint32_t bufferCount, uint32_t bufferIndexStep) 
-	: ComponentModule(bufferCount, bufferIndexStep)
-{
-}
-
 void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	surfaceModule = ExecuteAfter<SurfaceModule>(moduleManager);
 	storageModule = ExecuteBefore<StorageModule>(moduleManager);
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
@@ -19,7 +14,7 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void CameraModule::Execute(const ExecutionContext& context)
 {
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 
 	for (auto target : cameras)
 	{

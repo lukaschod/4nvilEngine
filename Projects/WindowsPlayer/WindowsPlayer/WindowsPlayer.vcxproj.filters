@@ -156,6 +156,9 @@
     <ClCompile Include="..\..\..\Source\Tools\Collections\BuddyHeapManager.cpp">
       <Filter>Source\Tools\Collections</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp">
+      <Filter>Source\Foundation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -352,6 +355,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Collections\BuddyHeapManager.h">
       <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\ProfilerModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Event.h">
+      <Filter>Source\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

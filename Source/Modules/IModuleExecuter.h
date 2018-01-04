@@ -12,4 +12,5 @@ public:
 	virtual void Start() = 0;
 	virtual void Stop() = 0;
 	virtual bool IsRunning() = 0;
+	virtual uint32_t GetWorkerCount() = 0;
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Tools\Collections\List.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\VertexLayout.h>
@@ -34,10 +34,9 @@ struct Mesh
 	Range<uint8_t> vertices;
 };
 
-class MeshModule : public CmdModule
+class MeshModule : public PipeModule
 {
 public:
-	MeshModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Mesh* RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout);
 	void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8_t>& vertices);

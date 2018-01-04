@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Graphics\IRenderPass.h>
 #include <Graphics\ITexture.h>
 #include <Graphics\Shader.h>
@@ -20,10 +20,9 @@ struct DrawDesc
 	uint32_t size;
 };
 
-class IGraphicsModule : public CmdModule
+class IGraphicsModule : public PipeModule
 {
 public:
-	IGraphicsModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
 	virtual const IBuffer* AllocateBuffer(size_t size) = 0;
 	virtual const ITexture* AllocateTexture(uint32_t width, uint32_t height) = 0;
 	virtual const ISwapChain* AllocateSwapChain(const IView* view) = 0;

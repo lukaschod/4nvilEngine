@@ -23,7 +23,7 @@ void TimeModule::Execute(const ExecutionContext& context)
 		// 67 57 57
 		// 36 33 33
 		TRACE("Frame took ms %f", (float) stopWatch.GetElapsedMiliseconds() / passedFrameCount);
-		logModule->RecMessageF(context, "Frame took ms %f\n", (float) stopWatch.GetElapsedMiliseconds() / passedFrameCount);
+		logModule->RecWriteFmt(context, "Frame took ms %f\n", (float) stopWatch.GetElapsedMiliseconds() / passedFrameCount);
 		stopWatch.Start();
 		passedFrameCount = 0;
 	}

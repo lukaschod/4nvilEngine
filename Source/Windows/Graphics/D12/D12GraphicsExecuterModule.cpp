@@ -3,9 +3,8 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <algorithm>
 
-D12GraphicsExecuterModule::D12GraphicsExecuterModule(uint32_t workersCount)
-	: executerContexts(workersCount)
-	, completedBufferIndex(0)
+D12GraphicsExecuterModule::D12GraphicsExecuterModule()
+	: completedBufferIndex(0)
 {
 }
 
@@ -13,6 +12,11 @@ void D12GraphicsExecuterModule::RecCmdBuffer(const ExecutionContext& context, co
 {
 	auto& executerContext = executerContexts[context.workerIndex];
 	executerContext.recordedCmds.push_back(buffer);
+}
+
+void D12GraphicsExecuterModule::SetupExecuteOrder(ModuleManager * moduleManager)
+{
+	executerContexts.resize(moduleManager->GetWorkerCount());
 }
 
 void D12GraphicsExecuterModule::Execute(const ExecutionContext& context)

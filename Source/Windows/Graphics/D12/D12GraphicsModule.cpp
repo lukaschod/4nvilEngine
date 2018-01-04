@@ -2,9 +2,8 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
 
-D12GraphicsModule::D12GraphicsModule(uint32_t bufferCount, uint32_t bufferIndexStep)
-	: IGraphicsModule(bufferCount, bufferIndexStep)
-	, device(nullptr)
+D12GraphicsModule::D12GraphicsModule()
+	: device(nullptr)
 	, factory(nullptr)
 	, resourceCounter(0)
 {}
@@ -31,15 +30,15 @@ void D12GraphicsModule::Execute(const ExecutionContext& context)
 	}
 
 	planner->Reset();
-	CmdModule::Execute(context);
+	PipeModule::Execute(context);
 }
 
 void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	CmdModule::SetupExecuteOrder(moduleManager);
+	PipeModule::SetupExecuteOrder(moduleManager);
 	Initialize();
 	moduleManager->AddModule(new D12GraphicsPlannerModule(device));
-	moduleManager->AddModule(new D12GraphicsExecuterModule(4));
+	moduleManager->AddModule(new D12GraphicsExecuterModule());
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 	memoryModule->SetAllocator(1, new FixedBlockHeap(sizeof(D12ShaderArguments)));
@@ -625,7 +624,7 @@ bool D12GraphicsModule::Initialize()
 	srvCpuHeap = new D12DescriptorHeap(device, D12HeapTypeSRVsCPU, 128);
 	samplersCpuHeap = new D12DescriptorHeap(device, D12HeapTypeSamplersCPU, 128);
 
-	bufferUploadHeap = new D12BufferHeap(device, 200*201*256);
+	bufferUploadHeap = new D12BufferHeap(device, 1<<20, 256);
 
 	ID3D12CommandAllocator* alloc;
 	ASSERT_SUCCEEDED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&alloc)));
@@ -789,10 +788,10 @@ void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 		nullptr,
 		IID_PPV_ARGS(&target->resource)));
 	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();*/
-	auto size = Math::GetPadded(target->GetSize(), (size_t)256);
-	target->memory = bufferUploadHeap->Allocate(size);
-	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetOffset(target->memory);
-	target->resource = bufferUploadHeap->Get_heap();
+	target->memory = bufferUploadHeap->Allocate(target->GetSize());
+	target->resourceOffset = bufferUploadHeap->GetOffset(target->memory);
+	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetVirtualAddress(target->memory);
+	target->resource = bufferUploadHeap->GetResource(target->memory);
 }
 
 void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)

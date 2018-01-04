@@ -1,15 +1,13 @@
 #pragma once
 
-#include <Tools\Common.h>
+// TODO: Remove
+/*#include <Tools\Common.h>
 #include <Tools\IO\MemoryStream.h>
 #include <Modules\Module.h>
 #include <Modules\CmdModuleHelper.h>
 #include <Modules\CmdBufferPoolModule.h>
 
-// TODO: Remove it
-#include <Modules\PipeModule.h>
-typedef PipeModule CmdModule;
-/*class CmdModule : public Module
+class CmdModule : public Module
 {
 public:
 	CmdModule(uint32_t bufferCount, uint32_t workersCount);

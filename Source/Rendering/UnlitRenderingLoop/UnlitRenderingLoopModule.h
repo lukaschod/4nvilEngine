@@ -10,10 +10,9 @@
 class StorageModule;
 class MaterialModule;
 
-class UnlitRenderingLoopModule : public CmdModule
+class UnlitRenderingLoopModule : public PipeModule
 {
 public:
-	UnlitRenderingLoopModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context);
 

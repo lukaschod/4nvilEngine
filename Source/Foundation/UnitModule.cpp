@@ -1,7 +1,5 @@
 #include <Foundation\UnitModule.h>
 
-UnitModule::UnitModule(uint32_t bufferCount, uint32_t workersCount) : CmdModule(bufferCount, workersCount) {}
-
 SERIALIZE_METHOD_CREATECMP(UnitModule, Unit);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);

@@ -25,7 +25,7 @@ struct MeshRenderer : public Component
 class MeshRendererModule : public ComponentModule
 {
 public:
-	MeshRendererModule(uint32_t bufferCount, uint32_t workersCount);
+	MeshRendererModule();
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;

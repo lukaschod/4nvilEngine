@@ -1,19 +1,19 @@
 #include <Modules\PipeModule.h>
 #include <Tools\Math\Math.h>
 
-PipeModule::PipeModule(uint32_t bufferCount, uint32_t workersCount) 
+PipeModule::PipeModule() 
 	: isPipesSorted(false)
-	, cachedCmdBuffers(4)
 {
 }
 
 void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+	cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
 }
 
 void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore)
 {
-	auto pipe = new Pipe(module, 4); // TODO: Make some 
+	auto pipe = new Pipe(module, moduleManager->GetWorkerCount());
 	pipes.push_back(pipe);
 	pipeMap[module] = pipe;
 }
@@ -54,8 +54,6 @@ CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
 
 	return buffer;
 }
-
-size_t PipeModule::GetExecutionSize() { return 1; }
 
 void PipeModule::Execute(const ExecutionContext& context)
 {

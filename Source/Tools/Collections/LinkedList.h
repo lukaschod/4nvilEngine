@@ -67,7 +67,7 @@ public:
 		endLink.prev = &beginLink;
 	}
 
-	void Add(T& value)
+	void Add(const T& value)
 	{
 		auto link = PullUnusedLink();
 		link->value = value;
@@ -82,12 +82,12 @@ public:
 		linkPool.push(link);
 	}
 
-	void Insert(Iterator after, T& value)
+	void Insert(Iterator after, const T& value)
 	{
 		auto link = PullUnusedLink();
 		link->value = value;
-		Connect(after, link);
-		Connect(link, after->next);
+		Connect(after.link, link);
+		Connect(link, after.link->next);
 	}
 
 	Link* Find(T& value) const

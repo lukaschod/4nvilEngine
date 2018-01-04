@@ -8,7 +8,6 @@
 class MemoryModule : public Module
 {
 public:
-	MemoryModule();
 	virtual void Execute(const ExecutionContext& context) override;
 
 	template<class T, class ... N>

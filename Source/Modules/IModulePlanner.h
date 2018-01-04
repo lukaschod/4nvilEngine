@@ -8,7 +8,12 @@ class Module;
 
 struct ModuleJob
 {
-	ModuleJob() : module(nullptr), offset(0), size(0), userData(nullptr) {}
+	ModuleJob() 
+		: module(nullptr)
+		, offset(0)
+		, size(0)
+		, userData(nullptr) 
+	{}
 	Module* module;
 	uint32_t offset;
 	size_t size;
@@ -21,7 +26,7 @@ public:
 	virtual void Recreate(List<Module*>& modules) = 0;
 	virtual void Reset() = 0;
 	virtual ModuleJob TryGetNext() = 0;
-	virtual void SetFinished(ModuleJob job) = 0;
+	virtual void SetFinished(const ModuleJob& job) = 0;
 
 public:
 	AUTOMATED_PROPERTY_SET(std::function<void(size_t)>, jobFinishCallback);

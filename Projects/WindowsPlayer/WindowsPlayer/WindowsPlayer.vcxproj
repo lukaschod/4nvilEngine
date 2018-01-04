@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Foundation\LogModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h" />
+    <ClInclude Include="..\..\..\Source\Foundation\ProfilerModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\TransformModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\UnitModule.h" />
@@ -205,6 +207,7 @@
     <ClInclude Include="..\..\..\Source\Tools\Collections\StringBuilder.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Event.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h" />

@@ -5,19 +5,22 @@
 #include <Tools\Collections\LinkedList.h>
 #include <mutex>
 
-struct HeapBlock
+class BuddyHeapManager;
+
+struct HeapMemory
 {
-	HeapBlock()
+	HeapMemory()
 	{
 		address = INT_MAX;
 		size = INT_MAX;
 	}
 
-	HeapBlock(uint64_t address, size_t size)
+	HeapMemory(uint64_t address, size_t size)
 		: address(address)
 		, size(size)
 	{
 	}
+
 	uint64_t address;
 	size_t size;
 };
@@ -25,16 +28,18 @@ struct HeapBlock
 class BuddyHeapManager
 {
 public:
-	BuddyHeapManager(size_t capacity);
+	BuddyHeapManager(const HeapMemory& bounds);
 
-	HeapBlock Allocate(size_t size);
-	void Deallocate(HeapBlock& block);
-
-private:
-	LinkedList<HeapBlock>::Iterator TryFindFreeBlock(size_t size);
-	LinkedList<HeapBlock>::Iterator TryFindClosestBlock(HeapBlock& block);
+	HeapMemory Allocate(size_t size);
+	bool Deallocate(const HeapMemory& memory);
+	bool Contains(const HeapMemory& memory);
+	const HeapMemory& GetBounds() const { return bounds; }
 
 private:
-	LinkedList<HeapBlock> freeBlocks;
-	size_t capacity;
+	LinkedList<HeapMemory>::Iterator TryFindFreeBlock(size_t size);
+	LinkedList<HeapMemory>::Iterator TryFindClosestBlock(const HeapMemory& block);
+
+private:
+	LinkedList<HeapMemory> freeBlocks;
+	HeapMemory bounds;
 };

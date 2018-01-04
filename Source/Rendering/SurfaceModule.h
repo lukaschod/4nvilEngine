@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\CmdModule.h>
+#include <Modules\PipeModule.h>
 #include <Rendering\ImageModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\IRenderPass.h>
@@ -48,10 +48,9 @@ struct Surface
 	Rectf viewport;
 };
 
-class SurfaceModule : public CmdModule
+class SurfaceModule : public PipeModule
 {
 public:
-	SurfaceModule(uint32_t bufferCount, uint32_t workersCount);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Surface* RecCreateSurface(const ExecutionContext& context);
 	void RecSetColor(const ExecutionContext& context, const Surface* target, uint32_t index, const SurfaceColor& color);

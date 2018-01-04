@@ -27,14 +27,10 @@
 class TestModule : public Module
 {
 public:
-	TestModule()
-		: Module()
-		, frame(0)
-	{}
+	TestModule() : frame(0) {}
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
-		ExecuteAfter<CmdBufferPoolModule>(moduleManager);
 		viewModule = ExecuteBefore<IViewModule>(moduleManager);
 		materialModule = ExecuteBefore<MaterialModule>(moduleManager);
 		shaderModule = ExecuteBefore<ShaderModule>(moduleManager);
@@ -156,7 +152,7 @@ float4 FragMain(VertData i) : SV_TARGET
 			return;
 		}
 
-		logModule->RecMessageF(context, "Initializing test scene %d\n", 1);
+		logModule->RecWriteFmt(context, "Initializing test scene %d\n", 1);
 
 		// Create window
 		//auto view = viewModule->RecCreateIView(context);
@@ -248,35 +244,27 @@ float4 FragMain(VertData i) : SV_TARGET
 	uint32_t frame;
 };
 
-#include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
-
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
-	auto planner2 = new D12GraphicsPlannerModule();
-	printf("%s", planner2->GetName());
-
-	auto workersCount = 4;
-	auto buffersCount = 2;
 	auto planner = new StaticModulePlanner();
-	auto executer = new ConcurrentModuleExecuter(planner, workersCount);
+	auto executer = new ConcurrentModuleExecuter(planner, 4);
 	auto moduleManager = new ModuleManager(planner, executer);
 
-	moduleManager->AddModule(new CmdBufferPoolModule(workersCount));
-	moduleManager->AddModule(new LogModule(buffersCount, workersCount));
-	moduleManager->AddModule(new UnitModule(buffersCount, workersCount));
-	moduleManager->AddModule(new D12GraphicsModule(buffersCount, workersCount));
-	moduleManager->AddModule(new TransformModule(buffersCount, workersCount));
-	moduleManager->AddModule(new SamplerModule(buffersCount, workersCount));
-	moduleManager->AddModule(new ImageModule(buffersCount, workersCount));
-	moduleManager->AddModule(new WinViewModule(buffersCount, workersCount, hInst));
-	moduleManager->AddModule(new StorageModule(buffersCount, workersCount));
-	moduleManager->AddModule(new ShaderModule(buffersCount, workersCount));
-	moduleManager->AddModule(new MaterialModule(buffersCount, workersCount));
-	moduleManager->AddModule(new MeshModule(buffersCount, workersCount));
-	moduleManager->AddModule(new MeshRendererModule(buffersCount, workersCount));
-	moduleManager->AddModule(new SurfaceModule(buffersCount, workersCount));
-	moduleManager->AddModule(new CameraModule(buffersCount, workersCount));
-	moduleManager->AddModule(new UnlitRenderingLoopModule(buffersCount, workersCount));
+	moduleManager->AddModule(new LogModule());
+	moduleManager->AddModule(new UnitModule());
+	moduleManager->AddModule(new D12GraphicsModule());
+	moduleManager->AddModule(new TransformModule());
+	moduleManager->AddModule(new SamplerModule());
+	moduleManager->AddModule(new ImageModule());
+	moduleManager->AddModule(new WinViewModule(hInst));
+	moduleManager->AddModule(new StorageModule());
+	moduleManager->AddModule(new ShaderModule());
+	moduleManager->AddModule(new MaterialModule());
+	moduleManager->AddModule(new MeshModule());
+	moduleManager->AddModule(new MeshRendererModule());
+	moduleManager->AddModule(new SurfaceModule());
+	moduleManager->AddModule(new CameraModule());
+	moduleManager->AddModule(new UnlitRenderingLoopModule());
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new TimeModule());
 	moduleManager->AddModule(new MemoryModule());

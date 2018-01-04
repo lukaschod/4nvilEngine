@@ -16,7 +16,7 @@ struct WinView : public IView
 class WinViewModule : public IViewModule
 {
 public:
-	WinViewModule(uint32_t bufferCount, uint32_t workersCount, HINSTANCE instanceHandle);
+	WinViewModule(HINSTANCE instanceHandle);
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
 	const IView* AllocateView() const;

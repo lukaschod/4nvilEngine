@@ -3,24 +3,28 @@
 #include <Windows\Graphics\D12\D12Common.h>
 #include <Windows\Graphics\D12\D12DescriptorHeap.h>
 #include <Tools\Collections\List.h>
+#include <Tools\Collections\BuddyHeapManager.h>
 
 class D12BufferHeap
 {
 public:
-	D12BufferHeap(ID3D12Device* device, size_t capacity);
-	D3D12_GPU_VIRTUAL_ADDRESS GetOffset(const D12HeapMemory& memory) const;
-	D12HeapMemory Allocate(size_t size);
-	void Deallocate(D12HeapMemory& memory);
+	D12BufferHeap(ID3D12Device* device, size_t capacity, size_t alignment);
+	~D12BufferHeap();
+	
+	HeapMemory Allocate(size_t size);
+	void Deallocate(const HeapMemory& memory);
+	D3D12_GPU_VIRTUAL_ADDRESS GetVirtualAddress(const HeapMemory& memory) const;
+	ID3D12Resource* GetResource(const HeapMemory& memory) const;
+	size_t GetOffset(const HeapMemory& memory) const;
 
 private:
 	void Grow(size_t capacity);
-	D12UnusedHeapMemory* FindMemory(size_t size);
-	inline void Connect(D12UnusedHeapMemory* first, D12UnusedHeapMemory* second);
+	int FindIndex(const HeapMemory& memory) const;
 
 private:
-	D12UnusedHeapMemory* begin;
-	D12UnusedHeapMemory* end;
-	AUTOMATED_PROPERTY_GET(ID3D12Resource*, heap);
+	List<BuddyHeapManager*> heapManagers;
+	List<ID3D12Resource*> resources;
 	ID3D12Device* device;
 	size_t capacity;
+	size_t alignment;
 };

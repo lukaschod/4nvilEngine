@@ -55,8 +55,9 @@ struct D12Buffer : public IBuffer
 		, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
 	{}
 
-	D12HeapMemory memory;
+	HeapMemory memory;
 	ID3D12Resource* resource;
+	size_t resourceOffset;
 	D3D12_RESOURCE_STATES currentState;
 	D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
 };
@@ -199,7 +200,7 @@ class D12GraphicsPlannerModule;
 class D12GraphicsModule : public IGraphicsModule
 {
 public:
-	D12GraphicsModule(uint32_t bufferCount, uint32_t workersCount);
+	D12GraphicsModule();
 	virtual void Execute(const ExecutionContext& context) override;
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual const char* GetName() { return "D12GraphicsModule"; }

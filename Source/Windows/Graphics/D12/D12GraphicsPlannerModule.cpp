@@ -13,7 +13,6 @@ D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device)
 
 void D12GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	ExecuteAfter<CmdBufferPoolModule>(moduleManager);
 	executer = ExecuteBefore<D12GraphicsExecuterModule>(moduleManager);
 }
 
@@ -318,7 +317,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
 		ASSERT_SUCCEEDED(target->resource->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
 		//memcpy(pVertexDataBegin + targetOffset, data.pointer, data.size);
-		memcpy(pVertexDataBegin + targetOffset + target->memory.pointer, data.pointer, data.size);
+		memcpy(pVertexDataBegin + targetOffset + target->resourceOffset, data.pointer, data.size);
 		target->resource->Unmap(0, nullptr);
 		DESERIALIZE_METHOD_END;
 

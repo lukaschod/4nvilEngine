@@ -19,12 +19,12 @@ using Microsoft::WRL::ComPtr;
 	{ \
 		_com_error err(hr); \
 		LPCTSTR errMsg = err.ErrorMessage(); \
-		Console::Print("ERROR: Assertion failed \'" #hr "\'\n"); \
-		Console::Print("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
-		Console::Print("    Info: "); \
-		Console::Print(errMsg); \
-		Console::Printf(" (hr = 0x%08X)", hr); \
-		Console::Print("\n"); \
+		Console::Write("ERROR: Assertion failed \'" #hr "\'\n"); \
+		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Console::Write("    Info: "); \
+		Console::Write(errMsg); \
+		Console::WriteFmt(" (hr = 0x%08X)", hr); \
+		Console::Write("\n"); \
 		__debugbreak(); \
 	}
 #else

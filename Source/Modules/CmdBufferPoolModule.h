@@ -38,7 +38,7 @@ struct CmdBuffer
 	CmdBufferState state;
 };
 
-class CmdBufferPoolModule : public Module
+/*class CmdBufferPoolModule : public Module
 {
 public:
 	CmdBufferPoolModule(uint32_t workerCount);
@@ -60,4 +60,4 @@ private:
 
 	Context* contexts;
 	uint32_t workerCount;
-};
+};*/
