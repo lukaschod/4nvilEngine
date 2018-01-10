@@ -13,6 +13,7 @@ D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device)
 
 void D12GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+	Module::SetupExecuteOrder(moduleManager);
 	executer = ExecuteBefore<D12GraphicsExecuterModule>(moduleManager);
 }
 
@@ -50,6 +51,7 @@ size_t D12GraphicsPlannerModule::GetSplitExecutionSize(size_t currentSize)
 
 void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	/*auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
 	D12CmdBuffer* buffer = nullptr;
 

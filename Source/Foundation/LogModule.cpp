@@ -6,6 +6,7 @@
 
 void LogModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	if (!output.IsOpened())
 		OpenStream();
 	PipeModule::Execute(context);

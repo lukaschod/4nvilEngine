@@ -29,7 +29,8 @@ ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint
 
 ConcurrentModuleExecuter::~ConcurrentModuleExecuter()
 {
-	SAFE_VECTOR_DELETE(workers);
+	for (auto worker : workers)
+		delete worker;
 }
 
 void ConcurrentModuleExecuter::Reset()
@@ -52,13 +53,13 @@ void ConcurrentModuleExecuter::Stop()
 		worker->Stop();
 }
 
-ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner) :
-	planner(planner),
-	thread(nullptr),
-	isRunning(false),
-	isSleeping(false),
-	index(index),
-	executionIndex(0)
+ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner) 
+	: planner(planner)
+	, thread(nullptr)
+	, isRunning(false)
+	, isSleeping(false)
+	, index(index)
+	, executionIndex(0)
 {
 	ASSERT(executer != nullptr);
 	ASSERT(planner != nullptr);

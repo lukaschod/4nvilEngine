@@ -19,7 +19,7 @@ struct ExecutionContext
 class Module
 {
 public:
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) {}
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) { this->profiler = moduleManager->GetProfiler(); }
 	virtual void Execute(const ExecutionContext& context) = 0;
 	virtual size_t GetExecutionSize() { return 1; }
 	virtual size_t GetSplitExecutionSize(size_t currentSize) { return 1; }
@@ -50,4 +50,5 @@ protected:
 
 private:
 	AUTOMATED_PROPERTY_GETADR(List<Module*>, dependencies);
+	IProfiler* profiler;
 };

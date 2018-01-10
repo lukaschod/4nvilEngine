@@ -17,7 +17,7 @@ struct ModuleJob
 	Module* module;
 	uint32_t offset;
 	size_t size;
-	void* userData;
+	void* userData; // TODO: Maybe we can get rid of it, currently one implementation really needs it for perforamnce
 };
 
 class IModulePlanner

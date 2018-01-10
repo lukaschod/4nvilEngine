@@ -2,16 +2,17 @@
 
 #include <Tools\Common.h>
 #include <Tools\Threading\AutoResetEvent.h>
+#include <Tools\Collections\List.h>
 #include <Modules\IModuleExecuter.h>
 #include <Modules\IModulePlanner.h>
-#include <Tools\Collections\List.h>
+#include <Modules\IProfiler.h>
 
 class Module;
 
 class ModuleManager
 {
 public:
-	ModuleManager(IModulePlanner* planner, IModuleExecuter* executer);
+	ModuleManager(IModulePlanner* planner, IModuleExecuter* executer, IProfiler* profiler);
 	~ModuleManager();
 
 	void Start();
@@ -35,10 +36,12 @@ public:
 
 	inline const List<Module*>& GetModules() const { return modules; }
 	inline uint32_t GetWorkerCount() const { return executer->GetWorkerCount(); }
+	inline IProfiler* GetProfiler() const { return profiler; }
 
 private:
 	List<Module*> modules;
 	IModulePlanner* planner;
 	IModuleExecuter* executer;
 	AutoResetEvent sleepEvent;
+	IProfiler* profiler;
 };

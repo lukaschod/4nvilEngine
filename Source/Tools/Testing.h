@@ -41,7 +41,7 @@
 #else
 #	define ASSERT(isFalse) (void)(isFalse)
 #	define ASSERT_MSG(isFalse, ...) (void)(isFalse)
-#	define ERROR(...)
+#	define ERROR(...) (void)0
 #endif
 
 #	define TRACE(...) \

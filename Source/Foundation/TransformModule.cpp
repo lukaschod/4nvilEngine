@@ -14,6 +14,7 @@ TransformModule::TransformModule()
 
 void TransformModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	PipeModule::Execute(context);
 
 	// Do BFS to re-calculate new transformations

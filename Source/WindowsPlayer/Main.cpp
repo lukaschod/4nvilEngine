@@ -1,6 +1,7 @@
 #include <Modules\ModuleManager.h>
 #include <Modules\ConcurrentModuleExecuter.h>
 #include <Modules\StaticModulePlanner.h>
+#include <Modules\Profiler.h>
 
 #include <Tools\Math\Vector.h>
 #include <Tools\Math\Matrix.h>
@@ -248,7 +249,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
 	auto planner = new StaticModulePlanner();
 	auto executer = new ConcurrentModuleExecuter(planner, 4);
-	auto moduleManager = new ModuleManager(planner, executer);
+	auto moduleManager = new ModuleManager(planner, executer, new Profiler(4));
 
 	moduleManager->AddModule(new LogModule());
 	moduleManager->AddModule(new UnitModule());

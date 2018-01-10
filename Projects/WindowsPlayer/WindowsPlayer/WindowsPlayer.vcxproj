@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\CameraModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\ImageModule.cpp" />
@@ -183,10 +184,12 @@
     <ClInclude Include="..\..\..\Source\Modules\CmdModuleHelper.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
+    <ClInclude Include="..\..\..\Source\Modules\IProfiler.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
     <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h" />
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h" />
     <ClInclude Include="..\..\..\Source\Modules\PipeModule.h" />
+    <ClInclude Include="..\..\..\Source\Modules\Profiler.h" />
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Rendering\CameraModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\MaterialModule.h" />
@@ -207,7 +210,8 @@
     <ClInclude Include="..\..\..\Source\Tools\Collections\StringBuilder.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Event.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Cpu.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Delegate.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h" />

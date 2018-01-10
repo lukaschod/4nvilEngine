@@ -10,6 +10,7 @@ D12GraphicsModule::D12GraphicsModule()
 
 void D12GraphicsModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	// Deallocate all memory that is not used by GPU
 	auto completedBufferIndex = planner->GetCompletedBufferIndex();
 	for (size_t i = srvHeapMemoryToFree.size(); i-->0 ;)
@@ -608,7 +609,7 @@ bool D12GraphicsModule::Initialize()
 	IDXGIAdapter* warpAdapter;
 	ASSERT_SUCCEEDED(factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
 
-	auto featureLevel = D3D_FEATURE_LEVEL_12_1;
+	auto featureLevel = D3D_FEATURE_LEVEL_11_1;
 	auto result = D3D12CreateDevice(nullptr, featureLevel, IID_PPV_ARGS(&device));
 	if (FAILED(result))
 		return false;

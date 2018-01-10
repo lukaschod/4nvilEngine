@@ -8,6 +8,7 @@ PipeModule::PipeModule()
 
 void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+	profiler = moduleManager->GetProfiler();
 	cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
 }
 

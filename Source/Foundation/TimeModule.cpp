@@ -10,11 +10,13 @@ TimeModule::TimeModule()
 
 void TimeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+	Module::SetupExecuteOrder(moduleManager);
 	logModule = ExecuteBefore<LogModule>(moduleManager);
 }
 
 void TimeModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	stopWatch.Stop();
 	if (stopWatch.GetElapsedMiliseconds() >= 8000)
 	{

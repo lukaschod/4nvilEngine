@@ -16,11 +16,13 @@ void D12GraphicsExecuterModule::RecCmdBuffer(const ExecutionContext& context, co
 
 void D12GraphicsExecuterModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
+	Module::SetupExecuteOrder(moduleManager);
 	executerContexts.resize(moduleManager->GetWorkerCount());
 }
 
 void D12GraphicsExecuterModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	// TODO: Make sure no allocation happens
 	cmdBuffersToExecute.clear();
 	for (auto& executerContext : executerContexts)

@@ -159,6 +159,9 @@
     <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -359,8 +362,17 @@
     <ClInclude Include="..\..\..\Source\Foundation\ProfilerModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Event.h">
+    <ClInclude Include="..\..\..\Source\Tools\Delegate.h">
       <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Modules\Profiler.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Cpu.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Modules\IProfiler.h">
+      <Filter>Source\Modules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

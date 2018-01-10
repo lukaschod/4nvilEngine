@@ -23,6 +23,7 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void MeshRendererModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	if (perAllRendererStorage == nullptr)
 		perAllRendererStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 

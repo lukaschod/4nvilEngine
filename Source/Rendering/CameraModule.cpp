@@ -14,6 +14,7 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void CameraModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 	PipeModule::Execute(context);
 
 	for (auto target : cameras)

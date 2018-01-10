@@ -4,9 +4,11 @@
 
 void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+	Module::SetupExecuteOrder(moduleManager);
 	logModule = ExecuteBefore<LogModule>(moduleManager);
 }
 
 void ProfilerModule::Execute(const ExecutionContext& context)
 {
+	PROFILE_FUNCTION;
 }
