@@ -77,6 +77,8 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 	D12CmdBuffer* mainBuffer = recordedCmdBuffers[context.offset];
 
 	directQueue->Reset(mainBuffer, allocatorPool);
+
+	auto totalCommandCount = 0;
 	
 	for (uint32_t j = context.offset; j < context.offset + context.size; j++)
 	{
@@ -95,11 +97,13 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 		}
 		buffer->commandList = cachedCmdList;
 
-		
+		totalCommandCount += buffer->commandCount;
 
 		if (buffer->swapChain)
 			executer->RecCmdBuffer(context, buffer);
 	}
+
+	TRACE("Worker %d CommandCount %d", context.workerIndex, totalCommandCount);
 
 	directQueue->Close(mainBuffer);
 
@@ -316,7 +320,7 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 
 		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const D12Buffer*, target, uint32_t, targetOffset, Range<uint8_t>, data);
 		UINT8* pVertexDataBegin;
-		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
+ 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
 		ASSERT_SUCCEEDED(target->resource->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
 		//memcpy(pVertexDataBegin + targetOffset, data.pointer, data.size);
 		memcpy(pVertexDataBegin + targetOffset + target->resourceOffset, data.pointer, data.size);

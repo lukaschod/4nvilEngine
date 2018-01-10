@@ -29,7 +29,7 @@ void Profiler::StartFunction(
 void Profiler::StopFunction(uint32_t workerIndex)
 {
 	auto& worker = workers[workerIndex];
-	ASSERT(worker.currentFunction != nullptr && worker.currentFunction->parent != nullptr);
+	ASSERT(worker.currentFunction != nullptr);
 	worker.currentFunction->endCycle = Cpu::GetCycles();
 	worker.currentFunction = worker.currentFunction->parent;
 }

@@ -1,6 +1,7 @@
 #include <Modules\StaticModulePlanner.h>
 #include <Modules\Module.h>
 #include <Tools\Collections\List.h>
+#include <Tools\Math\Math.h>
 
 class StaticModulePlanNode
 {
@@ -97,7 +98,6 @@ public:
 		for (auto node : nodes)
 		{
 			node->dependencies = (uint32_t)node->module->Get_dependencies().size();
-			node->concunrency = 1;
 		}
 	}
 };
@@ -125,12 +125,7 @@ void StaticModulePlanner::Reset()
 	plan->Reset(); // Reset dependencies
 	for (auto child : plan->root->childs)
 	{
-		ModuleJob job;
-		job.module = child->module;
-		job.offset = 0;
-		job.size = job.module->GetExecutionSize();
-		job.userData = child;
-		readyJobs.push(job);
+		AddJob(child);
 	}
 	jobExecutingCount = 0;
 }
@@ -143,24 +138,7 @@ ModuleJob StaticModulePlanner::TryGetNext()
 
 	// Here we split big jobs
 	auto job = readyJobs.front();
-
-	// Check if need to split the job into multiple ones
-	auto node = (StaticModulePlanNode*) job.userData;
-	
-	auto module = job.module;
-	auto splitTreshold = module->GetSplitExecutionSize(job.size);
-	if (splitTreshold != job.size)
-	{
-		auto& splitedJob = readyJobs.front();
-		splitedJob.offset += (uint32_t)splitTreshold;
-		splitedJob.size -= splitTreshold;
-		job.size = splitTreshold;
-		node->concunrency++;
-	}
-	else
-	{
-		readyJobs.pop();
-	}
+	readyJobs.pop();
 
 	jobExecutingCount++;
 	return job;
@@ -190,12 +168,7 @@ void StaticModulePlanner::SetFinished(const ModuleJob& job)
 		if (--child->dependencies != 0)
 			continue;
 
-		ModuleJob childJob;
-		childJob.module = child->module;
-		childJob.offset = 0;
-		childJob.size = childJob.module->GetExecutionSize();
-		childJob.userData = child;
-		readyJobs.push(childJob);
+		AddJob(child);
 	}
 
 	// Notify that all jobs are finished
@@ -206,4 +179,40 @@ void StaticModulePlanner::SetFinished(const ModuleJob& job)
 	// Notify about finished job
 	if (jobFinishCallback != nullptr)
 		jobFinishCallback(readyJobs.size());
+}
+
+void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
+{
+	// TODO: Doesn't look that clean as it could be, maybe we can do better?
+	node->concunrency = 0;
+
+	auto jobSize = node->module->GetExecutionSize();
+	if (jobSize == 0)
+	{
+		ModuleJob childJob;
+		childJob.module = node->module;
+		childJob.offset = 0;
+		childJob.size = childJob.module->GetExecutionSize();
+		childJob.userData = node;
+		readyJobs.push(childJob);
+		node->concunrency++;
+		return;
+	}
+
+	auto offset = 0;
+	while (jobSize != 0)
+	{
+		auto split = node->module->GetSplitExecutionSize(jobSize);
+
+		ModuleJob childJob;
+		childJob.module = node->module;
+		childJob.offset = offset;
+		childJob.size = split;
+		childJob.userData = node;
+		readyJobs.push(childJob);
+		node->concunrency++;
+
+		offset += split;
+		jobSize -= split;
+	}
 }

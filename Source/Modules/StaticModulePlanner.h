@@ -7,6 +7,7 @@
 #include <mutex>
 
 class StaticModulePlan;
+class StaticModulePlanNode;
 
 class StaticModulePlanner : public IModulePlanner
 {
@@ -17,6 +18,9 @@ public:
 	virtual void Reset() override;
 	virtual ModuleJob TryGetNext() override;
 	virtual void SetFinished(const ModuleJob& module) override;
+
+private:
+	void AddJob(StaticModulePlanNode* node);
 
 private:
 	StaticModulePlan* plan;

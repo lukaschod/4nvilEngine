@@ -5,7 +5,7 @@
 #include <Tools\Collections\List.h>
 #include <Modules\IModuleExecuter.h>
 #include <Modules\IModulePlanner.h>
-#include <Modules\IProfiler.h>
+#include <Modules\IProfiler.h> // TODO: Honestly I really really hate to bake profiler into modulemanager, but seems there is no solution without performance tradeoff
 
 class Module;
 
@@ -42,6 +42,6 @@ private:
 	List<Module*> modules;
 	IModulePlanner* planner;
 	IModuleExecuter* executer;
-	AutoResetEvent sleepEvent;
 	IProfiler* profiler;
+	AutoResetEvent sleepEvent;
 };
