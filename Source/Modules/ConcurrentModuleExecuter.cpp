@@ -108,7 +108,7 @@ void ConcurrentModuleWorker::Run()
 			
 			continue;
 		}
-		cyclesBeforeSleep = 5;
+		cyclesBeforeSleep = 5; // TODO: Maybe we can find something more legit, instead of this magic number?
 
 		ExecutionContext context;
 		context.workerIndex = index;

@@ -184,6 +184,7 @@ void StaticModulePlanner::SetFinished(const ModuleJob& job)
 void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 {
 	// TODO: Doesn't look that clean as it could be, maybe we can do better?
+
 	node->concunrency = 0;
 
 	auto jobSize = node->module->GetExecutionSize();

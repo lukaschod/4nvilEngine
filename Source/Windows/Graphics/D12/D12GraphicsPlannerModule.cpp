@@ -319,12 +319,12 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const D12Buffer*, target, uint32_t, targetOffset, Range<uint8_t>, data);
-		UINT8* pVertexDataBegin;
- 		CD3DX12_RANGE readRange(0, 0);		// We do not intend to read from this resource on the CPU.
+		/*UINT8* pVertexDataBegin;
+ 		CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
 		ASSERT_SUCCEEDED(target->resource->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-		//memcpy(pVertexDataBegin + targetOffset, data.pointer, data.size);
 		memcpy(pVertexDataBegin + targetOffset + target->resourceOffset, data.pointer, data.size);
-		target->resource->Unmap(0, nullptr);
+		target->resource->Unmap(0, nullptr);*/
+		memcpy(target->resourceMappedPointer + targetOffset + target->resourceOffset, data.pointer, data.size);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(Draw, DrawDesc, target);

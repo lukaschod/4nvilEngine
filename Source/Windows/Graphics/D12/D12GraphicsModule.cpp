@@ -793,6 +793,7 @@ void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 	target->resourceOffset = bufferUploadHeap->GetOffset(target->memory);
 	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetVirtualAddress(target->memory);
 	target->resource = bufferUploadHeap->GetResource(target->memory);
+	target->resourceMappedPointer = bufferUploadHeap->GetResourceMappedPointer(target->memory);
 }
 
 void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)

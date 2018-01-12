@@ -72,12 +72,12 @@
     <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\Source\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\um;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\shared;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\External\Windows Kit\10\Include\10.0.14393.0\um;..\..\..\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;..\..\..\External\Windows Kit\10\Include\10.0.14393.0\shared;..\..\..\Source;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\um;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Include\10.0.14393.0\shared;C:\Users\Lukas-PC\Source\VoidEngine\External\veclib;C:\Users\Lukas-PC\Source\VoidEngine\Source;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Lukas-PC\Source\VoidEngine\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\External\Windows Kit\10\Include\10.0.14393.0\um;..\..\..\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;..\..\..\External\Windows Kit\10\Include\10.0.14393.0\shared;..\..\..\External\veclib;..\..\..\Source;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

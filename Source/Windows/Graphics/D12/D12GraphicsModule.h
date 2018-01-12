@@ -53,6 +53,7 @@ struct D12Buffer : public IBuffer
 		: IBuffer(size)
 		, resource(nullptr)
 		, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
+		, resourceMappedPointer(nullptr)
 	{}
 
 	HeapMemory memory;
@@ -60,6 +61,7 @@ struct D12Buffer : public IBuffer
 	size_t resourceOffset;
 	D3D12_RESOURCE_STATES currentState;
 	D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
+	uint8_t* resourceMappedPointer;
 };
 
 struct D12RootSubParamter

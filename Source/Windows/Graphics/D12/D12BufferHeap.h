@@ -15,6 +15,7 @@ public:
 	void Deallocate(const HeapMemory& memory);
 	D3D12_GPU_VIRTUAL_ADDRESS GetVirtualAddress(const HeapMemory& memory) const;
 	ID3D12Resource* GetResource(const HeapMemory& memory) const;
+	uint8_t* GetResourceMappedPointer(const HeapMemory& memory) const;
 	size_t GetOffset(const HeapMemory& memory) const;
 
 private:
@@ -24,6 +25,7 @@ private:
 private:
 	List<BuddyHeapManager*> heapManagers;
 	List<ID3D12Resource*> resources;
+	List<uint8_t*> resourceMappedPointers;
 	ID3D12Device* device;
 	size_t capacity;
 	size_t alignment;
