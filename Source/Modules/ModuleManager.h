@@ -20,7 +20,8 @@ public:
 	void NewFrame();
 	void WaitForFrame();
 	void AddModule(Module* module);
-	bool IsRunning() { return executer->IsRunning(); }
+	void RequestStop() { requestedStop = true; }
+	bool IsRunning() { return !requestedStop; }
 
 	template<class T>
 	T* GetModule()
@@ -44,4 +45,5 @@ private:
 	IModuleExecuter* executer;
 	IProfiler* profiler;
 	AutoResetEvent sleepEvent;
+	bool requestedStop;
 };

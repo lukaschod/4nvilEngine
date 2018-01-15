@@ -17,7 +17,7 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
 	unitModule = ExecuteAfter<UnitModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(3, new FixedBlockHeap(sizeof(MeshRenderer)));
+	memoryModule->SetAllocator("Graphics.MeshRenderer", new FixedBlockHeap(sizeof(MeshRenderer)));
 	ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
@@ -32,7 +32,8 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	for (auto meshRenderer : meshRenderers)
 	{
 		auto transform = unitModule->GetComponent<Transform>(meshRenderer);
-		storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
+		if (transform->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
+			storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
 	}
 }
 
@@ -48,7 +49,7 @@ const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionCon
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<MeshRenderer>(3, this);
+	auto target = memoryModule->New<MeshRenderer>("Graphics.MeshRenderer", this);
 	stream.Write(CommandCodeCreateMeshRenderer);
 	stream.Write(target);
 	buffer->commandCount++;

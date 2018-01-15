@@ -87,6 +87,9 @@ void ConcurrentModuleWorker::Stop()
 {
 	ASSERT(isRunning);
 	isRunning = false;
+	if (isSleeping)
+		Wakeup();
+	thread->join();
 }
 
 void ConcurrentModuleWorker::Run()

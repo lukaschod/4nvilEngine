@@ -11,7 +11,7 @@ public:
 	virtual void Execute(const ExecutionContext& context) override;
 
 	template<class T, class ... N>
-	T* New(uint32_t memoryType, N ... args)
+	T* New(const char* memoryType, N ... args)
 	{
 		auto allocator = allocators.find(memoryType);
 		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
@@ -21,7 +21,7 @@ public:
 		return target;
 	}
 
-	void SetAllocator(uint32_t memoryType, IHeap* allocator)
+	void SetAllocator(const char* memoryType, IHeap* allocator)
 	{
 		auto allocatorDup = allocators.find(memoryType);
 		ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)), 
@@ -31,7 +31,7 @@ public:
 	}
 
 	template<class T>
-	void Delete(uint32_t memoryType, T* target)
+	void Delete(const char* memoryType, T* target)
 	{
 		auto allocator = allocators.find(memoryType);
 		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
@@ -41,5 +41,5 @@ public:
 	}
 
 private:
-	std::map<uint32_t, IHeap*> allocators;
+	std::map<const char*, IHeap*> allocators;
 };

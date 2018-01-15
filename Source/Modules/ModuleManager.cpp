@@ -6,6 +6,7 @@ ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecuter* executer,
 	: planner(planner)
 	, executer(executer)
 	, profiler(profiler)
+	, requestedStop(false)
 {
 	ASSERT(planner != nullptr);
 	ASSERT(executer != nullptr);

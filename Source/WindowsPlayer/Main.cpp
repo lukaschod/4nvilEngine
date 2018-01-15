@@ -25,6 +25,31 @@
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
 #include <Windows\Views\WinViewModule.h>
 
+class ShutdownModule : public Module
+{
+public:
+	ShutdownModule(ModuleManager* moduleManager)
+		: moduleManager(moduleManager)
+	{
+	}
+
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+	{
+		Module::SetupExecuteOrder(moduleManager);
+		viewModule = ExecuteAfter<IViewModule>(moduleManager);
+	}
+
+	virtual void Execute(const ExecutionContext& context) override
+	{
+		if (viewModule->GetViews().size() == 0)
+			moduleManager->RequestStop();
+	}
+
+private:
+	IViewModule* viewModule;
+	ModuleManager* moduleManager;
+};
+
 class FpsLoggerModule : public Module
 {
 public:
@@ -319,6 +344,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	// Test project
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new FpsLoggerModule());
+	moduleManager->AddModule(new ShutdownModule(moduleManager));
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())
@@ -326,6 +352,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 		moduleManager->NewFrame();
 		moduleManager->WaitForFrame();
 	}
+	moduleManager->Stop();
 
 	delete moduleManager;
 	delete executer;

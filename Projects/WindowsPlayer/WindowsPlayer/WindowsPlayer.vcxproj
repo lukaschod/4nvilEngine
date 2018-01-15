@@ -212,6 +212,7 @@
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
     <ClInclude Include="..\..\..\Source\Tools\Cpu.h" />
     <ClInclude Include="..\..\..\Source\Tools\Delegate.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Flags.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h" />

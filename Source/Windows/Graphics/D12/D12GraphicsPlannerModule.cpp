@@ -75,8 +75,6 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 
 		for (int i = 0; i < buffer->commandCount; i++)
 		{
-			//uint32_t commandCode;
-			//stream.Read(commandCode);
 			auto& commandCode = stream.FastRead<uint32_t>();
 			ASSERT(ExecuteCommand(context, buffer, commandCode));
 		}
@@ -94,6 +92,7 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 
 	executer->RecCmdBuffer(context, mainBuffer);
 
+	// Push back allocator and mark it as free once the buffer finished
 	directAllocatorPool->Push(buffer->index, allocatorPool);
 
 	// Reset optimizer for new frame

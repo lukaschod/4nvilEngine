@@ -1,13 +1,20 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Foundation\UnitModule.h>
+#include <Tools\Flags.h>
 #include <Tools\Math\Matrix.h>
 #include <Tools\Collections\List.h>
+#include <Foundation\UnitModule.h>
 #include <queue>
 
 class TransformModule;
 class MemoryModule;
+
+enum TransformStateFlags
+{
+	TransformFlagsLocalObjectToWorldChanged = 1 << 0,
+	TransformFlagsLocalObjectToWorldUnsetNextFrame = 1 << 1,
+};
 
 struct Transform : public Component
 {
@@ -27,6 +34,7 @@ struct Transform : public Component
 	Vector3f localScale;
 	Vector3f position;
 	bool dirtyLocalObjectToWorldMatrix;
+	Flags<TransformStateFlags> flags;
 };
 
 class TransformModule : public ComponentModule

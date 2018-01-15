@@ -29,16 +29,29 @@ void TransformModule::Execute(const ExecutionContext& context)
 
 		auto parent = next->parent;
 		ASSERT(parent != nullptr);
-		
-		if (next->dirtyLocalObjectToWorldMatrix)
+
+		// Check if we need to unmark changed state
+		if (next->flags.Contains(TransformFlagsLocalObjectToWorldUnsetNextFrame))
+		{
+			next->flags.Remove(TransformFlagsLocalObjectToWorldChanged);
+			next->flags.Remove(TransformFlagsLocalObjectToWorldUnsetNextFrame);
+		}
+
+		// Check if we need update
+		if (next->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
 		{
 			next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
-			next->dirtyLocalObjectToWorldMatrix = false;
+			next->flags.Add(TransformFlagsLocalObjectToWorldUnsetNextFrame);
 		}
-		next->objectToWorld = parent->objectToWorld;
-		next->objectToWorld.Multiply(next->localObjectToWorld);
-		next->objectToWorld = Matrix4x4f::Transpose(next->objectToWorld);
-		next->position = next->objectToWorld.Multiply(Vector3f(0, 0, 0));
+
+		// If nor local transformation changed nor the parent one, we can skip the combination of them
+		if (next->flags.Contains(TransformFlagsLocalObjectToWorldChanged) || parent->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
+		{
+			next->objectToWorld = parent->objectToWorld;
+			next->objectToWorld.Multiply(next->localObjectToWorld);
+			next->objectToWorld = Matrix4x4f::Transpose(next->objectToWorld); // TODO: Technical depth, maybe we can avoid using transpose at all
+			next->position = next->objectToWorld.Multiply(Vector3f(0, 0, 0));
+		}
 
 		// Add transform childs
 		for (auto child : next->childs)
@@ -50,12 +63,12 @@ void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
 	PipeModule::SetupExecuteOrder(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(0, new FixedBlockHeap(sizeof(Transform)));
+	memoryModule->SetAllocator("Foundation.Transform", new FixedBlockHeap(sizeof(Transform)));
 }
 
 const Transform* TransformModule::AllocateTransform() const
 {
-	return memoryModule->New<Transform>(0, this);
+	return memoryModule->New<Transform>("Foundation.Transform", this);
 }
 
 DECLARE_COMMAND_CODE(CreateTransform);
@@ -111,6 +124,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStre
 
 		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition = position;
+		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
 		transform->dirtyLocalObjectToWorldMatrix = true;
 		DESERIALIZE_METHOD_END;
 

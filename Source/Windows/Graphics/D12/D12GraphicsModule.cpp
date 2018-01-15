@@ -42,13 +42,13 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	moduleManager->AddModule(new D12GraphicsExecuterModule());
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(1, new FixedBlockHeap(sizeof(D12ShaderArguments)));
-	memoryModule->SetAllocator(2, new FixedBlockHeap(sizeof(D12Buffer)));
+	memoryModule->SetAllocator("Graphics.ShaderArguments", new FixedBlockHeap(sizeof(D12ShaderArguments)));
+	memoryModule->SetAllocator("Graphics.Buffer", new FixedBlockHeap(sizeof(D12Buffer)));
 }
 
 const IBuffer* D12GraphicsModule::AllocateBuffer(size_t size)
 {
-	return memoryModule->New<D12Buffer>(2, size);
+	return memoryModule->New<D12Buffer>("Graphics.Buffer", size);
 }
 
 const ITexture* D12GraphicsModule::AllocateTexture(uint32_t width, uint32_t height)
@@ -83,7 +83,7 @@ const IShaderArguments* D12GraphicsModule::RecCreateIShaderArguments(const Execu
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<D12ShaderArguments>(1, pipeline);
+	auto target = memoryModule->New<D12ShaderArguments>("Graphics.ShaderArguments", pipeline);
 	stream.Write(CommandCodeCreateIShaderArguments);
 	stream.Write(target);
 	buffer->commandCount++;

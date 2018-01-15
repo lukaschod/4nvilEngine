@@ -19,12 +19,22 @@ const List<const IView*>& WinViewModule::GetViews()
 	return *data;
 }
 
+void WinViewModule::CloseWindow(HWND windowHandle)
+{
+	auto view = TryFindView(windowHandle);
+	ASSERT(view != nullptr);
+	views.remove(view);
+	DestroyWindow(windowHandle);
+}
+
+static WinViewModule* viewModule = nullptr;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	ASSERT(viewModule != nullptr);
 	switch (msg)
 	{
 	case WM_CLOSE:
-		DestroyWindow(hwnd);
+		viewModule->CloseWindow(hwnd);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -88,10 +98,21 @@ HWND WinViewModule::TryCreateWindow(const char* name, uint32_t width, uint32_t h
 	return hwnd;
 }
 
+WinView* WinViewModule::TryFindView(HWND windowHandle)
+{
+	for (auto view : views)
+	{
+		if (view->windowHandle == windowHandle)
+			return view;
+	}
+	return nullptr;
+}
+
 void WinViewModule::Execute(const ExecutionContext& context)
 {
 	PipeModule::Execute(context);
 
+	viewModule = this; // TODO: Lets figure out if we can pass the object to callback somehow
 	MSG msg;
 	for (auto view : views)
 	{

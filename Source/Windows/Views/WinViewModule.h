@@ -24,6 +24,7 @@ public:
 public:
 	virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) override;
 	virtual const List<const IView*>& GetViews() override;
+	void CloseWindow(HWND windowHandle);
 
 protected:
 	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
@@ -31,6 +32,7 @@ protected:
 private:
 	bool RegisterDefaultWindowClass();
 	HWND TryCreateWindow(const char* name, uint32_t width, uint32_t height);
+	WinView* TryFindView(HWND windowHandle);
 
 private:
 	IGraphicsModule* graphicsModule;

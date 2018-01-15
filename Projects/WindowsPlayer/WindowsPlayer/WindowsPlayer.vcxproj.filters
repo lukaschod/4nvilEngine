@@ -374,5 +374,8 @@
     <ClInclude Include="..\..\..\Source\Modules\IProfiler.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Flags.h">
+      <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
