@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
+#include <Tools\StopWatch.h>
 #include <Modules\IProfiler.h>
 
 class Profiler : public IProfiler
@@ -19,4 +20,5 @@ public:
 
 private:
 	List<Worker> workers;
+	StopWatch stopWatch;
 };

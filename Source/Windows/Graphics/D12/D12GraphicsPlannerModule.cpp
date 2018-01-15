@@ -52,30 +52,13 @@ size_t D12GraphicsPlannerModule::GetSplitExecutionSize(size_t currentSize)
 void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 {
 	PROFILE_FUNCTION;
-	/*auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
-	D12CmdBuffer* buffer = nullptr;
 
-	for (uint32_t j = context.offset; j < context.offset + context.size; j++)
-	{
-		buffer = recordedCmdBuffers[j];
-		auto& stream = buffer->stream;
-		directQueue->Reset(buffer, allocatorPool);
-		for (int i = 0; i < buffer->commandCount; i++)
-		{
-			uint32_t commandCode;
-			stream.Read(commandCode);
-			ASSERT(ExecuteCommand(context, buffer, commandCode));
-		}
-		directQueue->Close(buffer);
-		executer->RecCmdBuffer(context, buffer);
-	}
-
-	directAllocatorPool->Push(buffer->index, allocatorPool);*/
-
+	// Pull CmdAllocator this is where all our commands will be stored physicaly
 	auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
 	D12CmdBuffer* buffer = nullptr;
 	D12CmdBuffer* mainBuffer = recordedCmdBuffers[context.offset];
 
+	// Pull CmdList this interface that will allow use to store commands in allocator
 	directQueue->Reset(mainBuffer, allocatorPool);
 
 	auto totalCommandCount = 0;
@@ -86,8 +69,10 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 		auto& stream = buffer->stream;
 		stream.Reset();
 
+		// TODO: Technical dept, need some clean solution for CmdList accessing
 		auto cachedCmdList = buffer->commandList;
 		buffer->commandList = mainBuffer->commandList;
+
 		for (int i = 0; i < buffer->commandCount; i++)
 		{
 			//uint32_t commandCode;
@@ -95,6 +80,8 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 			auto& commandCode = stream.FastRead<uint32_t>();
 			ASSERT(ExecuteCommand(context, buffer, commandCode));
 		}
+
+		// TODO: Technical dept, need some clean solution for CmdList accessing
 		buffer->commandList = cachedCmdList;
 
 		totalCommandCount += buffer->commandCount;
@@ -103,14 +90,13 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 			executer->RecCmdBuffer(context, buffer);
 	}
 
-	TRACE("Worker %d CommandCount %d", context.workerIndex, totalCommandCount);
-
 	directQueue->Close(mainBuffer);
 
 	executer->RecCmdBuffer(context, mainBuffer);
 
 	directAllocatorPool->Push(buffer->index, allocatorPool);
 
+	// Reset optimizer for new frame
 	auto& drawOptimizer = drawOptimizers[context.workerIndex];
 	drawOptimizer.Clear();
 }
@@ -319,11 +305,6 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const D12Buffer*, target, uint32_t, targetOffset, Range<uint8_t>, data);
-		/*UINT8* pVertexDataBegin;
- 		CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-		ASSERT_SUCCEEDED(target->resource->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)));
-		memcpy(pVertexDataBegin + targetOffset + target->resourceOffset, data.pointer, data.size);
-		target->resource->Unmap(0, nullptr);*/
 		memcpy(target->resourceMappedPointer + targetOffset + target->resourceOffset, data.pointer, data.size);
 		DESERIALIZE_METHOD_END;
 

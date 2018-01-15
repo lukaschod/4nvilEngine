@@ -10,5 +10,4 @@ void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void ProfilerModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
 }

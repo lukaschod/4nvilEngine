@@ -12,28 +12,40 @@ private:
 	typedef std::chrono::duration<double, typename clock::period> Cycle;
 
 public:
+	StopWatch()
+		: isRunning(false)
+	{
+	}
+
 	inline void Start()
 	{
+		ASSERT(!isRunning);
 		start = end = clock::now();
+		isRunning = true;
 	}
 
 	inline void Stop()
 	{
+		ASSERT(isRunning);
 		end = clock::now();
+		isRunning = false;
 	}
 
-	inline uint64_t GetElapsedPicoseconds()
+	inline uint64_t GetElapsedPicoseconds() const
 	{
-		auto ticks_per_iter = Cycle(end - start) / 1;
+		auto current = isRunning ? clock::now() : clock::now();
+		auto ticks_per_iter = Cycle(current - start) / 1;
 		return std::chrono::duration_cast<picoseconds>(ticks_per_iter).count();
 	}
 
-	inline uint64_t GetElapsedMiliseconds()
+	inline uint64_t GetElapsedMiliseconds() const
 	{
-		auto ticks_per_iter = Cycle(end - start) / 1;
+		auto current = isRunning ? clock::now() : clock::now();
+		auto ticks_per_iter = Cycle(current - start) / 1;
 		return std::chrono::duration_cast<milliseconds>(ticks_per_iter).count();
 	}
 
 private:
 	std::chrono::high_resolution_clock::time_point start, end;
+	bool isRunning;
 };

@@ -5,6 +5,7 @@ Profiler::Profiler(uint32_t workersCount)
 	: workers(workersCount)
 {
 	Reset();
+	stopWatch.Start();
 }
 
 void Profiler::StartFunction(
@@ -20,7 +21,7 @@ void Profiler::StartFunction(
 	function.functionName = functionName;
 	function.lineNumber = lineNumber;
 	function.parent = worker.currentFunction;
-	function.startCycle = Cpu::GetCycles();
+	function.startCycle = stopWatch.GetElapsedPicoseconds();
 
 	worker.functions.push_back(function);
 	worker.currentFunction = &worker.functions.back();
@@ -30,7 +31,7 @@ void Profiler::StopFunction(uint32_t workerIndex)
 {
 	auto& worker = workers[workerIndex];
 	ASSERT(worker.currentFunction != nullptr);
-	worker.currentFunction->endCycle = Cpu::GetCycles();
+	worker.currentFunction->endCycle = stopWatch.GetElapsedPicoseconds();
 	worker.currentFunction = worker.currentFunction->parent;
 }
 

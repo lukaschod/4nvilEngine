@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#if _WIN32
+#if PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
 
@@ -13,7 +13,7 @@ namespace Directory
 		static bool pathValid = false;
 
 		// Store executable path on demand
-#if _WIN32
+#if PLATFORM_WINDOWS
 		if (!pathValid)
 		{
 			HMODULE hModule = GetModuleHandleW(NULL);

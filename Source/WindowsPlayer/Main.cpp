@@ -25,6 +25,52 @@
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
 #include <Windows\Views\WinViewModule.h>
 
+class FpsLoggerModule : public Module
+{
+public:
+	FpsLoggerModule()
+		: passedFrameCount(0)
+	{
+	}
+
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+	{
+		Module::SetupExecuteOrder(moduleManager);
+		logModule = ExecuteBefore<LogModule>(moduleManager);
+		stopWatch.Start();
+	}
+
+	virtual void Execute(const ExecutionContext& context) override
+	{
+		PROFILE_FUNCTION;
+		stopWatch.Stop();
+		auto dt = stopWatch.GetElapsedMiliseconds();
+		if (dt >= 8000)
+		{
+			// Hystory of all ms changes
+			// 78 58 59
+			// 69 59 61
+			// 67 57 57
+			// 36 33 33
+			// 22 21 20
+			// 16 15 15
+
+			auto msPerFrame = (float) dt / passedFrameCount;
+			TRACE("Frame took ms %f", msPerFrame);
+			logModule->RecWriteFmt(context, "Frame took ms %f\n", msPerFrame);
+
+			stopWatch.Start();
+			passedFrameCount = 0;
+		}
+		passedFrameCount++;
+	}
+
+private:
+	StopWatch stopWatch;
+	LogModule* logModule;
+	uint64_t passedFrameCount;
+};
+
 class TestModule : public Module
 {
 public:
@@ -251,6 +297,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	auto executer = new ConcurrentModuleExecuter(planner, 4);
 	auto moduleManager = new ModuleManager(planner, executer, new Profiler(4));
 
+	// Core
 	moduleManager->AddModule(new LogModule());
 	moduleManager->AddModule(new UnitModule());
 	moduleManager->AddModule(new D12GraphicsModule());
@@ -266,14 +313,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new SurfaceModule());
 	moduleManager->AddModule(new CameraModule());
 	moduleManager->AddModule(new UnlitRenderingLoopModule());
-	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new TimeModule());
 	moduleManager->AddModule(new MemoryModule());
+
+	// Test project
+	moduleManager->AddModule(new TestModule());
+	moduleManager->AddModule(new FpsLoggerModule());
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())
 	{
-		EXT_TRACE("----------FRAME--------------");
 		moduleManager->NewFrame();
 		moduleManager->WaitForFrame();
 	}

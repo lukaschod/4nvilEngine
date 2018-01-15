@@ -12,9 +12,9 @@ public:
 	TimeModule();
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
+	inline uint64_t GetDeltaTimeMs() const { return stopWatch.GetElapsedMiliseconds(); }
 
 private:
-	LogModule* logModule;
 	StopWatch stopWatch;
-	uint64_t passedFrameCount;
+	uint64_t deltaTimeMs;
 };

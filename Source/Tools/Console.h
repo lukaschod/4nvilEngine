@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <cstdarg>
 
-#if _WIN32
+#if PLATFORM_WINDOWS
 #	ifndef WIN32_LEAN_AND_MEAN
 #		define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers.
 #	endif
@@ -19,7 +19,7 @@ namespace Console
 {
 	inline void Write(const char* msg) 
 	{ 
-#if _WIN32
+#if PLATFORM_WINDOWS
 		OutputDebugString(msg);
 #else
 		ERROR("Not implemented");
