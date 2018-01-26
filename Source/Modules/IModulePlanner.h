@@ -23,9 +23,18 @@ struct ModuleJob
 class IModulePlanner
 {
 public:
+	// Recreates the Modules execution plan
 	virtual void Recreate(List<Module*>& modules) = 0;
+
+	// Prepares for new frame
 	virtual void Reset() = 0;
+
+	// Pulls next executable job, if no job is available nullptr will be returned in Module field
+	// Thread-safe
 	virtual ModuleJob TryGetNext() = 0;
+
+	// Marks the job as finished
+	// Thread-safe
 	virtual void SetFinished(const ModuleJob& job) = 0;
 
 public:

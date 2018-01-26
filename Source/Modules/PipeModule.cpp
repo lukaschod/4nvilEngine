@@ -14,6 +14,7 @@ void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore)
 {
+	// Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
 	auto pipe = new Pipe(module, moduleManager->GetWorkerCount());
 	pipes.push_back(pipe);
 	pipeMap[module] = pipe;
@@ -21,6 +22,7 @@ void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, b
 
 void PipeModule::SortPipes()
 {
+	// Sort the pipies according the dependencies
 	std::function<bool(Module*, Module*)> recusrive = [&recusrive](Module* first, Module* second)
 	{
 		if (first == second)
@@ -40,16 +42,17 @@ void PipeModule::SortPipes()
 
 CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
 {
-	// Lets try firstly to look the cache
+	// As long as for the worker executing Module doesn't change, we can actaully cache Pipe for faster access
 	auto& cachedCmdBuffer = cachedCmdBuffers[context.workerIndex];
 	if (cachedCmdBuffer.source == context.executingModule)
 		return cachedCmdBuffer.currentBuffer;
 
+	// If cache miss happens, we should find the Pipe corresponding to the executing Module
 	auto pipe = pipeMap.find(context.executingModule);
 	ASSERT(pipe != pipeMap.end());
 	auto buffer = &pipe->second->buffers[context.workerIndex];
 
-	// Update cache
+	// Update cache with new executing module
 	cachedCmdBuffer.source = context.executingModule;
 	cachedCmdBuffer.currentBuffer = buffer;
 
@@ -59,6 +62,7 @@ CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
 void PipeModule::Execute(const ExecutionContext& context)
 {
 	// TODO: Move it to some initialization
+	// We can sort the pipes only once, as dependencies between the Modules are static
 	if (!isPipesSorted)
 		SortPipes();
 
@@ -75,12 +79,14 @@ void PipeModule::Execute(const ExecutionContext& context)
 			buffer.stream.Reset();
 			buffer.executingModule = context.executingModule;
 
+			// Execute each command one by one
 			for (int i = 0; i < buffer.commandCount; i++)
 			{
 				auto& commandCode = stream.FastRead<uint32_t>();
 				ASSERT(ExecuteCommand(context, stream, commandCode));
 			}
 
+			// Prepare buffer for next frame recording
 			buffer.commandCount = 0;
 			buffer.stream.Reset();
 		}

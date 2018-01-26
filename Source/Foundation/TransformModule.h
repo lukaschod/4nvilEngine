@@ -21,7 +21,6 @@ struct Transform : public Component
 	Transform(const TransformModule* module) 
 		: Component((ComponentModule*)module)
 		, parent(nullptr)
-		, dirtyLocalObjectToWorldMatrix(true)
 	{ }
 
 	List<Transform*> childs;
@@ -33,7 +32,6 @@ struct Transform : public Component
 	Quaternionf localRotation;
 	Vector3f localScale;
 	Vector3f position;
-	bool dirtyLocalObjectToWorldMatrix;
 	Flags<TransformStateFlags> flags;
 };
 

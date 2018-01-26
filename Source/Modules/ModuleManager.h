@@ -15,16 +15,25 @@ public:
 	ModuleManager(IModulePlanner* planner, IModuleExecuter* executer, IProfiler* profiler);
 	~ModuleManager();
 
+	// Initializes the ModuleManager and other Modules
 	void Start();
+
+	// Finalizes ModuleManager and other Modules
 	void Stop();
+
+	// Begins new iteration of frame, where all modules will be re-executed at given time
 	void NewFrame();
+
+	// Waits until the current frame finishes
 	void WaitForFrame();
+
+	// Adds module to manager, which later on will be used for planning and execution
 	void AddModule(Module* module);
+
 	void RequestStop() { requestedStop = true; }
 	bool IsRunning() { return !requestedStop; }
 
-	template<class T>
-	T* GetModule()
+	template<class T> T* GetModule()
 	{
 		for (auto module : modules)
 		{
@@ -40,9 +49,9 @@ public:
 	inline IProfiler* GetProfiler() const { return profiler; }
 
 private:
-	List<Module*> modules;
-	IModulePlanner* planner;
-	IModuleExecuter* executer;
+	List<Module*> modules; // Modules contained by the manager
+	IModulePlanner* planner; // Planner that will be used for planning Module execution
+	IModuleExecuter* executer; // Executer that will be sued for Module execution
 	IProfiler* profiler;
 	AutoResetEvent sleepEvent;
 	bool requestedStop;

@@ -264,6 +264,9 @@ float4 FragMain(VertData i) : SV_TARGET
 			unitModule->RecAddComponent(context, mainCamera, camera);
 		}*/
 
+		int count = 200;
+		auto offset = count * 1;
+
 		for (int i = 0; i < 1; i++)
 		{
 			auto view = viewModule->RecCreateIView(context);
@@ -273,7 +276,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create transform
 			auto transform = transformModuke->RecCreateTransform(context);
-			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -10));
+			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
 			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
@@ -287,11 +290,11 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto testShader = CreateShader(context);
 		auto mesh = CreateMesh(context);
-		for (int i = 0; i < 200; i++)
+		for (int i = 0; i < count; i++)
 		{
-			for (int j = 0; j < 200; j++)
+			for (int j = 0; j < count; j++)
 			{
-				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2, j*2, 0));
+				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2 - offset, j*2 - offset, 0));
 			}
 		}
 	}
@@ -330,7 +333,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new SamplerModule());
 	moduleManager->AddModule(new ImageModule());
 	moduleManager->AddModule(new WinViewModule(hInst));
-	moduleManager->AddModule(new StorageModule());
+	moduleManager->AddModule(new StorageModule()); 
 	moduleManager->AddModule(new ShaderModule());
 	moduleManager->AddModule(new MaterialModule());
 	moduleManager->AddModule(new MeshModule());

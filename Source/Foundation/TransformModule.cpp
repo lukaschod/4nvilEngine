@@ -125,7 +125,6 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStre
 		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition = position;
 		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
-		transform->dirtyLocalObjectToWorldMatrix = true;
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
