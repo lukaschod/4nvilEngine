@@ -2,14 +2,14 @@
 #include <Modules\Module.h>
 #include <algorithm>
 
-ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecuter* executer, IProfiler* profiler)
+ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor, IProfiler* profiler)
 	: planner(planner)
-	, executer(executer)
+	, executor(executor)
 	, profiler(profiler)
 	, requestedStop(false)
 {
 	ASSERT(planner != nullptr);
-	ASSERT(executer != nullptr);
+	ASSERT(executor != nullptr);
 	ASSERT(profiler != nullptr);
 
 	planner->Set_finishCallback([this]()
@@ -29,19 +29,19 @@ void ModuleManager::Start()
 	for (size_t i = 0; i < modules.size(); i++)
 		modules[i]->SetupExecuteOrder(this);
 	planner->Recreate(modules);
-	executer->Start();
+	executor->Start();
 }
 
 void ModuleManager::Stop()
 {
-	executer->Stop();
+	executor->Stop();
 }
 
 void ModuleManager::NewFrame()
 {
 	profiler->Reset();
 	planner->Reset();
-	executer->Reset();
+	executor->Reset();
 }
 
 void ModuleManager::WaitForFrame()

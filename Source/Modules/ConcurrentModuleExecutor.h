@@ -2,17 +2,17 @@
 
 #include <Tools\Common.h>
 #include <Tools\Threading\AutoResetEvent.h>
-#include <Modules\IModuleExecuter.h>
+#include <Modules\IModuleExecutor.h>
 #include <Modules\Module.h>
 #include <vector>
 #include <thread>
 
-class ConcurrentModuleExecuter;
+class ConcurrentModuleExecutor;
 
 class ConcurrentModuleWorker
 {
 public:
-	ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner);
+	ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecutor* executor, IModulePlanner* planner);
 	~ConcurrentModuleWorker();
 	void Reset();
 	void Start();
@@ -34,11 +34,11 @@ private:
 	AUTOMATED_PROPERTY_GET(bool, isSleeping);
 };
 
-class ConcurrentModuleExecuter : public IModuleExecuter
+class ConcurrentModuleExecutor : public IModuleExecutor
 {
 public:
-	ConcurrentModuleExecuter(IModulePlanner* planner, uint32_t workerCount = 1);
-	~ConcurrentModuleExecuter();
+	ConcurrentModuleExecutor(IModulePlanner* planner, uint32_t workerCount = 1);
+	~ConcurrentModuleExecutor();
 	virtual void Reset() override;
 	virtual void Start() override;
 	virtual void Stop() override;

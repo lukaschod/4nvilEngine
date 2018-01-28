@@ -5,19 +5,19 @@
 
 class Module;
 
-class IModuleExecuter
+class IModuleExecutor
 {
 public:
 	// Prepares for new frame
 	virtual void Reset() = 0;
 
-	// Initializes the executer
+	// Initializes the executor
 	virtual void Start() = 0;
 
-	// Finalizes the executer
+	// Finalizes the executor
 	virtual void Stop() = 0;
 
-	// Returns if the executer is still running
+	// Returns if the executor is still running
 	virtual bool IsRunning() = 0;
 
 	// Returs the number of total workers

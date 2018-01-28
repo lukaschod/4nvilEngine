@@ -1,8 +1,8 @@
 #include <Modules\ModuleManager.h>
 #include <algorithm>
-#include "ConcurrentModuleExecuter.h"
+#include "ConcurrentModuleExecutor.h"
 
-ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint32_t workerCount) 
+ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, uint32_t workerCount) 
 	: planner(planner)
 	, isRunning(false)
 {
@@ -27,33 +27,33 @@ ConcurrentModuleExecuter::ConcurrentModuleExecuter(IModulePlanner* planner, uint
 	});
 }
 
-ConcurrentModuleExecuter::~ConcurrentModuleExecuter()
+ConcurrentModuleExecutor::~ConcurrentModuleExecutor()
 {
 	for (auto worker : workers)
 		delete worker;
 }
 
-void ConcurrentModuleExecuter::Reset()
+void ConcurrentModuleExecutor::Reset()
 {
 	for (auto worker : workers)
 		worker->Reset();
 }
 
-void ConcurrentModuleExecuter::Start()
+void ConcurrentModuleExecutor::Start()
 {
 	isRunning = true;
 	for (auto worker : workers)
 		worker->Start();
 }
 
-void ConcurrentModuleExecuter::Stop()
+void ConcurrentModuleExecutor::Stop()
 {
 	isRunning = false;
 	for (auto worker : workers)
 		worker->Stop();
 }
 
-ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecuter* executer, IModulePlanner* planner) 
+ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecutor* executor, IModulePlanner* planner) 
 	: planner(planner)
 	, thread(nullptr)
 	, isRunning(false)
@@ -61,7 +61,7 @@ ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleE
 	, index(index)
 	, executionIndex(0)
 {
-	ASSERT(executer != nullptr);
+	ASSERT(executor != nullptr);
 	ASSERT(planner != nullptr);
 }
 

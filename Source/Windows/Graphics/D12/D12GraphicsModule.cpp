@@ -1,6 +1,6 @@
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
-#include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
+#include <Windows\Graphics\D12\D12GraphicsExecutorModule.h>
 
 D12GraphicsModule::D12GraphicsModule()
 	: device(nullptr)
@@ -39,7 +39,7 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	PipeModule::SetupExecuteOrder(moduleManager);
 	Initialize();
 	moduleManager->AddModule(new D12GraphicsPlannerModule(device));
-	moduleManager->AddModule(new D12GraphicsExecuterModule());
+	moduleManager->AddModule(new D12GraphicsExecutorModule());
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 	memoryModule->SetAllocator("Graphics.ShaderArguments", new FixedBlockHeap(sizeof(D12ShaderArguments)));

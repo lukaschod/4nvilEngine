@@ -63,9 +63,6 @@
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
@@ -109,9 +106,6 @@
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.cpp">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp">
@@ -162,6 +156,12 @@
     <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.cpp">
+      <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -174,12 +174,6 @@
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\IModuleExecuter.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\CmdModule.h">
@@ -258,9 +252,6 @@
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Common.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.h">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h">
@@ -376,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Flags.h">
       <Filter>Source\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.h">
+      <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

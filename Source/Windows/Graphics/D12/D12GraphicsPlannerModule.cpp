@@ -1,6 +1,6 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
-#include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
+#include <Windows\Graphics\D12\D12GraphicsExecutorModule.h>
 #include <Windows\Graphics\D12\D12DescriptorHeap.h>
 
 D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device) 
@@ -14,7 +14,7 @@ D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device)
 void D12GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
 	Module::SetupExecuteOrder(moduleManager);
-	executer = ExecuteBefore<D12GraphicsExecuterModule>(moduleManager);
+	executor = ExecuteBefore<D12GraphicsExecutorModule>(moduleManager);
 }
 
 D12CmdBuffer* D12GraphicsPlannerModule::ContinueRecording()
@@ -37,7 +37,7 @@ uint64_t D12GraphicsPlannerModule::GetRecordingBufferIndex()
 
 uint64_t D12GraphicsPlannerModule::GetCompletedBufferIndex()
 {
-	return executer->Get_completedBufferIndex();
+	return executor->Get_completedBufferIndex();
 }
 
 size_t D12GraphicsPlannerModule::GetExecutionSize() { return recordedCmdBuffers.size(); }
@@ -85,12 +85,12 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 		totalCommandCount += buffer->commandCount;
 
 		if (buffer->swapChain)
-			executer->RecCmdBuffer(context, buffer);
+			executor->RecCmdBuffer(context, buffer);
 	}
 
 	directQueue->Close(mainBuffer);
 
-	executer->RecCmdBuffer(context, mainBuffer);
+	executor->RecCmdBuffer(context, mainBuffer);
 
 	// Push back allocator and mark it as free once the buffer finished
 	directAllocatorPool->Push(buffer->index, allocatorPool);

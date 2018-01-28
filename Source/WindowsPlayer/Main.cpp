@@ -1,5 +1,5 @@
 #include <Modules\ModuleManager.h>
-#include <Modules\ConcurrentModuleExecuter.h>
+#include <Modules\ConcurrentModuleExecutor.h>
 #include <Modules\StaticModulePlanner.h>
 #include <Modules\Profiler.h>
 
@@ -322,8 +322,8 @@ float4 FragMain(VertData i) : SV_TARGET
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
 	auto planner = new StaticModulePlanner();
-	auto executer = new ConcurrentModuleExecuter(planner, 4);
-	auto moduleManager = new ModuleManager(planner, executer, new Profiler(4));
+	auto executor = new ConcurrentModuleExecutor(planner, 4);
+	auto moduleManager = new ModuleManager(planner, executor, new Profiler(4));
 
 	// Core
 	moduleManager->AddModule(new LogModule());
@@ -358,7 +358,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->Stop();
 
 	delete moduleManager;
-	delete executer;
+	delete executor;
 	delete planner;
 
 	return 0;

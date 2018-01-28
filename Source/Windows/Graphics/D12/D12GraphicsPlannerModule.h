@@ -13,7 +13,7 @@ struct D12SwapChain;
 struct D12RenderPass;
 struct D12ShaderArguments;
 class D12GraphicsModule;
-class D12GraphicsExecuterModule;
+class D12GraphicsExecutorModule;
 
 class D12GraphicsPlannerModule : public Module
 {
@@ -79,7 +79,7 @@ private:
 	};
 	List<DrawOptimizer> drawOptimizers;
 
-	D12GraphicsExecuterModule* executer;
+	D12GraphicsExecutorModule* executor;
 	ID3D12CommandAllocator* commandAllocator;
 	ID3D12Device* device;
 };

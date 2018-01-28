@@ -1,26 +1,26 @@
-#include <Windows\Graphics\D12\D12GraphicsExecuterModule.h>
+#include <Windows\Graphics\D12\D12GraphicsExecutorModule.h>
 #include <Windows\Graphics\D12\D12GraphicsModule.h>
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <algorithm>
 
-D12GraphicsExecuterModule::D12GraphicsExecuterModule()
+D12GraphicsExecutorModule::D12GraphicsExecutorModule()
 	: completedBufferIndex(0)
 {
 }
 
-void D12GraphicsExecuterModule::RecCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer)
+void D12GraphicsExecutorModule::RecCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer)
 {
 	auto& executerContext = executerContexts[context.workerIndex];
 	executerContext.recordedCmds.push_back(buffer);
 }
 
-void D12GraphicsExecuterModule::SetupExecuteOrder(ModuleManager * moduleManager)
+void D12GraphicsExecutorModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
 	Module::SetupExecuteOrder(moduleManager);
 	executerContexts.resize(moduleManager->GetWorkerCount());
 }
 
-void D12GraphicsExecuterModule::Execute(const ExecutionContext& context)
+void D12GraphicsExecutorModule::Execute(const ExecutionContext& context)
 {
 	PROFILE_FUNCTION;
 	// TODO: Make sure no allocation happens

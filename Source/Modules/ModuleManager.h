@@ -3,7 +3,7 @@
 #include <Tools\Common.h>
 #include <Tools\Threading\AutoResetEvent.h>
 #include <Tools\Collections\List.h>
-#include <Modules\IModuleExecuter.h>
+#include <Modules\IModuleExecutor.h>
 #include <Modules\IModulePlanner.h>
 #include <Modules\IProfiler.h> // TODO: Honestly I really really hate to bake profiler into modulemanager, but seems there is no solution without performance tradeoff
 
@@ -12,7 +12,7 @@ class Module;
 class ModuleManager
 {
 public:
-	ModuleManager(IModulePlanner* planner, IModuleExecuter* executer, IProfiler* profiler);
+	ModuleManager(IModulePlanner* planner, IModuleExecutor* executor, IProfiler* profiler);
 	~ModuleManager();
 
 	// Initializes the ModuleManager and other Modules
@@ -45,13 +45,13 @@ public:
 	}
 
 	inline const List<Module*>& GetModules() const { return modules; }
-	inline uint32_t GetWorkerCount() const { return executer->GetWorkerCount(); }
+	inline uint32_t GetWorkerCount() const { return executor->GetWorkerCount(); }
 	inline IProfiler* GetProfiler() const { return profiler; }
 
 private:
 	List<Module*> modules; // Modules contained by the manager
 	IModulePlanner* planner; // Planner that will be used for planning Module execution
-	IModuleExecuter* executer; // Executer that will be sued for Module execution
+	IModuleExecutor* executor; // Executor that will be sued for Module execution
 	IProfiler* profiler;
 	AutoResetEvent sleepEvent;
 	bool requestedStop;

@@ -136,7 +136,7 @@
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.cpp" />
+    <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp" />
@@ -158,7 +158,7 @@
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.cpp" />
@@ -182,11 +182,11 @@
     <ClInclude Include="..\..\..\Source\Modules\CmdBufferPoolModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\CmdModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\CmdModuleHelper.h" />
-    <ClInclude Include="..\..\..\Source\Modules\IModuleExecuter.h" />
+    <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Modules\IProfiler.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
-    <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecuter.h" />
+    <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h" />
     <ClInclude Include="..\..\..\Source\Modules\PipeModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\Profiler.h" />
@@ -231,7 +231,7 @@
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Common.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecuterModule.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.h" />

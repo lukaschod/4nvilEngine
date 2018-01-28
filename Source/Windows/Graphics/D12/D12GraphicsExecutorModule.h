@@ -6,13 +6,13 @@
 
 struct D12CmdBuffer;
 
-class D12GraphicsExecuterModule : public Module
+class D12GraphicsExecutorModule : public Module
 {
 public:
-	D12GraphicsExecuterModule();
+	D12GraphicsExecutorModule();
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	virtual void Execute(const ExecutionContext& context) override;
-	virtual const char* GetName() override { return "D12GraphicsExecuterModule"; }
+	virtual const char* GetName() override { return "D12GraphicsExecutorModule"; }
 
 	void RecCmdBuffer(const ExecutionContext& context, const D12CmdBuffer* buffer);
 
