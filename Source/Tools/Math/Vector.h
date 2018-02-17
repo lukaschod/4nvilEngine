@@ -37,6 +37,11 @@ public:
 	inline bool operator==(const Vector3<T>& v) const { return(x == v.x && y == v.y && z == v.z); }
 	inline bool operator!=(const Vector3<T>& v) const { return(x != v.x && y != v.y && z != v.z); }
 
+	inline T SqrMagnitude() const { return x*x + y*y + z*z; }
+	inline T Magnitude() const { return Math::Sqrt(SqrMagnitude()); }
+
+	inline void Normalize() { this->operator/=(Magnitude()); }
+
 public:
 	T x, y, z;
 };
@@ -46,8 +51,17 @@ typedef Vector3<float> Vector3f;
 template<class T>
 inline Vector3<T> operator-(const Vector3<T>& left) { return Vector3<T>(-left.x, -left.y, -left.z); }
 
-template<class T>
-inline Vector3<T> operator+(const Vector3<T>& left, const Vector3<T>& right) { Vector3<T> out(left); out += right; return out; }
+template<class T, class Other>
+inline Vector3<T> operator-(const Vector3<T>& left, const Other& right) { Vector3<T> out(left); out -= right; return out; }
+
+template<class T, class Other>
+inline Vector3<T> operator+(const Vector3<T>& left, const Other& right) { Vector3<T> out(left); out += right; return out; }
+
+template<class T, class Other>
+inline Vector3<T> operator*(const Vector3<T>& left, const Other& right) { Vector3<T> out(left); out *= right; return out; }
+
+template<class T, class Other>
+inline Vector3<T> operator/(const Vector3<T>& left, const Other& right) { Vector3<T> out(left); out /= right; return out; }
 
 
 template<typename T>

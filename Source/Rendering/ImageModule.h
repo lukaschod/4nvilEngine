@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\ITexture.h>
 #include <Rendering\SamplerModule.h>
@@ -24,6 +24,7 @@ struct Image
 class ImageModule : public PipeModule
 {
 public:
+	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Image* AllocateImage(uint32_t width, uint32_t height) const;
 
@@ -32,7 +33,7 @@ public:
 	void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	List<Image*> images;

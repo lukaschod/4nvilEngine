@@ -13,7 +13,7 @@ D12GraphicsPlannerModule::D12GraphicsPlannerModule(ID3D12Device* device)
 
 void D12GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	Module::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	executor = ExecuteBefore<D12GraphicsExecutorModule>(moduleManager);
 }
 
@@ -51,19 +51,17 @@ size_t D12GraphicsPlannerModule::GetSplitExecutionSize(size_t currentSize)
 
 void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 
 	// Pull CmdAllocator this is where all our commands will be stored physicaly
 	auto allocatorPool = directAllocatorPool->TryPull(directQueue->GetCompletedBufferIndex());
-	D12CmdBuffer* buffer = nullptr;
-	D12CmdBuffer* mainBuffer = recordedCmdBuffers[context.offset];
+	D12CmdBuffer* mainBuffer = recordedCmdBuffers[context.start];
+	D12CmdBuffer* buffer = mainBuffer;
 
 	// Pull CmdList this interface that will allow use to store commands in allocator
 	directQueue->Reset(mainBuffer, allocatorPool);
 
-	auto totalCommandCount = 0;
-	
-	for (uint32_t j = context.offset; j < context.offset + context.size; j++)
+	for (auto j = context.start; j < context.end; j++)
 	{
 		buffer = recordedCmdBuffers[j];
 		auto& stream = buffer->stream;
@@ -75,14 +73,13 @@ void D12GraphicsPlannerModule::Execute(const ExecutionContext& context)
 
 		for (int i = 0; i < buffer->commandCount; i++)
 		{
-			auto& commandCode = stream.FastRead<uint32_t>();
+			auto& commandCode = stream.FastRead<CommandCode>();
 			ASSERT(ExecuteCommand(context, buffer, commandCode));
+			stream.Align();
 		}
 
 		// TODO: Technical dept, need some clean solution for CmdList accessing
 		buffer->commandList = cachedCmdList;
-
-		totalCommandCount += buffer->commandCount;
 
 		if (buffer->swapChain)
 			executor->RecCmdBuffer(context, buffer);
@@ -105,8 +102,9 @@ void D12GraphicsPlannerModule::RecPushDebug(const char* name)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodePushDebug);
+	stream.Write(TO_COMMAND_CODE(PushDebug));
 	stream.Write(name);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -115,7 +113,8 @@ void D12GraphicsPlannerModule::RecPopDebug()
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodePopDebug);
+	stream.Write(TO_COMMAND_CODE(PopDebug));
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -124,10 +123,11 @@ void D12GraphicsPlannerModule::RecSetTextureState(const D12Texture* target, D3D1
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeSetTextureState);
+	stream.Write(TO_COMMAND_CODE(SetTextureState));
 	stream.Write(target);
 	stream.Write(currentState);
 	stream.Write(nextState);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -136,10 +136,11 @@ void D12GraphicsPlannerModule::RecSetBufferState(const D12Buffer* target, D3D12_
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeSetBufferState);
+	stream.Write(TO_COMMAND_CODE(SetBufferState));
 	stream.Write(target);
 	stream.Write(currentState);
 	stream.Write(nextState);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -148,10 +149,11 @@ void D12GraphicsPlannerModule::RecSetRenderPass(const D12RenderPass* target, boo
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeSetRenderPass);
+	stream.Write(TO_COMMAND_CODE(SetRenderPass));
 	recordingOptimizer.MarSetRenderPass((D12RenderPass*)target);
 	stream.Write((void*)target, sizeof(D12RenderPass)); // We need copy here, because renderpass lives on cpu
 	stream.Write(ignoreLoadActions);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -160,10 +162,11 @@ void D12GraphicsPlannerModule::RecUpdateBuffer(const D12Buffer* target, uint32_t
 { 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeUpdateBuffer);
+	stream.Write(TO_COMMAND_CODE(UpdateBuffer));
 	stream.Write(target);
 	stream.Write(targetOffset);
 	stream.Write(data);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -188,7 +191,7 @@ void D12GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeDraw);
+	stream.Write(TO_COMMAND_CODE(Draw));
 	stream.Write(target);
 
 	auto& rootParameters = ((D12ShaderPipeline*) target.pipeline)->rootParameters;
@@ -214,6 +217,7 @@ void D12GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 		}
 	}
 
+	stream.Align();
 	buffer->commandCount++;
 	recordingOptimizer.MarDraw();
 }
@@ -223,9 +227,10 @@ void D12GraphicsPlannerModule::RecSetHeap(const D12DescriptorHeap** heap)
 {
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeSetHeap);
+	stream.Write(TO_COMMAND_CODE(SetHeap));
 	recordingOptimizer.MarSetHeap((D12DescriptorHeap**) heap);
 	stream.Write(heap, sizeof(D12DescriptorHeap*) * D12HeapTypeCount);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -246,7 +251,7 @@ ID3D12CommandQueue* D12GraphicsPlannerModule::GetDirectQueue()
 	return directQueue->Get_queue();
 }
 
-bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D12CmdBuffer* buffer, uint32_t commandCode)
+bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D12CmdBuffer* buffer, CommandCode commandCode)
 {
 	auto& stream = buffer->stream;
 	auto commandList = (ID3D12GraphicsCommandList*)buffer->commandList;
@@ -304,7 +309,8 @@ bool D12GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, D
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const D12Buffer*, target, uint32_t, targetOffset, Range<uint8_t>, data);
-		memcpy(target->resourceMappedPointer + targetOffset + target->resourceOffset, data.pointer, data.size);
+		ASSERT(target->resourceMappedPointer != nullptr && data.pointer != nullptr && data.size != 0);
+		memcpy(target->resourceMappedPointer + targetOffset, data.pointer, data.size);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(Draw, DrawDesc, target);

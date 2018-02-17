@@ -3,6 +3,8 @@
 #include <Tools\Collections\FixedBlockHeap.h>
 #include <Tools\Math\Math.h>
 
+static const char* memoryLabelTransform = "Foundation.Transform";
+
 TransformModule::TransformModule() 
 {
 	root = new Transform(this);
@@ -14,7 +16,7 @@ TransformModule::TransformModule()
 
 void TransformModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	PipeModule::Execute(context);
 
 	// Do BFS to re-calculate new transformations
@@ -63,12 +65,12 @@ void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
 	PipeModule::SetupExecuteOrder(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator("Foundation.Transform", new FixedBlockHeap(sizeof(Transform)));
+	memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
 }
 
 const Transform* TransformModule::AllocateTransform() const
 {
-	return memoryModule->New<Transform>("Foundation.Transform", this);
+	return memoryModule->New<Transform>(memoryLabelTransform, this);
 }
 
 DECLARE_COMMAND_CODE(CreateTransform);
@@ -77,8 +79,9 @@ const Transform* TransformModule::RecCreateTransform(const ExecutionContext& con
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = transform == nullptr ? AllocateTransform() : transform;
-	stream.Write(CommandCodeCreateTransform);
+	stream.Write(TO_COMMAND_CODE(CreateTransform));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -87,9 +90,10 @@ const Transform* TransformModule::RecCreateTransform(const ExecutionContext& con
 SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
+SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
-bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
@@ -124,6 +128,11 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStre
 
 		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition = position;
+		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, transform, Vector3f, position);
+		transform->localPosition += position;
 		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 

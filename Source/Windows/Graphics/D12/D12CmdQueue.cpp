@@ -82,7 +82,7 @@ void D12CmdQueue::Execute(D12CmdBuffer* buffer, bool isLast)
 			cmdsToExecute.clear();
 		}
 
-		buffer->swapChain->Present(1, 0);
+		buffer->swapChain->Present(0, 0);
 
 		if (isLast)
 			queue->Signal(fence, buffer->index);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Tools\Collections\List.h>
 
 class ComponentModule;
@@ -68,7 +68,7 @@ public:
 	}
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	List<Unit*> units;

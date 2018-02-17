@@ -13,11 +13,11 @@ struct ExecutionContext
 	// Index of worker in current execution
 	uint32_t workerIndex;
 
-	// Offset of job
-	uint32_t offset;
+	// Start of job offset index
+	uint32_t start;
 
-	// Size of job
-	size_t size;
+	// End of job offset index
+	uint32_t end;
 
 	// Module that is currently executed
 	Module* executingModule;
@@ -25,9 +25,12 @@ struct ExecutionContext
 
 class Module
 {
+protected:
+	typedef Module base;
+
 public:
 	// This is where each Module will setup dependencies between other Modules using the ExecuteBefore and ExecuteAfter
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) { this->profiler = moduleManager->GetProfiler(); }
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) { }
 
 	// This is where each Module job will be done, context contains additional information about execution
 	virtual void Execute(const ExecutionContext& context) = 0;
@@ -42,8 +45,8 @@ protected:
 	{
 		ASSERT(moduleManager != nullptr);
 		auto module = (Module*) moduleManager->GetModule<T>();
-		if (module->dependencies.safe_push_back(this))
-			module->OnDependancyAdd(moduleManager, this, true);
+		module->dependencies.safe_push_back(this);
+		module->OnDependancyAdd(moduleManager, this, true);
 		return (T*) module;
 	}
 
@@ -52,8 +55,8 @@ protected:
 	{
 		ASSERT(moduleManager != nullptr);
 		auto module = (Module*) moduleManager->GetModule<T>();
-		if (dependencies.safe_push_back(module))
-			module->OnDependancyAdd(moduleManager, this, false);
+		dependencies.safe_push_back(module);
+		module->OnDependancyAdd(moduleManager, this, false);
 		return (T*) module;
 	}
 
@@ -61,5 +64,4 @@ protected:
 
 private:
 	AUTOMATED_PROPERTY_GETADR(List<Module*>, dependencies); // Modules that this current Module depends on
-	IProfiler* profiler;
 };

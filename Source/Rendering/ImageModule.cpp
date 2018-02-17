@@ -19,15 +19,16 @@ const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = image == nullptr ? AllocateImage(width, height) : image;
-	stream.Write(CommandCodeCreateImage);
+	stream.Write(TO_COMMAND_CODE(CreateImage));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 
 SERIALIZE_METHOD_ARG2(ImageModule, SetSampler, const Image*, const Sampler*);
 
-bool ImageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool ImageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

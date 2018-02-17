@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Rendering\ImageModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\IRenderPass.h>
@@ -51,6 +51,7 @@ struct Surface
 class SurfaceModule : public PipeModule
 {
 public:
+	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Surface* RecCreateSurface(const ExecutionContext& context);
 	void RecSetColor(const ExecutionContext& context, const Surface* target, uint32_t index, const SurfaceColor& color);
@@ -58,7 +59,7 @@ public:
 	void RecSetViewport(const ExecutionContext& context, const Surface* target, const Viewport& viewport);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	List<Surface*> surfaces;

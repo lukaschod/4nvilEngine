@@ -3,6 +3,8 @@
 #include <Foundation\MemoryModule.h>
 #include <Graphics\IGraphicsModule.h>
 
+static const char* memoryLabelMeshRenderer = "Graphics.MeshRenderer";
+
 MeshRendererModule::MeshRendererModule()
 	: perAllRendererStorage(nullptr)
 {
@@ -17,13 +19,13 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
 	unitModule = ExecuteAfter<UnitModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator("Graphics.MeshRenderer", new FixedBlockHeap(sizeof(MeshRenderer)));
+	memoryModule->SetAllocator(memoryLabelMeshRenderer, new FixedBlockHeap(sizeof(MeshRenderer)));
 	ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
 void MeshRendererModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	if (perAllRendererStorage == nullptr)
 		perAllRendererStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 
@@ -49,15 +51,16 @@ const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionCon
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<MeshRenderer>("Graphics.MeshRenderer", this);
-	stream.Write(CommandCodeCreateMeshRenderer);
+	auto target = memoryModule->New<MeshRenderer>(memoryLabelMeshRenderer, this);
+	stream.Write(TO_COMMAND_CODE(CreateMeshRenderer));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 //SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 
-bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

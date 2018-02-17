@@ -16,7 +16,6 @@ public:
 	D3D12_GPU_VIRTUAL_ADDRESS GetVirtualAddress(const HeapMemory& memory) const;
 	ID3D12Resource* GetResource(const HeapMemory& memory) const;
 	uint8_t* GetResourceMappedPointer(const HeapMemory& memory) const;
-	size_t GetOffset(const HeapMemory& memory) const;
 
 private:
 	void Grow(size_t capacity);

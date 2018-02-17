@@ -2,7 +2,7 @@
 
 #include <Tools\Common.h>
 #include <Tools\IO\FileStream.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 
 class LogModule : public PipeModule
 {
@@ -16,7 +16,7 @@ private:
 	void CloseStream();
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	FileStream output;

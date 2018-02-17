@@ -13,7 +13,7 @@ using Microsoft::WRL::ComPtr;
 
 #include <comdef.h>
 
-#ifdef DEBUG
+#ifdef ENABLED_DEBUG
 #define ASSERT_SUCCEEDED(hr) \
 	if (FAILED(hr)) \
 	{ \

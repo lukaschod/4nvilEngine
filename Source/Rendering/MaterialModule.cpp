@@ -18,8 +18,9 @@ const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& contex
 	auto& stream = buffer->stream;
 	auto properties = new MaterialProperties();
 	auto target = new Material(properties);
-	stream.Write(CommandCodeCreateMaterial);
+	stream.Write(TO_COMMAND_CODE(CreateMaterial));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -27,7 +28,7 @@ const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& contex
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
 
-bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

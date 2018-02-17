@@ -2,7 +2,7 @@
 
 #include <Tools\Common.h>
 
-#if PLATFORM_WINDOWS
+#if ENABLED_WINDOWS
 #include <Windows.h>
 #endif
 
@@ -10,7 +10,7 @@ namespace Cpu
 {
 	uint64_t GetCycles()
 	{
-#if PLATFORM_WINDOWS
+#if ENABLED_WINDOWS
 		FILETIME ftime, fsys, fuser;
 		GetProcessTimes(GetCurrentProcess(), &ftime, &ftime, &fsys, &fuser);
 		return fuser.dwLowDateTime;

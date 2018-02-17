@@ -2,11 +2,11 @@
 
 #include <Windows\Graphics\D12\D12Common.h>
 #include <Windows\Graphics\D12\D12CmdQueue.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\ComputeModule.h>
 
 struct D12CmdBuffer;
 
-class D12GraphicsExecutorModule : public Module
+class D12GraphicsExecutorModule : public ComputeModule
 {
 public:
 	D12GraphicsExecutorModule();

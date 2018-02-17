@@ -116,8 +116,8 @@ void ConcurrentModuleWorker::Run()
 		ExecutionContext context;
 		context.workerIndex = index;
 		context.executingModule = module;
-		context.offset = job.offset;
-		context.size = job.size;
+		context.start = job.offset;
+		context.end = job.offset + job.size;
 
 		// Execute the job here
 		module->Execute(context);

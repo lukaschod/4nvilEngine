@@ -1,19 +1,19 @@
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
+#include <Foundation\ProfilerModule.h>
 #include <Tools\Math\Math.h>
+#include <algorithm>
 
-PipeModule::PipeModule() 
-	: isPipesSorted(false)
-{
-}
+PipeModule::PipeModule() : isPipesSorted(false) {}
 
 void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	profiler = moduleManager->GetProfiler();
+	profilerModule = ExecuteAfter<ProfilerModule>(moduleManager);
 	cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
 }
 
 void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore)
 {
+	ASSERT(pipeMap.find(module) == pipeMap.end());
 	// Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
 	auto pipe = new Pipe(module, moduleManager->GetWorkerCount());
 	pipes.push_back(pipe);
@@ -63,6 +63,7 @@ void PipeModule::Execute(const ExecutionContext& context)
 {
 	// TODO: Move it to some initialization
 	// We can sort the pipes only once, as dependencies between the Modules are static
+	// NOTE: Of course branch prediction migh eleminate this performance cost
 	if (!isPipesSorted)
 		SortPipes();
 
@@ -82,8 +83,9 @@ void PipeModule::Execute(const ExecutionContext& context)
 			// Execute each command one by one
 			for (int i = 0; i < buffer.commandCount; i++)
 			{
-				auto& commandCode = stream.FastRead<uint32_t>();
+				auto& commandCode = stream.FastRead<CommandCode>();
 				ASSERT(ExecuteCommand(context, stream, commandCode));
+				stream.Align();
 			}
 
 			// Prepare buffer for next frame recording

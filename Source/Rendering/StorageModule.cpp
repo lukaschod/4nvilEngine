@@ -18,15 +18,16 @@ const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, 
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = storage == nullptr ? AllocateStorage(size) : storage;
-	stream.Write(CommandCodeCreateStorage);
+	stream.Write(TO_COMMAND_CODE(CreateStorage));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 
 SERIALIZE_METHOD_ARG3(StorageModule, UpdateStorage, const Storage*, uint32_t, Range<void>&);
 
-bool StorageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool StorageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

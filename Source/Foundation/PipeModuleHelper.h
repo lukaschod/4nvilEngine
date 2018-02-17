@@ -3,7 +3,8 @@
 #define NOARG
 #define COMMA ,
 
-#define DECLARE_COMMAND_CODE(Name) static const int CommandCode##Name = __COUNTER__;
+#define TO_COMMAND_CODE(Name) CommandCode##Name
+#define DECLARE_COMMAND_CODE(Name) static const int TO_COMMAND_CODE(Name) = __COUNTER__;
 
 #define SERIALIZE_METHOD_TEMPLATE(Module, Name, ReturnType, DeclareArguments, WriteArguments, BodyPrefix, BodyPostFix) \
 	DECLARE_COMMAND_CODE(Name); \
@@ -12,8 +13,9 @@
 		auto buffer = GetRecordingBuffer(context); \
 		auto& stream = buffer->stream; \
 		BodyPrefix \
-		stream.Write(CommandCode##Name); \
+		stream.Write(TO_COMMAND_CODE(Name)); \
 		WriteArguments \
+		stream.Align(); \
 		buffer->commandCount++; \
 		BodyPostFix \
 	}
@@ -82,7 +84,7 @@
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
 	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
-	ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); \
+	ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); \\
 	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
 
 #define DESERIALIZE_METHOD_END return true; }

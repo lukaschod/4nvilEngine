@@ -2,6 +2,9 @@
 #include <Windows\Graphics\D12\D12GraphicsPlannerModule.h>
 #include <Windows\Graphics\D12\D12GraphicsExecutorModule.h>
 
+static const char* memoryLabelShaderArguments = "Graphics.ShaderArguments";
+static const char* memoryLabelBuffer = "Graphics.Buffer";
+
 D12GraphicsModule::D12GraphicsModule()
 	: device(nullptr)
 	, factory(nullptr)
@@ -10,7 +13,7 @@ D12GraphicsModule::D12GraphicsModule()
 
 void D12GraphicsModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	// Deallocate all memory that is not used by GPU
 	auto completedBufferIndex = planner->GetCompletedBufferIndex();
 	for (size_t i = srvHeapMemoryToFree.size(); i-->0 ;)
@@ -42,13 +45,13 @@ void D12GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	moduleManager->AddModule(new D12GraphicsExecutorModule());
 	planner = ExecuteBefore<D12GraphicsPlannerModule>(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator("Graphics.ShaderArguments", new FixedBlockHeap(sizeof(D12ShaderArguments)));
-	memoryModule->SetAllocator("Graphics.Buffer", new FixedBlockHeap(sizeof(D12Buffer)));
+	memoryModule->SetAllocator(memoryLabelShaderArguments, new FixedBlockHeap(sizeof(D12ShaderArguments)));
+	memoryModule->SetAllocator(memoryLabelBuffer, new FixedBlockHeap(sizeof(D12Buffer)));
 }
 
 const IBuffer* D12GraphicsModule::AllocateBuffer(size_t size)
 {
-	return memoryModule->New<D12Buffer>("Graphics.Buffer", size);
+	return memoryModule->New<D12Buffer>(memoryLabelBuffer, size);
 }
 
 const ITexture* D12GraphicsModule::AllocateTexture(uint32_t width, uint32_t height)
@@ -83,9 +86,10 @@ const IShaderArguments* D12GraphicsModule::RecCreateIShaderArguments(const Execu
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	auto target = memoryModule->New<D12ShaderArguments>("Graphics.ShaderArguments", pipeline);
-	stream.Write(CommandCodeCreateIShaderArguments);
+	auto target = memoryModule->New<D12ShaderArguments>(memoryLabelShaderArguments, pipeline);
+	stream.Write(TO_COMMAND_CODE(CreateIShaderArguments));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -97,8 +101,9 @@ const IBuffer* D12GraphicsModule::RecCreateIBuffer(const ExecutionContext& conte
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = gfxBuffer == nullptr ? AllocateBuffer(size) : gfxBuffer;
-	stream.Write(CommandCodeCreateIBuffer);
+	stream.Write(TO_COMMAND_CODE(CreateIBuffer));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -110,8 +115,9 @@ const ISwapChain* D12GraphicsModule::RecCreateISwapChain(const ExecutionContext&
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = swapChain == nullptr ? AllocateSwapChain(view) : swapChain;
-	stream.Write(CommandCodeCreateISwapChain);
+	stream.Write(TO_COMMAND_CODE(CreateISwapChain));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -123,14 +129,15 @@ const ITexture* D12GraphicsModule::RecCreateITexture(const ExecutionContext& con
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = texture == nullptr ? AllocateTexture(width, height) : texture;
-	stream.Write(CommandCodeCreateITexture);
+	stream.Write(TO_COMMAND_CODE(CreateITexture));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 //SERIALIZE_METHOD_CREATEGEN_ARG2(D12GraphicsModule, ITexture, D12Texture, uint32_t, uint32_t);
 
-bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool D12GraphicsModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
@@ -588,7 +595,7 @@ void D12GraphicsModule::Present(const ExecutionContext& context, D12SwapChain* s
 bool D12GraphicsModule::Initialize()
 {
 	UINT dxgiFactoryFlags = 0;
-#if defined(_DEBUG)
+#if defined(ENABLED_D12_DEBUG_LAYER)
 	// Enable the debug layer (requires the Graphics Tools "optional feature").
 	// NOTE: Enabling the debug layer after device creation will invalidate the active device.
 	{
@@ -606,8 +613,8 @@ bool D12GraphicsModule::Initialize()
 
 	ASSERT_SUCCEEDED(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory)));
 
-	IDXGIAdapter* warpAdapter;
-	ASSERT_SUCCEEDED(factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
+	//IDXGIAdapter* warpAdapter;
+	//ASSERT_SUCCEEDED(factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter)));
 
 	auto featureLevel = D3D_FEATURE_LEVEL_11_1;
 	auto result = D3D12CreateDevice(nullptr, featureLevel, IID_PPV_ARGS(&device));
@@ -626,11 +633,6 @@ bool D12GraphicsModule::Initialize()
 	samplersCpuHeap = new D12DescriptorHeap(device, D12HeapTypeSamplersCPU, 128);
 
 	bufferUploadHeap = new D12BufferHeap(device, 1<<20, 256);
-
-	ID3D12CommandAllocator* alloc;
-	ASSERT_SUCCEEDED(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&alloc)));
-	ID3D12GraphicsCommandList* cmd;
-	ASSERT_SUCCEEDED(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, alloc, nullptr, IID_PPV_ARGS(&cmd)));
 
 	return true;
 }
@@ -790,7 +792,6 @@ void D12GraphicsModule::InitializeBuffer(D12Buffer* target)
 		IID_PPV_ARGS(&target->resource)));
 	target->cachedResourceGpuVirtualAddress = target->resource->GetGPUVirtualAddress();*/
 	target->memory = bufferUploadHeap->Allocate(target->GetSize());
-	target->resourceOffset = bufferUploadHeap->GetOffset(target->memory);
 	target->cachedResourceGpuVirtualAddress = bufferUploadHeap->GetVirtualAddress(target->memory);
 	target->resource = bufferUploadHeap->GetResource(target->memory);
 	target->resourceMappedPointer = bufferUploadHeap->GetResourceMappedPointer(target->memory);
@@ -802,11 +803,11 @@ void D12GraphicsModule::CompilePipeline(D12ShaderPipeline* pipeline)
 	ComPtr<ID3DBlob> vertexShader;
 	ComPtr<ID3DBlob> pixelShader;
 
-#if defined(_DEBUG)
+#if defined(ENABLED_DEBUG)
 	// Enable better shader debugging with the graphics debugging tools.
 	UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-	UINT compileFlags = 0;
+	UINT compileFlags = 0; 
 #endif
 
 	ComPtr<ID3DBlob> error;

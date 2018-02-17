@@ -5,14 +5,13 @@
 #include <Tools\Collections\List.h>
 #include <Modules\IModuleExecutor.h>
 #include <Modules\IModulePlanner.h>
-#include <Modules\IProfiler.h> // TODO: Honestly I really really hate to bake profiler into modulemanager, but seems there is no solution without performance tradeoff
 
 class Module;
 
 class ModuleManager
 {
 public:
-	ModuleManager(IModulePlanner* planner, IModuleExecutor* executor, IProfiler* profiler);
+	ModuleManager(IModulePlanner* planner, IModuleExecutor* executor);
 	~ModuleManager();
 
 	// Initializes the ModuleManager and other Modules
@@ -46,13 +45,11 @@ public:
 
 	inline const List<Module*>& GetModules() const { return modules; }
 	inline uint32_t GetWorkerCount() const { return executor->GetWorkerCount(); }
-	inline IProfiler* GetProfiler() const { return profiler; }
 
 private:
 	List<Module*> modules; // Modules contained by the manager
 	IModulePlanner* planner; // Planner that will be used for planning Module execution
 	IModuleExecutor* executor; // Executor that will be sued for Module execution
-	IProfiler* profiler;
 	AutoResetEvent sleepEvent;
 	bool requestedStop;
 };

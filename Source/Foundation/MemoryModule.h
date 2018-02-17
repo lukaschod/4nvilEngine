@@ -15,7 +15,6 @@ public:
 	{
 		auto allocator = allocators.find(memoryType);
 		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
-
 		auto target = (T*)allocator->second->Allocate();
 		new(target) T(std::forward<N>(args)...);
 		return target;
@@ -26,7 +25,6 @@ public:
 		auto allocatorDup = allocators.find(memoryType);
 		ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)), 
 			"Allocator was already set for memory type %d", memoryType);
-
 		allocators[memoryType] = allocator;
 	}
 
@@ -35,7 +33,6 @@ public:
 	{
 		auto allocator = allocators.find(memoryType);
 		ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
-
 		allocator->second->Deallocate(target);
 		target->~T();
 	}

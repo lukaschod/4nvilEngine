@@ -52,6 +52,9 @@
     <Filter Include="Source\Tools\IO">
       <UniqueIdentifier>{42c40ba2-fb6b-406d-8a1e-5742ff323acb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Tools\Data">
+      <UniqueIdentifier>{e181512c-80bf-48ef-8299-72a6fe5e9b53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp">
@@ -61,9 +64,6 @@
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\MeshModule.cpp">
@@ -92,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\MaterialModule.cpp">
       <Filter>Source\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp">
-      <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\SamplerModule.cpp">
       <Filter>Source\Rendering</Filter>
@@ -132,9 +129,6 @@
     <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.cpp">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClCompile>
@@ -153,14 +147,14 @@
     <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp">
-      <Filter>Source\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.cpp">
       <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Foundation\PipeModule.cpp">
+      <Filter>Source\Foundation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +168,6 @@
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\CmdModule.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h">
@@ -209,9 +200,6 @@
     <ClInclude Include="..\..\..\Source\Graphics\IGraphicsModule.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\CmdModuleHelper.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.h">
       <Filter>Source\Rendering\UnlitRenderingLoop</Filter>
     </ClInclude>
@@ -235,9 +223,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Graphics\ISwapChain.h">
       <Filter>Source\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\CmdBufferPoolModule.h">
-      <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\SamplerModule.h">
       <Filter>Source\Rendering</Filter>
@@ -317,9 +302,6 @@
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\PipeModule.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.h">
       <Filter>Source\Windows\Graphics\D12</Filter>
     </ClInclude>
@@ -356,14 +338,8 @@
     <ClInclude Include="..\..\..\Source\Tools\Delegate.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\Profiler.h">
-      <Filter>Source\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Cpu.h">
       <Filter>Source\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Modules\IProfiler.h">
-      <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Flags.h">
       <Filter>Source\Tools\Collections</Filter>
@@ -376,6 +352,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.h">
       <Filter>Source\Windows\Graphics\D12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Data\XmlData.h">
+      <Filter>Source\Tools\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\ComputeModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\PipeModule.h">
+      <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Foundation\PipeModuleHelper.h">
+      <Filter>Source\Foundation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

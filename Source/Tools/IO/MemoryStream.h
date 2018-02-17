@@ -60,10 +60,10 @@ public:
 		return end - begin;
 	}
 
-	inline void Align(size_t padding)
+	inline void Align(size_t padding = sizeof(void*))
 	{
-		if ((uint64_t) data > padding)
-			data = data + (uint64_t)data / padding;
+		data += (size_t)data % padding;
+		ASSERT(data <= end);
 	}
 
 private:

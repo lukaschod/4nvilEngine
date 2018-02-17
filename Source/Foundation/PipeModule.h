@@ -3,12 +3,37 @@
 #include <Tools\Common.h>
 #include <Tools\IO\MemoryStream.h>
 #include <Modules\Module.h>
-#include <Modules\CmdModuleHelper.h>
-#include <Modules\CmdBufferPoolModule.h>
+#include <Foundation\ProfilerModule.h>
+#include <Foundation\PipeModuleHelper.h>
 #include <map>
+
+typedef uint32_t CommandCode;
+
+struct CmdBuffer
+{
+	CmdBuffer() : commandCount(0) {}
+
+	// Reced commands buffer
+	MemoryStream stream;
+
+	// Reced commandcount
+	size_t commandCount;
+
+	// Index of the cmdbuffer
+	uint64_t index;
+
+	// On which worker the cmdbuffer was created
+	uint32_t workerIndex;
+
+	// Module that records this buffer
+	Module* executingModule;
+};
 
 class PipeModule : public Module
 {
+protected:
+	typedef PipeModule base;
+
 public:
 	PipeModule();
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
@@ -16,7 +41,7 @@ public:
 
 protected:
 	// This is where each PipeModule implementation will add its commands
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) = 0;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) = 0;
 	virtual void OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore) override;
 
 	// Sort the pipes according the order of Module execution, deducted from the dependancy tree
@@ -29,11 +54,7 @@ private:
 	// Pipe is simple one directiona connection between Modules
 	struct Pipe
 	{
-		Pipe(Module* source, size_t size)
-			: buffers(size)
-			, source(source)
-		{
-		}
+		Pipe(Module* source, size_t size) : buffers(size) , source(source) {}
 		Module* source;
 		List<CmdBuffer> buffers;
 	};
@@ -44,13 +65,12 @@ private:
 
 	struct CachedCmdBuffer
 	{
-		CachedCmdBuffer()
-			: source(nullptr)
-			, currentBuffer(nullptr)
-		{
-		}
+		CachedCmdBuffer() : source(nullptr), currentBuffer(nullptr) {}
 		Module* source;
 		CmdBuffer* currentBuffer;
 	};
 	List<CachedCmdBuffer> cachedCmdBuffers;
+
+protected:
+	ProfilerModule* profilerModule;
 };

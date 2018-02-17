@@ -13,13 +13,14 @@ const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, 
 	auto& stream = buffer->stream;
 	auto filter = graphicsModule->RecCreateIFilter(context, options);
 	auto target = new Sampler(options, filter);
-	stream.Write(CommandCodeCreateSampler);
+	stream.Write(TO_COMMAND_CODE(CreateSampler));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 
-bool SamplerModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool SamplerModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

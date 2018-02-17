@@ -5,7 +5,7 @@
 #include <Windows\Graphics\D12\D12CmdAllocatorPool.h>
 #include <Windows\Graphics\D12\D12CmdQueue.h>
 #include <Graphics\IGraphicsModule.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\ComputeModule.h>
 
 struct D12Texture;
 struct D12Buffer;
@@ -15,7 +15,7 @@ struct D12ShaderArguments;
 class D12GraphicsModule;
 class D12GraphicsExecutorModule;
 
-class D12GraphicsPlannerModule : public Module
+class D12GraphicsPlannerModule : public ComputeModule
 {
 public:
 	D12GraphicsPlannerModule(ID3D12Device* device);
@@ -44,7 +44,7 @@ public:
 private:
 	inline D12CmdBuffer* ContinueRecording();
 	inline void SplitRecording();
-	inline bool ExecuteCommand(const ExecutionContext& context, D12CmdBuffer* buffer, uint32_t commandCode);
+	inline bool ExecuteCommand(const ExecutionContext& context, D12CmdBuffer* buffer, CommandCode commandCode);
 
 private:
 	D12CmdQueue* directQueue;

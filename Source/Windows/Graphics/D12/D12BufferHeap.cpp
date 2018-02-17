@@ -32,13 +32,7 @@ ID3D12Resource* D12BufferHeap::GetResource(const HeapMemory& memory) const
 uint8_t* D12BufferHeap::GetResourceMappedPointer(const HeapMemory& memory) const
 {
 	auto index = FindIndex(memory);
-	return resourceMappedPointers[index];
-}
-
-size_t D12BufferHeap::GetOffset(const HeapMemory& memory) const
-{
-	auto index = FindIndex(memory);
-	return memory.address - heapManagers[index]->GetBounds().address;
+	return resourceMappedPointers[index] + memory.address - heapManagers[index]->GetBounds().address;
 }
 
 HeapMemory D12BufferHeap::Allocate(size_t size)

@@ -48,10 +48,11 @@ public:
 	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
 	void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
 	void RecSetPosition(const ExecutionContext& context, const Transform* target, const Vector3f& position);
+	void RecAddPosition(const ExecutionContext& context, const Transform* target, const Vector3f& position);
 	void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	MemoryModule* memoryModule;

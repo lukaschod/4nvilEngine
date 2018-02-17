@@ -2,7 +2,7 @@
 
 #include <Tools\Common.h>
 #include <Tools\String.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Rendering\ImageModule.h>
 #include <Tools\Math\Rect.h>
 

@@ -16,13 +16,13 @@ void D12GraphicsExecutorModule::RecCmdBuffer(const ExecutionContext& context, co
 
 void D12GraphicsExecutorModule::SetupExecuteOrder(ModuleManager * moduleManager)
 {
-	Module::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	executerContexts.resize(moduleManager->GetWorkerCount());
 }
 
 void D12GraphicsExecutorModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	// TODO: Make sure no allocation happens
 	cmdBuffersToExecute.clear();
 	for (auto& executerContext : executerContexts)
@@ -40,7 +40,7 @@ void D12GraphicsExecutorModule::Execute(const ExecutionContext& context)
 		cmdBuffer->queue->Execute((D12CmdBuffer*)cmdBuffer, cmdBuffer == back); // TODO: Fix this const shit
 	}
 
-	// TODO: remove onc we have buffer caching
+	// TODO: remove once we have double/triple buffering
 	if (!cmdBuffersToExecute.empty())
 		cmdBuffersToExecute.back()->queue->WaitForBufferIndexToComplete(back->index);
 	completedBufferIndex = back->index;

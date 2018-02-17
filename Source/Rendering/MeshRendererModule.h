@@ -38,7 +38,7 @@ public:
 	const Storage* GetPerAllRendererStorage() const;
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	List<MeshRenderer*> meshRenderers;

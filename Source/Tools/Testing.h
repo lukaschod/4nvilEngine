@@ -9,7 +9,11 @@
 #	undef ASSERT
 #endif
 
-#ifdef DEBUG
+#if !defined(ENABLED_ASSERT) && defined(ENABLED_DEBUG)
+#define ENABLED_ASSERT
+#endif
+
+#ifdef ENABLED_ASSERT
 #	define STRINGIFY(x) #x
 #	define STRINGIFY_BUILTIN(x) STRINGIFY(x)
 #	define ASSERT_MSG(isFalse, ...) \
@@ -50,8 +54,6 @@
 		Console::WriteFmt(__VA_ARGS__); \
 		Console::Write("\n"); \
 	}
-
-//#define EXT_DEBUG
 
 #ifdef EXT_DEBUG
 #	define EXT_TRACE(...) TRACE(__VA_ARGS__)

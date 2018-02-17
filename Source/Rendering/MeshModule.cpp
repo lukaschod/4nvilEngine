@@ -12,8 +12,9 @@ const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const Ver
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = new Mesh(vertexLayout);
-	stream.Write(CommandCodeCreateMesh);
+	stream.Write(TO_COMMAND_CODE(CreateMesh));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -21,7 +22,7 @@ const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const Ver
 SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<uint8_t>&);
 SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, uint32_t, const SubMesh&);
 
-bool MeshModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool MeshModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

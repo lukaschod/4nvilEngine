@@ -2,15 +2,13 @@
 #include <Modules\Module.h>
 #include <algorithm>
 
-ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor, IProfiler* profiler)
+ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
 	: planner(planner)
 	, executor(executor)
-	, profiler(profiler)
 	, requestedStop(false)
 {
 	ASSERT(planner != nullptr);
 	ASSERT(executor != nullptr);
-	ASSERT(profiler != nullptr);
 
 	planner->Set_finishCallback([this]()
 	{
@@ -39,7 +37,6 @@ void ModuleManager::Stop()
 
 void ModuleManager::NewFrame()
 {
-	profiler->Reset();
 	planner->Reset();
 	executor->Reset();
 }

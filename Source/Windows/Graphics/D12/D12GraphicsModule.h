@@ -7,6 +7,10 @@
 #include <Windows\Graphics\D12\D12BufferHeap.h>
 #include <Foundation\MemoryModule.h>
 
+#if !defined(ENABLED_D12_DEBUG_LAYER) && defined(ENABLED_DEBUG)
+#define ENABLED_D12_DEBUG_LAYER
+#endif
+
 struct D12RenderPass : public IRenderPass
 {
 	D12RenderPass()
@@ -58,7 +62,6 @@ struct D12Buffer : public IBuffer
 
 	HeapMemory memory;
 	ID3D12Resource* resource;
-	size_t resourceOffset;
 	D3D12_RESOURCE_STATES currentState;
 	D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
 	uint8_t* resourceMappedPointer;
@@ -240,7 +243,7 @@ public:
 	virtual void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	inline bool Initialize();

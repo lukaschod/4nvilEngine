@@ -46,6 +46,8 @@ public:
 		for (auto module : modules)
 			nodes.push_back(new StaticModulePlanNode(module));
 
+		// TODO: Validate the plan, etc. cycles
+
 		size_t addedCount = 0;
 		while (addedCount != nodes.size())
 		{

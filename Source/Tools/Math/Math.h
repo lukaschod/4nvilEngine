@@ -50,4 +50,7 @@ namespace Math
 		else
 			return value + value % padding;
 	}
+
+	template<typename T>
+	inline T Clamp(T value, T min, T max) { return Max(Min(value, min), max); }
 };

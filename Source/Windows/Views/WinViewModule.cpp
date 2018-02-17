@@ -30,10 +30,10 @@ void WinViewModule::CloseWindow(HWND windowHandle)
 static WinViewModule* viewModule = nullptr;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	ASSERT(viewModule != nullptr);
 	switch (msg)
 	{
 	case WM_CLOSE:
+		ASSERT(viewModule != nullptr);
 		viewModule->CloseWindow(hwnd);
 		break;
 	case WM_DESTROY:
@@ -144,13 +144,14 @@ const IView* WinViewModule::RecCreateIView(const ExecutionContext& context, cons
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = view == nullptr ? AllocateView() : view;
-	stream.Write(CommandCodeCreateIView);
+	stream.Write(TO_COMMAND_CODE(CreateIView));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
 
-bool WinViewModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool WinViewModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

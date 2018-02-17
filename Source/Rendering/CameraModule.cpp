@@ -14,7 +14,7 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void CameraModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	PipeModule::Execute(context);
 
 	for (auto target : cameras)
@@ -24,7 +24,7 @@ void CameraModule::Execute(const ExecutionContext& context)
 		target->worldToCameraMatrix = transform->worldToView;
 		target->worldToCameraMatrix.Multiply(target->projectionMatrix);
 		target->worldToCameraMatrix = Matrix4x4f::Transpose(target->worldToCameraMatrix);
-		storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
+		//storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
 	}
 }
 
@@ -42,8 +42,9 @@ const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, con
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
 	auto target = camera == nullptr ? AllocateCamera() : camera;
-	stream.Write(CommandCodeCreateCamera);
+	stream.Write(TO_COMMAND_CODE(CreateCamera));
 	stream.Write(target);
+	stream.Align();
 	buffer->commandCount++;
 	return target;
 }
@@ -51,7 +52,7 @@ const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, con
 SERIALIZE_METHOD_ARG2(CameraModule, SetSurface, const Camera*, const Surface*);
 SERIALIZE_METHOD_ARG1(CameraModule, Destroy, const Component*);
 
-bool CameraModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool CameraModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

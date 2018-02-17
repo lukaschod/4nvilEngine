@@ -6,7 +6,7 @@
 
 void LogModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	if (!output.IsOpened())
 		OpenStream();
 	PipeModule::Execute(context);
@@ -20,7 +20,7 @@ void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
 	// Construct message
 	va_list ap;
 	va_start(ap, format);
-	StringBuilder<512> messageBuilder;
+	StringBuilder<1024> messageBuilder;
 	messageBuilder.AppendFmt(format, ap);
 	va_end(ap);
 
@@ -30,9 +30,10 @@ void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
 
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
-	stream.Write(CommandCodeWriteFmt);
+	stream.Write(TO_COMMAND_CODE(WriteFmt));
 	stream.Write(size);
 	stream.Write((void*)message, size);
+	stream.Align();
 	buffer->commandCount++;
 }
 
@@ -49,7 +50,7 @@ void LogModule::CloseStream()
 		output.Close();
 }
 
-bool LogModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode)
+bool LogModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

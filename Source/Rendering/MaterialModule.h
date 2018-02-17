@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Rendering\ShaderModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Rendering\StorageModule.h>
@@ -53,13 +53,14 @@ struct Material
 class MaterialModule : public PipeModule
 {
 public:
+	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 	const Material* RecCreateMaterial(const ExecutionContext& context);
 	void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
 	void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	inline void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, void* value);

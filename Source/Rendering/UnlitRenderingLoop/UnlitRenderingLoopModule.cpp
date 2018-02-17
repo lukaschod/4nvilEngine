@@ -15,7 +15,7 @@ void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 {
-	PROFILE_FUNCTION;
+	MARK_FUNCTION;
 	PipeModule::Execute(context);
 
 	auto& cameras = cameraModule->GetCameras();

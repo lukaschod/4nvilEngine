@@ -91,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>__x86_64;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86_64;ENABLED_DEBUG;ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -117,7 +117,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>__x86_64;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86_64;ENABLED_WINDOWS;ENABLED_MARK_FUNCTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -130,16 +131,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Foundation\PipeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Modules\CmdBufferPoolModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Modules\CmdModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
-    <ClCompile Include="..\..\..\Source\Modules\PipeModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Modules\Profiler.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\CameraModule.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\ImageModule.cpp" />
@@ -166,8 +164,11 @@
     <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Foundation\ComputeModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\LogModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h" />
+    <ClInclude Include="..\..\..\Source\Foundation\PipeModule.h" />
+    <ClInclude Include="..\..\..\Source\Foundation\PipeModuleHelper.h" />
     <ClInclude Include="..\..\..\Source\Foundation\ProfilerModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\TransformModule.h" />
@@ -179,17 +180,11 @@
     <ClInclude Include="..\..\..\Source\Graphics\IRenderPass.h" />
     <ClInclude Include="..\..\..\Source\Graphics\ITexture.h" />
     <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h" />
-    <ClInclude Include="..\..\..\Source\Modules\CmdBufferPoolModule.h" />
-    <ClInclude Include="..\..\..\Source\Modules\CmdModule.h" />
-    <ClInclude Include="..\..\..\Source\Modules\CmdModuleHelper.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
-    <ClInclude Include="..\..\..\Source\Modules\IProfiler.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
     <ClInclude Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h" />
-    <ClInclude Include="..\..\..\Source\Modules\PipeModule.h" />
-    <ClInclude Include="..\..\..\Source\Modules\Profiler.h" />
     <ClInclude Include="..\..\..\Source\Modules\StaticModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Rendering\CameraModule.h" />
     <ClInclude Include="..\..\..\Source\Rendering\MaterialModule.h" />
@@ -211,6 +206,7 @@
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
     <ClInclude Include="..\..\..\Source\Tools\Cpu.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Data\XmlData.h" />
     <ClInclude Include="..\..\..\Source\Tools\Delegate.h" />
     <ClInclude Include="..\..\..\Source\Tools\Flags.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Graphics\IRenderPass.h>
 #include <Graphics\ITexture.h>
 #include <Graphics\Shader.h>

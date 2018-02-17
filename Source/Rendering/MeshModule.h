@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Modules\PipeModule.h>
+#include <Foundation\PipeModule.h>
 #include <Tools\Collections\List.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Graphics\VertexLayout.h>
@@ -37,13 +37,15 @@ struct Mesh
 class MeshModule : public PipeModule
 {
 public:
+	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+
 	const Mesh* RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout);
 	void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8_t>& vertices);
 	void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32_t index, const SubMesh& submesh);
 
 protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, uint32_t commandCode) override;
+	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
 
 private:
 	List<Mesh*> meshes;
