@@ -9,7 +9,7 @@ namespace Core
 
 	struct Input
 	{
-		uint8_t* GetData() { return (uint8_t*)this + sizeof(const IView*) + sizeof(size_t); }
+		uint8* GetData() { return (uint8*)this + sizeof(const IView*) + sizeof(size_t); }
 		const IView* view;
 		size_t size;
 	};

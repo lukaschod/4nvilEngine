@@ -40,21 +40,21 @@ namespace Core
 			isRunning = false;
 		}
 
-		inline uint64_t GetElapsedPicoseconds() const
+		inline uint64 GetElapsedPicoseconds() const
 		{
 			auto current = isRunning ? clock::now() : clock::now();
 			auto ticks_per_iter = Cycle(current - start) / 1;
 			return std::chrono::duration_cast<picoseconds>(ticks_per_iter).count();
 		}
 
-		inline uint64_t GetElapsedMicroseconds() const
+		inline uint64 GetElapsedMicroseconds() const
 		{
 			auto current = isRunning ? clock::now() : clock::now();
 			auto ticks_per_iter = Cycle(current - start) / 1;
 			return std::chrono::duration_cast<microseconds>(ticks_per_iter).count();
 		}
 
-		inline uint64_t GetElapsedMiliseconds() const
+		inline uint64 GetElapsedMiliseconds() const
 		{
 			auto current = isRunning ? clock::now() : clock::now();
 			auto ticks_per_iter = Cycle(current - start) / 1;

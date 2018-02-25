@@ -21,24 +21,24 @@ namespace Core::Graphics
 		const IShaderPipeline* pipeline;
 		const IShaderArguments* properties;
 		const IBuffer* vertexBuffer;
-		uint32_t offset;
-		uint32_t size;
+		uint32 offset;
+		uint32 size;
 	};
 
 	class IGraphicsModule : public PipeModule
 	{
 	public:
 		virtual const IBuffer* AllocateBuffer(size_t size) = 0;
-		virtual const ITexture* AllocateTexture(uint32_t width, uint32_t height) = 0;
+		virtual const ITexture* AllocateTexture(uint32 width, uint32 height) = 0;
 		virtual const ISwapChain* AllocateSwapChain(const IView* view) = 0;
 
 	public:
-		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture = nullptr) = 0;
+		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture = nullptr) = 0;
 
 		virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) = 0;
 
 		virtual const IRenderPass* RecCreateIRenderPass(const ExecutionContext& context) = 0;
-		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32_t index, const ColorAttachment& attachment) = 0;
+		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32 index, const ColorAttachment& attachment) = 0;
 		virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) = 0;
 		virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) = 0;
 		virtual void RecSetRenderPass(const ExecutionContext& context, const IRenderPass* target) = 0;

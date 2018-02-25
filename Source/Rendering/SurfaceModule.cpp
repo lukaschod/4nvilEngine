@@ -14,7 +14,7 @@ void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 SERIALIZE_METHOD_CREATE(SurfaceModule, Surface);
-SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32_t, const SurfaceColor&);
+SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32, const SurfaceColor&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetDepth, const Surface*, const SurfaceDepth&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetViewport, const Surface*, const Viewport&);
 
@@ -27,7 +27,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 		surfaces.push_back(target);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG3_START(SetColor, Surface*, target, uint32_t, index, SurfaceColor, color);
+		DESERIALIZE_METHOD_ARG3_START(SetColor, Surface*, target, uint32, index, SurfaceColor, color);
 		target->colors.safe_set(index, color);
 		ColorAttachment attachment;
 		attachment.texture = color.image->texture;

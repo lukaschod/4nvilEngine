@@ -19,7 +19,7 @@ const Storage* StorageModule::AllocateStorage(size_t size) const
 }
 
 DECLARE_COMMAND_CODE(CreateStorage);
-const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, uint32_t size, const Storage* storage)
+const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, uint32 size, const Storage* storage)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
@@ -31,7 +31,7 @@ const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, 
 	return target;
 }
 
-SERIALIZE_METHOD_ARG3(StorageModule, UpdateStorage, const Storage*, uint32_t, Range<void>&);
+SERIALIZE_METHOD_ARG3(StorageModule, UpdateStorage, const Storage*, uint32, Range<void>&);
 
 bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -42,7 +42,7 @@ bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 		storages.push_back(target);
 		DESERIALIZE_METHOD_END
 
-		DESERIALIZE_METHOD_ARG3_START(UpdateStorage, Storage*, target, uint32_t, targetOffset, Range<void>, data);
+		DESERIALIZE_METHOD_ARG3_START(UpdateStorage, Storage*, target, uint32, targetOffset, Range<void>, data);
 		graphicsModule->RecUpdateBuffer(context, target->buffer, (void*)data.pointer, data.size);
 		DESERIALIZE_METHOD_END
 	}

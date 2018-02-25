@@ -27,6 +27,6 @@ namespace Windows::Directx12
 
 		List<const Directx12::CmdBuffer*> cmdBuffersToExecute;
 		List<ID3D12GraphicsCommandList*> batchedCommandLists;
-		AUTOMATED_PROPERTY_GET(uint64_t, completedBufferIndex);
+		AUTOMATED_PROPERTY_GET(uint64, completedBufferIndex);
 	};
 }

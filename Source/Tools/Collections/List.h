@@ -198,7 +198,7 @@ namespace Core
 			erase(target);
 		}
 
-		void safe_set(uint32_t index, T& item)
+		void safe_set(uint32 index, T& item)
 		{
 			if (size() <= index)
 				resize(index + 1);

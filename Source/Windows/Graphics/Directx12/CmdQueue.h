@@ -22,7 +22,7 @@ namespace Windows::Directx12
 		{
 		}
 
-		void Reset(int64_t index)
+		void Reset(int64 index)
 		{
 			commandCount = 0;
 			this->index = index;
@@ -37,7 +37,7 @@ namespace Windows::Directx12
 		size_t commandCount;
 		ID3D12GraphicsCommandList* commandList;
 		IDXGISwapChain* swapChain;
-		uint64_t index;
+		uint64 index;
 		DescriptorHeap* heaps[Enum::ToUnderlying(HeapType::Count)];
 	};
 
@@ -53,8 +53,8 @@ namespace Windows::Directx12
 		void Close(CmdBuffer* buffer);
 		void Execute(CmdBuffer* buffer, bool isLast);
 
-		uint64_t GetCompletedBufferIndex();
-		void WaitForBufferIndexToComplete(uint64_t index);
+		uint64 GetCompletedBufferIndex();
+		void WaitForBufferIndexToComplete(uint64 index);
 
 	private:
 		const D3D12_COMMAND_LIST_TYPE type;
@@ -66,7 +66,7 @@ namespace Windows::Directx12
 
 		List<CmdBuffer*> buffers;
 		std::queue<CmdBuffer*> readyBuffers;
-		uint64_t pulledBufferCount;
+		uint64 pulledBufferCount;
 
 		List<ID3D12CommandList*> cmdsToExecute;
 	};

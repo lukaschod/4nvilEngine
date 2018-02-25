@@ -12,14 +12,14 @@ void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	samplerModule = ExecuteBefore<SamplerModule>(moduleManager);
 }
 
-const Image* ImageModule::AllocateImage(uint32_t width, uint32_t height) const
+const Image* ImageModule::AllocateImage(uint32 width, uint32 height) const
 {
 	auto texture = graphicsModule->AllocateTexture(width, height);
 	return new Image(texture);
 }
 
 DECLARE_COMMAND_CODE(CreateImage);
-const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image)
+const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32 width, uint32 height, const Image* image)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;

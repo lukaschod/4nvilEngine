@@ -31,7 +31,7 @@ ID3D12Resource* BufferHeap::GetResource(const HeapMemory& memory) const
 	return resources[index];
 }
 
-uint8_t* BufferHeap::GetResourceMappedPointer(const HeapMemory& memory) const
+uint8* BufferHeap::GetResourceMappedPointer(const HeapMemory& memory) const
 {
 	auto index = FindIndex(memory);
 	return resourceMappedPointers[index] + memory.address - heapManagers[index]->GetBounds().address;
@@ -74,7 +74,7 @@ void BufferHeap::Grow(size_t capacity)
 	resources.push_back(resource);
 
 	// TODO: Clean it a bit, currently lets keep it that way to check if we win anything by always keeping resource mapped
-	uint8_t* resourceMappedPointer;
+	uint8* resourceMappedPointer;
 	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
 	ASSERT_SUCCEEDED(resource->Map(0, &readRange, reinterpret_cast<void**>(&resourceMappedPointer)));
 	resourceMappedPointers.push_back(resourceMappedPointer);

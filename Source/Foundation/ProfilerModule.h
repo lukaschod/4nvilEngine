@@ -30,7 +30,7 @@ namespace Core
 
 	struct ProfiledWorker
 	{
-		uint32_t workerIndex;
+		uint32 workerIndex;
 		List<ProfiledFunction> functions;
 	};
 
@@ -52,7 +52,7 @@ namespace Core
 		LogModule* logModule;
 		List<ProfiledWorker> workers;
 		StopWatch stopWatch;
-		uint64_t frameLeftUntilProfile;
+		uint64 frameLeftUntilProfile;
 	};
 
 #if !defined(ENABLED_MARK_FUNCTION) && defined(ENABLED_DEBUG)

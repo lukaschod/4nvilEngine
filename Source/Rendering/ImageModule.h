@@ -26,8 +26,8 @@ namespace Core
 
 		const Graphics::ITexture* texture;
 		const Sampler* sampler;
-		const uint32_t width;
-		const uint32_t height;
+		const uint32 width;
+		const uint32 height;
 	};
 
 	class ImageModule : public PipeModule
@@ -35,10 +35,10 @@ namespace Core
 	public:
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-		const Image* AllocateImage(uint32_t width, uint32_t height) const;
+		const Image* AllocateImage(uint32 width, uint32 height) const;
 
 	public:
-		const Image* RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image = nullptr);
+		const Image* RecCreateImage(const ExecutionContext& context, uint32 width, uint32 height, const Image* image = nullptr);
 		void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
 
 	protected:

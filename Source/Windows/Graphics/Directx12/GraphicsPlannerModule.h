@@ -37,15 +37,15 @@ namespace Windows::Directx12
 		void RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
 		void RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
 		void RecSetRenderPass(const RenderPass* target, bool ignoreLoadAction = false);
-		void RecUpdateBuffer(const Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
+		void RecUpdateBuffer(const Buffer* target, uint32 targetOffset, Range<uint8> data);
 		void RecPresent(const SwapChain* swapchain);
 		void RecDraw(const DrawDesc& target);
 		void RecSetHeap(const DescriptorHeap** heap);
 
 		void Reset();
 		ID3D12CommandQueue* GetDirectQueue();
-		uint64_t GetRecordingBufferIndex();
-		uint64_t GetCompletedBufferIndex();
+		uint64 GetRecordingBufferIndex();
+		uint64 GetCompletedBufferIndex();
 
 	private:
 		inline Directx12::CmdBuffer* ContinueRecording();

@@ -60,7 +60,7 @@ namespace Core::Graphics
 		{
 		}
 
-		ShaderProgram(const uint8_t* code, size_t size) :
+		ShaderProgram(const uint8* code, size_t size) :
 			available(true),
 			code(code),
 			size(size)
@@ -68,7 +68,7 @@ namespace Core::Graphics
 		}
 
 		bool available;
-		const uint8_t* code;
+		const uint8* code;
 		size_t size;
 	};
 
@@ -78,9 +78,9 @@ namespace Core::Graphics
 		ShaderStates states;
 		ShaderProgram programs[SHADER_PROGRAM_COUNT];
 		VertexLayout vertexLayout;
-		uint32_t varation;
+		uint32 varation;
 		String name;
-		const uint8_t* source;
+		const uint8* source;
 		size_t sourceSize;
 	};
 

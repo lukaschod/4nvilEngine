@@ -87,7 +87,7 @@ void StaticModulePlan::Reset()
 {
 	for (auto node : nodes)
 	{
-		node->dependencies = (uint32_t) node->module->Get_dependencies().size();
+		node->dependencies = (uint32) node->module->Get_dependencies().size();
 	}
 }
 
@@ -203,7 +203,7 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 		readyJobs.push(childJob);
 		node->concunrency++;
 
-		offset += (uint32_t) split;
-		jobSize -= (uint32_t) split;
+		offset += (uint32) split;
+		jobSize -= (uint32) split;
 	}
 }

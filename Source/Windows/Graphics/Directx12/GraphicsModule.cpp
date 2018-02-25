@@ -57,7 +57,7 @@ const IBuffer* GraphicsModule::AllocateBuffer(size_t size)
 	return memoryModule->New<Buffer>(memoryLabelBuffer, size);
 }
 
-const ITexture* GraphicsModule::AllocateTexture(uint32_t width, uint32_t height)
+const ITexture* GraphicsModule::AllocateTexture(uint32 width, uint32 height)
 {
 	return new Texture(width, height);
 }
@@ -69,7 +69,7 @@ const ISwapChain* GraphicsModule::AllocateSwapChain(const IView * view)
 
 SERIALIZE_METHOD_CREATEGEN_ARG1(GraphicsModule, IFilter, Filter, const FilterOptions&);
 SERIALIZE_METHOD_CREATEGEN(GraphicsModule, IRenderPass, RenderPass);
-SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, uint32_t, const ColorAttachment&);
+SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, uint32, const ColorAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetDepthAttachment, const IRenderPass*, const DepthAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
 SERIALIZE_METHOD_ARG1(GraphicsModule, SetRenderPass, const IRenderPass*);
@@ -127,7 +127,7 @@ const ISwapChain* GraphicsModule::RecCreateISwapChain(const ExecutionContext& co
 //SERIALIZE_METHOD_CREATEGEN_ARG1(GraphicsModule, ISwapChain, SwapChain, const IView*);
 
 DECLARE_COMMAND_CODE(CreateITexture);
-const ITexture* GraphicsModule::RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture)
+const ITexture* GraphicsModule::RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture)
 {
 	auto buffer = GetRecordingBuffer(context);
 	auto& stream = buffer->stream;
@@ -138,7 +138,7 @@ const ITexture* GraphicsModule::RecCreateITexture(const ExecutionContext& contex
 	buffer->commandCount++;
 	return target;
 }
-//SERIALIZE_METHOD_CREATEGEN_ARG2(GraphicsModule, ITexture, Texture, uint32_t, uint32_t);
+//SERIALIZE_METHOD_CREATEGEN_ARG2(GraphicsModule, ITexture, Texture, uint32, uint32);
 
 bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -156,7 +156,7 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
 		InitializeRenderPass(target);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG3_START(SetColorAttachment, RenderPass*, target, uint32_t, index, ColorAttachment, attachment);
+		DESERIALIZE_METHOD_ARG3_START(SetColorAttachment, RenderPass*, target, uint32, index, ColorAttachment, attachment);
 		SetColorAttachment(context, target, index, attachment);
 		DESERIALIZE_METHOD_END;
 
@@ -217,7 +217,7 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, Buffer*, target, void*, data, size_t, size);
-		UpdateBuffer(target, 0, Range<uint8_t>((const uint8_t*)data, size));
+		UpdateBuffer(target, 0, Range<uint8>((const uint8*)data, size));
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(PushDebug, const char*, name);
@@ -275,9 +275,9 @@ void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const 
 				if (strcmp(rootSubParameter.name, name) != 0)
 					continue;
 
-				if (rootArguments[i].subData[j] == (uint64_t) buffer)
+				if (rootArguments[i].subData[j] == (uint64) buffer)
 					continue;
-				rootArguments[i].subData[j] = (uint64_t) buffer;
+				rootArguments[i].subData[j] = (uint64) buffer;
 
 				auto memory = target->rootArguments[i].memory;
 				memory.pointer += j;
@@ -302,8 +302,8 @@ void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const 
 				continue;
 
 			// TODO: Check if we can really cache the gpu virtual address safely
-			 rootArguments[i].subData = (uint64_t*) buffer->cachedResourceGpuVirtualAddress;
-			// rootArguments[i].subData = (uint64_t*) buffer->resource->GetGPUVirtualAddress();
+			 rootArguments[i].subData = (uint64*) buffer->cachedResourceGpuVirtualAddress;
+			// rootArguments[i].subData = (uint64*) buffer->resource->GetGPUVirtualAddress();
 			break;
 		}
 		}
@@ -332,9 +332,9 @@ void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
 					continue;
 
 				// Don't update if the argument didn't changed
-				if (rootArgument.subData[j] == (uint64_t) texture)
+				if (rootArgument.subData[j] == (uint64) texture)
 					return;
-				rootArgument.subData[j] = (uint64_t) texture;
+				rootArgument.subData[j] = (uint64) texture;
 
 				// If draw was used before, we want to make changes in new heap, to avoid race condition
 				if (rootArgument.IsCurrentlyUsedByDraw)
@@ -342,7 +342,7 @@ void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
 					rootArgument.IsCurrentlyUsedByDraw = false;
 
 					// Mark this memory as we need to deallocate once the buffer is finished
-					srvHeapMemoryToFree.push_back(std::pair<uint64_t, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
+					srvHeapMemoryToFree.push_back(std::pair<uint64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
 
 					rootArgument.memory = srvHeap->Allocate(rootArgument.memory.size);
 					auto memory = rootArgument.memory;
@@ -394,9 +394,9 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
 					continue;
 
 				// Don't update if the argument didn't changed
-				if (rootArgument.subData[j] == (uint64_t) filter)
+				if (rootArgument.subData[j] == (uint64) filter)
 					return;
-				rootArgument.subData[j] = (uint64_t) filter;
+				rootArgument.subData[j] = (uint64) filter;
 
 				// If draw was used before, we want to make changes in new heap, to avoid race condition
 				if (rootArgument.IsCurrentlyUsedByDraw)
@@ -404,7 +404,7 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
 					rootArgument.IsCurrentlyUsedByDraw = false;
 
 					// Mark this memory as we need to deallocate once the buffer is finished
-					samplersHeapMemoryToFree.push_back(std::pair<uint64_t, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
+					samplersHeapMemoryToFree.push_back(std::pair<uint64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
 
 					rootArgument.memory = samplersHeap->Allocate(rootArgument.memory.size);
 					auto memory = rootArgument.memory;
@@ -427,7 +427,7 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
 	}
 }
 
-void GraphicsModule::SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32_t index, const ColorAttachment& attachment)
+void GraphicsModule::SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32 index, const ColorAttachment& attachment)
 {
 	target->colors[index] = attachment;
 
@@ -506,7 +506,7 @@ void GraphicsModule::SetRenderPass(const ExecutionContext & context, const Rende
 	planner->RecSetRenderPass(target);
 }
 
-void GraphicsModule::UpdateBuffer(Buffer* target, uint32_t targetOffset, Range<uint8_t> data)
+void GraphicsModule::UpdateBuffer(Buffer* target, uint32 targetOffset, Range<uint8> data)
 {
 	planner->RecUpdateBuffer(target, targetOffset, data);
 }
@@ -684,7 +684,7 @@ void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
 
 	// Create backbuffers
 	swapChain->bacBuffers = new Texture*[bacBufferCount];
-	for (uint32_t i = 0; i < bacBufferCount; i++)
+	for (uint32 i = 0; i < bacBufferCount; i++)
 	{
 		auto bacBufferMemory = HeapMemory(memory.address + i, 1);
 
@@ -823,11 +823,11 @@ void GraphicsModule::CompilePipeline(ShaderPipeline* pipeline)
 	if (error.Get() != NULL)
 		ERROR((const char*) error.Get()->GetBufferPointer());
 
-	pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)] = ShaderProgram(new uint8_t[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
-	pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)] = ShaderProgram(new uint8_t[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
+	pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)] = ShaderProgram(new uint8[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
+	pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)] = ShaderProgram(new uint8[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
 
-	memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)].code, (const uint8_t*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
-	memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)].code, (const uint8_t*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
+	memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)].code, (const uint8*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
+	memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)].code, (const uint8*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
 }
 
 void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
@@ -907,7 +907,7 @@ void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
 			}
 			case RootParamterType::TableSRV:
 			{
-				uint32_t srvCount = 0;
+				uint32 srvCount = 0;
 				rootParameter.GetCounts(&srvCount, nullptr);
 
 				CD3DX12_DESCRIPTOR_RANGE1 ranges[1];
@@ -918,7 +918,7 @@ void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
 			}
 			case RootParamterType::TableSamplers:
 			{
-				uint32_t samplersCount = 0;
+				uint32 samplersCount = 0;
 				rootParameter.GetCounts(nullptr, &samplersCount);
 
 				CD3DX12_DESCRIPTOR_RANGE1 ranges[1];
@@ -1053,7 +1053,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 	auto shaderDesc = new ShaderPipelineDesc();
 	shaderDesc->name = "Test";
-	shaderDesc->source = (const uint8_t*) source;
+	shaderDesc->source = (const uint8*) source;
 	shaderDesc->sourceSize = strlen(source);
 	shaderDesc->states.zTest = ZTest::LEqual;
 	shaderDesc->states.zWrite = ZWrite::On;
@@ -1078,7 +1078,7 @@ float4 FragMain(VertData i) : SV_TARGET
 	};
 	target->vertexBuffer = new Buffer(sizeof(vertices));
 	InitializeBuffer((Buffer*) target->vertexBuffer);
-	UpdateBuffer((Buffer*) target->vertexBuffer, 0, Range<uint8_t>((const uint8_t*) vertices, sizeof(vertices)));
+	UpdateBuffer((Buffer*) target->vertexBuffer, 0, Range<uint8>((const uint8*) vertices, sizeof(vertices)));
 
 	target->offset = 0;
 	target->size = 3*2;
@@ -1123,7 +1123,7 @@ const char* GraphicsModule::Convert(VertexAttributeType type)
 	return nullptr;
 }
 
-uint32_t GraphicsModule::GetSize(ColorFormat format)
+uint32 GraphicsModule::GetSize(ColorFormat format)
 {
 	switch (format)
 	{

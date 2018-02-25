@@ -15,7 +15,7 @@ CmdAllocatorPool::~CmdAllocatorPool()
 	allocatorPool.clear();
 }
 
-ID3D12CommandAllocator* CmdAllocatorPool::TryPull(uint64_t completedFenceValue)
+ID3D12CommandAllocator* CmdAllocatorPool::TryPull(uint64 completedFenceValue)
 {
 	std::lock_guard<std::mutex> lock(allocatorMutex);
 
@@ -23,7 +23,7 @@ ID3D12CommandAllocator* CmdAllocatorPool::TryPull(uint64_t completedFenceValue)
 
 	if (!readyAllocators.empty())
 	{
-		std::pair<uint64_t, ID3D12CommandAllocator*>& allocatorPair = readyAllocators.front();
+		std::pair<uint64, ID3D12CommandAllocator*>& allocatorPair = readyAllocators.front();
 
 		if (allocatorPair.first <= completedFenceValue)
 		{
@@ -46,7 +46,7 @@ ID3D12CommandAllocator* CmdAllocatorPool::TryPull(uint64_t completedFenceValue)
 	return allocator;
 }
 
-void CmdAllocatorPool::Push(uint64_t fenceValue, ID3D12CommandAllocator* allocator)
+void CmdAllocatorPool::Push(uint64 fenceValue, ID3D12CommandAllocator* allocator)
 {
 	std::lock_guard<std::mutex> lock(allocatorMutex);
 

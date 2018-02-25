@@ -27,7 +27,7 @@ void* FixedBlockHeap::Allocate()
 void FixedBlockHeap::Deallocate(void* pointer)
 {
 	std::lock_guard<std::mutex> lock(allocationMutex);
-	freeBlockHeaders.push_back(BlockHeader((uint8_t*)pointer));
+	freeBlockHeaders.push_back(BlockHeader((uint8*)pointer));
 }
 
 void FixedBlockHeap::AddHeapBlock(size_t count)
@@ -35,7 +35,7 @@ void FixedBlockHeap::AddHeapBlock(size_t count)
 	ASSERT(freeBlockHeaders.empty());
 
 	auto size = count * elementSize;
-	auto block = (uint8_t*) malloc(size);
+	auto block = (uint8*) malloc(size);
 	totalBlocks.push_back(block);
 
 	auto pointer = block + size - elementSize;

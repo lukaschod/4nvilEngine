@@ -28,6 +28,8 @@ using Microsoft::WRL::ComPtr;
 
 #include <comdef.h>
 
+#include <Tools\Common.h>
+
 #ifdef ENABLED_DEBUG
 #define ASSERT_SUCCEEDED(hr) \
 	if (FAILED(hr)) \

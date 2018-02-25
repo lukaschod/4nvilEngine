@@ -21,10 +21,10 @@ namespace Core
 	struct SubMesh
 	{
 		SubMesh() {}
-		SubMesh(uint32_t offset, uint32_t size, MeshTopology topology) : offset(offset), size(size), topology(topology) {}
-		SubMesh(uint32_t size) : SubMesh(0, size, MeshTopology::Triangles) {}
-		uint32_t offset;
-		uint32_t size;
+		SubMesh(uint32 offset, uint32 size, MeshTopology topology) : offset(offset), size(size), topology(topology) {}
+		SubMesh(uint32 size) : SubMesh(0, size, MeshTopology::Triangles) {}
+		uint32 offset;
+		uint32 size;
 		MeshTopology topology;
 	};
 
@@ -38,7 +38,7 @@ namespace Core
 		const Graphics::VertexLayout vertexLayout;
 		const Graphics::IBuffer* vertexBuffer;
 		List<SubMesh> subMeshes;
-		Range<uint8_t> vertices;
+		Range<uint8> vertices;
 	};
 
 	class MeshModule : public PipeModule
@@ -48,8 +48,8 @@ namespace Core
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
 		const Mesh* RecCreateMesh(const ExecutionContext& context, const Graphics::VertexLayout& vertexLayout);
-		void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8_t>& vertices);
-		void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32_t index, const SubMesh& submesh);
+		void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8>& vertices);
+		void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32 index, const SubMesh& submesh);
 
 	protected:
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

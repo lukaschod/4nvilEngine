@@ -106,13 +106,13 @@ void CmdQueue::Execute(CmdBuffer* buffer, bool isLast)
 	}
 }
 
-uint64_t CmdQueue::GetCompletedBufferIndex()
+uint64 CmdQueue::GetCompletedBufferIndex()
 {
 	// TODO: Sync?
 	return fence->GetCompletedValue();
 }
 
-void CmdQueue::WaitForBufferIndexToComplete(uint64_t index)
+void CmdQueue::WaitForBufferIndexToComplete(uint64 index)
 {
 	if (index <= fence->GetCompletedValue())
 		return;

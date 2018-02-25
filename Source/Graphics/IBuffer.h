@@ -13,14 +13,14 @@ namespace Core::Graphics
 	struct IBuffer
 	{
 		IBuffer(size_t size) :
-			data(new uint8_t[size], size),
+			data(new uint8[size], size),
 			usage(BufferUsageFlags::Shader)
 		{
 		}
 
 		inline size_t GetSize() const { return data.size; }
 
-		Range<uint8_t> data;
+		Range<uint8> data;
 		BufferUsageFlags usage;
 	};
 }

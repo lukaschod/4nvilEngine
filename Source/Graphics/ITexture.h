@@ -15,14 +15,14 @@ namespace Core::Graphics
 	struct ITexture
 	{
 		ITexture() {}
-		ITexture(uint32_t width, uint32_t height) :
+		ITexture(uint32 width, uint32 height) :
 			width(width),
 			height(height),
 			usage(TextureUsageFlags::Render | TextureUsageFlags::Shader)
 		{
 		}
-		uint32_t width;
-		uint32_t height;
+		uint32 width;
+		uint32 height;
 		TextureUsageFlags usage;
 	};
 }

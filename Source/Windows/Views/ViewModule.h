@@ -40,7 +40,7 @@ namespace Windows
 
 	private:
 		bool RegisterDefaultWindowClass();
-		HWND TryCreateWindow(const char* name, uint32_t width, uint32_t height);
+		HWND TryCreateWindow(const char* name, uint32 width, uint32 height);
 		View* TryFindView(HWND windowHandle);
 
 	private:

@@ -61,7 +61,7 @@ namespace Core
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Surface* RecCreateSurface(const ExecutionContext& context);
-		void RecSetColor(const ExecutionContext& context, const Surface* target, uint32_t index, const SurfaceColor& color);
+		void RecSetColor(const ExecutionContext& context, const Surface* target, uint32 index, const SurfaceColor& color);
 		void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
 		void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);
 

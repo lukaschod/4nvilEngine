@@ -22,6 +22,6 @@ namespace Core
 		virtual bool IsRunning() = 0;
 
 		// Returs the number of total workers
-		virtual uint32_t GetWorkerCount() = 0;
+		virtual uint32 GetWorkerCount() = 0;
 	};
 }

@@ -12,13 +12,13 @@ namespace Core
 	struct ExecutionContext
 	{
 		// Index of worker in current execution
-		uint32_t workerIndex;
+		uint32 workerIndex;
 
 		// Start of job offset index
-		uint32_t start;
+		uint32 start;
 
 		// End of job offset index
-		uint32_t end;
+		uint32 end;
 
 		// Module that is currently executed
 		Module* executingModule;

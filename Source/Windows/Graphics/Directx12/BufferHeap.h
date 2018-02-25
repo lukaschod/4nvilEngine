@@ -18,7 +18,7 @@ namespace Windows::Directx12
 		void Deallocate(const HeapMemory& memory);
 		D3D12_GPU_VIRTUAL_ADDRESS GetVirtualAddress(const HeapMemory& memory) const;
 		ID3D12Resource* GetResource(const HeapMemory& memory) const;
-		uint8_t* GetResourceMappedPointer(const HeapMemory& memory) const;
+		uint8* GetResourceMappedPointer(const HeapMemory& memory) const;
 
 	private:
 		void Grow(size_t capacity);
@@ -27,7 +27,7 @@ namespace Windows::Directx12
 	private:
 		List<BuddyHeapManager*> heapManagers;
 		List<ID3D12Resource*> resources;
-		List<uint8_t*> resourceMappedPointers;
+		List<uint8*> resourceMappedPointers;
 		ID3D12Device* device;
 		size_t capacity;
 		size_t alignment;

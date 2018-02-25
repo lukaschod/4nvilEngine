@@ -15,8 +15,8 @@ namespace Core
 
 		List<StaticModulePlanNode*> childs;
 		Module* module;
-		uint32_t concunrency;
-		uint32_t dependencies;
+		uint32 concunrency;
+		uint32 dependencies;
 	};
 
 	class StaticModulePlan

@@ -35,12 +35,12 @@ void GraphicsPlannerModule::SplitRecording()
 	recordedCmdBuffers.push_back(buffer);
 }
 
-uint64_t GraphicsPlannerModule::GetRecordingBufferIndex()
+uint64 GraphicsPlannerModule::GetRecordingBufferIndex()
 {
 	return ContinueRecording()->index;
 }
 
-uint64_t GraphicsPlannerModule::GetCompletedBufferIndex()
+uint64 GraphicsPlannerModule::GetCompletedBufferIndex()
 {
 	return executor->Get_completedBufferIndex();
 }
@@ -158,7 +158,7 @@ void GraphicsPlannerModule::RecSetRenderPass(const RenderPass* target, bool igno
 }
 
 DECLARE_COMMAND_CODE(UpdateBuffer);
-void GraphicsPlannerModule::RecUpdateBuffer(const Buffer* target, uint32_t targetOffset, Range<uint8_t> data)
+void GraphicsPlannerModule::RecUpdateBuffer(const Buffer* target, uint32 targetOffset, Range<uint8> data)
 { 
 	auto buffer = ContinueRecording();
 	auto& stream = buffer->stream;
@@ -309,7 +309,7 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
 		}
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const Buffer*, target, uint32_t, targetOffset, Range<uint8_t>, data);
+		DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const Buffer*, target, uint32, targetOffset, Range<uint8>, data);
 		ASSERT(target->resourceMappedPointer != nullptr && data.pointer != nullptr && data.size != 0);
 		memcpy(target->resourceMappedPointer + targetOffset, data.pointer, data.size);
 		DESERIALIZE_METHOD_END;

@@ -16,17 +16,17 @@ namespace Core
 
 		inline bool Contains(EnumType flag) const
 		{
-			return (data & (uint64_t) flag) != 0;
+			return (data & (uint64) flag) != 0;
 		}
 
 		inline void Add(EnumType flag)
 		{
-			data |= (uint64_t) flag;
+			data |= (uint64) flag;
 		}
 
 		inline void Remove(EnumType flag)
 		{
-			data &= !(uint64_t) flag;
+			data &= !(uint64) flag;
 		}
 
 		inline operator EnumType()
@@ -35,6 +35,6 @@ namespace Core
 		}
 
 	private:
-		uint64_t data;
+		uint64 data;
 	};
 }

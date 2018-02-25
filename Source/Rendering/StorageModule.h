@@ -29,8 +29,8 @@ namespace Core
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Storage* AllocateStorage(size_t size) const;
 
-		const Storage* RecCreateStorage(const ExecutionContext& context, uint32_t size, const Storage* storage = nullptr);
-		void RecUpdateStorage(const ExecutionContext& context, const Storage* target, uint32_t targetOffset, Range<void>& data);
+		const Storage* RecCreateStorage(const ExecutionContext& context, uint32 size, const Storage* storage = nullptr);
+		void RecUpdateStorage(const ExecutionContext& context, const Storage* target, uint32 targetOffset, Range<void>& data);
 
 	protected:
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

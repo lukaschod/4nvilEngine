@@ -27,13 +27,13 @@ void FileStream::Close()
 void FileStream::Read(void* data, size_t size)
 {
 	ASSERT(isOpened);
-	fread(data, sizeof(uint8_t), size, file);
+	fread(data, sizeof(uint8), size, file);
 }
 
 void FileStream::Write(void* data, size_t size)
 {
 	ASSERT(isOpened);
-	fwrite(data, sizeof(uint8_t), size, file);
+	fwrite(data, sizeof(uint8), size, file);
 }
 
 void FileStream::ReadFmt(const char* format, ...)

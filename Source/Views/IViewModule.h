@@ -25,8 +25,8 @@ namespace Core
 		}
 		const Image* renderTarget;
 		const Graphics::ISwapChain* swapChain;
-		uint32_t width;
-		uint32_t height;
+		uint32 width;
+		uint32 height;
 	};
 
 	class IViewModule : public PipeModule

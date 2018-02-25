@@ -17,6 +17,6 @@ namespace Core::Graphics
 		{
 		}
 		const IView* view;
-		const uint32_t bacBufferCount;
+		const uint32 bacBufferCount;
 	};
 }

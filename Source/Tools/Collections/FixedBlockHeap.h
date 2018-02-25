@@ -19,8 +19,8 @@ namespace Core
 		struct BlockHeader
 		{
 			BlockHeader() {}
-			BlockHeader(uint8_t* pointer) : pointer(pointer) {}
-			uint8_t* pointer;
+			BlockHeader(uint8* pointer) : pointer(pointer) {}
+			uint8* pointer;
 		};
 
 		void AddHeapBlock(size_t size);

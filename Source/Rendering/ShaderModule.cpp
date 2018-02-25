@@ -11,7 +11,7 @@ void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 SERIALIZE_METHOD_CREATE(ShaderModule, Shader);
-SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, uint32_t, const ShaderPipelineDesc*);
+SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, uint32, const ShaderPipelineDesc*);
 
 bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -21,7 +21,7 @@ bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream
 		shaders.push_back(target);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, uint32_t, index, const ShaderPipelineDesc*, desc);
+		DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, uint32, index, const ShaderPipelineDesc*, desc);
 		auto pipeline = graphicsModule->RecCreateIShaderPipeline(context, desc);
 		target->pipelines.push_back(pipeline);
 		DESERIALIZE_METHOD_END;

@@ -503,7 +503,7 @@ public:
 private:
 	StopWatch stopWatch;
 	LogModule* logModule;
-	uint64_t passedFrameCount;
+	uint64 passedFrameCount;
 };
 
 class TestModule : public ComputeModule
@@ -570,7 +570,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto shaderDesc = new ShaderPipelineDesc();
 		shaderDesc->name = "Test";
-		shaderDesc->source = (const uint8_t*) source;
+		shaderDesc->source = (const uint8*) source;
 		shaderDesc->sourceSize = strlen(source);
 		shaderDesc->states.zTest = ZTest::LEqual;
 		shaderDesc->states.zWrite = ZWrite::On;
@@ -620,7 +620,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
-		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
+		meshModule->RecSetVertices(context, mesh, Range<uint8>((uint8*) vertices, sizeof(vertices)));
 		meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
 		return mesh;
 	}
@@ -692,7 +692,7 @@ float4 FragMain(VertData i) : SV_TARGET
 	SurfaceModule* surfaceModule;
 	IGraphicsModule* graphicsModule;
 	LogModule* logModule;
-	uint32_t frame;
+	uint32 frame;
 };
 
 class Test2Module : public ComputeModule
@@ -760,7 +760,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		auto shaderDesc = new ShaderPipelineDesc();
 		shaderDesc->name = "Test";
-		shaderDesc->source = (const uint8_t*) source;
+		shaderDesc->source = (const uint8*) source;
 		shaderDesc->sourceSize = strlen(source);
 		shaderDesc->states.zTest = ZTest::LEqual;
 		shaderDesc->states.zWrite = ZWrite::On;
@@ -813,7 +813,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
-		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
+		meshModule->RecSetVertices(context, mesh, Range<uint8>((uint8*) vertices, sizeof(vertices)));
 		meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
 		return mesh;
 	}
@@ -921,7 +921,7 @@ float4 FragMain(VertData i) : SV_TARGET
 	IGraphicsModule* graphicsModule;
 	LogModule* logModule;
 	AgentModule* agentModule;
-	uint32_t frame;
+	uint32 frame;
 };
 
 void AddCoreModules(ModuleManager* manager)

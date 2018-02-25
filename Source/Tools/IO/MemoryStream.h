@@ -10,7 +10,7 @@ namespace Core::IO
 	public:
 		MemoryStream(size_t capacity = 128)
 		{
-			end = begin = data = (uint8_t*) malloc(capacity);
+			end = begin = data = (uint8*) malloc(capacity);
 			end += capacity;
 		}
 
@@ -20,9 +20,9 @@ namespace Core::IO
 			Write((void*) &data, sizeof(T));
 		}
 
-		inline void Write(uint32_t v)
+		inline void Write(uint32 v)
 		{
-			Write((void*) &v, sizeof(uint32_t));
+			Write((void*) &v, sizeof(uint32));
 		}
 
 		inline void Write(void* data, size_t size)
@@ -75,15 +75,15 @@ namespace Core::IO
 			{
 				auto capacity = data - begin;
 				auto requiredCapacity = (end - begin) * 2;
-				begin = (uint8_t*) realloc(begin, requiredCapacity);
+				begin = (uint8*) realloc(begin, requiredCapacity);
 				data = begin + capacity;
 				end = begin + requiredCapacity;
 			}
 		}
 
 	private:
-		uint8_t* begin;
-		uint8_t* end;
-		AUTOMATED_PROPERTY_GETSET(uint8_t*, data);
+		uint8* begin;
+		uint8* end;
+		AUTOMATED_PROPERTY_GETSET(uint8*, data);
 	};
 }

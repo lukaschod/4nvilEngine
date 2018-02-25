@@ -9,7 +9,7 @@
 
 namespace Core
 {
-	typedef uint32_t CommandCode;
+	typedef uint32 CommandCode;
 	struct CommandStream : public IO::MemoryStream {};
 
 	struct CmdBuffer
@@ -23,10 +23,10 @@ namespace Core
 		size_t commandCount;
 
 		// Index of the cmdbuffer
-		uint64_t index;
+		uint64 index;
 
 		// On which worker the cmdbuffer was created
-		uint32_t workerIndex;
+		uint32 workerIndex;
 
 		// Module that records this buffer
 		Module* executingModule;

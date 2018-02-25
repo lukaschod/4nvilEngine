@@ -12,12 +12,12 @@ namespace Core
 		TimeModule();
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;
-		inline uint64_t GetDeltaTimeMs() const { return deltaTimeMs; }
+		inline uint64 GetDeltaTimeMs() const { return deltaTimeMs; }
 		inline float GetDeltaTime() const { return deltaTime; }
 
 	private:
 		StopWatch stopWatch;
-		uint64_t deltaTimeMs;
+		uint64 deltaTimeMs;
 		float deltaTime;
 	};
 }

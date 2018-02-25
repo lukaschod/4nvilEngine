@@ -18,7 +18,7 @@ namespace Core
 		{
 		}
 		Module* module;
-		uint32_t offset;
+		uint32 offset;
 		size_t size;
 		void* userData; // TODO: Maybe we can get rid of it, currently one implementation really needs it for perforamnce
 	};

@@ -17,13 +17,13 @@ namespace Core
 			size = INT_MAX;
 		}
 
-		HeapMemory(uint64_t address, size_t size)
+		HeapMemory(uint64 address, size_t size)
 			: address(address)
 			, size(size)
 		{
 		}
 
-		uint64_t address;
+		uint64 address;
 		size_t size;
 	};
 

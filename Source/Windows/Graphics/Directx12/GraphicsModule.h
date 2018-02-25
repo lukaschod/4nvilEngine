@@ -42,7 +42,7 @@ namespace Windows::Directx12
 
 	struct Texture : public ITexture
 	{
-		Texture(uint32_t width, uint32_t height)
+		Texture(uint32 width, uint32 height)
 			: ITexture(width, height)
 			, resource(nullptr)
 			, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
@@ -69,7 +69,7 @@ namespace Windows::Directx12
 		ID3D12Resource* resource;
 		D3D12_RESOURCE_STATES currentState;
 		D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
-		uint8_t* resourceMappedPointer;
+		uint8* resourceMappedPointer;
 	};
 
 	struct RootSubParamter
@@ -104,7 +104,7 @@ namespace Windows::Directx12
 			return parameter;
 		}
 
-		void GetCounts(uint32_t* srvCount, uint32_t* samplersCount) const
+		void GetCounts(uint32* srvCount, uint32* samplersCount) const
 		{
 			for (auto& supParameter : supParameters)
 			{
@@ -156,18 +156,18 @@ namespace Windows::Directx12
 			: memory(memory)
 			, IsCurrentlyUsedByDraw(false)
 		{
-			subData = new uint64_t(memory.size);
-			memset(subData, 0, sizeof(uint64_t) * memory.size);
+			subData = new uint64(memory.size);
+			memset(subData, 0, sizeof(uint64) * memory.size);
 		}
 
-		RootArgument(uint64_t data) :
+		RootArgument(uint64 data) :
 			IsCurrentlyUsedByDraw(false)
 		{
-			subData = (uint64_t*) data;
+			subData = (uint64*) data;
 		}
 
 		HeapMemory memory;
-		uint64_t* subData;
+		uint64* subData;
 		bool IsCurrentlyUsedByDraw;
 	};
 
@@ -195,9 +195,9 @@ namespace Windows::Directx12
 		inline Texture* GetBacBuffer() const { return bacBuffers[bacBufferIndex]; }
 
 		Texture** bacBuffers;
-		uint32_t bacBufferIndex;
-		uint32_t width;
-		uint32_t height;
+		uint32 bacBufferIndex;
+		uint32 width;
+		uint32 height;
 
 		IDXGISwapChain3* IDXGISwapChain3;
 	};
@@ -218,16 +218,16 @@ namespace Windows::Directx12
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual const char* GetName() { return "Directx12::GraphicsModule"; }
 		virtual const IBuffer* AllocateBuffer(size_t size) override;
-		virtual const ITexture* AllocateTexture(uint32_t width, uint32_t height) override;
+		virtual const ITexture* AllocateTexture(uint32 width, uint32 height) override;
 		virtual const ISwapChain* AllocateSwapChain(const IView* view) override;
 
 	public:
-		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32_t width, uint32_t height, const ITexture* texture) override;
+		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture) override;
 
 		virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) override;
 
 		virtual const IRenderPass* RecCreateIRenderPass(const ExecutionContext& context) override;
-		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32_t index, const ColorAttachment& attachment) override;
+		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32 index, const ColorAttachment& attachment) override;
 		virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
 		virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
 		virtual void RecSetRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
@@ -267,7 +267,7 @@ namespace Windows::Directx12
 
 		DXGI_FORMAT Convert(ColorFormat format);
 		const char* Convert(VertexAttributeType type);
-		uint32_t GetSize(ColorFormat format);
+		uint32 GetSize(ColorFormat format);
 
 		inline void Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen);
 		inline void BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest);
@@ -276,11 +276,11 @@ namespace Windows::Directx12
 		inline void SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer);
 		inline void SetTexture(ShaderArguments* target, const char* name, const Texture* texture);
 		inline void SetFilter(ShaderArguments* target, const char* name, const Filter* filter);
-		inline void SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32_t index, const ColorAttachment& attachment);
+		inline void SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32 index, const ColorAttachment& attachment);
 		inline void SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment);
 		inline void SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport);
 		inline void SetRenderPass(const ExecutionContext& context, const RenderPass* target);
-		inline void UpdateBuffer(Buffer* target, uint32_t targetOffset, Range<uint8_t> data);
+		inline void UpdateBuffer(Buffer* target, uint32 targetOffset, Range<uint8> data);
 		inline void Draw(const ExecutionContext& context, const DrawDesc& target);
 		inline void SetName(ID3D12Object* object, const wchar_t* format, ...);
 
@@ -290,9 +290,9 @@ namespace Windows::Directx12
 		DescriptorHeap* rtvHeap;
 		DescriptorHeap* samplersHeap;
 		BufferHeap* bufferUploadHeap;
-		List<std::pair<uint64_t, HeapMemory>> srvHeapMemoryToFree;
-		List<std::pair<uint64_t, HeapMemory>> samplersHeapMemoryToFree;
-		uint64_t resourceCounter;
+		List<std::pair<uint64, HeapMemory>> srvHeapMemoryToFree;
+		List<std::pair<uint64, HeapMemory>> samplersHeapMemoryToFree;
+		uint64 resourceCounter;
 		DescriptorHeap* srvCpuHeap;
 		DescriptorHeap* samplersCpuHeap;
 

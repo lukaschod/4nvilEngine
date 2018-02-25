@@ -4,11 +4,11 @@
 
 using namespace Core;
 
-ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, uint32_t workerCount) 
+ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, uint32 workerCount) 
 	: planner(planner)
 	, isRunning(false)
 {
-	for (uint32_t i = 0; i < workerCount; i++)
+	for (uint32 i = 0; i < workerCount; i++)
 	{
 		auto worker = new ConcurrentModuleWorker(i, this, planner);
 		workers.push_back(worker);
@@ -55,7 +55,7 @@ void ConcurrentModuleExecutor::Stop()
 		worker->Stop();
 }
 
-ConcurrentModuleWorker::ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecutor* executor, IModulePlanner* planner) 
+ConcurrentModuleWorker::ConcurrentModuleWorker(uint32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner) 
 	: planner(planner)
 	, thread(nullptr)
 	, isRunning(false)
@@ -119,7 +119,7 @@ void ConcurrentModuleWorker::Run()
 		context.workerIndex = index;
 		context.executingModule = module;
 		context.start = job.offset;
-		context.end = job.offset + (uint32_t)job.size;
+		context.end = job.offset + (uint32)job.size;
 
 		// Execute the job here
 		module->Execute(context);

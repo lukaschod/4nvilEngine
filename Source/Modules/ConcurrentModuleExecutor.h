@@ -14,7 +14,7 @@ namespace Core
 	class ConcurrentModuleWorker
 	{
 	public:
-		ConcurrentModuleWorker(uint32_t index, ConcurrentModuleExecutor* executor, IModulePlanner* planner);
+		ConcurrentModuleWorker(uint32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner);
 		~ConcurrentModuleWorker();
 		void Reset();
 		void Start();
@@ -30,22 +30,22 @@ namespace Core
 		Threading::AutoResetEvent event;
 		std::thread* thread;
 		bool isRunning;
-		uint32_t cyclesBeforeSleep;
-		uint32_t index;
-		uint64_t executionIndex;
+		uint32 cyclesBeforeSleep;
+		uint32 index;
+		uint64 executionIndex;
 		AUTOMATED_PROPERTY_GET(bool, isSleeping);
 	};
 
 	class ConcurrentModuleExecutor : public IModuleExecutor
 	{
 	public:
-		ConcurrentModuleExecutor(IModulePlanner* planner, uint32_t workerCount = 1);
+		ConcurrentModuleExecutor(IModulePlanner* planner, uint32 workerCount = 1);
 		~ConcurrentModuleExecutor();
 		virtual void Reset() override;
 		virtual void Start() override;
 		virtual void Stop() override;
 		virtual bool IsRunning() { return isRunning; };
-		virtual uint32_t GetWorkerCount() override { return (uint32_t) workers.size(); }
+		virtual uint32 GetWorkerCount() override { return (uint32) workers.size(); }
 
 	private:
 		List<ConcurrentModuleWorker*> workers;

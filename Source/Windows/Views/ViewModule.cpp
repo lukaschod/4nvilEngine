@@ -71,7 +71,7 @@ bool ViewModule::RegisterDefaultWindowClass()
 	return RegisterClassEx(&wc) != 0;
 }
 
-HWND ViewModule::TryCreateWindow(const char* name, uint32_t width, uint32_t height)
+HWND ViewModule::TryCreateWindow(const char* name, uint32 width, uint32 height)
 {
 	if (defaultWindowClassName == nullptr && !RegisterDefaultWindowClass())
 		return nullptr;

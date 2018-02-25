@@ -46,7 +46,7 @@ namespace Core
 		}
 
 		inline const List<Module*>& GetModules() const { return modules; }
-		inline uint32_t GetWorkerCount() const { return executor->GetWorkerCount(); }
+		inline uint32 GetWorkerCount() const { return executor->GetWorkerCount(); }
 
 	private:
 		List<Module*> modules; // Modules contained by the manager

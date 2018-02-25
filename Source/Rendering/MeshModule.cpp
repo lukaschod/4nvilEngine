@@ -25,8 +25,8 @@ const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const Ver
 	return target;
 }
 
-SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<uint8_t>&);
-SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, uint32_t, const SubMesh&);
+SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<uint8>&);
+SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, uint32, const SubMesh&);
 
 bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -36,14 +36,14 @@ bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
 		meshes.push_back(target);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<uint8_t>, vertices);
+		DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<uint8>, vertices);
 		target->vertices = vertices;
 
 		target->vertexBuffer = graphicsModule->RecCreateIBuffer(context, vertices.size);
 		graphicsModule->RecUpdateBuffer(context, target->vertexBuffer, (void*) target->vertices.pointer, target->vertices.size);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, uint32_t, index, SubMesh, submesh);
+		DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, uint32, index, SubMesh, submesh);
 		target->subMeshes.safe_set(index, submesh);
 		DESERIALIZE_METHOD_END;
 	}
