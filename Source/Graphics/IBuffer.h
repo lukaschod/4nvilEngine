@@ -2,21 +2,25 @@
 
 #include <Tools\Common.h>
 
-enum BufferUsageFlags
+namespace Core::Graphics
 {
-	BufferUsageFlagNone = 0,
-	BufferUsageFlagsShader = 1 << 0,
-};
+	enum class BufferUsageFlags
+	{
+		None = 0,
+		Shader = 1 << 0,
+	};
 
-struct IBuffer
-{
-	IBuffer(size_t size) : 
-		data(new uint8_t[size], size),
-		usage(BufferUsageFlagsShader)
-	{}
+	struct IBuffer
+	{
+		IBuffer(size_t size) :
+			data(new uint8_t[size], size),
+			usage(BufferUsageFlags::Shader)
+		{
+		}
 
-	inline size_t GetSize() const { return data.size; }
+		inline size_t GetSize() const { return data.size; }
 
-	Range<uint8_t> data;
-	BufferUsageFlags usage;
-};
+		Range<uint8_t> data;
+		BufferUsageFlags usage;
+	};
+}

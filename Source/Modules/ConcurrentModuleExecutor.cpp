@@ -1,6 +1,8 @@
-#include <Modules\ModuleManager.h>
 #include <algorithm>
-#include "ConcurrentModuleExecutor.h"
+#include <Modules\ModuleManager.h>
+#include <Modules\ConcurrentModuleExecutor.h>
+
+using namespace Core;
 
 ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, uint32_t workerCount) 
 	: planner(planner)
@@ -117,7 +119,7 @@ void ConcurrentModuleWorker::Run()
 		context.workerIndex = index;
 		context.executingModule = module;
 		context.start = job.offset;
-		context.end = job.offset + job.size;
+		context.end = job.offset + (uint32_t)job.size;
 
 		// Execute the job here
 		module->Execute(context);

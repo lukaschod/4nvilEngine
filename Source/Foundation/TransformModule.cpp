@@ -1,9 +1,12 @@
+#include <Tools\Math\Math.h>
+#include <Tools\Collections\FixedBlockHeap.h>
 #include <Foundation\TransformModule.h>
 #include <Foundation\MemoryModule.h>
-#include <Tools\Collections\FixedBlockHeap.h>
-#include <Tools\Math\Math.h>
 
-static const char* memoryLabelTransform = "Foundation.Transform";
+using namespace Core;
+using namespace Core::Math;
+
+static const char* memoryLabelTransform = "Foundation::Transform";
 
 TransformModule::TransformModule() 
 {
@@ -33,21 +36,21 @@ void TransformModule::Execute(const ExecutionContext& context)
 		ASSERT(parent != nullptr);
 
 		// Check if we need to unmark changed state
-		if (next->flags.Contains(TransformFlagsLocalObjectToWorldUnsetNextFrame))
+		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
 		{
-			next->flags.Remove(TransformFlagsLocalObjectToWorldChanged);
-			next->flags.Remove(TransformFlagsLocalObjectToWorldUnsetNextFrame);
+			next->flags.Remove(TransformStateFlags::LocalObjectToWorldChanged);
+			next->flags.Remove(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
 		}
 
 		// Check if we need update
-		if (next->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
+		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
 		{
 			next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
-			next->flags.Add(TransformFlagsLocalObjectToWorldUnsetNextFrame);
+			next->flags.Add(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
 		}
 
 		// If nor local transformation changed nor the parent one, we can skip the combination of them
-		if (next->flags.Contains(TransformFlagsLocalObjectToWorldChanged) || parent->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
+		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged) || parent->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
 		{
 			next->objectToWorld = parent->objectToWorld;
 			next->objectToWorld.Multiply(next->localObjectToWorld);
@@ -61,15 +64,16 @@ void TransformModule::Execute(const ExecutionContext& context)
 	}
 }
 
-void TransformModule::SetupExecuteOrder(ModuleManager * moduleManager)
+void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 	memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
 }
 
-const Transform* TransformModule::AllocateTransform() const
+const Transform* TransformModule::AllocateTransform()
 {
+	return new Transform(this);
 	return memoryModule->New<Transform>(memoryLabelTransform, this);
 }
 
@@ -93,7 +97,7 @@ SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vect
 SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
-bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
@@ -128,12 +132,12 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, MemoryStre
 
 		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition = position;
-		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
+		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition += position;
-		transform->flags.Add(TransformFlagsLocalObjectToWorldChanged);
+		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);

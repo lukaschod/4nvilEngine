@@ -1,5 +1,10 @@
-#include <Rendering\MaterialModule.h>
 #include <Graphics\IGraphicsModule.h>
+#include <Rendering\MaterialModule.h>
+#include <Rendering\ShaderModule.h>
+#include <Rendering\StorageModule.h>
+
+using namespace Core;
+using namespace Core::Graphics;
 
 void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -28,7 +33,7 @@ const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& contex
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
 
-bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
@@ -61,7 +66,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStrea
 			{
 				switch (property.type)
 				{
-				case MaterialPropertyTypeStorage:
+				case MaterialPropertyType::Storage:
 					auto storage = (const Storage*) property.value;
 					graphicsModule->RecSetBuffer(context, pipeline->properties, property.name.c_str(), storage->buffer);
 				}
@@ -72,7 +77,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, MemoryStrea
 
 		DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const char*, name, const Storage*, storage);
 		auto materialProperties = (MaterialProperties*) material->properties;
-		SetProperty(materialProperties, name, MaterialPropertyTypeStorage, (void*) storage);
+		SetProperty(materialProperties, name, MaterialPropertyType::Storage, (void*) storage);
 		for (auto pipeline : material->pipelines)
 		{
 			graphicsModule->RecSetBuffer(context, pipeline->properties, name, storage->buffer);

@@ -1,6 +1,18 @@
+#include <Graphics\IGraphicsModule.h>
 #include <Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.h>
 #include <Rendering\MaterialModule.h>
 #include <Rendering\StorageModule.h>
+#include <Rendering\CameraModule.h>
+#include <Rendering\MeshRendererModule.h>
+#include <Rendering\SurfaceModule.h>
+#include <Rendering\MeshModule.h>
+#include <Rendering\ImageModule.h>
+#include <Views\IViewModule.h>
+
+using namespace Core;
+using namespace Core::Math;
+using namespace Core::Graphics;
+using namespace Core;
 
 void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {

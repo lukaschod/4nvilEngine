@@ -1,10 +1,12 @@
 #include <Foundation\UnitModule.h>
 
+using namespace Core;
+
 SERIALIZE_METHOD_CREATECMP(UnitModule, Unit);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
 
-bool UnitModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

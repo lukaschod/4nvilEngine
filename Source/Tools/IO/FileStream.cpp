@@ -1,12 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <Tools\IO\FileStream.h>
+#include <stdarg.h>
+
+using namespace Core::IO;
 
 FileStream::FileStream()
 	: isOpened(false)
 {
 }
 
-bool FileStream::Open(const char * path, FileMode mode, FileAccess access)
+bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
 {
 	ASSERT_MSG(file == nullptr, "File is already opened");
 	auto modeTexted = TryGetMode(mode, access);
@@ -68,43 +71,43 @@ const char* FileStream::TryGetMode(FileMode mode, FileAccess access)
 	switch (mode)
 	{
 
-	case FileModeAppend:
+	case FileMode::Append:
 	{
 		switch (access)
 		{
-		case FileAccessRead:
+		case FileAccess::Read:
 			return "rab+";
-		case FileAccessWrite:
+		case FileAccess::Write:
 			return "wab+";
 		default:
 			return nullptr;
 		}
 	}
 
-	case FileModeOpen:
+	case FileMode::Open:
 	{
 		switch (access)
 		{
-		case FileAccessRead:
+		case FileAccess::Read:
 			return "rb";
-		case FileAccessWrite:
+		case FileAccess::Write:
 			return "wb";
-		case FileAccessReadWrite:
+		case FileAccess::ReadWrite:
 			return "rb+";
 		default:
 			return nullptr;
 		}
 	}
 
-	case FileModeCreate:
+	case FileMode::Create:
 	{
 		switch (access)
 		{
-		case FileAccessRead:
+		case FileAccess::Read:
 			return "rb+";
-		case FileAccessWrite:
+		case FileAccess::Write:
 			return "wb";
-		case FileAccessReadWrite:
+		case FileAccess::ReadWrite:
 			return "wb+";
 		default:
 			return nullptr;

@@ -4,20 +4,23 @@
 #include <Tools\IO\FileStream.h>
 #include <Foundation\PipeModule.h>
 
-class LogModule : public PipeModule
+namespace Core
 {
-public:
-	virtual void Execute(const ExecutionContext& context) override;
-	void RecWrite(const ExecutionContext& context, const char* name);
-	void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
+	class LogModule : public PipeModule
+	{
+	public:
+		virtual void Execute(const ExecutionContext& context) override;
+		void RecWrite(const ExecutionContext& context, const char* name);
+		void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
 
-private:
-	void OpenStream();
-	void CloseStream();
+	private:
+		void OpenStream();
+		void CloseStream();
 
-protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
+	protected:
+		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
-private:
-	FileStream output;
-};
+	private:
+		IO::FileStream output;
+	};
+}

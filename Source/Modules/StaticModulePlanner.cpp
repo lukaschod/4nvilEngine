@@ -3,106 +3,93 @@
 #include <Tools\Collections\List.h>
 #include <Tools\Math\Math.h>
 
-class StaticModulePlanNode
+using namespace Core;
+
+StaticModulePlanNode::StaticModulePlanNode(Module* module)
+	: module(module)
+	, concunrency(0)
+	, dependencies(0)
 {
-public:
-	List<StaticModulePlanNode*> childs;
-	Module* module;
-	uint32_t concunrency;
-	uint32_t dependencies;
+}
 
-	StaticModulePlanNode(Module* module) 
-		: module(module)
-		, concunrency(0)
-		, dependencies(0)
-	{ }
-
-	StaticModulePlanNode* TryFindNode(Module* module)
-	{
-		if (this->module == module)
-			return this;
-
-		for (auto child : childs)
-		{
-			auto node = child->TryFindNode(module);
-			if (node != nullptr)
-				return node;
-		}
-		return nullptr;
-	}
-};
-
-class StaticModulePlan
+StaticModulePlanNode* StaticModulePlanNode::TryFindNode(Module* module)
 {
-public:
-	StaticModulePlanNode* root;
-	List<StaticModulePlanNode*> nodes;
+	if (this->module == module)
+		return this;
 
-	StaticModulePlan(List<Module*>& modules)
+	for (auto child : childs)
 	{
-		root = new StaticModulePlanNode(nullptr);
-
-		nodes.reserve(modules.size());
-		for (auto module : modules)
-			nodes.push_back(new StaticModulePlanNode(module));
-
-		// TODO: Validate the plan, etc. cycles
-
-		size_t addedCount = 0;
-		while (addedCount != nodes.size())
-		{
-			for (auto node : nodes)
-			{
-				if (TryAdd(node))
-					addedCount++;
-			}
-		}
+		auto node = child->TryFindNode(module);
+		if (node != nullptr)
+			return node;
 	}
+	return nullptr;
+}
 
-	inline bool TryAdd(StaticModulePlanNode* node)
-	{
-		// Check if it is not already in plan
-		auto module = node->module;
-		if (TryFindNode(module) != nullptr)
-			return false;
-		
-		auto& dependencies = module->Get_dependencies();
+StaticModulePlan::StaticModulePlan(List<Module*>& modules)
+{
+	root = new StaticModulePlanNode(nullptr);
 
-		// If thre is no dependencies we can freely add it to root
-		if (dependencies.empty())
-			root->childs.push_back(node);
+	nodes.reserve(modules.size());
+	for (auto module : modules)
+		nodes.push_back(new StaticModulePlanNode(module));
 
-		// Check if all dependencies already in plan, if not we can't add it
-		for (auto dependancy : dependencies)
-		{
-			auto dependancyNode = root->TryFindNode(dependancy);
-			if (dependancyNode == nullptr)
-				return false;
-		}
+	// TODO: Validate the plan, etc. cycles
 
-		// Include to all dependencies this module as continue
-		for (auto dependancy : dependencies)
-		{
-			auto dependancyNode = root->TryFindNode(dependancy);
-			dependancyNode->childs.push_back(node);
-		}
-
-		return true;
-	}
-
-	inline StaticModulePlanNode* TryFindNode(Module* module)
-	{
-		return root->TryFindNode(module);
-	}
-
-	inline void Reset()
+	size_t addedCount = 0;
+	while (addedCount != nodes.size())
 	{
 		for (auto node : nodes)
 		{
-			node->dependencies = (uint32_t)node->module->Get_dependencies().size();
+			if (TryAdd(node))
+				addedCount++;
 		}
 	}
-};
+}
+
+bool StaticModulePlan::TryAdd(StaticModulePlanNode* node)
+{
+	// Check if it is not already in plan
+	auto module = node->module;
+	if (TryFindNode(module) != nullptr)
+		return false;
+
+	auto& dependencies = module->Get_dependencies();
+
+	// If thre is no dependencies we can freely add it to root
+	if (dependencies.empty())
+		root->childs.push_back(node);
+
+	// Check if all dependencies already in plan, if not we can't add it
+	for (auto dependancy : dependencies)
+	{
+		auto dependancyNode = root->TryFindNode(dependancy);
+		if (dependancyNode == nullptr)
+			return false;
+	}
+
+	// Include to all dependencies this module as continue
+	for (auto dependancy : dependencies)
+	{
+		auto dependancyNode = root->TryFindNode(dependancy);
+		dependancyNode->childs.push_back(node);
+	}
+
+	return true;
+}
+
+StaticModulePlanNode* StaticModulePlan::TryFindNode(Module* module)
+{
+	return root->TryFindNode(module);
+}
+
+void StaticModulePlan::Reset()
+{
+	for (auto node : nodes)
+	{
+		node->dependencies = (uint32_t) node->module->Get_dependencies().size();
+	}
+}
 
 StaticModulePlanner::StaticModulePlanner()
 {
@@ -125,7 +112,7 @@ void StaticModulePlanner::Reset()
 {
 	std::lock_guard<std::mutex> lock(readyModulesMutex);
 	plan->Reset(); // Reset dependencies
-	for (auto child : plan->root->childs)
+	for (auto child : plan->GetRoot()->childs)
 	{
 		AddJob(child);
 	}
@@ -153,7 +140,7 @@ void StaticModulePlanner::SetFinished(const ModuleJob& job)
 
 	std::lock_guard<std::mutex> lock(readyModulesMutex);
 	//auto node = plan->TryFindNode(module); // TODO: Maybe we can optimize this without sacrificing design
-	auto node = (StaticModulePlanNode*)job.userData; // How about this?
+	auto node = (StaticModulePlanNode*) job.userData; // How about this?
 	ASSERT(node != nullptr);
 
 	// Check if all job shards are completed
@@ -195,7 +182,7 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 		ModuleJob childJob;
 		childJob.module = node->module;
 		childJob.offset = 0;
-		childJob.size = childJob.module->GetExecutionSize();
+		childJob.size = jobSize;
 		childJob.userData = node;
 		readyJobs.push(childJob);
 		node->concunrency++;
@@ -205,7 +192,8 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 	auto offset = 0;
 	while (jobSize != 0)
 	{
-		auto split = node->module->GetSplitExecutionSize(jobSize);
+		auto split = node->module->GetSplitExecutionSize();
+		split = Math::Clamp(split, (size_t) 1, jobSize);
 
 		ModuleJob childJob;
 		childJob.module = node->module;
@@ -215,7 +203,7 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 		readyJobs.push(childJob);
 		node->concunrency++;
 
-		offset += split;
-		jobSize -= split;
+		offset += (uint32_t) split;
+		jobSize -= (uint32_t) split;
 	}
 }

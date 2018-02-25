@@ -1,8 +1,11 @@
-#include <Foundation\LogModule.h>
+#include <stdarg.h>
 #include <Tools\Math\Math.h>
 #include <Tools\IO\Directory.h>
 #include <Tools\Collections\StringBuilder.h>
-#include <stdarg.h>
+#include <Foundation\LogModule.h>
+
+using namespace Core;
+using namespace Core::IO;
 
 void LogModule::Execute(const ExecutionContext& context)
 {
@@ -39,9 +42,9 @@ void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
 
 void LogModule::OpenStream()
 {
-	StringBuilder<MAX_PATH> path;
+	StringBuilder<Directory::maxPathSize> path;
 	path.AppendFmt("%s\\%s", Directory::GetExecutablePath(), "Log.txt");
-	output.Open(path.ToString(), FileModeCreate, FileAccessWrite);
+	output.Open(path.ToString(), FileMode::Create, FileAccess::Write);
 }
 
 void LogModule::CloseStream()
@@ -50,7 +53,7 @@ void LogModule::CloseStream()
 		output.Close();
 }
 
-bool LogModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

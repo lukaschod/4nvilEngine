@@ -2,15 +2,21 @@
 
 #include <Tools\Common.h>
 
-struct IView;
-
-struct ISwapChain
+namespace Core
 {
-	ISwapChain(const IView* view) :
-		view(view),
-		bacBufferCount(2)
+	struct IView;
+}
+
+namespace Core::Graphics
+{
+	struct ISwapChain
 	{
-	}
-	const IView* view;
-	const uint32_t bacBufferCount;
-};
+		ISwapChain(const IView* view) :
+			view(view),
+			bacBufferCount(2)
+		{
+		}
+		const IView* view;
+		const uint32_t bacBufferCount;
+	};
+}

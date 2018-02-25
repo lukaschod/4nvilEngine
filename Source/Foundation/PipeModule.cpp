@@ -1,7 +1,9 @@
+#include <algorithm>
+#include <Tools\Math\Math.h>
 #include <Foundation\PipeModule.h>
 #include <Foundation\ProfilerModule.h>
-#include <Tools\Math\Math.h>
-#include <algorithm>
+
+using namespace Core;
 
 PipeModule::PipeModule() : isPipesSorted(false) {}
 

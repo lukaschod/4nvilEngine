@@ -2,24 +2,37 @@
 
 #include <Tools\Common.h>
 #include <Tools\String.h>
-#include <Foundation\PipeModule.h>
-#include <Rendering\ImageModule.h>
 #include <Tools\Math\Rect.h>
+#include <Foundation\PipeModule.h>
 
-struct IView
+namespace Core
 {
-	IView(const Image* renderTarget)
-		: renderTarget(renderTarget)
-	{ }
-	const Image* renderTarget;
-	const ISwapChain* swapChain;
-	uint32_t width;
-	uint32_t height;
-};
+	struct Image;
+}
 
-class IViewModule : public PipeModule
+namespace Core::Graphics
 {
-public:
-	virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) = 0;
-	virtual const List<const IView*>& GetViews() = 0;
-};
+	struct ISwapChain;
+}
+
+namespace Core
+{
+	struct IView
+	{
+		IView(const Image* renderTarget)
+			: renderTarget(renderTarget)
+		{
+		}
+		const Image* renderTarget;
+		const Graphics::ISwapChain* swapChain;
+		uint32_t width;
+		uint32_t height;
+	};
+
+	class IViewModule : public PipeModule
+	{
+	public:
+		virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) = 0;
+		virtual const List<const IView*>& GetViews() = 0;
+	};
+}

@@ -2,51 +2,58 @@
 
 #include <Tools\Common.h>
 #include <Foundation\UnitModule.h>
-#include <Rendering\MeshModule.h>
-#include <Rendering\MaterialModule.h>
 
-class TransformModule; struct Transform;
-class StorageModule; struct Storage;
-class MeshRendererModule;
-class MemoryModule;
-
-struct MeshRenderer : public Component
+namespace Core
 {
-	MeshRenderer(MeshRendererModule* module)
-		: Component((ComponentModule*)module)
-		, mesh(nullptr)
-		, material(nullptr)
-	{}
-	const Mesh* mesh;
-	const Material* material;
-	const Storage* perMeshStorage;
-};
+	class TransformModule; struct Transform;
+	class MemoryModule;
+}
 
-class MeshRendererModule : public ComponentModule
+namespace Core
 {
-public:
-	MeshRendererModule();
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	virtual void Execute(const ExecutionContext& context) override;
-	virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
-	const MeshRenderer* RecCreateMeshRenderer(const ExecutionContext& context);
-	void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
-	void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+	class StorageModule; struct Storage;
+	class MaterialModule; struct Material;
+	class MeshModule; struct Mesh;
 
-public:
-	const List<MeshRenderer*>& GetMeshRenderers() const;
-	const Storage* GetPerAllRendererStorage() const;
+	struct MeshRenderer : public Component
+	{
+		MeshRenderer(ComponentModule* module)
+			: Component(module)
+			, mesh(nullptr)
+			, material(nullptr)
+		{
+		}
+		const Mesh* mesh;
+		const Material* material;
+		const Storage* perMeshStorage;
+	};
 
-protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
+	class MeshRendererModule : public ComponentModule
+	{
+	public:
+		MeshRendererModule();
+		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+		virtual void Execute(const ExecutionContext& context) override;
+		virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+		const MeshRenderer* RecCreateMeshRenderer(const ExecutionContext& context);
+		void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+		void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
 
-private:
-	List<MeshRenderer*> meshRenderers;
-	MaterialModule* materialModule;
-	MeshModule* meshModule;
-	StorageModule* storageModule;
-	TransformModule* transformModule;
-	UnitModule* unitModule;
-	MemoryModule* memoryModule;
-	const Storage* perAllRendererStorage;
-};
+	public:
+		const List<MeshRenderer*>& GetMeshRenderers() const;
+		const Storage* GetPerAllRendererStorage() const;
+
+	protected:
+		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+	private:
+		List<MeshRenderer*> meshRenderers;
+		MaterialModule* materialModule;
+		MeshModule* meshModule;
+		StorageModule* storageModule;
+		TransformModule* transformModule;
+		UnitModule* unitModule;
+		MemoryModule* memoryModule;
+		const Storage* perAllRendererStorage;
+	};
+}

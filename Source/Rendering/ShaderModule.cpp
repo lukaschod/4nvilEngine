@@ -1,4 +1,8 @@
+#include <Graphics\IGraphicsModule.h>
 #include <Rendering\ShaderModule.h>
+
+using namespace Core;
+using namespace Core::Graphics;
 
 void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -9,7 +13,7 @@ void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 SERIALIZE_METHOD_CREATE(ShaderModule, Shader);
 SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, uint32_t, const ShaderPipelineDesc*);
 
-bool ShaderModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

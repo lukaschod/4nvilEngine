@@ -1,11 +1,9 @@
-#include <Modules\ModuleManager.h>
-#include <Modules\ConcurrentModuleExecutor.h>
-#include <Modules\StaticModulePlanner.h>
-
 #include <Tools\Math\Vector.h>
 #include <Tools\Math\Matrix.h>
 #include <Tools\StopWatch.h>
-
+#include <Modules\ModuleManager.h>
+#include <Modules\ConcurrentModuleExecutor.h>
+#include <Modules\StaticModulePlanner.h>
 #include <Foundation\UnitModule.h>
 #include <Foundation\TimeModule.h>
 #include <Foundation\LogModule.h>
@@ -21,15 +19,18 @@
 #include <Rendering\StorageModule.h>
 #include <Rendering\SurfaceModule.h>
 #include <Rendering\SamplerModule.h>
+#include <Windows\Graphics\Directx12\GraphicsModule.h>
+#include <Windows\Views\ViewModule.h>
 
-#include <Windows\Graphics\D12\D12GraphicsModule.h>
-#include <Windows\Views\WinViewModule.h>
-
-class AgentModule;
+using namespace Core;
+using namespace Core::Math;
+using namespace Core::Graphics;
+using namespace Core;
+using namespace Windows;
 
 struct Agent : public Component
 {
-	Agent(const AgentModule* module) : Component((ComponentModule*) module) {}
+	Agent(ComponentModule* module) : Component(module) {}
 	const Transform* transform;
 	Vector3f velocity;
 	const Transform* destination;
@@ -38,7 +39,7 @@ struct Agent : public Component
 	float radius;
 };
 
-class AgentModule : public ComponentModule
+/*class AgentModule : public ComponentModule
 {
 public:
 	DECLARE_COMMAND_CODE(CreateAgent);
@@ -57,7 +58,7 @@ public:
 		stream.Write(TO_COMMAND_CODE(CreateAgent));
 		stream.Write(target);
 		stream.Align();
-	buffer->commandCount++;
+		buffer->commandCount++;
 		return target;
 	}
 
@@ -69,7 +70,7 @@ public:
 		stream.Write(target);
 		stream.Write(destination);
 		stream.Align();
-	buffer->commandCount++;
+		buffer->commandCount++;
 	}
 
 	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override {}
@@ -84,7 +85,7 @@ public:
 		memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
 	}
 
-	virtual bool AgentModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override
+	virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
 	{
 		switch (commandCode)
 		{
@@ -201,12 +202,237 @@ public:
 		return totalForce;
 	}
 
+	List<Agent*>* GetAgents() { return &agents; }
+
 private:
 	TransformModule* transformModule;
 	UnitModule* unitModule;
 	MemoryModule* memoryModule;
 	TimeModule* timeModule;
 	List<Agent*> agents;
+};*/
+
+class AgentModule : public ComponentModule
+{
+public:
+	DECLARE_COMMAND_CODE(CreateAgent);
+	DECLARE_COMMAND_CODE(SetDestination);
+
+	const Agent* AllocateAgent()
+	{
+		return memoryModule->New<Agent>("AgentModule", this);
+	}
+
+	const Agent* RecCreateAgent(const ExecutionContext& context, const Agent* target = nullptr)
+	{
+		auto buffer = GetRecordingBuffer(context);
+		auto& stream = buffer->stream;
+		target = target == nullptr ? AllocateAgent() : target;
+		stream.Write(TO_COMMAND_CODE(CreateAgent));
+		stream.Write(target);
+		stream.Align();
+		buffer->commandCount++;
+		return target;
+	}
+
+	void RecSetDestination(const ExecutionContext& context, const Agent* target, const Transform* destination)
+	{
+		auto buffer = GetRecordingBuffer(context);
+		auto& stream = buffer->stream;
+		stream.Write(TO_COMMAND_CODE(SetDestination));
+		stream.Write(target);
+		stream.Write(destination);
+		stream.Align();
+		buffer->commandCount++;
+	}
+
+	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override {}
+
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+	{
+		ComponentModule::SetupExecuteOrder(moduleManager);
+		unitModule = ExecuteAfter<UnitModule>(moduleManager);
+		memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+		memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
+	}
+
+	virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
+	{
+		switch (commandCode)
+		{
+			DESERIALIZE_METHOD_ARG1_START(CreateAgent, Agent*, target);
+			target->acceleration = 1.0f;
+			target->maxSpeed = 2.0f;
+			target->velocity = Vector3f(0, 0, 0);
+			target->radius = 1.2f;
+			target->transform = unitModule->GetComponent<Transform>(target->unit);
+			agents.push_back(target);
+			DESERIALIZE_METHOD_END;
+		}
+		return false;
+	}
+
+	virtual void Execute(const ExecutionContext& context) override
+	{
+		MARK_FUNCTION;
+		ComponentModule::Execute(context);
+	}
+
+	List<Agent*>* GetAgents() { return &agents; }
+
+private:
+	UnitModule* unitModule;
+	MemoryModule* memoryModule;
+	List<Agent*> agents;
+};
+
+class AgentForceModule : public ComputeModule
+{
+public:
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+	{
+		base::SetupExecuteOrder(moduleManager);
+		transformModule = ExecuteAfter<TransformModule>(moduleManager);
+		agentModule = ExecuteAfter<AgentModule>(moduleManager);
+		timeModule = ExecuteAfter<TimeModule>(moduleManager);
+		agents = agentModule->GetAgents();
+	}
+
+	virtual size_t GetExecutionSize() override { return agents->size(); }
+	virtual size_t GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
+
+	virtual void Execute(const ExecutionContext& context) override
+	{
+		MARK_FUNCTION;
+
+		for (auto i = context.start; i < context.end; i++)
+		{
+			auto agent = agents->at(i);
+			auto agentTransform = agent->transform;
+			Vector3f impact(0, 0, 0);
+			impact += GetSeek(agent, Vector3f(0, 0, 0));
+			impact += GetSeparation(agent) * 2.2f;
+
+			agent->velocity += impact * timeModule->GetDeltaTime();
+
+			// Limit the speed
+			auto speed = agent->velocity.Magnitude();
+			if (speed > agent->maxSpeed)
+				agent->velocity *= agent->maxSpeed / speed;
+
+			transformModule->RecAddPosition(context, agentTransform, agent->velocity);
+		}
+	}
+
+	Vector3f GetSeek(Agent* agent, Vector3f destination)
+	{
+		auto position = agent->transform->localPosition;
+
+		if (position == destination)
+			return Vector3f(0, 0, 0);
+
+		auto desired = destination - position;
+
+		desired *= agent->maxSpeed / desired.Magnitude();
+
+		auto velocityChange = desired - agent->velocity;
+
+		velocityChange *= agent->acceleration / agent->maxSpeed;
+
+		return velocityChange;
+	}
+
+	Vector3f GetSeparation(Agent* targetAgent)
+	{
+		Vector3f totalForce(0, 0, 0);
+		int neighboursCount = 0;
+		float seperation = 3;
+
+		auto targetTransform = targetAgent->transform;
+		for (auto agent : *agents)
+		{
+			if (targetAgent == agent)
+				continue;
+
+			auto agentTransform = agent->transform;
+			auto pushForce = agentTransform->localPosition - targetTransform->localPosition;
+			auto distance = pushForce.Magnitude();
+
+			if (distance <= seperation)
+			{
+				float r = (agent->radius + targetAgent->radius);
+				totalForce += pushForce*(1.0f - ((distance - r) / (seperation - r)));
+				neighboursCount++;
+			}
+		}
+
+		if (neighboursCount == 0)
+			return Vector3f(0, 0, 0);
+
+		return totalForce * (targetAgent->maxSpeed / neighboursCount);
+	}
+
+private:
+	TransformModule* transformModule;
+	AgentModule* agentModule;
+	TimeModule* timeModule;
+	List<Agent*>* agents;
+};
+
+class AgentDistModule : public ComputeModule
+{
+public:
+	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+	{
+		base::SetupExecuteOrder(moduleManager);
+		transformModule = ExecuteAfter<TransformModule>(moduleManager);
+		agentModule = ExecuteAfter<AgentModule>(moduleManager);
+		agents = agentModule->GetAgents();
+	}
+
+	virtual size_t GetExecutionSize() override { return agents->size(); }
+	virtual size_t GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
+
+	virtual void Execute(const ExecutionContext& context) override
+	{
+		MARK_FUNCTION;
+
+		for (auto i = context.start; i < context.end; i++)
+		{
+			auto agent = agents->at(i);
+			auto agentTransform = agent->transform;
+			transformModule->RecAddPosition(context, agentTransform, GetDistinguish(agent));
+		}
+	}
+
+	Vector3f GetDistinguish(Agent* targetAgent)
+	{
+		Vector3f totalForce(0, 0, 0);
+		auto targetPosition = targetAgent->transform->localPosition;
+		for (auto agent : *agents)
+		{
+			if (targetAgent == agent)
+				continue;
+
+			auto position = agent->transform->localPosition;
+			auto direction = position - targetPosition;
+			auto directionMagnitude = direction.Magnitude();
+			auto distance = agent->radius + targetAgent->radius - directionMagnitude;
+			auto seperate = direction / directionMagnitude*distance;
+
+			if (distance > 0 && directionMagnitude > 0)
+			{
+				totalForce += Vector3f(seperate.x, 0, seperate.y);
+			}
+		}
+
+		return totalForce;
+	}
+
+private:
+	TransformModule* transformModule;
+	AgentModule* agentModule;
+	List<Agent*>* agents;
 };
 
 class ShutdownModule : public ComputeModule
@@ -340,18 +566,18 @@ float4 FragMain(VertData i) : SV_TARGET
 			)";
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatRGBA32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto shaderDesc = new ShaderPipelineDesc();
 		shaderDesc->name = "Test";
 		shaderDesc->source = (const uint8_t*) source;
 		shaderDesc->sourceSize = strlen(source);
-		shaderDesc->states.zTest = ZTestLEqual;
-		shaderDesc->states.zWrite = ZWriteOn;
+		shaderDesc->states.zTest = ZTest::LEqual;
+		shaderDesc->states.zWrite = ZWrite::On;
 		shaderDesc->varation = 0;
 		shaderDesc->vertexLayout = vertexLayout;
-		shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterTypeConstantBuffer));
-		shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterType::ConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterType::ConstantBuffer));
 
 		auto shader = shaderModule->RecCreateShader(context);
 		shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
@@ -391,7 +617,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		};
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatRGBA32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
 		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
@@ -431,7 +657,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecCreateSurface(context);
-			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionClear, StoreActionStore));
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Clear, StoreAction::Store));
 			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
 			auto camera = cameraModule->RecCreateCamera(context);
 			cameraModule->RecSetSurface(context, camera, surface);
@@ -444,7 +670,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		{
 			for (int j = 0; j < count; j++)
 			{
-				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2 - offset, j*2 - offset, 0));
+				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2.0f - offset, j*2.0f - offset, 0.0f));
 			}
 		}
 	}
@@ -530,18 +756,18 @@ float4 FragMain(VertData i) : SV_TARGET
 			)";
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatRGBA32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto shaderDesc = new ShaderPipelineDesc();
 		shaderDesc->name = "Test";
 		shaderDesc->source = (const uint8_t*) source;
 		shaderDesc->sourceSize = strlen(source);
-		shaderDesc->states.zTest = ZTestLEqual;
-		shaderDesc->states.zWrite = ZWriteOn;
+		shaderDesc->states.zTest = ZTest::LEqual;
+		shaderDesc->states.zWrite = ZWrite::On;
 		shaderDesc->varation = 0;
 		shaderDesc->vertexLayout = vertexLayout;
-		shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterTypeConstantBuffer));
-		shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterTypeConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterType::ConstantBuffer));
+		shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterType::ConstantBuffer));
 
 		auto shader = shaderModule->RecCreateShader(context);
 		shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
@@ -584,7 +810,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		};
 
 		VertexLayout vertexLayout;
-		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeTypePosition, ColorFormatRGBA32));
+		vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
 		auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
 		meshModule->RecSetVertices(context, mesh, Range<uint8_t>((uint8_t*) vertices, sizeof(vertices)));
@@ -618,7 +844,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		// Create camera with window as target
 		auto surface = surfaceModule->RecCreateSurface(context);
-		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionClear, StoreActionStore));
+		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Clear, StoreAction::Store));
 		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0.5f, 0, 0.5f, 1)));
 		auto camera = cameraModule->RecCreateCamera(context);
 		cameraModule->RecSetSurface(context, camera, surface);
@@ -635,7 +861,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		// Create camera with window as target
 		auto surface = surfaceModule->RecCreateSurface(context);
-		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionLoad, StoreActionStore));
+		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Load, StoreAction::Store));
 		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 0.5f, 1)));
 		auto camera = cameraModule->RecCreateCamera(context);
 		cameraModule->RecSetSurface(context, camera, surface);
@@ -659,7 +885,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto surface = surfaceModule->RecCreateSurface(context);
-			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadActionClear, StoreActionStore));
+			surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Clear, StoreAction::Store));
 			surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
 			auto camera = cameraModule->RecCreateCamera(context);
 			cameraModule->RecSetSurface(context, camera, surface);
@@ -672,7 +898,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		{
 			for (int j = 0; j < count; j++)
 			{
-				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i * 2 - offset, j * 2 - offset, 0));
+				auto quad = CreateQuad(context, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
 			}
 		}
 	}
@@ -698,20 +924,30 @@ float4 FragMain(VertData i) : SV_TARGET
 	uint32_t frame;
 };
 
+void AddCoreModules(ModuleManager* manager)
+{
+
+}
+
+void AddProjectModules(ModuleManager* manager)
+{
+
+}
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
 	auto planner = new StaticModulePlanner();
 	auto executor = new ConcurrentModuleExecutor(planner, 4);
 	auto moduleManager = new ModuleManager(planner, executor);
-
+	
 	// Core
 	moduleManager->AddModule(new LogModule());
 	moduleManager->AddModule(new UnitModule());
-	moduleManager->AddModule(new D12GraphicsModule());
+	moduleManager->AddModule(new Directx12::GraphicsModule());
 	moduleManager->AddModule(new TransformModule());
 	moduleManager->AddModule(new SamplerModule());
 	moduleManager->AddModule(new ImageModule());
-	moduleManager->AddModule(new WinViewModule(hInst));
+	moduleManager->AddModule(new ViewModule(hInst));
 	moduleManager->AddModule(new StorageModule()); 
 	moduleManager->AddModule(new ShaderModule());
 	moduleManager->AddModule(new MaterialModule());
@@ -724,16 +960,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new MemoryModule());
 	moduleManager->AddModule(new ProfilerModule());
 
-	/*// Test project 1
+	// Test project 1
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+	moduleManager->AddModule(new ShutdownModule(moduleManager));
 
 	// Test project 2
-	moduleManager->AddModule(new AgentModule());
+	//moduleManager->AddModule(new AgentModule());
+	/*moduleManager->AddModule(new AgentModule());
+	moduleManager->AddModule(new AgentForceModule());
+	moduleManager->AddModule(new AgentDistModule());
 	moduleManager->AddModule(new Test2Module());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));
+	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())

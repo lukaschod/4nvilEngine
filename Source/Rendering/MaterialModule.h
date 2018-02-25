@@ -2,72 +2,83 @@
 
 #include <Tools\Common.h>
 #include <Foundation\PipeModule.h>
-#include <Rendering\ShaderModule.h>
-#include <Graphics\IGraphicsModule.h>
-#include <Rendering\StorageModule.h>
 #include <Graphics\Shader.h>
 
-enum MaterialPropertyType
+namespace Core::Graphics
 {
-	MaterialPropertyTypeStorage,
-};
+	class IGraphicsModule;
+}
 
-struct MaterialProperty
+namespace Core
 {
-	MaterialProperty(const char* name, MaterialPropertyType type)
-		: name(name)
-		, type(type)
-		, value(nullptr)
-	{}
-	const String name;
-	const MaterialPropertyType type;
-	void* value;
-};
+	class ShaderModule; struct Shader;
+	struct Storage;
 
-struct MaterialProperties
-{
-	List<MaterialProperty> properties;
-};
+	enum class MaterialPropertyType
+	{
+		Storage,
+	};
 
-struct MaterialPipeline
-{
-	MaterialPipeline(const IShaderPipeline* pipeline, const IShaderArguments* properties) : 
-		pipeline(pipeline), 
-		properties(properties) 
-	{}
-	const IShaderPipeline* const pipeline;
-	const IShaderArguments* const properties;
-};
+	struct MaterialProperty
+	{
+		MaterialProperty(const char* name, MaterialPropertyType type)
+			: name(name)
+			, type(type)
+			, value(nullptr)
+		{
+		}
+		const String name;
+		const MaterialPropertyType type;
+		void* value;
+	};
 
-struct Material
-{
-	Material(const MaterialProperties* properties) :
-		shader(nullptr),
-		properties(properties)
-	{}
-	const Shader* shader;
-	const MaterialProperties* properties;
-	List<const MaterialPipeline*> pipelines;
-};
+	struct MaterialProperties
+	{
+		List<MaterialProperty> properties;
+	};
 
-class MaterialModule : public PipeModule
-{
-public:
-	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Material* RecCreateMaterial(const ExecutionContext& context);
-	void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
-	void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
+	struct MaterialPipeline
+	{
+		MaterialPipeline(const Graphics::IShaderPipeline* pipeline, const Graphics::IShaderArguments* properties) :
+			pipeline(pipeline),
+			properties(properties)
+		{
+		}
+		const Graphics::IShaderPipeline* const pipeline;
+		const Graphics::IShaderArguments* const properties;
+	};
 
-protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
+	struct Material
+	{
+		Material(const MaterialProperties* properties) :
+			shader(nullptr),
+			properties(properties)
+		{
+		}
+		const Shader* shader;
+		const MaterialProperties* properties;
+		List<const MaterialPipeline*> pipelines;
+	};
 
-private:
-	inline void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, void* value);
-	inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const char* name);
+	class MaterialModule : public PipeModule
+	{
+	public:
+		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+		const Material* RecCreateMaterial(const ExecutionContext& context);
+		void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
+		void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
 
-private:
-	List<Material*> materials;
-	List<MaterialProperties*> materialProperties;
-	IGraphicsModule* graphicsModule;
-};
+	protected:
+		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+	private:
+		inline void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, void* value);
+		inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const char* name);
+
+	private:
+		List<Material*> materials;
+		List<MaterialProperties*> materialProperties;
+		Graphics::IGraphicsModule* graphicsModule;
+	};
+}

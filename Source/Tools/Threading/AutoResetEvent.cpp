@@ -1,5 +1,7 @@
 #include <Tools\Threading\AutoResetEvent.h>
 
+using namespace Core::Threading;
+
 AutoResetEvent::AutoResetEvent(bool initial)
 	: flag(initial)
 {

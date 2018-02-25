@@ -1,8 +1,18 @@
 #pragma once
 
-#include <cstdint>
 #include <Tools\Testing.h>
 
+typedef signed char        int8_t;
+typedef short              int16_t;
+typedef int                int32_t;
+typedef long long          int64_t;
+typedef unsigned char      uint8_t;
+typedef unsigned short     uint16_t;
+typedef unsigned int       uint32_t;
+typedef unsigned long long uint64_t;
+
+namespace Core
+{
 #define AUTOMATED_PROPERTY_GETPTR(Type, Name) \
 	protected: Type Name; \
 	public: inline Type* Get_##Name() { return &Name; } \
@@ -44,3 +54,4 @@
 #define IMPLEMENT_ENUM_FLAG(Name) \
 inline Name operator|(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) | static_cast<int>(b)); } \
 inline Name operator&(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) & static_cast<int>(b)); }
+}

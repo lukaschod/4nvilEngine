@@ -2,38 +2,27 @@
 
 #include <Tools\Common.h>
 
-struct FilterOptions
+namespace Core::Graphics
 {
-
-};
-
-struct IFilter
-{
-	IFilter(const FilterOptions& options)
+	enum class TextureUsageFlags
 	{
+		None = 0,
+		Render = 1 << 0,
+		Shader = 1 << 1,
+	};
+	IMPLEMENT_ENUM_FLAG(TextureUsageFlags);
 
-	}
-};
-
-enum TextureUsageFlags
-{
-	TextureUsageFlagNone = 0,
-	TextureUsageFlagRender = 1 << 0,
-	TextureUsageFlagShader = 1 << 1,
-};
-
-IMPLEMENT_ENUM_FLAG(TextureUsageFlags);
-
-struct ITexture
-{
-	ITexture() {}
-	ITexture(uint32_t width, uint32_t height) : 
-		width(width), 
-		height(height), 
-		usage(TextureUsageFlagRender | TextureUsageFlagShader)
+	struct ITexture
 	{
-	}
-	uint32_t width;
-	uint32_t height;
-	TextureUsageFlags usage;
-};
+		ITexture() {}
+		ITexture(uint32_t width, uint32_t height) :
+			width(width),
+			height(height),
+			usage(TextureUsageFlags::Render | TextureUsageFlags::Shader)
+		{
+		}
+		uint32_t width;
+		uint32_t height;
+		TextureUsageFlags usage;
+	};
+}

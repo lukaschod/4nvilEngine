@@ -4,27 +4,30 @@
 #include <Tools\Collections\List.h>
 #include <Tools\Math\Color.h>
 
-enum VertexAttributeType
+namespace Core::Graphics
 {
-	VertexAttributeTypePosition,
-	VertexAttributeTypeTexCoord0,
-};
-
-struct VertexAttributeLayout
-{
-	VertexAttributeLayout() {}
-	VertexAttributeLayout(VertexAttributeType type, ColorFormat format) :
-		type(type),
-		format(format)
+	enum class VertexAttributeType
 	{
-	}
+		Position,
+		TexCoord0,
+	};
 
-	VertexAttributeType type;
-	ColorFormat format;
-};
+	struct VertexAttributeLayout
+	{
+		VertexAttributeLayout() {}
+		VertexAttributeLayout(VertexAttributeType type, Math::ColorFormat format) :
+			type(type),
+			format(format)
+		{
+		}
 
-struct VertexLayout
-{
-	List<VertexAttributeLayout> attributes;
-	uint32_t stride;
-};
+		VertexAttributeType type;
+		Math::ColorFormat format;
+	};
+
+	struct VertexLayout
+	{
+		List<VertexAttributeLayout> attributes;
+		uint32_t stride;
+	};
+}

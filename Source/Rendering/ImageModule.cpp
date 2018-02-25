@@ -1,8 +1,13 @@
+#include <Graphics\IGraphicsModule.h>
 #include <Rendering\ImageModule.h>
+#include <Rendering\SamplerModule.h>
+
+using namespace Core;
+using namespace Core::Graphics;
 
 void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	samplerModule = ExecuteBefore<SamplerModule>(moduleManager);
 }
@@ -28,7 +33,7 @@ const Image* ImageModule::RecCreateImage(const ExecutionContext& context, uint32
 
 SERIALIZE_METHOD_ARG2(ImageModule, SetSampler, const Image*, const Sampler*);
 
-bool ImageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool ImageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

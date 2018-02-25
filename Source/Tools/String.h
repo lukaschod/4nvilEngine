@@ -2,4 +2,7 @@
 
 #include <string>
 
-typedef std::string String;
+namespace Core
+{
+	typedef std::string String;
+}

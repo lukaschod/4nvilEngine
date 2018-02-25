@@ -1,9 +1,9 @@
-#include <Foundation\TimeModule.h>
 #include <Tools\Math\Math.h>
+#include <Foundation\TimeModule.h>
 
-TimeModule::TimeModule() 
-{
-}
+using namespace Core;
+
+TimeModule::TimeModule() {}
 
 void TimeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {

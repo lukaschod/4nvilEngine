@@ -1,42 +1,52 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Foundation\PipeModule.h>
-#include <Graphics\IGraphicsModule.h>
 #include <Graphics\ITexture.h>
-#include <Rendering\SamplerModule.h>
+#include <Foundation\PipeModule.h>
 
-struct Image
+namespace Core::Graphics
 {
-	Image(const ITexture* texture)
-		: texture(texture)
-		, sampler(nullptr)
-		, width(texture->width)
-		, height(texture->height)
-	{}
+	struct ITexture;
+	class IGraphicsModule;
+}
 
-	const ITexture* texture;
-	const Sampler* sampler;
-	const uint32_t width;
-	const uint32_t height;
-};
-
-class ImageModule : public PipeModule
+namespace Core
 {
-public:
-	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Image* AllocateImage(uint32_t width, uint32_t height) const;
+	class SamplerModule; struct Sampler;
 
-public:
-	const Image* RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image = nullptr);
-	void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
+	struct Image
+	{
+		Image(const Graphics::ITexture* texture)
+			: texture(texture)
+			, sampler(nullptr)
+			, width(texture->width)
+			, height(texture->height)
+		{
+		}
 
-protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
+		const Graphics::ITexture* texture;
+		const Sampler* sampler;
+		const uint32_t width;
+		const uint32_t height;
+	};
 
-private:
-	List<Image*> images;
-	IGraphicsModule* graphicsModule;
-	SamplerModule* samplerModule;
-};
+	class ImageModule : public PipeModule
+	{
+	public:
+		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+		const Image* AllocateImage(uint32_t width, uint32_t height) const;
+
+	public:
+		const Image* RecCreateImage(const ExecutionContext& context, uint32_t width, uint32_t height, const Image* image = nullptr);
+		void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
+
+	protected:
+		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+	private:
+		List<Image*> images;
+		Graphics::IGraphicsModule* graphicsModule;
+		SamplerModule* samplerModule;
+	};
+}

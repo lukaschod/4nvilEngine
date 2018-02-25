@@ -1,17 +1,20 @@
 #pragma once
 
 #include <Tools\Common.h>
-#include <Foundation\ProfilerModule.h>
 #include <Modules\Module.h>
+#include <Foundation\ProfilerModule.h>
 
-class ComputeModule : public Module
+namespace Core
 {
-protected:
-	typedef ComputeModule base;
+	class ComputeModule : public Module
+	{
+	protected:
+		typedef ComputeModule base;
 
-public:
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
+	public:
+		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
 
-protected:
-	ProfilerModule* profilerModule;
-};
+	protected:
+		ProfilerModule* profilerModule;
+	};
+}

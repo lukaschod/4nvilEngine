@@ -92,6 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>__x86_64;ENABLED_DEBUG;ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -119,6 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>__x86_64;ENABLED_WINDOWS;ENABLED_MARK_FUNCTION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -130,12 +132,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Foundation\LogModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\PipeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\ProfilerModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Input\InputModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />
@@ -151,17 +153,19 @@
     <ClCompile Include="..\..\..\Source\Rendering\UnlitRenderingLoop\UnlitRenderingLoopModule.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Collections\BuddyHeapManager.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Console.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\IO\Directory.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\IO\FileStream.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp" />
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.cpp" />
-    <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\BufferHeap.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\CmdAllocatorPool.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\CmdQueue.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\DescriptorHeap.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Windows\Views\ViewModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Foundation\ComputeModule.h" />
@@ -174,12 +178,15 @@
     <ClInclude Include="..\..\..\Source\Foundation\TransformModule.h" />
     <ClInclude Include="..\..\..\Source\Foundation\UnitModule.h" />
     <ClInclude Include="..\..\..\Source\Graphics\IBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\IFilter.h" />
     <ClInclude Include="..\..\..\Source\Graphics\IGraphicsModule.h" />
     <ClInclude Include="..\..\..\Source\Graphics\ISwapChain.h" />
     <ClInclude Include="..\..\..\Source\Graphics\Shader.h" />
     <ClInclude Include="..\..\..\Source\Graphics\IRenderPass.h" />
     <ClInclude Include="..\..\..\Source\Graphics\ITexture.h" />
     <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h" />
+    <ClInclude Include="..\..\..\Source\Input\Input.h" />
+    <ClInclude Include="..\..\..\Source\Input\InputModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />
@@ -205,9 +212,8 @@
     <ClInclude Include="..\..\..\Source\Tools\Collections\StringBuilder.h" />
     <ClInclude Include="..\..\..\Source\Tools\Common.h" />
     <ClInclude Include="..\..\..\Source\Tools\Console.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Cpu.h" />
-    <ClInclude Include="..\..\..\Source\Tools\Data\XmlData.h" />
     <ClInclude Include="..\..\..\Source\Tools\Delegate.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Enum.h" />
     <ClInclude Include="..\..\..\Source\Tools\Flags.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h" />
     <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h" />
@@ -222,17 +228,20 @@
     <ClInclude Include="..\..\..\Source\Tools\String.h" />
     <ClInclude Include="..\..\..\Source\Tools\Testing.h" />
     <ClInclude Include="..\..\..\Source\Tools\Threading\AutoResetEvent.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Windows\Common.h" />
     <ClInclude Include="..\..\..\Source\Views\IViewModule.h" />
     <ClInclude Include="..\..\..\Source\Windows\Common.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Common.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.h" />
-    <ClInclude Include="..\..\..\Source\Windows\Views\WinViewModule.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\BufferHeap.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\CmdAllocatorPool.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\CmdQueue.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\Common.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\DescriptorHeap.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsModule.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.h" />
+    <ClInclude Include="..\..\..\Source\Windows\Views\ViewModule.h" />
+    <ClInclude Include="Test1.h" />
+    <ClInclude Include="Test2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

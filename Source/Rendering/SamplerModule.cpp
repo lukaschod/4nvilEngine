@@ -1,4 +1,9 @@
+#include <Graphics\IGraphicsModule.h>
+#include <Graphics\IFilter.h>
 #include <Rendering\SamplerModule.h>
+
+using namespace Core;
+using namespace Core::Graphics;
 
 void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -20,7 +25,7 @@ const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, 
 	return target;
 }
 
-bool SamplerModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool SamplerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

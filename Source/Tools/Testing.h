@@ -19,11 +19,11 @@
 #	define ASSERT_MSG(isFalse, ...) \
 	if (!(bool)(isFalse)) \
 	{ \
-		Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
-		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
-		Console::Write("    Info:"); \
-		Console::WriteFmt(__VA_ARGS__); \
-		Console::Write("\n"); \
+		Core::Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
+		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Core::Console::Write("    Info:"); \
+		Core::Console::WriteFmt(__VA_ARGS__); \
+		Core::Console::Write("\n"); \
 		__debugbreak(); \
 	}
 #	define ASSERT(isFalse) \
@@ -36,10 +36,10 @@
 
 #	define ERROR(...) \
 	{ \
-		Console::Write("ERROR:"); \
-		Console::WriteFmt(__VA_ARGS__); \
-		Console::Write("\n"); \
-		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Core::Console::Write("ERROR:"); \
+		Core::Console::WriteFmt(__VA_ARGS__); \
+		Core::Console::Write("\n"); \
+		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
 #else
@@ -50,9 +50,9 @@
 
 #	define TRACE(...) \
 	{ \
-		Console::Write("TRACE:"); \
-		Console::WriteFmt(__VA_ARGS__); \
-		Console::Write("\n"); \
+		Core::Console::Write("TRACE:"); \
+		Core::Console::WriteFmt(__VA_ARGS__); \
+		Core::Console::Write("\n"); \
 	}
 
 #ifdef EXT_DEBUG

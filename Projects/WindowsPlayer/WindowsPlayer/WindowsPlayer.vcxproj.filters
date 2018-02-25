@@ -7,9 +7,6 @@
     <Filter Include="Source\Modules">
       <UniqueIdentifier>{65f3b4f8-af9f-4d27-a332-bf02cc2b6abb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\WindowsPlayer">
-      <UniqueIdentifier>{71a4dc94-a4cb-46ac-882a-853756778184}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics">
       <UniqueIdentifier>{a486f1ae-b5f4-40cc-a3ed-11290979acbf}</UniqueIdentifier>
     </Filter>
@@ -31,9 +28,6 @@
     <Filter Include="Source\Windows\Graphics">
       <UniqueIdentifier>{96b0d8ca-bca7-4689-b401-2beb8e2bee2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Windows\Graphics\D12">
-      <UniqueIdentifier>{b2900fe4-f61a-41a8-82df-8a9558f83050}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Windows\Views">
       <UniqueIdentifier>{060aac22-eedd-4fb6-8060-7bef78fad9cc}</UniqueIdentifier>
     </Filter>
@@ -52,14 +46,20 @@
     <Filter Include="Source\Tools\IO">
       <UniqueIdentifier>{42c40ba2-fb6b-406d-8a1e-5742ff323acb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Tools\Data">
-      <UniqueIdentifier>{e181512c-80bf-48ef-8299-72a6fe5e9b53}</UniqueIdentifier>
+    <Filter Include="Source\WindowsPlayer">
+      <UniqueIdentifier>{103ed197-6501-4883-8958-ef391cb9566e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Windows\Graphics\Directx12">
+      <UniqueIdentifier>{b2900fe4-f61a-41a8-82df-8a9558f83050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{97d5630e-349b-48ea-9322-78199fb4e9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tools\Windows">
+      <UniqueIdentifier>{912b91d3-e2bb-4740-85cf-f46937822656}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp">
-      <Filter>Source\WindowsPlayer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
@@ -99,21 +99,6 @@
     <ClCompile Include="..\..\..\Source\Foundation\TimeModule.cpp">
       <Filter>Source\Foundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Views\WinViewModule.cpp">
-      <Filter>Source\Windows\Views</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp">
       <Filter>Source\Tools\Threading</Filter>
     </ClCompile>
@@ -125,15 +110,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp">
       <Filter>Source\Foundation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Foundation\MemoryModule.cpp">
-      <Filter>Source\Foundation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Collections\FixedBlockHeap.cpp">
       <Filter>Source\Tools\Collections</Filter>
@@ -150,11 +126,44 @@
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.cpp">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Foundation\PipeModule.cpp">
       <Filter>Source\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp">
+      <Filter>Source\WindowsPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Views\ViewModule.cpp">
+      <Filter>Source\Windows\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\BufferHeap.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\CmdAllocatorPool.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\CmdQueue.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\DescriptorHeap.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsModule.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.cpp">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Input\InputModule.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\IO\Directory.cpp">
+      <Filter>Source\Tools\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Console.cpp">
+      <Filter>Source\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,24 +239,6 @@
     <ClInclude Include="..\..\..\Source\Foundation\TimeModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdAllocatorPool.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12CmdQueue.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12Common.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsModule.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsPlannerModule.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Views\WinViewModule.h">
-      <Filter>Source\Windows\Views</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Console.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
@@ -302,12 +293,6 @@
     <ClInclude Include="..\..\..\Source\Foundation\MemoryModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12DescriptorHeap.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12BufferHeap.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\IO\MemoryStream.h">
       <Filter>Source\Tools\IO</Filter>
     </ClInclude>
@@ -319,9 +304,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\IO\FileStream.h">
       <Filter>Source\Tools\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h">
-      <Filter>Source\Tools\Collections</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Collections\StringBuilder.h">
       <Filter>Source\Tools\Collections</Filter>
@@ -338,9 +320,6 @@
     <ClInclude Include="..\..\..\Source\Tools\Delegate.h">
       <Filter>Source\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Cpu.h">
-      <Filter>Source\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Flags.h">
       <Filter>Source\Tools\Collections</Filter>
     </ClInclude>
@@ -350,12 +329,6 @@
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h">
       <Filter>Source\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Windows\Graphics\D12\D12GraphicsExecutorModule.h">
-      <Filter>Source\Windows\Graphics\D12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Data\XmlData.h">
-      <Filter>Source\Tools\Data</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Foundation\ComputeModule.h">
       <Filter>Source\Foundation</Filter>
     </ClInclude>
@@ -364,6 +337,53 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Foundation\PipeModuleHelper.h">
       <Filter>Source\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Enum.h">
+      <Filter>Source\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Test1.h" />
+    <ClInclude Include="Test2.h" />
+    <ClInclude Include="..\..\..\Source\Graphics\IFilter.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Views\ViewModule.h">
+      <Filter>Source\Windows\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\BufferHeap.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\CmdAllocatorPool.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\CmdQueue.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\Common.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\DescriptorHeap.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsModule.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.h">
+      <Filter>Source\Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Input\InputModule.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Input\Input.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IO\Directory.h">
+      <Filter>Source\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Windows\Common.h">
+      <Filter>Source\Tools\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

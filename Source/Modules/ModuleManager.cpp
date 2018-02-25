@@ -1,6 +1,8 @@
+#include <algorithm>
 #include <Modules\ModuleManager.h>
 #include <Modules\Module.h>
-#include <algorithm>
+
+using namespace Core;
 
 ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
 	: planner(planner)

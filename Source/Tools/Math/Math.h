@@ -1,23 +1,26 @@
 #pragma once
 
-#include <Tools\Common.h>
 #include <cmath>
+#include <Tools\Common.h>
 
-template<class T>
-struct Range
+namespace Core
 {
-	Range() {}
-	Range(const T* pointer, size_t size)
-		: pointer(pointer)
-		, size(size)
+	template<class T>
+	struct Range
 	{
-	}
+		Range() {}
+		Range(const T* pointer, size_t size)
+			: pointer(pointer)
+			, size(size)
+		{
+		}
 
-	const T* pointer;
-	size_t size;
-};
+		const T* pointer;
+		size_t size;
+	};
+}
 
-namespace Math
+namespace Core::Math
 {
 	template<typename T>
 	inline T Max(T first, T second) { return first > second ? first : second; }
@@ -52,5 +55,10 @@ namespace Math
 	}
 
 	template<typename T>
-	inline T Clamp(T value, T min, T max) { return Max(Min(value, min), max); }
+	inline T Clamp(T value, T min, T max) { return Max(Min(value, max), min); }
+
+	inline size_t SplitJobs(size_t total, size_t pieces, size_t minimum = 1)
+	{
+		return total > minimum ? (total / pieces) : total;
+	}
 };

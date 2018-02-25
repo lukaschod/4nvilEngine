@@ -2,34 +2,37 @@
 
 #include <Tools\Common.h>
 #include <Foundation\PipeModule.h>
-#include <Graphics\IGraphicsModule.h>
-#include <Graphics\ITexture.h>
 
-struct SamplerOptions : public FilterOptions
+namespace Core::Graphics
 {
-};
+	struct IFilter;
+	class IGraphicsModule;
+}
 
-struct Sampler
+namespace Core
 {
-	Sampler(const SamplerOptions& options, const IFilter* filter)
-		: filter(filter)
-	{ }
-	const IFilter* filter;
-};
+	struct SamplerOptions : public Graphics::FilterOptions {};
 
-class SamplerModule : public PipeModule
-{
-public:
-	virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-	const Sampler* RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
+	struct Sampler
+	{
+		Sampler(const SamplerOptions& options, const Graphics::IFilter* filter) : filter(filter) {}
+		const Graphics::IFilter* filter;
+	};
 
-	inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
+	class SamplerModule : public PipeModule
+	{
+	public:
+		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+		const Sampler* RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
 
-protected:
-	virtual bool ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode) override;
+		inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
 
-private:
-	List<Sampler*> samplers;
-	IGraphicsModule* graphicsModule;
-};
+	protected:
+		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+	private:
+		List<Sampler*> samplers;
+		Graphics::IGraphicsModule* graphicsModule;
+	};
+}

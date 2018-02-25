@@ -1,9 +1,16 @@
-#include <Rendering\MeshRendererModule.h>
 #include <Foundation\TransformModule.h>
 #include <Foundation\MemoryModule.h>
 #include <Graphics\IGraphicsModule.h>
+#include <Rendering\MeshRendererModule.h>
+#include <Rendering\MeshModule.h>
+#include <Rendering\MaterialModule.h>
+#include <Rendering\StorageModule.h>
 
-static const char* memoryLabelMeshRenderer = "Graphics.MeshRenderer";
+using namespace Core;
+using namespace Core::Math;
+using namespace Core::Graphics;
+
+static const char* memoryLabelMeshRenderer = "Graphics::MeshRenderer";
 
 MeshRendererModule::MeshRendererModule()
 	: perAllRendererStorage(nullptr)
@@ -34,7 +41,7 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	for (auto meshRenderer : meshRenderers)
 	{
 		auto transform = unitModule->GetComponent<Transform>(meshRenderer);
-		if (transform->flags.Contains(TransformFlagsLocalObjectToWorldChanged))
+		if (transform->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
 			storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
 	}
 }
@@ -60,7 +67,7 @@ const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionCon
 }
 //SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
 
-bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

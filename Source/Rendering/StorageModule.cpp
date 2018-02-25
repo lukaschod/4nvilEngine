@@ -1,4 +1,10 @@
+#include <Graphics\IGraphicsModule.h>
+#include <Graphics\IBuffer.h>
 #include <Rendering\StorageModule.h>
+
+using namespace Core;
+using namespace Core::Math;
+using namespace Core::Graphics;
 
 void StorageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -27,7 +33,7 @@ const Storage* StorageModule::RecCreateStorage(const ExecutionContext& context, 
 
 SERIALIZE_METHOD_ARG3(StorageModule, UpdateStorage, const Storage*, uint32_t, Range<void>&);
 
-bool StorageModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

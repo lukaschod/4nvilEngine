@@ -1,7 +1,9 @@
-#include <Foundation\ProfilerModule.h>
-#include <Foundation\LogModule.h>
 #include <Tools\Math\Math.h>
 #include <Tools\Collections\StringBuilder.h>
+#include <Foundation\ProfilerModule.h>
+#include <Foundation\LogModule.h>
+
+using namespace Core;
 
 void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -19,16 +21,17 @@ void ProfilerModule::Execute(const ExecutionContext& context)
 
 	if (frameLeftUntilProfile == 0)
 	{
+		StringBuilder<1024 * 4> message;
 		frameLeftUntilProfile = 120;
 		for (auto& worker : workers)
 		{
-			StringBuilder<1024> message;
 			message.AppendFmt("Worker %d", worker.workerIndex);
 			for (auto& function : worker.functions)
 				message.AppendFmt(" %s (%.2f)", function.name, function.end - function.start);
 			message.Append("\n");
-			logModule->RecWriteFmt(context, "%s", message.ToString());
 		}
+		message.Append("\n");
+		logModule->RecWriteFmt(context, "%s", message.ToString());
 	}
 	else
 	{

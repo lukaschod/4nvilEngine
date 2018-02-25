@@ -4,6 +4,7 @@
 #include <Foundation\PipeModule.h>
 #include <Graphics\IGraphicsModule.h>
 
-class IRenderingLoopModule : public PipeModule
+namespace Core
 {
-};
+	class IRenderingLoopModule : public PipeModule {};
+}

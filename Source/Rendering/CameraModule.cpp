@@ -1,7 +1,12 @@
-#include <Rendering\CameraModule.h>
-#include <Rendering\StorageModule.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Foundation\TransformModule.h>
+#include <Rendering\CameraModule.h>
+#include <Rendering\StorageModule.h>
+#include <Rendering\SurfaceModule.h>
+#include <Rendering\ImageModule.h>
+
+using namespace Core;
+using namespace Core::Math;
 
 void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -24,13 +29,13 @@ void CameraModule::Execute(const ExecutionContext& context)
 		target->worldToCameraMatrix = transform->worldToView;
 		target->worldToCameraMatrix.Multiply(target->projectionMatrix);
 		target->worldToCameraMatrix = Matrix4x4f::Transpose(target->worldToCameraMatrix);
-		//storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
+		storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
 	}
 }
 
 const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
 
-const Camera* CameraModule::AllocateCamera() const
+const Camera* CameraModule::AllocateCamera()
 {
 	auto storage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
 	return new Camera(this, storage);
@@ -52,7 +57,7 @@ const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, con
 SERIALIZE_METHOD_ARG2(CameraModule, SetSurface, const Camera*, const Surface*);
 SERIALIZE_METHOD_ARG1(CameraModule, Destroy, const Component*);
 
-bool CameraModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

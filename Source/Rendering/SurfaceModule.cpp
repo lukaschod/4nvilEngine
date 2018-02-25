@@ -1,4 +1,10 @@
+#include <Graphics\IGraphicsModule.h>
+#include <Graphics\IRenderPass.h>
 #include <Rendering\SurfaceModule.h>
+#include <Rendering\ImageModule.h>
+
+using namespace Core;
+using namespace Core::Graphics;
 
 void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -12,7 +18,7 @@ SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32_t, const S
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetDepth, const Surface*, const SurfaceDepth&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetViewport, const Surface*, const Viewport&);
 
-bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, MemoryStream& stream, CommandCode commandCode)
+bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{

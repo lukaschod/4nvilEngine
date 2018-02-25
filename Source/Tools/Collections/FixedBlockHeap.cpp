@@ -1,5 +1,7 @@
-#include <Tools\Collections\FixedBlockHeap.h>
 #include <Tools\Math\Math.h>
+#include <Tools\Collections\FixedBlockHeap.h>
+
+using namespace Core;
 
 FixedBlockHeap::FixedBlockHeap(size_t elementSize)
 	: elementSize(elementSize)

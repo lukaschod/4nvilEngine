@@ -1,5 +1,7 @@
 #include <Tools\Collections\BuddyHeapManager.h>
 
+using namespace Core;
+
 BuddyHeapManager::BuddyHeapManager(const HeapMemory& bounds)
 	: bounds(bounds)
 {
