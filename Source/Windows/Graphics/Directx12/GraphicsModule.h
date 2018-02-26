@@ -7,10 +7,6 @@
 #include <Windows\Graphics\Directx12\DescriptorHeap.h>
 #include <Windows\Graphics\Directx12\BufferHeap.h>
 
-#if !defined(ENABLED_D12_DEBUG_LAYER) && defined(ENABLED_DEBUG)
-#define ENABLED_D12_DEBUG_LAYER
-#endif
-
 using namespace Core::Math;
 using namespace Core::Graphics;
 

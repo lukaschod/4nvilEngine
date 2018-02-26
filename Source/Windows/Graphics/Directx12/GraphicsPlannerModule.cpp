@@ -264,7 +264,6 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetTextureState, const Texture*, target, D3D12_RESOURCE_STATES, currentState, D3D12_RESOURCE_STATES, nextState);
-		EXT_TRACE("target=%d currentState=%d nextState=%d", target, currentState, nextState);
 		commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(target->resource, currentState, nextState));
 		DESERIALIZE_METHOD_END;
 

@@ -1,5 +1,8 @@
 #include <Graphics\IGraphicsModule.h>
+#include <Input\InputModule.h>
+#include <Input\MouseInputs.h>
 #include <Windows\Views\ViewModule.h>
+#include <windowsx.h>
 
 using namespace Core;
 using namespace Core::Graphics;
@@ -15,6 +18,7 @@ void ViewModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	imageModule = ExecuteBefore<ImageModule>(moduleManager);
+	inputModule = ExecuteBefore<InputModule>(moduleManager);
 }
 
 const List<const IView*>& ViewModule::GetViews()
@@ -31,18 +35,32 @@ void ViewModule::CloseWindow(HWND windowHandle)
 	DestroyWindow(windowHandle);
 }
 
+static ExecutionContext winProcContext;
 static ViewModule* viewModule = nullptr;
+static InputModule* winProcInputModule = nullptr;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_MOUSEMOVE:
+	{
+		auto xPos = GET_X_LPARAM(lParam);
+		auto yPos = GET_Y_LPARAM(lParam);
+		MousePositionDesc desc;
+		desc.position = Math::Vector2f((float) xPos, (float) yPos);
+		winProcInputModule->RecInput(winProcContext, 0, (uint8*) &desc, sizeof(MousePositionDesc));
+		break;
+	}
+
 	case WM_CLOSE:
 		ASSERT(viewModule != nullptr);
 		viewModule->CloseWindow(hwnd);
 		break;
+
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+
 	default:
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -116,7 +134,11 @@ void ViewModule::Execute(const ExecutionContext& context)
 {
 	PipeModule::Execute(context);
 
-	viewModule = this; // TODO: Lets figure out if we can pass the object to callback somehow
+	// TODO: Lets figure out if we can pass the object to callback somehow
+	viewModule = this;
+	winProcContext = context;
+	winProcInputModule = inputModule;
+
 	MSG msg;
 	for (auto view : views)
 	{

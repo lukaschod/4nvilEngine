@@ -8,7 +8,7 @@
 
 namespace Core::Graphics
 {
-#define COLOR_ATTACHMENT_MAX_COUNT 4
+#define COLOR_ATTACHMENT_MAX_COUNT 4 // TODO: Remove this!!!!!!!!!!!
 
 	enum class StoreAction
 	{

@@ -6,6 +6,11 @@
 
 using namespace Core;
 
+namespace Core
+{
+	class InputModule;
+}
+
 namespace Core::Graphics
 {
 	class IGraphicsModule;
@@ -45,6 +50,7 @@ namespace Windows
 
 	private:
 		Graphics::IGraphicsModule* graphicsModule;
+		InputModule* inputModule;
 		ImageModule* imageModule;
 		List<View*> views;
 		const char* defaultWindowClassName;

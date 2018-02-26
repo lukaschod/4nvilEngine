@@ -31,8 +31,10 @@ namespace Core::IO
 		void ReadFmt(const char* format, ...);
 		void WriteFmt(const char* format, ...);
 		void WriteFmt(const char* format, va_list arguments);
-		void Flush();
 		inline bool IsOpened() const { return isOpened; }
+
+		// Forces all unwritten data to be written to the file
+		void Flush();
 
 	private:
 		const char* TryGetMode(FileMode mode, FileAccess access);

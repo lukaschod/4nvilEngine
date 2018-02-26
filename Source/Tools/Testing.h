@@ -2,21 +2,16 @@
 
 #include <Tools\Console.h>
 
-#ifdef ERROR
-#	undef ERROR
-#endif
-#ifdef ASSERT
-#	undef ASSERT
-#endif
-
+// Automatically enable asserting in debug mode
 #if !defined(ENABLED_ASSERT) && defined(ENABLED_DEBUG)
 #define ENABLED_ASSERT
 #endif
 
-#ifdef ENABLED_ASSERT
-#	define STRINGIFY(x) #x
-#	define STRINGIFY_BUILTIN(x) STRINGIFY(x)
-#	define ASSERT_MSG(isFalse, ...) \
+#define STRINGIFY(x) #x
+#define STRINGIFY_BUILTIN(x) STRINGIFY(x)
+
+// Assert with custom message use it for debugging purpose
+#define RELEASE_ASSERT_MSG(isFalse, ...) \
 	if (!(bool)(isFalse)) \
 	{ \
 		Core::Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
@@ -26,7 +21,9 @@
 		Core::Console::Write("\n"); \
 		__debugbreak(); \
 	}
-#	define ASSERT(isFalse) \
+
+// Default assert use it for debugging purpose
+#define RELEASE_ASSERT(isFalse) \
 	if (!(bool)(isFalse)) \
 	{ \
 		Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
@@ -34,7 +31,8 @@
 		__debugbreak(); \
 	}
 
-#	define ERROR(...) \
+// Unconditional assert
+#define RELEASE_ERROR(...) \
 	{ \
 		Core::Console::Write("ERROR:"); \
 		Core::Console::WriteFmt(__VA_ARGS__); \
@@ -42,21 +40,21 @@
 		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
-#else
-#	define ASSERT(isFalse) (void)(isFalse)
-#	define ASSERT_MSG(isFalse, ...) (void)(isFalse)
-#	define ERROR(...) (void)0
-#endif
 
-#	define TRACE(...) \
+// Prints into IDEA console
+#define TRACE(...) \
 	{ \
 		Core::Console::Write("TRACE:"); \
 		Core::Console::WriteFmt(__VA_ARGS__); \
 		Core::Console::Write("\n"); \
 	}
 
-#ifdef EXT_DEBUG
-#	define EXT_TRACE(...) TRACE(__VA_ARGS__)
+#ifdef ENABLED_ASSERT
+#	define ASSERT(isFalse) RELEASE_ASSERT_MSG(isFalse)
+#	define ASSERT_MSG(isFalse, ...) ASSERT(isFalse)
+#	define ERROR(...) ERROR(isFalse)
 #else
-#	define EXT_TRACE(...)
+#	define ASSERT(isFalse) (void)(isFalse)
+#	define ASSERT_MSG(isFalse, ...) (void)(isFalse)
+#	define ERROR(...) (void)0
 #endif

@@ -12,7 +12,8 @@ void LogModule::Execute(const ExecutionContext& context)
 	MARK_FUNCTION;
 	if (!output.IsOpened())
 		OpenStream();
-	PipeModule::Execute(context);
+	base::Execute(context);
+	output.Flush();
 }
 
 SERIALIZE_METHOD_ARG1(LogModule, Write, const char*);
@@ -59,14 +60,12 @@ bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& s
 	{
 		DESERIALIZE_METHOD_ARG1_START(Write, const char*, message);
 		output.WriteFmt(message);
-		output.Flush();
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(WriteFmt, size_t, size);
 		const char* message = (const char*)stream.Get_data();
 		stream.Set_data(stream.Get_data() + size);
 		output.WriteFmt(message);
-		output.Flush();
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

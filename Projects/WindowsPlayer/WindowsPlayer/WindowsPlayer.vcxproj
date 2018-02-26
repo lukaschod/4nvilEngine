@@ -187,6 +187,8 @@
     <ClInclude Include="..\..\..\Source\Graphics\VertexLayout.h" />
     <ClInclude Include="..\..\..\Source\Input\Input.h" />
     <ClInclude Include="..\..\..\Source\Input\InputModule.h" />
+    <ClInclude Include="..\..\..\Source\Input\MouseInputs.h" />
+    <ClInclude Include="..\..\..\Source\Input\MouseModule.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModuleExecutor.h" />
     <ClInclude Include="..\..\..\Source\Modules\IModulePlanner.h" />
     <ClInclude Include="..\..\..\Source\Modules\Module.h" />

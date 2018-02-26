@@ -385,5 +385,11 @@
     <ClInclude Include="..\..\..\Source\Tools\Windows\Common.h">
       <Filter>Source\Tools\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Input\MouseModule.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Input\MouseInputs.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

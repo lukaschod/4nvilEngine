@@ -10,7 +10,7 @@ namespace Core::Math
 	public:
 		inline Vector2() {}
 		inline Vector2(T v) : x(v), y(v) {}
-		inline Vector2(T x, T y, T z) : x(x), y(y) {}
+		inline Vector2(T x, T y) : x(x), y(y) {}
 		inline Vector2(const Vector2& v) : x(v.x), y(v.y) {}
 
 	public:

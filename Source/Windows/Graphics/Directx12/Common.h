@@ -6,8 +6,7 @@
 
 #pragma comment(lib, "d3d12.lib")
 
-#ifdef D12_DEBUG
-#	define D12_DEBUG_TRACE(...) TRACE(__VA_ARGS__)
-#else
-#	define D12_DEBUG_TRACE(...)
+// Automatically enable debug layer on debug modes 
+#if !defined(ENABLED_D12_DEBUG_LAYER) && defined(ENABLED_DEBUG)
+#	define ENABLED_D12_DEBUG_LAYER
 #endif

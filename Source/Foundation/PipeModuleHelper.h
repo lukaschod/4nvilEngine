@@ -58,33 +58,28 @@
 	SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, NOARG, WRITE_TARGET, auto target = new Name(this);, RETURN_TARGET)
 
 #define DESERIALIZE_METHOD_START(Name) \
-	case CommandCode##Name: { \
-	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+	case CommandCode##Name: { 
 
 #define DESERIALIZE_METHOD_ARG1_START(Name, ArgumentType1, ArgumentName1) \
 	case CommandCode##Name: { \
-	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
-	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); 
 
 #define DESERIALIZE_METHOD_ARG2_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2) \
 	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
-	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
-	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); 
 
 #define DESERIALIZE_METHOD_ARG3_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3) \
 	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
-	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
-	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); 
 
 #define DESERIALIZE_METHOD_ARG4_START(Name, ArgumentType1, ArgumentName1, ArgumentType2, ArgumentName2, ArgumentType3, ArgumentName3, ArgumentType4, ArgumentName4) \
 	case CommandCode##Name: { \
 	ArgumentType1& ArgumentName1 = stream.FastRead<ArgumentType1>(); \
 	ArgumentType2& ArgumentName2 = stream.FastRead<ArgumentType2>(); \
 	ArgumentType3& ArgumentName3 = stream.FastRead<ArgumentType3>(); \
-	ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); \\
-	EXT_TRACE("%s::%s index=%d", GetName(), #Name, context.workerIndex);
+	ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); 
 
 #define DESERIALIZE_METHOD_END return true; }

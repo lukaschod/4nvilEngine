@@ -19,6 +19,7 @@
 #include <Rendering\StorageModule.h>
 #include <Rendering\SurfaceModule.h>
 #include <Rendering\SamplerModule.h>
+#include <Input\InputModule.h>
 #include <Windows\Graphics\Directx12\GraphicsModule.h>
 #include <Windows\Views\ViewModule.h>
 
@@ -943,11 +944,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	// Core
 	moduleManager->AddModule(new LogModule());
 	moduleManager->AddModule(new UnitModule());
-	moduleManager->AddModule(new Directx12::GraphicsModule());
 	moduleManager->AddModule(new TransformModule());
 	moduleManager->AddModule(new SamplerModule());
 	moduleManager->AddModule(new ImageModule());
-	moduleManager->AddModule(new ViewModule(hInst));
 	moduleManager->AddModule(new StorageModule()); 
 	moduleManager->AddModule(new ShaderModule());
 	moduleManager->AddModule(new MaterialModule());
@@ -959,6 +958,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new TimeModule());
 	moduleManager->AddModule(new MemoryModule());
 	moduleManager->AddModule(new ProfilerModule());
+	moduleManager->AddModule(new InputModule());
+
+	// Player
+	moduleManager->AddModule(new Windows::ViewModule(hInst));
+	moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
 	// Test project 1
 	moduleManager->AddModule(new TestModule());
