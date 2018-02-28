@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\Source\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\Source\Foundation\UnitModule.cpp" />
     <ClCompile Include="..\..\..\Source\Input\InputModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Input\MouseModule.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ConcurrentModuleExecutor.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\ModuleManager.cpp" />
     <ClCompile Include="..\..\..\Source\Modules\StaticModulePlanner.cpp" />

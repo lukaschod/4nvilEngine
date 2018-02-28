@@ -149,7 +149,6 @@ namespace Core::Math
 			return out;
 		}
 
-
 		template <class T>
 		inline static Matrix4x4<T> Transpose(const Matrix4x4<T>& m)
 		{
@@ -159,6 +158,12 @@ namespace Core::Math
 			out.z = Vector4<T>(m.x.z, m.y.z, m.z.z, m.w.z);
 			out.w = Vector4<T>(m.x.w, m.y.w, m.z.w, m.w.w);
 			return out;
+		}
+
+		template <class T>
+		inline static Matrix4x4<T> Invert(const Matrix4x4<T>& m)
+		{
+			return m;
 		}
 
 	public:

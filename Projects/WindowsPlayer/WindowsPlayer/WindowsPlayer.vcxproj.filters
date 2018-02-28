@@ -165,6 +165,9 @@
     <ClCompile Include="..\..\..\Source\Tools\Console.cpp">
       <Filter>Source\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Input\MouseModule.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">

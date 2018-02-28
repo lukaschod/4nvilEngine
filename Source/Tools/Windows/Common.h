@@ -36,12 +36,12 @@ using Microsoft::WRL::ComPtr;
 	{ \
 		_com_error err(hr); \
 		LPCTSTR errMsg = err.ErrorMessage(); \
-		Console::Write("ERROR: Assertion failed \'" #hr "\'\n"); \
-		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
-		Console::Write("    Info: "); \
-		Console::Write(errMsg); \
-		Console::WriteFmt(" (hr = 0x%08X)", hr); \
-		Console::Write("\n"); \
+		Core::Console::Write("ERROR: Assertion failed \'" #hr "\'\n"); \
+		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Core::Console::Write("    Info: "); \
+		Core::Console::Write(errMsg); \
+		Core::Console::WriteFmt(" (hr = 0x%08X)", hr); \
+		Core::Console::Write("\n"); \
 		__debugbreak(); \
 	}
 #else

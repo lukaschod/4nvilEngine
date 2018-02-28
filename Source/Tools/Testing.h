@@ -26,8 +26,8 @@
 #define RELEASE_ASSERT(isFalse) \
 	if (!(bool)(isFalse)) \
 	{ \
-		Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
-		Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+		Core::Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
+		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
 		__debugbreak(); \
 	}
 
@@ -50,9 +50,9 @@
 	}
 
 #ifdef ENABLED_ASSERT
-#	define ASSERT(isFalse) RELEASE_ASSERT_MSG(isFalse)
-#	define ASSERT_MSG(isFalse, ...) ASSERT(isFalse)
-#	define ERROR(...) ERROR(isFalse)
+#	define ASSERT(isFalse) RELEASE_ASSERT(isFalse)
+#	define ASSERT_MSG(isFalse, ...) RELEASE_ASSERT_MSG(isFalse, __VA_ARGS__)
+#	define ERROR(...) RELEASE_ERROR(__VA_ARGS__)
 #else
 #	define ASSERT(isFalse) (void)(isFalse)
 #	define ASSERT_MSG(isFalse, ...) (void)(isFalse)

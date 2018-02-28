@@ -41,6 +41,11 @@ const Camera* CameraModule::AllocateCamera()
 	return new Camera(this, storage);
 }
 
+Math::Matrix4x4f CameraModule::CalculateScreenToWorld(const Camera* camera)
+{
+	return Math::Matrix4x4f::Invert(camera->worldToCameraMatrix);
+}
+
 DECLARE_COMMAND_CODE(CreateCamera);
 const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, const Camera* camera)
 {

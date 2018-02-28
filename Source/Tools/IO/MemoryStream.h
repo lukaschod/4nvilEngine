@@ -52,6 +52,14 @@ namespace Core::IO
 			return ptr;
 		}
 
+		template<typename T>
+		inline T& FastRead(size_t& offset) const
+		{
+			T& ptr = *(T*) (begin + offset);
+			offset += sizeof(T);
+			return ptr;
+		}
+
 		inline void Reset()
 		{
 			data = begin;

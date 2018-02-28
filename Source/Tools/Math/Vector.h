@@ -26,7 +26,8 @@ namespace Core::Math
 		inline Vector3() {}
 		inline Vector3(T v) : x(v), y(v), z(v) {}
 		inline Vector3(T x, T y, T z) : x(x), y(y), z(z) {}
-		inline Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
+		inline Vector3(const Vector3<T>& v) : x(v.x), y(v.y), z(v.z) {}
+		inline Vector3(const Vector2<T>& v) : x(v.x), y(v.y), z(0) {}
 
 		inline const Vector3<T>& operator+=(const Vector3<T>& v) { x += v.x; y += v.y; z += v.z; return *this; }
 		inline const Vector3<T>& operator-=(const Vector3<T>& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }

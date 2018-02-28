@@ -20,6 +20,7 @@
 #include <Rendering\SurfaceModule.h>
 #include <Rendering\SamplerModule.h>
 #include <Input\InputModule.h>
+#include <Input\MouseModule.h>
 #include <Windows\Graphics\Directx12\GraphicsModule.h>
 #include <Windows\Views\ViewModule.h>
 
@@ -34,7 +35,8 @@ struct Agent : public Component
 	Agent(ComponentModule* module) : Component(module) {}
 	const Transform* transform;
 	Vector3f velocity;
-	const Transform* destination;
+	Vector3f destination;
+	bool seekDestination;
 	float acceleration;
 	float maxSpeed;
 	float radius;
@@ -255,6 +257,8 @@ public:
 		unitModule = ExecuteAfter<UnitModule>(moduleManager);
 		memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 		memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
+		mouseModule = ExecuteAfter<MouseModule>(moduleManager);
+		cameraModule = ExecuteAfter<CameraModule>(moduleManager);
 	}
 
 	virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
@@ -267,6 +271,7 @@ public:
 			target->velocity = Vector3f(0, 0, 0);
 			target->radius = 1.2f;
 			target->transform = unitModule->GetComponent<Transform>(target->unit);
+			target->seekDestination = nullptr;
 			agents.push_back(target);
 			DESERIALIZE_METHOD_END;
 		}
@@ -276,7 +281,16 @@ public:
 	virtual void Execute(const ExecutionContext& context) override
 	{
 		MARK_FUNCTION;
-		ComponentModule::Execute(context);
+		base::Execute(context);
+
+		auto screenToWorld = cameraModule->CalculateScreenToWorld(cameraModule->GetCameras()[0]);
+		auto screenPosition = mouseModule->GetPosition();
+		for (auto agent : agents)
+		{
+			auto worldPosition = screenToWorld.Multiply(screenPosition);
+			agent->seekDestination = mouseModule->GetButtonState(MouseButtonType::Left) == MouseButtonState::Click;
+			agent->destination = worldPosition;
+		}
 	}
 
 	List<Agent*>* GetAgents() { return &agents; }
@@ -284,6 +298,8 @@ public:
 private:
 	UnitModule* unitModule;
 	MemoryModule* memoryModule;
+	MouseModule* mouseModule;
+	CameraModule* cameraModule;
 	List<Agent*> agents;
 };
 
@@ -311,7 +327,8 @@ public:
 			auto agent = agents->at(i);
 			auto agentTransform = agent->transform;
 			Vector3f impact(0, 0, 0);
-			impact += GetSeek(agent, Vector3f(0, 0, 0));
+			if (agent->seekDestination)
+				impact += GetSeek(agent, agent->destination);
 			impact += GetSeparation(agent) * 2.2f;
 
 			agent->velocity += impact * timeModule->GetDeltaTime();
@@ -959,24 +976,25 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new MemoryModule());
 	moduleManager->AddModule(new ProfilerModule());
 	moduleManager->AddModule(new InputModule());
+	moduleManager->AddModule(new MouseModule());
 
 	// Player
 	moduleManager->AddModule(new Windows::ViewModule(hInst));
 	moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-	// Test project 1
+	/*// Test project 1
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));
+	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
 	// Test project 2
 	//moduleManager->AddModule(new AgentModule());
-	/*moduleManager->AddModule(new AgentModule());
+	moduleManager->AddModule(new AgentModule());
 	moduleManager->AddModule(new AgentForceModule());
 	moduleManager->AddModule(new AgentDistModule());
 	moduleManager->AddModule(new Test2Module());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+	moduleManager->AddModule(new ShutdownModule(moduleManager));
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())

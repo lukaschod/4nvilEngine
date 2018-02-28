@@ -1,3 +1,4 @@
+#include <Tools\Enum.h>
 #include <Graphics\IGraphicsModule.h>
 #include <Input\InputModule.h>
 #include <Input\MouseInputs.h>
@@ -10,6 +11,7 @@ using namespace Windows;
 
 ViewModule::ViewModule(HINSTANCE instanceHandle)
 	: instanceHandle(instanceHandle)
+	, inputDevice(nullptr)
 {
 }
 
@@ -35,9 +37,24 @@ void ViewModule::CloseWindow(HWND windowHandle)
 	DestroyWindow(windowHandle);
 }
 
-static ExecutionContext winProcContext;
-static ViewModule* viewModule = nullptr;
-static InputModule* winProcInputModule = nullptr;
+struct WndProcData
+{
+	ExecutionContext context;
+	ViewModule* viewModule;
+	InputModule* inputModule;
+	const InputDevice* inputDevice;
+};
+
+static WndProcData wndProcData;
+static void RecButtonInput(MouseButtonType type, bool isDown)
+{
+	MouseButtonDesc desc;
+	desc.isDown = isDown;
+	desc.type = type;
+	wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.inputDevice, Enum::ToUnderlying(MouseInputType::Button), (uint8*) &desc, sizeof(MouseButtonDesc));
+	TRACE("%d %d", type, isDown);
+}
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -48,13 +65,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		auto yPos = GET_Y_LPARAM(lParam);
 		MousePositionDesc desc;
 		desc.position = Math::Vector2f((float) xPos, (float) yPos);
-		winProcInputModule->RecInput(winProcContext, 0, (uint8*) &desc, sizeof(MousePositionDesc));
+		wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.inputDevice, Enum::ToUnderlying(MouseInputType::Move), (uint8*) &desc, sizeof(MousePositionDesc));
 		break;
 	}
 
+	case WM_LBUTTONUP: RecButtonInput(MouseButtonType::Left, false); break;
+	case WM_LBUTTONDOWN: RecButtonInput(MouseButtonType::Left, true); break;
+	case WM_RBUTTONUP: RecButtonInput(MouseButtonType::Right, false); break;
+	case WM_RBUTTONDOWN: RecButtonInput(MouseButtonType::Right, true); break;
+	case WM_MBUTTONUP: RecButtonInput(MouseButtonType::Center, false); break;
+	case WM_MBUTTONDOWN: RecButtonInput(MouseButtonType::Center, true); break;
+
 	case WM_CLOSE:
-		ASSERT(viewModule != nullptr);
-		viewModule->CloseWindow(hwnd);
+		ASSERT(wndProcData.viewModule != nullptr);
+		wndProcData.viewModule->CloseWindow(hwnd);
 		break;
 
 	case WM_DESTROY:
@@ -134,10 +158,19 @@ void ViewModule::Execute(const ExecutionContext& context)
 {
 	PipeModule::Execute(context);
 
+	if (inputDevice == nullptr)
+	{
+		InputDeviceDesc desc;
+		desc.typeName = "Mouse";
+		desc.vendorName = "Unknown";
+		inputDevice = inputModule->RecCreateInputDevice(context, desc);
+	}
+
 	// TODO: Lets figure out if we can pass the object to callback somehow
-	viewModule = this;
-	winProcContext = context;
-	winProcInputModule = inputModule;
+	wndProcData.viewModule = this;
+	wndProcData.context = context;
+	wndProcData.inputModule = inputModule;
+	wndProcData.inputDevice = inputDevice;
 
 	MSG msg;
 	for (auto view : views)

@@ -45,6 +45,7 @@ namespace Core
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const List<Camera*>& GetCameras() const;
 		const Camera* AllocateCamera();
+		Math::Matrix4x4f CalculateScreenToWorld(const Camera* camera);
 
 	public:
 		const Camera* RecCreateCamera(const ExecutionContext& context, const Camera* camera = nullptr);

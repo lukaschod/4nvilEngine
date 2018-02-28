@@ -206,7 +206,6 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
 		auto bacBuffer = target->GetBacBuffer();
 		BlitCopy(context, texture, bacBuffer);
 
-		TRACE("%d\n", target->IDXGISwapChain3->GetCurrentBackBufferIndex());
 		ASSERT(target->bacBufferIndex == target->IDXGISwapChain3->GetCurrentBackBufferIndex());
 
 		SetTextureState(context, bacBuffer, D3D12_RESOURCE_STATE_PRESENT);

@@ -6,6 +6,12 @@ namespace Core
 {
 	struct IView;
 
+	enum class MouseInputType
+	{
+		Button,
+		Move,
+	};
+
 	enum class MouseButtonType
 	{
 		Left,
@@ -25,7 +31,7 @@ namespace Core
 	struct MouseButtonDesc
 	{
 		MouseButtonType type;
-		MouseButtonState state;
+		bool isDown;
 	};
 
 	struct MousePositionDesc
