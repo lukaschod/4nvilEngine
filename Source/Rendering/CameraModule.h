@@ -36,6 +36,7 @@ namespace Core
 
 		Math::Matrix4x4f projectionMatrix;
 		Math::Matrix4x4f worldToCameraMatrix;
+		Math::Matrix4x4f cameraToWorldMatrix;
 	};
 
 	class CameraModule : public ComponentModule
@@ -45,7 +46,7 @@ namespace Core
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const List<Camera*>& GetCameras() const;
 		const Camera* AllocateCamera();
-		Math::Matrix4x4f CalculateScreenToWorld(const Camera* camera);
+		Math::Vector3f CalculateScreenToWorld(const Camera* camera, const Math::Vector3f& position);
 
 	public:
 		const Camera* RecCreateCamera(const ExecutionContext& context, const Camera* camera = nullptr);

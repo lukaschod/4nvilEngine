@@ -283,11 +283,13 @@ public:
 		MARK_FUNCTION;
 		base::Execute(context);
 
-		auto screenToWorld = cameraModule->CalculateScreenToWorld(cameraModule->GetCameras()[0]);
 		auto screenPosition = mouseModule->GetPosition();
+		auto screenPosition3 = Vector3f(screenPosition.x, screenPosition.y, 0.9f);
+		auto worldPosition = cameraModule->CalculateScreenToWorld(cameraModule->GetCameras()[0], screenPosition3);
+
+		TRACE("%f %f %f", worldPosition.x, worldPosition.y, worldPosition.z);
 		for (auto agent : agents)
 		{
-			auto worldPosition = screenToWorld.Multiply(screenPosition);
 			agent->seekDestination = mouseModule->GetButtonState(MouseButtonType::Left) == MouseButtonState::Click;
 			agent->destination = worldPosition;
 		}

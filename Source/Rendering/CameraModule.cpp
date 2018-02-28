@@ -29,6 +29,8 @@ void CameraModule::Execute(const ExecutionContext& context)
 		target->worldToCameraMatrix = transform->worldToView;
 		target->worldToCameraMatrix.Multiply(target->projectionMatrix);
 		target->worldToCameraMatrix = Matrix4x4f::Transpose(target->worldToCameraMatrix);
+		target->cameraToWorldMatrix = Matrix4x4f::Invert(target->worldToCameraMatrix);
+		target->cameraToWorldMatrix = Matrix4x4f::Transpose(target->cameraToWorldMatrix);
 		storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
 	}
 }
@@ -41,9 +43,13 @@ const Camera* CameraModule::AllocateCamera()
 	return new Camera(this, storage);
 }
 
-Math::Matrix4x4f CameraModule::CalculateScreenToWorld(const Camera* camera)
+Vector3f CameraModule::CalculateScreenToWorld(const Camera* camera, const Vector3f& position)
 {
-	return Math::Matrix4x4f::Invert(camera->worldToCameraMatrix);
+	auto color = camera->surface->colors[0];
+	auto width = color.image->width;
+	auto height = color.image->height;
+	auto normalizedPosition = Vector3f((position.x / width) * 2 - 1, (position.y / height) * 2 - 1, position.z);
+	return camera->cameraToWorldMatrix.Multiply(normalizedPosition);
 }
 
 DECLARE_COMMAND_CODE(CreateCamera);

@@ -21,7 +21,7 @@ namespace Core::Math
 		{
 		}
 
-		inline Vector4<T> Multiply(const Vector4<T>& v)
+		inline Vector4<T> Multiply(const Vector4<T>& v) const
 		{
 			Vector4<T> out;
 			out.x = x | v;
@@ -32,13 +32,16 @@ namespace Core::Math
 			return out;
 		}
 
-		inline Vector3<T> Multiply(const Vector3<T>& v)
+		inline Vector3<T> Multiply(const Vector3<T>& v) const
 		{
-			Vector3<T> out;
+			Vector4<T> temp(v.x, v.y, v.z, 1);
+			temp = Multiply(temp);
+			return Vector3<T>(temp.x, temp.y, temp.z);
+			/*Vector3<T> out;
 			out.x = v.x*x.x + v.y*y.x + v.z*z.x + w.x;
 			out.y = v.x*x.y + v.y*y.y + v.z*z.y + w.y;
 			out.z = v.x*x.z + v.y*z.z + v.z*z.z + w.z;
-			return out;
+			return out;*/
 		}
 
 		inline Matrix4x4<T> Multiply(const Matrix4x4<T>& m)
@@ -50,6 +53,28 @@ namespace Core::Math
 			z = Vector4<T>(z_ | t.x, z_ | t.y, z_ | t.z, z_ | t.w);
 			w = Vector4<T>(m.w | t.x, m.w | t.y, m.w | t.z, m.w | t.w);
 			return *this;
+		}
+
+		inline T GetDeterminant() const
+		{
+			// Taken from unity
+			/*T m00 = Get(0, 0);  T m01 = Get(0, 1);  T m02 = Get(0, 2);  T m03 = Get(0, 3);
+			T m10 = Get(1, 0);  T m11 = Get(1, 1);  T m12 = Get(1, 2);  T m13 = Get(1, 3);
+			T m20 = Get(2, 0);  T m21 = Get(2, 1);  T m22 = Get(2, 2);  T m23 = Get(2, 3);
+			T m30 = Get(3, 0);  T m31 = Get(3, 1);  T m32 = Get(3, 2);  T m33 = Get(3, 3);*/
+			T m00 = x.x;  T m01 = x.y;  T m02 = x.z;  T m03 = x.w;
+			T m10 = y.x;  T m11 = y.y;  T m12 = y.z;  T m13 = y.w;
+			T m20 = z.x;  T m21 = z.y;  T m22 = z.z;  T m23 = z.w;
+			T m30 = w.x;  T m31 = w.y;  T m32 = w.z;  T m33 = w.w;
+
+			T result =
+				m03 * m12 * m21 * m30 - m02 * m13 * m21 * m30 - m03 * m11 * m22 * m30 + m01 * m13 * m22 * m30 +
+				m02 * m11 * m23 * m30 - m01 * m12 * m23 * m30 - m03 * m12 * m20 * m31 + m02 * m13 * m20 * m31 +
+				m03 * m10 * m22 * m31 - m00 * m13 * m22 * m31 - m02 * m10 * m23 * m31 + m00 * m12 * m23 * m31 +
+				m03 * m11 * m20 * m32 - m01 * m13 * m20 * m32 - m03 * m10 * m21 * m32 + m00 * m13 * m21 * m32 +
+				m01 * m10 * m23 * m32 - m00 * m11 * m23 * m32 - m02 * m11 * m20 * m33 + m01 * m12 * m20 * m33 +
+				m02 * m10 * m21 * m33 - m00 * m12 * m21 * m33 - m01 * m10 * m22 * m33 + m00 * m11 * m22 * m33;
+			return result;
 		}
 
 		template <class T>
@@ -163,7 +188,15 @@ namespace Core::Math
 		template <class T>
 		inline static Matrix4x4<T> Invert(const Matrix4x4<T>& m)
 		{
-			return m;
+			T determinant = m.GetDeterminant();
+			ASSERT(determinant != 0);
+
+			Matrix4x4<T> out;
+			out.x = m.x / determinant;
+			out.y = m.y / determinant;
+			out.z = m.z / determinant;
+			out.w = m.w / determinant;
+			return out;
 		}
 
 	public:
