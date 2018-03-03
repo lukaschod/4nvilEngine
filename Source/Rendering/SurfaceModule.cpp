@@ -8,7 +8,7 @@ using namespace Core::Graphics;
 
 void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 	ExecuteAfter<ImageModule>(moduleManager);
 }

@@ -22,7 +22,13 @@ namespace Core
 		bool IsPresent() const { return device != nullptr; }
 
 		// Returns the specific button state
-		MouseButtonState GetButtonState(MouseButtonType type) const { return buttonState[Enum::ToUnderlying(type)]; }
+		bool GetButton(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].click; }
+
+		// Returns the specific button state
+		bool GetButtonUp(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].up; }
+
+		// Returns the specific button state
+		bool GetButtonDown(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].down; }
 
 		// Returns mouse position in screen space
 		Math::Vector2f GetPosition() const { return position; }
@@ -30,7 +36,8 @@ namespace Core
 	private:
 		InputModule* inputModule;
 		const InputDevice* device;
-		MouseButtonState buttonState[Enum::ToUnderlying(MouseButtonType::Count)];
+		MouseButtonState buttonsState[Enum::ToUnderlying(MouseButtonType::Count)];
+
 		Math::Vector2f position;
 	};
 }

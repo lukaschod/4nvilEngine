@@ -24,7 +24,7 @@ void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
 	// Construct message
 	va_list ap;
 	va_start(ap, format);
-	StringBuilder<1024> messageBuilder;
+	StringBuilder<1024 * 4> messageBuilder;
 	messageBuilder.AppendFmt(format, ap);
 	va_end(ap);
 

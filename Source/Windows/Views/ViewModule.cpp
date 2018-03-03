@@ -6,6 +6,7 @@
 #include <windowsx.h>
 
 using namespace Core;
+using namespace Core::Math;
 using namespace Core::Graphics;
 using namespace Windows;
 
@@ -64,7 +65,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		auto xPos = GET_X_LPARAM(lParam);
 		auto yPos = GET_Y_LPARAM(lParam);
 		MousePositionDesc desc;
-		desc.position = Math::Vector2f((float) xPos, (float) yPos);
+		desc.position = Vector2f((float) xPos, (float) yPos);
 		wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.inputDevice, Enum::ToUnderlying(MouseInputType::Move), (uint8*) &desc, sizeof(MousePositionDesc));
 		break;
 	}
@@ -156,7 +157,7 @@ View* ViewModule::TryFindView(HWND windowHandle)
 
 void ViewModule::Execute(const ExecutionContext& context)
 {
-	PipeModule::Execute(context);
+	base::Execute(context);
 
 	if (inputDevice == nullptr)
 	{

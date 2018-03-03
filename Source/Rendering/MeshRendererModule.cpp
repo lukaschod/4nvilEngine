@@ -19,7 +19,7 @@ MeshRendererModule::MeshRendererModule()
 
 void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	meshModule = ExecuteBefore<MeshModule>(moduleManager);
 	materialModule = ExecuteBefore<MaterialModule>(moduleManager);
 	storageModule = ExecuteBefore<StorageModule>(moduleManager);
@@ -36,7 +36,7 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	if (perAllRendererStorage == nullptr)
 		perAllRendererStorage = storageModule->RecCreateStorage(context, sizeof(Matrix4x4f));
 
-	PipeModule::Execute(context);
+	base::Execute(context);
 
 	for (auto meshRenderer : meshRenderers)
 	{

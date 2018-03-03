@@ -10,7 +10,7 @@ using namespace Core::Math;
 
 void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	surfaceModule = ExecuteAfter<SurfaceModule>(moduleManager);
 	storageModule = ExecuteBefore<StorageModule>(moduleManager);
 	transformModule = ExecuteBefore<TransformModule>(moduleManager);
@@ -20,7 +20,7 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 void CameraModule::Execute(const ExecutionContext& context)
 {
 	MARK_FUNCTION;
-	PipeModule::Execute(context);
+	base::Execute(context);
 
 	for (auto target : cameras)
 	{
@@ -28,9 +28,7 @@ void CameraModule::Execute(const ExecutionContext& context)
 		transformModule->RecCalculateWorldToView(context, transform);
 		target->worldToCameraMatrix = transform->worldToView;
 		target->worldToCameraMatrix.Multiply(target->projectionMatrix);
-		target->worldToCameraMatrix = Matrix4x4f::Transpose(target->worldToCameraMatrix);
-		target->cameraToWorldMatrix = Matrix4x4f::Invert(target->worldToCameraMatrix);
-		target->cameraToWorldMatrix = Matrix4x4f::Transpose(target->cameraToWorldMatrix);
+		target->cameraToWorldMatrix = Matrix4x4f::Inverted(target->worldToCameraMatrix);
 		storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
 	}
 }
@@ -43,13 +41,31 @@ const Camera* CameraModule::AllocateCamera()
 	return new Camera(this, storage);
 }
 
-Vector3f CameraModule::CalculateScreenToWorld(const Camera* camera, const Vector3f& position)
+Vector3f CameraModule::ScreenToWorld(const Camera* camera, const Vector3f& position)
 {
-	auto color = camera->surface->colors[0];
-	auto width = color.image->width;
-	auto height = color.image->height;
-	auto normalizedPosition = Vector3f((position.x / width) * 2 - 1, (position.y / height) * 2 - 1, position.z);
-	return camera->cameraToWorldMatrix.Multiply(normalizedPosition);
+	auto normalizedPosition = ScreenToViewport(camera, position);
+	auto worldPosition = camera->cameraToWorldMatrix.TransformPosition(normalizedPosition);
+	return Vector3f(worldPosition.x, worldPosition.y, worldPosition.z) / worldPosition.w;
+}
+
+Vector3f CameraModule::ScreenToViewport(const Camera* camera, const Vector3f& position)
+{
+	// Fetch width and height
+	auto surface = camera->surface;
+	ASSERT(camera->surface != nullptr);
+	ASSERT(!camera->surface->colors.empty());
+	auto& color = surface->colors[0];
+	auto image = color.image;
+	ASSERT(image != nullptr);
+
+	auto width = image->width;
+	auto height = image->height;
+
+	auto viewPortPosition = Vector3f(
+		(position.x / width) * 2 - 1, 
+		(1 - (position.y / height)) * 2 - 1, 
+		position.z);
+	return viewPortPosition;
 }
 
 DECLARE_COMMAND_CODE(CreateCamera);

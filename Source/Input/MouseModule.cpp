@@ -18,6 +18,12 @@ void MouseModule::Execute(const ExecutionContext& context)
 	if (device == nullptr)
 		return;
 
+	for (auto& state : buttonsState)
+	{
+		state.down = false;
+		state.up = false;
+	}
+
 	// Examine all inputs and update the state of mouse
 	auto& stream = device->inputStream;
 	auto inputCount = device->inputCount;
@@ -38,33 +44,11 @@ void MouseModule::Execute(const ExecutionContext& context)
 		case MouseInputType::Button:
 		{
 			auto& desc = stream.FastRead<MouseButtonDesc>(offset);
-			auto& state = buttonState[Enum::ToUnderlying(desc.type)];
+			auto& state = buttonsState[Enum::ToUnderlying(desc.type)];
 			auto isDown = desc.isDown;
-			if (state == MouseButtonState::None && isDown)
-			{
-				state = MouseButtonState::Down;
-				break;
-			}
-
-			if (state == MouseButtonState::Down && isDown)
-			{
-				state = MouseButtonState::Click;
-				break;
-			}
-
-			if (state == MouseButtonState::Click && !isDown)
-			{
-				state = MouseButtonState::Up;
-				break;
-			}
-
-			if (state == MouseButtonState::Up && !isDown)
-			{
-				state = MouseButtonState::None;
-				break;
-			}
-
-			ERROR("Invalid button state");
+			state.down = isDown;
+			state.up = !isDown;
+			state.click = isDown;
 			break;
 		}
 

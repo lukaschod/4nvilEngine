@@ -80,7 +80,7 @@ public:
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
-		ComponentModule::SetupExecuteOrder(moduleManager);
+		base::SetupExecuteOrder(moduleManager);
 		transformModule = ExecuteAfter<TransformModule>(moduleManager);
 		unitModule = ExecuteAfter<UnitModule>(moduleManager);
 		memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
@@ -107,7 +107,7 @@ public:
 	virtual void Execute(const ExecutionContext& context) override
 	{
 		MARK_FUNCTION;
-		ComponentModule::Execute(context);
+		base::Execute(context);
 
 		for (auto agent : agents)
 		{
@@ -253,7 +253,7 @@ public:
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
-		ComponentModule::SetupExecuteOrder(moduleManager);
+		base::SetupExecuteOrder(moduleManager);
 		unitModule = ExecuteAfter<UnitModule>(moduleManager);
 		memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
 		memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
@@ -268,7 +268,7 @@ public:
 			DESERIALIZE_METHOD_ARG1_START(CreateAgent, Agent*, target);
 			target->acceleration = 1.0f;
 			target->maxSpeed = 2.0f;
-			target->velocity = Vector3f(0, 0, 0);
+			target->velocity = 0.0f;
 			target->radius = 1.2f;
 			target->transform = unitModule->GetComponent<Transform>(target->unit);
 			target->seekDestination = nullptr;
@@ -284,13 +284,12 @@ public:
 		base::Execute(context);
 
 		auto screenPosition = mouseModule->GetPosition();
-		auto screenPosition3 = Vector3f(screenPosition.x, screenPosition.y, 0.9f);
-		auto worldPosition = cameraModule->CalculateScreenToWorld(cameraModule->GetCameras()[0], screenPosition3);
+		auto screenPosition3 = Vector3f(screenPosition.x, screenPosition.y, 0.999549866f);
+		auto worldPosition = cameraModule->ScreenToWorld(cameraModule->GetCameras()[0], screenPosition3);
 
-		TRACE("%f %f %f", worldPosition.x, worldPosition.y, worldPosition.z);
 		for (auto agent : agents)
 		{
-			agent->seekDestination = mouseModule->GetButtonState(MouseButtonType::Left) == MouseButtonState::Click;
+			agent->seekDestination = mouseModule->GetButton(MouseButtonType::Left);
 			agent->destination = worldPosition;
 		}
 	}
@@ -533,7 +532,7 @@ public:
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
-		ComputeModule::SetupExecuteOrder(moduleManager);
+		base::SetupExecuteOrder(moduleManager);
 		viewModule = ExecuteBefore<IViewModule>(moduleManager);
 		materialModule = ExecuteBefore<MaterialModule>(moduleManager);
 		shaderModule = ExecuteBefore<ShaderModule>(moduleManager);
@@ -581,7 +580,7 @@ VertData VertMain(AppData i)
 
 float4 FragMain(VertData i) : SV_TARGET
 {
-	return float4(1, 1, 1, 1);
+	return float4(1, 1, 0, 1);
 }
 			)";
 
@@ -722,7 +721,7 @@ public:
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
-		ComputeModule::SetupExecuteOrder(moduleManager);
+		base::SetupExecuteOrder(moduleManager);
 		viewModule = ExecuteBefore<IViewModule>(moduleManager);
 		materialModule = ExecuteBefore<MaterialModule>(moduleManager);
 		shaderModule = ExecuteBefore<ShaderModule>(moduleManager);
@@ -771,7 +770,7 @@ VertData VertMain(AppData i)
 
 float4 FragMain(VertData i) : SV_TARGET
 {
-	return float4(1, 1, 1, 1);
+	return float4(1, 1, 0, 1);
 }
 			)";
 
@@ -943,16 +942,6 @@ float4 FragMain(VertData i) : SV_TARGET
 	AgentModule* agentModule;
 	uint32 frame;
 };
-
-void AddCoreModules(ModuleManager* manager)
-{
-
-}
-
-void AddProjectModules(ModuleManager* manager)
-{
-
-}
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {

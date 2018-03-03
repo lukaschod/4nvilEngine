@@ -20,7 +20,7 @@ TransformModule::TransformModule()
 void TransformModule::Execute(const ExecutionContext& context)
 {
 	MARK_FUNCTION;
-	PipeModule::Execute(context);
+	base::Execute(context);
 
 	// Do BFS to re-calculate new transformations
 	// TODO: Find performance BFS vs DFS, but my guess BFS better because cache might be used much more better
@@ -52,10 +52,10 @@ void TransformModule::Execute(const ExecutionContext& context)
 		// If nor local transformation changed nor the parent one, we can skip the combination of them
 		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged) || parent->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
 		{
-			next->objectToWorld = parent->objectToWorld;
-			next->objectToWorld.Multiply(next->localObjectToWorld);
-			next->objectToWorld = Matrix4x4f::Transpose(next->objectToWorld); // TODO: Technical depth, maybe we can avoid using transpose at all
-			next->position = next->objectToWorld.Multiply(Vector3f(0, 0, 0));
+			next->objectToWorld = next->localObjectToWorld;
+			next->objectToWorld.Multiply(parent->objectToWorld);
+			ASSERT(next->objectToWorld.IsValid());
+			next->position = next->objectToWorld.TransformPosition(Vector3f::zero).xyz();
 		}
 
 		// Add transform childs
@@ -161,7 +161,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 			if (parentTransform != nullptr)
 				transformToCalculate->worldToView = parentTransform->worldToView;
 			else
-				transformToCalculate->worldToView = Matrix4x4f::Indentity<float>();
+				transformToCalculate->worldToView = Matrix4x4f::indentity;
 			transformToCalculate->worldToView.Multiply(Matrix4x4f::Rotate(-transformToCalculate->localRotation));
 			transformToCalculate->worldToView.Multiply(Matrix4x4f::Translate(-transformToCalculate->localPosition));
 

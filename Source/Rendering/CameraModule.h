@@ -44,9 +44,18 @@ namespace Core
 	public:
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+
+		// Returns all cameras
 		const List<Camera*>& GetCameras() const;
+
+		// Allocates memory for camera, creation is still needed
 		const Camera* AllocateCamera();
-		Math::Vector3f CalculateScreenToWorld(const Camera* camera, const Math::Vector3f& position);
+
+		// Convert screen space position into world space position
+		Math::Vector3f ScreenToWorld(const Camera* camera, const Math::Vector3f& position);
+
+		// Convert screen space position into viewport space position
+		Math::Vector3f ScreenToViewport(const Camera* camera, const Math::Vector3f& position);
 
 	public:
 		const Camera* RecCreateCamera(const ExecutionContext& context, const Camera* camera = nullptr);

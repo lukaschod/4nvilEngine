@@ -37,12 +37,12 @@ void GraphicsModule::Execute(const ExecutionContext& context)
 	}
 
 	planner->Reset();
-	PipeModule::Execute(context);
+	base::Execute(context);
 }
 
 void GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	Initialize();
 	moduleManager->AddModule(new GraphicsPlannerModule(device));
 	moduleManager->AddModule(new GraphicsExecutorModule());

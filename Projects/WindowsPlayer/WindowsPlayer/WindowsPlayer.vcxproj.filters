@@ -168,6 +168,9 @@
     <ClCompile Include="..\..\..\Source\Input\MouseModule.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Math\Matrix.cpp">
+      <Filter>Source\Tools\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Modules\ModuleManager.h">
@@ -393,6 +396,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Input\MouseInputs.h">
       <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector2.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector3.h">
+      <Filter>Source\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector4.h">
+      <Filter>Source\Tools\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using namespace Core::Graphics;
 
 void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 
 	// TODO: Do we really need them?

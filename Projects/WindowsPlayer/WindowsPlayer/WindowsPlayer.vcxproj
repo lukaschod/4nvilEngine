@@ -93,6 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>__x86_64;ENABLED_DEBUG;ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -157,6 +158,7 @@
     <ClCompile Include="..\..\..\Source\Tools\Console.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\IO\Directory.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\IO\FileStream.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Math\Matrix.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Threading\AutoResetEvent.cpp" />
     <ClCompile Include="..\..\..\Source\WindowsPlayer\Main.cpp" />
     <ClCompile Include="..\..\..\Source\Windows\Graphics\Directx12\BufferHeap.cpp" />
@@ -227,6 +229,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Math\Quaternion.h" />
     <ClInclude Include="..\..\..\Source\Tools\Math\Rect.h" />
     <ClInclude Include="..\..\..\Source\Tools\Math\Vector.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector2.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector3.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Math\Vector4.h" />
     <ClInclude Include="..\..\..\Source\Tools\StopWatch.h" />
     <ClInclude Include="..\..\..\Source\Tools\String.h" />
     <ClInclude Include="..\..\..\Source\Tools\Testing.h" />

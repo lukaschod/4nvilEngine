@@ -12,196 +12,265 @@ namespace Core::Math
 	class Matrix4x4
 	{
 	public:
-		inline Matrix4x4() {}
-		inline Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w)
-			: x(x)
-			, y(y)
-			, z(z)
-			, w(w)
-		{
-		}
+		Matrix4x4() {}
+		Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w);
 
-		inline Vector4<T> Multiply(const Vector4<T>& v) const
-		{
-			Vector4<T> out;
-			out.x = x | v;
-			out.y = y | v;
-			out.z = z | v;
-			out.w = w | v;
-			out /= out.w;
-			return out;
-		}
+		bool operator==(const Matrix4x4<T>& other) const;
+		bool operator!=(const Matrix4x4<T>& other) const;
 
-		inline Vector3<T> Multiply(const Vector3<T>& v) const
-		{
-			Vector4<T> temp(v.x, v.y, v.z, 1);
-			temp = Multiply(temp);
-			return Vector3<T>(temp.x, temp.y, temp.z);
-			/*Vector3<T> out;
-			out.x = v.x*x.x + v.y*y.x + v.z*z.x + w.x;
-			out.y = v.x*x.y + v.y*y.y + v.z*z.y + w.y;
-			out.z = v.x*x.z + v.y*z.z + v.z*z.z + w.z;
-			return out;*/
-		}
+		// Transform position without w normalization
+		Vector4<T> TransformPosition(const Vector4<T>& v) const;
 
-		inline Matrix4x4<T> Multiply(const Matrix4x4<T>& m)
-		{
-			Matrix4x4<T> t = Transpose(*this);
-			Vector4<T> x_ = m.x, y_ = m.y, z_ = m.z;
-			x = Vector4<T>(x_ | t.x, x_ | t.y, x_ | t.z, x_ | t.w);
-			y = Vector4<T>(y_ | t.x, y_ | t.y, y_ | t.z, y_ | t.w);
-			z = Vector4<T>(z_ | t.x, z_ | t.y, z_ | t.z, z_ | t.w);
-			w = Vector4<T>(m.w | t.x, m.w | t.y, m.w | t.z, m.w | t.w);
-			return *this;
-		}
+		// Transform position without w normalization
+		Vector4<T> TransformPosition(const Vector3<T>& v) const;
 
-		inline T GetDeterminant() const
-		{
-			// Taken from unity
-			/*T m00 = Get(0, 0);  T m01 = Get(0, 1);  T m02 = Get(0, 2);  T m03 = Get(0, 3);
-			T m10 = Get(1, 0);  T m11 = Get(1, 1);  T m12 = Get(1, 2);  T m13 = Get(1, 3);
-			T m20 = Get(2, 0);  T m21 = Get(2, 1);  T m22 = Get(2, 2);  T m23 = Get(2, 3);
-			T m30 = Get(3, 0);  T m31 = Get(3, 1);  T m32 = Get(3, 2);  T m33 = Get(3, 3);*/
-			T m00 = x.x;  T m01 = x.y;  T m02 = x.z;  T m03 = x.w;
-			T m10 = y.x;  T m11 = y.y;  T m12 = y.z;  T m13 = y.w;
-			T m20 = z.x;  T m21 = z.y;  T m22 = z.z;  T m23 = z.w;
-			T m30 = w.x;  T m31 = w.y;  T m32 = w.z;  T m33 = w.w;
+		Matrix4x4<T> Multiply(const Matrix4x4<T>& m);
+		void Transpose();
+		T GetDeterminant() const;
 
-			T result =
-				m03 * m12 * m21 * m30 - m02 * m13 * m21 * m30 - m03 * m11 * m22 * m30 + m01 * m13 * m22 * m30 +
-				m02 * m11 * m23 * m30 - m01 * m12 * m23 * m30 - m03 * m12 * m20 * m31 + m02 * m13 * m20 * m31 +
-				m03 * m10 * m22 * m31 - m00 * m13 * m22 * m31 - m02 * m10 * m23 * m31 + m00 * m12 * m23 * m31 +
-				m03 * m11 * m20 * m32 - m01 * m13 * m20 * m32 - m03 * m10 * m21 * m32 + m00 * m13 * m21 * m32 +
-				m01 * m10 * m23 * m32 - m00 * m11 * m23 * m32 - m02 * m11 * m20 * m33 + m01 * m12 * m20 * m33 +
-				m02 * m10 * m21 * m33 - m00 * m12 * m21 * m33 - m01 * m10 * m22 * m33 + m00 * m11 * m22 * m33;
-			return result;
-		}
+		// Returns if all values are finite
+		bool IsValid() const;
 
-		template <class T>
-		inline static Matrix4x4<T> Indentity()
-		{
-			Matrix4x4<T> out;
-			out.x = Vector4<T>(1, 0, 0, 0);
-			out.y = Vector4<T>(0, 1, 0, 0);
-			out.z = Vector4<T>(0, 0, 1, 0);
-			out.w = Vector4<T>(0, 0, 0, 1);
-			return out;
-		}
+		static Matrix4x4<T> Rotate(const Quaternion<T>& rotation);
+		static Matrix4x4<T> Scale(const Vector3<T>& scale);
+		static Matrix4x4<T> Translate(const Vector3<T>& translate);
+		static Matrix4x4<T> TRS(const Vector3<T>& translate, const Quaternion<T>& rotation, const Vector3<T>& scale);
+		static Matrix4x4<T> Perspective(T aspectRatio, T fieldOfView, T nearClip, T farClip);
+		static Matrix4x4<T> Transposed(const Matrix4x4<T>& m);
+		static Matrix4x4<T> Inverted(const Matrix4x4<T>& m);
 
-		/*inline static Matrix4x4<float> RotateX(float angle)
-		{
-			Matrix4x4<T> out;
-			float c = cos(angle), s = sin(angle);
-			out.x = Vector4<float>(1, 0, 0, 0);
-			out.y = Vector4<float>(0, c, -s, 0);
-			out.z = Vector4<float>(0, s, c, 0);
-			out.w = Vector4<float>(0, 0, 0, 1);
-			return out;
-		}
-
-		inline static Matrix4x4<float> RotateY(float angle)
-		{
-			Matrix4x4<T> out;
-			float c = cos(angle), s = sin(angle);
-			out.x = Vector4<float>(c, 0, -s, 0);
-			out.y = Vector4<float>(0, 1, 0, 0);
-			out.z = Vector4<float>(s, 0, c, 0);
-			out.w = Vector4<float>(0, 0, 0, 1);
-			return out;
-		}
-
-		inline static Matrix4x4<float> RotateZ(float angle)
-		{
-			Matrix4x4<T> out;
-			float c = cos(angle), s = sin(angle);
-			out.x = Vector4<float>(c, s, 0, 0);
-			out.y = Vector4<float>(-s, c, 0, 0);
-			out.z = Vector4<float>(0, 0, 1, 0);
-			out.w = Vector4<float>(0, 0, 0, 1);
-			return out;
-		}*/
-
-		template <class T>
-		inline static Matrix4x4<T> Rotate(const Quaternion<T>& rotation)
-		{
-			// TODO: Make it
-			return Indentity<T>();
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> Scale(const Vector3<T>& scale)
-		{
-			Matrix4x4<T> out;
-			out.x = Vector4<T>(scale.x, 0, 0, 0);
-			out.y = Vector4<T>(0, scale.y, 0, 0);
-			out.z = Vector4<T>(0, 0, scale.z, 0);
-			out.w = Vector4<T>(0, 0, 0, 1);
-			return out;
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> Translate(const Vector3<T>& translate)
-		{
-			Matrix4x4<T> out;
-			out.x = Vector4<T>(1, 0, 0, translate.x);
-			out.y = Vector4<T>(0, 1, 0, translate.y);
-			out.z = Vector4<T>(0, 0, 1, translate.z);
-			out.w = Vector4<T>(0, 0, 0, 1);
-			return out;
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> TRS(const Vector3<T>& translate, const Quaternion<T>& rotation, const Vector3<T>& scale)
-		{
-			Matrix4x4<T> out;
-			out = Scale(scale);
-			out.Multiply(Rotate(rotation));
-			out.Multiply(Translate(translate));
-			return out;
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> Perspective(T aspectRatio, T fieldOfView, T nearClip, T farClip)
-		{
-			Matrix4x4<T> out;
-			const T zDelta = farClip - nearClip;
-			const T radians = fieldOfView * (T) 0.5;
-			const T cotangent = cos(radians) / sin(radians);
-			out.x = Vector4<T>(cotangent / aspectRatio, 0, 0, 0);
-			out.y = Vector4<T>(0, cotangent, 0, 0);
-			out.z = Vector4<T>(0, 0, farClip / zDelta, -(farClip * nearClip) / zDelta);
-			out.w = Vector4<T>(0, 0, 1, 0);
-			return out;
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> Transpose(const Matrix4x4<T>& m)
-		{
-			Matrix4x4<T> out;
-			out.x = Vector4<T>(m.x.x, m.y.x, m.z.x, m.w.x);
-			out.y = Vector4<T>(m.x.y, m.y.y, m.z.y, m.w.y);
-			out.z = Vector4<T>(m.x.z, m.y.z, m.z.z, m.w.z);
-			out.w = Vector4<T>(m.x.w, m.y.w, m.z.w, m.w.w);
-			return out;
-		}
-
-		template <class T>
-		inline static Matrix4x4<T> Invert(const Matrix4x4<T>& m)
-		{
-			T determinant = m.GetDeterminant();
-			ASSERT(determinant != 0);
-
-			Matrix4x4<T> out;
-			out.x = m.x / determinant;
-			out.y = m.y / determinant;
-			out.z = m.z / determinant;
-			out.w = m.w / determinant;
-			return out;
-		}
+	public:
+		const static Matrix4x4<T> indentity;
+		const static Matrix4x4<T> zero;
 
 	public:
 		Vector4<T> x, y, z, w;
 	};
 
 	typedef Matrix4x4<float> Matrix4x4f;
+	typedef Matrix4x4<float> float4x4;
+
+	float MatrixGetDeterminant(const float* in);
+	bool MatrixInvertGeneral3D(const float* in, float* out);
+	bool MatrixInvertFull(const float* m, float* out);
+
+	template<class T>
+	inline Matrix4x4<T>::Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w)
+		: x(x)
+		, y(y)
+		, z(z)
+		, w(w)
+	{
+	}
+
+	template<class T>
+	inline bool Matrix4x4<T>::operator==(const Matrix4x4<T>& other) const
+	{
+		return x == other.x && y == other.y && z == other.z && w == other.w;
+	}
+
+	template<class T>
+	inline bool Matrix4x4<T>::operator!=(const Matrix4x4<T>& other) const
+	{
+		return x != other.x || y != other.y || z != other.z || w != other.w;
+	}
+
+	template<class T>
+	inline Vector4<T> Matrix4x4<T>::TransformPosition(const Vector4<T>& v) const
+	{
+		/*auto transposed = Matrix4x4<T>Transposed(*this); // Trade-off of using column-major matrices
+		Vector4<T> out;
+		out.x = Vector4<T>::Dot(transposed.x, v);
+		out.y = Vector4<T>::Dot(transposed.y, v);
+		out.z = Vector4<T>::Dot(transposed.z, v);
+		out.w = Vector4<T>::Dot(transposed.w, v);
+		return out;*/
+
+		Vector4<T> out;
+		out =  x * v.x; // MUL
+		out += y * v.y; // MAD
+		out += z * v.z; // MAD
+		out += w * v.w; // MAD
+		return out;
+	}
+
+	template<class T>
+	inline Vector4<T> Matrix4x4<T>::TransformPosition(const Vector3<T>& v) const
+	{
+		/*Vector3<T> out;
+		out.x = v.x*x.x + v.y*y.x + v.z*z.x + w.x;
+		out.y = v.x*x.y + v.y*y.y + v.z*z.y + w.y;
+		out.z = v.x*x.z + v.y*y.z + v.z*z.z + w.z;
+		return out;*/
+
+		Vector4<T> out;
+		out =  x * v.x; // MUL
+		out += y * v.y; // MAD
+		out += z * v.z; // MAD
+		out += w;		// ADD
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Multiply(const Matrix4x4<T>& m)
+	{
+		/*Matrix4x4<T> t = Matrix4x4<T>::Transposed(m);
+		Vector4<T> x_ = x, y_ = y, z_ = z;
+		x = Vector4<T>(
+			Vector4<T>::Dot(x_, t.x),
+			Vector4<T>::Dot(x_, t.y),
+			Vector4<T>::Dot(x_, t.z),
+			Vector4<T>::Dot(x_, t.w));
+		y = Vector4<T>(
+			Vector4<T>::Dot(y_, t.x),
+			Vector4<T>::Dot(y_, t.y),
+			Vector4<T>::Dot(y_, t.z),
+			Vector4<T>::Dot(y_, t.w));
+		z = Vector4<T>(
+			Vector4<T>::Dot(z_, t.x),
+			Vector4<T>::Dot(z_, t.y),
+			Vector4<T>::Dot(z_, t.z),
+			Vector4<T>::Dot(z_, t.w));
+		w = Vector4<T>(
+			Vector4<T>::Dot(w, t.x),
+			Vector4<T>::Dot(w, t.y),
+			Vector4<T>::Dot(w, t.z),
+			Vector4<T>::Dot(w, t.w));*/
+
+		Matrix4x4<T> out;
+
+		out.x =  m.x * x.x; // MUL
+		out.x += m.y * x.y; // MAD
+		out.x += m.z * x.z; // MAD
+		out.x += m.w * x.w; // MAD
+
+		out.y =  m.x * y.x;
+		out.y += m.y * y.y; // MAD
+		out.y += m.z * y.z; // MAD
+		out.y += m.w * y.w; // MAD
+
+		out.z =  m.x * z.x; // MUL
+		out.z += m.y * z.y; // MAD
+		out.z += m.z * z.z; // MAD
+		out.z += m.w * z.w; // MAD
+
+		out.w =  m.x * w.x; // MUL
+		out.w += m.y * w.y; // MAD
+		out.w += m.z * w.z; // MAD
+		out.w += m.w * w.w; // MAD
+
+		*this = out;
+
+		return *this;
+	}
+
+	template<class T>
+	inline void Matrix4x4<T>::Transpose()
+	{
+		Math::Swap(x.y, y.x);
+		Math::Swap(x.z, z.x);
+		Math::Swap(x.w, w.x);
+		Math::Swap(y.z, z.y);
+		Math::Swap(y.w, w.y);
+		Math::Swap(z.w, w.z);
+	}
+
+	template<class T>
+	inline T Matrix4x4<T>::GetDeterminant() const
+	{
+		return (T) MatrixGetDeterminant((float*)this);
+	}
+
+	template<class T>
+	bool Matrix4x4<T>::IsValid() const
+	{
+		return x.IsValid() && y.IsValid() && z.IsValid() && w.IsValid();
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Rotate(const Quaternion<T>& rotation)
+	{
+		// TODO: Make it
+		return Matrix4x4<T>::indentity;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Scale(const Vector3<T>& scale)
+	{
+		Matrix4x4<T> out;
+		out.x = Vector4<T>(scale.x, 0, 0, 0);
+		out.y = Vector4<T>(0, scale.y, 0, 0);
+		out.z = Vector4<T>(0, 0, scale.z, 0);
+		out.w = Vector4<T>(0, 0, 0, 1);
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Translate(const Vector3<T>& translate)
+	{
+		Matrix4x4<T> out;
+		out.x = Vector4<T>(1, 0, 0, 0);
+		out.y = Vector4<T>(0, 1, 0, 0);
+		out.z = Vector4<T>(0, 0, 1, 0);
+		out.w = Vector4<T>(translate.x, translate.y, translate.z, 1);
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::TRS(const Vector3<T>& translate, const Quaternion<T>& rotation, const Vector3<T>& scale)
+	{
+		Matrix4x4<T> out;
+		out = Scale(scale);
+		out.Multiply(Rotate(rotation));
+		out.Multiply(Translate(translate));
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Perspective(T aspectRatio, T fieldOfView, T nearClip, T farClip)
+	{
+		Matrix4x4<T> out;
+		const T zDelta = farClip - nearClip;
+		const T radians = fieldOfView * (T) 0.5;
+		const T cotangent = cos(radians) / sin(radians);
+		out.x = Vector4<T>(cotangent / aspectRatio, 0, 0, 0);
+		out.y = Vector4<T>(0, cotangent, 0, 0);
+		out.z = Vector4<T>(0, 0, farClip / zDelta, 1);
+		out.w = Vector4<T>(0, 0, -(farClip * nearClip) / zDelta, 0);
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Transposed(const Matrix4x4<T>& m)
+	{
+		Matrix4x4<T> out;
+		out.x = Vector4<T>(m.x.x, m.y.x, m.z.x, m.w.x);
+		out.y = Vector4<T>(m.x.y, m.y.y, m.z.y, m.w.y);
+		out.z = Vector4<T>(m.x.z, m.y.z, m.z.z, m.w.z);
+		out.w = Vector4<T>(m.x.w, m.y.w, m.z.w, m.w.w);
+		return out;
+	}
+
+	template<class T>
+	inline Matrix4x4<T> Matrix4x4<T>::Inverted(const Matrix4x4<T>& m)
+	{
+		Matrix4x4<T> out;
+		if (!MatrixInvertFull((const float*) &m, (float*) &out))
+			return Matrix4x4<T>::zero;
+		return out;
+	}
+
+	template<class T>
+	const Matrix4x4<T> Matrix4x4<T>::indentity(
+		Vector4<T>(1, 0, 0, 0),
+		Vector4<T>(0, 1, 0, 0),
+		Vector4<T>(0, 0, 1, 0),
+		Vector4<T>(0, 0, 0, 1));
+
+	template<class T>
+	const Matrix4x4<T> Matrix4x4<T>::zero(
+		Vector4<T>(0, 0, 0, 0),
+		Vector4<T>(0, 0, 0, 0),
+		Vector4<T>(0, 0, 0, 0),
+		Vector4<T>(0, 0, 0, 0));
 }

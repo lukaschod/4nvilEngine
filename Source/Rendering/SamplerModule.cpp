@@ -7,7 +7,7 @@ using namespace Core::Graphics;
 
 void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 

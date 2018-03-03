@@ -6,7 +6,7 @@ using namespace Core::Graphics;
 
 void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 

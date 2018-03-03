@@ -16,7 +16,7 @@ using namespace Core;
 
 void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	PipeModule::SetupExecuteOrder(moduleManager);
+	base::SetupExecuteOrder(moduleManager);
 	cameraModule = ExecuteAfter<CameraModule>(moduleManager);
 	meshRendererModule = ExecuteAfter<MeshRendererModule>(moduleManager);
 	graphicsModule = ExecuteAfter<IGraphicsModule>(moduleManager);
@@ -28,7 +28,7 @@ void UnlitRenderingLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 void UnlitRenderingLoopModule::Execute(const ExecutionContext& context)
 {
 	MARK_FUNCTION;
-	PipeModule::Execute(context);
+	base::Execute(context);
 
 	auto& cameras = cameraModule->GetCameras();
 	auto& meshRenderers = meshRendererModule->GetMeshRenderers();

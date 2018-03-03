@@ -20,12 +20,11 @@ namespace Core
 		Count,
 	};
 
-	enum class MouseButtonState
+	struct MouseButtonState
 	{
-		None,
-		Down,
-		Click,
-		Up,
+		bool up;
+		bool down;
+		bool click;
 	};
 
 	struct MouseButtonDesc
