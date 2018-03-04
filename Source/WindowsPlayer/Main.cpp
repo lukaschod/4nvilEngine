@@ -27,7 +27,6 @@
 using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
-using namespace Core;
 using namespace Windows;
 
 struct Agent : public Component
@@ -41,179 +40,6 @@ struct Agent : public Component
 	float maxSpeed;
 	float radius;
 };
-
-/*class AgentModule : public ComponentModule
-{
-public:
-	DECLARE_COMMAND_CODE(CreateAgent);
-	DECLARE_COMMAND_CODE(SetDestination);
-
-	const Agent* AllocateAgent() const
-	{
-		return memoryModule->New<Agent>("AgentModule", this);
-	}
-
-	const Agent* RecCreateAgent(const ExecutionContext& context, const Agent* target = nullptr)
-	{
-		auto buffer = GetRecordingBuffer(context);
-		auto& stream = buffer->stream;
-		target = target == nullptr ? AllocateAgent() : target;
-		stream.Write(TO_COMMAND_CODE(CreateAgent));
-		stream.Write(target);
-		stream.Align();
-		buffer->commandCount++;
-		return target;
-	}
-
-	void RecSetDestination(const ExecutionContext& context, const Agent* target, const Transform* destination)
-	{
-		auto buffer = GetRecordingBuffer(context);
-		auto& stream = buffer->stream;
-		stream.Write(TO_COMMAND_CODE(SetDestination));
-		stream.Write(target);
-		stream.Write(destination);
-		stream.Align();
-		buffer->commandCount++;
-	}
-
-	virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override {}
-
-	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
-	{
-		base::SetupExecuteOrder(moduleManager);
-		transformModule = ExecuteAfter<TransformModule>(moduleManager);
-		unitModule = ExecuteAfter<UnitModule>(moduleManager);
-		memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-		timeModule = ExecuteAfter<TimeModule>(moduleManager);
-		memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
-	}
-
-	virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
-	{
-		switch (commandCode)
-		{
-			DESERIALIZE_METHOD_ARG1_START(CreateAgent, Agent*, target);
-			target->acceleration = 1.0f;
-			target->maxSpeed = 2.0f;
-			target->velocity = Vector3f(0, 0, 0);
-			target->radius = 1.2f;
-			target->transform = unitModule->GetComponent<Transform>(target->unit);
-			agents.push_back(target);
-			DESERIALIZE_METHOD_END;
-		}
-		return false;
-	}
-
-	virtual void Execute(const ExecutionContext& context) override
-	{
-		MARK_FUNCTION;
-		base::Execute(context);
-
-		for (auto agent : agents)
-		{
-			auto agentTransform = agent->transform;
-			Vector3f impact(0, 0, 0);
-			impact += GetSeek(agent, Vector3f(0, 0, 0));
-			impact += GetSeparation(agent) * 2.2;
-
-			agent->velocity += impact * timeModule->GetDeltaTime();
-
-			// Limit the speed
-			auto speed = agent->velocity.Magnitude();
-			if (speed > agent->maxSpeed)
-				agent->velocity *= agent->maxSpeed / speed;
-
-			transformModule->RecAddPosition(context, agentTransform, agent->velocity);
-		}
-
-		for (auto agent : agents)
-		{
-			auto agentTransform = agent->transform;
-			transformModule->RecAddPosition(context, agentTransform, GetDistinguish(agent));
-		}
-	}
-
-	Vector3f GetSeek(Agent* agent, Vector3f destination)
-	{
-		auto position = agent->transform->localPosition;
-
-		if (position == destination)
-			return Vector3f(0, 0, 0);
-
-		auto desired = destination - position;
-
-		desired *= agent->maxSpeed / desired.Magnitude();
-
-		auto velocityChange = desired - agent->velocity;
-
-		velocityChange *= agent->acceleration / agent->maxSpeed;
-
-		return velocityChange;
-	}
-
-	Vector3f GetSeparation(Agent* targetAgent)
-	{
-		Vector3f totalForce(0, 0, 0);
-		int neighboursCount = 0;
-		float seperation = 3;
-
-		auto targetTransform = targetAgent->transform;
-		for (auto agent : agents)
-		{
-			if (targetAgent == agent)
-				continue;
-
-			auto agentTransform = agent->transform;
-			auto pushForce = agentTransform->localPosition - targetTransform->localPosition;
-			auto distance = pushForce.Magnitude();
-
-			if (distance <= seperation)
-			{
-				float r = (agent->radius + targetAgent->radius);
-				totalForce += pushForce*(1.0f - ((distance - r) / (seperation - r)));
-				neighboursCount++;
-			}
-		}
-
-		if (neighboursCount == 0)
-			return Vector3f(0, 0, 0);
-
-		return totalForce * (targetAgent->maxSpeed/neighboursCount);
-	}
-
-	Vector3f GetDistinguish(Agent* targetAgent)
-	{
-		Vector3f totalForce(0, 0, 0);
-		auto targetPosition = targetAgent->transform->localPosition;
-		for (auto agent : agents)
-		{
-			if (targetAgent == agent)
-				continue;
-
-			auto position = agent->transform->localPosition;
-			auto direction = position - targetPosition;
-			auto directionMagnitude = direction.Magnitude();
-			auto distance = agent->radius + targetAgent->radius - directionMagnitude;
-			auto seperate = direction / directionMagnitude*distance;
-
-			if (distance > 0 && directionMagnitude > 0)
-			{
-				totalForce += Vector3f(seperate.x, 0, seperate.y);
-			}
-		}
-
-		return totalForce;
-	}
-
-	List<Agent*>* GetAgents() { return &agents; }
-
-private:
-	TransformModule* transformModule;
-	UnitModule* unitModule;
-	MemoryModule* memoryModule;
-	TimeModule* timeModule;
-	List<Agent*> agents;
-};*/
 
 class AgentModule : public ComponentModule
 {
@@ -327,7 +153,7 @@ public:
 		{
 			auto agent = agents->at(i);
 			auto agentTransform = agent->transform;
-			Vector3f impact(0, 0, 0);
+			Vector3f impact = 0;
 			if (agent->seekDestination)
 				impact += GetSeek(agent, agent->destination);
 			impact += GetSeparation(agent) * 2.2f;
@@ -348,7 +174,7 @@ public:
 		auto position = agent->transform->localPosition;
 
 		if (position == destination)
-			return Vector3f(0, 0, 0);
+			return Vector3f::zero;
 
 		auto desired = destination - position;
 
@@ -363,7 +189,7 @@ public:
 
 	Vector3f GetSeparation(Agent* targetAgent)
 	{
-		Vector3f totalForce(0, 0, 0);
+		Vector3f totalForce = 0;
 		int neighboursCount = 0;
 		float seperation = 3;
 
@@ -386,7 +212,7 @@ public:
 		}
 
 		if (neighboursCount == 0)
-			return Vector3f(0, 0, 0);
+			return Vector3f::zero;
 
 		return totalForce * (targetAgent->maxSpeed / neighboursCount);
 	}
@@ -406,7 +232,10 @@ public:
 		base::SetupExecuteOrder(moduleManager);
 		transformModule = ExecuteAfter<TransformModule>(moduleManager);
 		agentModule = ExecuteAfter<AgentModule>(moduleManager);
+		timeModule = ExecuteAfter<TimeModule>(moduleManager);
+		ExecuteAfter<AgentForceModule>(moduleManager);
 		agents = agentModule->GetAgents();
+		totalPassedTime = 0;
 	}
 
 	virtual size_t GetExecutionSize() override { return agents->size(); }
@@ -416,11 +245,14 @@ public:
 	{
 		MARK_FUNCTION;
 
+		totalPassedTime += timeModule->GetDeltaTime() / 4.0f;
+
 		for (auto i = context.start; i < context.end; i++)
 		{
 			auto agent = agents->at(i);
 			auto agentTransform = agent->transform;
 			transformModule->RecAddPosition(context, agentTransform, GetDistinguish(agent));
+			transformModule->RecSetRotation(context, agentTransform, Vector3f(0, 0, totalPassedTime));
 		}
 	}
 
@@ -450,8 +282,10 @@ public:
 
 private:
 	TransformModule* transformModule;
+	TimeModule* timeModule;
 	AgentModule* agentModule;
 	List<Agent*>* agents;
+	float totalPassedTime;
 };
 
 class ShutdownModule : public ComputeModule
@@ -890,7 +724,7 @@ float4 FragMain(VertData i) : SV_TARGET
 		int count = 30;
 		auto offset = count * 1;
 
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			auto view = viewModule->RecCreateIView(context);
 

@@ -7,6 +7,7 @@ BufferHeap::BufferHeap(ID3D12Device* device, size_t capacity, size_t alignment)
 	: device(device)
 	, alignment(alignment)
 {
+	this->capacity = alignment;
 	Grow(capacity);
 }
 

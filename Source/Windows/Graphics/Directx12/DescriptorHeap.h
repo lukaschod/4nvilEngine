@@ -36,6 +36,7 @@ namespace Windows::Directx12
 
 	private:
 		AUTOMATED_PROPERTY_GET(HeapType, type);
+		D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc;
 		List<BuddyHeapManager*> heapManagers;
 		List<ID3D12DescriptorHeap*> descriptorHeaps;
 		ID3D12Device* device;

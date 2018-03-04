@@ -6,6 +6,37 @@ DescriptorHeap::DescriptorHeap(ID3D12Device* device, HeapType type, size_t capac
 	: device(device)
 	, type(type)
 {
+	switch (type)
+	{
+	case HeapType::SRVs:
+		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
+		break;
+	case HeapType::Samplers:
+		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
+		break;
+	case HeapType::RTVs:
+		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
+		break;
+	case HeapType::SRVsCPU:
+		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
+		break;
+	case HeapType::SamplersCPU:
+		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
+		break;
+	}
+
+	this->capacity = 1; // We need to offset start to respect aligment
+
 	Grow(capacity);
 }
 
@@ -62,36 +93,7 @@ void DescriptorHeap::Deallocate(const HeapMemory& memory)
 void DescriptorHeap::Grow(size_t capacity)
 {
 	ID3D12DescriptorHeap* heap;
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 	srvHeapDesc.NumDescriptors = (UINT) capacity;
-	switch (type)
-	{
-	case HeapType::SRVs:
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
-		break;
-	case HeapType::Samplers:
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
-		break;
-	case HeapType::RTVs:
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
-		break;
-	case HeapType::SRVsCPU:
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
-		break;
-	case HeapType::SamplersCPU:
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		alignment = device->GetDescriptorHandleIncrementSize(srvHeapDesc.Type);
-		break;
-	}
 	ASSERT_SUCCEEDED((device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&heap))));
 	descriptorHeaps.push_back(heap);
 

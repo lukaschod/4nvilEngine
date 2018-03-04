@@ -52,6 +52,7 @@ namespace Core
 		void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
 		void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
 		void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
+		void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
 		void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
 	protected:

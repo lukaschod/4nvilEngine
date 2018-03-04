@@ -6,8 +6,6 @@
 
 namespace Core::Math
 {
-	// Row-major system
-	// Left-handed Cartesian Coordinates
 	template<typename T>
 	class Matrix4x4
 	{
@@ -78,14 +76,7 @@ namespace Core::Math
 	template<class T>
 	inline Vector4<T> Matrix4x4<T>::TransformPosition(const Vector4<T>& v) const
 	{
-		/*auto transposed = Matrix4x4<T>Transposed(*this); // Trade-off of using column-major matrices
-		Vector4<T> out;
-		out.x = Vector4<T>::Dot(transposed.x, v);
-		out.y = Vector4<T>::Dot(transposed.y, v);
-		out.z = Vector4<T>::Dot(transposed.z, v);
-		out.w = Vector4<T>::Dot(transposed.w, v);
-		return out;*/
-
+		// Pack the operations for SIMD optimization
 		Vector4<T> out;
 		out =  x * v.x; // MUL
 		out += y * v.y; // MAD
@@ -97,12 +88,7 @@ namespace Core::Math
 	template<class T>
 	inline Vector4<T> Matrix4x4<T>::TransformPosition(const Vector3<T>& v) const
 	{
-		/*Vector3<T> out;
-		out.x = v.x*x.x + v.y*y.x + v.z*z.x + w.x;
-		out.y = v.x*x.y + v.y*y.y + v.z*z.y + w.y;
-		out.z = v.x*x.z + v.y*y.z + v.z*z.z + w.z;
-		return out;*/
-
+		// Pack the operations for SIMD optimization
 		Vector4<T> out;
 		out =  x * v.x; // MUL
 		out += y * v.y; // MAD
@@ -114,29 +100,7 @@ namespace Core::Math
 	template<class T>
 	inline Matrix4x4<T> Matrix4x4<T>::Multiply(const Matrix4x4<T>& m)
 	{
-		/*Matrix4x4<T> t = Matrix4x4<T>::Transposed(m);
-		Vector4<T> x_ = x, y_ = y, z_ = z;
-		x = Vector4<T>(
-			Vector4<T>::Dot(x_, t.x),
-			Vector4<T>::Dot(x_, t.y),
-			Vector4<T>::Dot(x_, t.z),
-			Vector4<T>::Dot(x_, t.w));
-		y = Vector4<T>(
-			Vector4<T>::Dot(y_, t.x),
-			Vector4<T>::Dot(y_, t.y),
-			Vector4<T>::Dot(y_, t.z),
-			Vector4<T>::Dot(y_, t.w));
-		z = Vector4<T>(
-			Vector4<T>::Dot(z_, t.x),
-			Vector4<T>::Dot(z_, t.y),
-			Vector4<T>::Dot(z_, t.z),
-			Vector4<T>::Dot(z_, t.w));
-		w = Vector4<T>(
-			Vector4<T>::Dot(w, t.x),
-			Vector4<T>::Dot(w, t.y),
-			Vector4<T>::Dot(w, t.z),
-			Vector4<T>::Dot(w, t.w));*/
-
+		// Pack the operations for SIMD optimization
 		Matrix4x4<T> out;
 
 		out.x =  m.x * x.x; // MUL
@@ -190,8 +154,18 @@ namespace Core::Math
 	template<class T>
 	inline Matrix4x4<T> Matrix4x4<T>::Rotate(const Quaternion<T>& rotation)
 	{
-		// TODO: Make it
-		return Matrix4x4<T>::indentity;
+		// Cache for less typing
+		T qx = rotation.x;
+		T qy = rotation.y;
+		T qz = rotation.z;
+		T qw = rotation.w;
+
+		Matrix4x4<T> out;
+		out.x = Vector4<T>(1 - 2 * qy*qy - 2 * qz*qz, 2 * qx*qy - 2 * qz*qw, 2 * qx*qz + 2 * qy*qw, 0);
+		out.y = Vector4<T>(2 * qx*qy + 2 * qz*qw, 1 - 2 * qx*qx - 2 * qz*qz, 2 * qy*qz - 2*qx*qw, 0);
+		out.z = Vector4<T>(2 * qx*qz - 2 * qy*qw, 2 * qy*qz + 2 * qx*qw, 1 - 2 * qx*qx - 2 * qy*qy, 0);
+		out.w = Vector4<T>(0, 0, 0, 1);
+		return out;
 	}
 
 	template<class T>

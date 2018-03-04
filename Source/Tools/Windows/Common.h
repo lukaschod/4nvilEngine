@@ -47,4 +47,7 @@ using Microsoft::WRL::ComPtr;
 #else
 #define ASSERT_SUCCEEDED(hr) (void)(hr)
 #endif
+
+#else
+#error ENABLED_WINDOWS macro is required for this header
 #endif

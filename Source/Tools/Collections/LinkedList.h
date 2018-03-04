@@ -88,8 +88,8 @@ namespace Core
 		{
 			auto link = PullUnusedLink();
 			link->value = value;
-			Connect(after.link, link);
 			Connect(link, after.link->next);
+			Connect(after.link, link);
 		}
 
 		Link* Find(T& value) const
@@ -106,7 +106,7 @@ namespace Core
 			Connect(beginLink, endLink);
 		}
 
-		inline Iterator begin() const { return Iterator((Link*) beginLink.next); }
+		inline Iterator begin() const { return Iterator((Link*) &beginLink); }
 		inline Iterator end() const { return Iterator((Link*) &endLink); }
 
 	private:
@@ -122,6 +122,7 @@ namespace Core
 
 		inline void Connect(Link* first, Link* second) const
 		{
+			ASSERT(first != second);
 			first->next = second;
 			second->prev = first;
 		}

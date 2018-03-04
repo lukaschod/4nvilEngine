@@ -85,7 +85,7 @@ namespace Core::Math
 	inline Vector4<T> operator*(const Vector4<T>& left, T right) { Vector4<T> out(left); out *= right; return out; }
 
 	template<class T>
-	inline Vector4<T> operator-(const Vector4<T>& left) { return Vector4<T>(-left.x, -left.y, -left.z, -left.z); }
+	inline Vector4<T> operator-(const Vector4<T>& v) { return Vector4<T>(-v.x, -v.y, -v.z, -v.z); }
 
 	template<class T>
 	inline void Vector4<T>::Normalize() 

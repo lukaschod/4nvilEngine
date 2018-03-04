@@ -5,6 +5,10 @@ using namespace Core;
 BuddyHeapManager::BuddyHeapManager(const HeapMemory& bounds)
 	: bounds(bounds)
 {
+	ASSERT_MSG(bounds.address != 0, "Address can't be zero as zero reserved for null");
+	freeBlocks.begin().link->value = HeapMemory(0, 0); // Reserve null for begin
+	freeBlocks.end().link->value = HeapMemory(INT64_MAX, 0); // Reserver max for end
+
 	ASSERT(bounds.size != 0);
 	freeBlocks.Add(bounds);
 }
@@ -109,8 +113,7 @@ LinkedList<HeapMemory>::Iterator BuddyHeapManager::TryFindClosestBlock(const Hea
 	{
 		auto& firstBlock = itr.link->value;
 		auto& secondBlock = itr.link->next->value;
-		if (firstBlock.address + firstBlock.size >= block.address &&
-			block.address + block.size <= secondBlock.address)
+		if (firstBlock.address + firstBlock.size <= block.address && block.address + block.size <= secondBlock.address)
 			return itr;
 	}
 	return itr;

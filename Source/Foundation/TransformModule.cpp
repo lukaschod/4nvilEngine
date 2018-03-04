@@ -95,6 +95,7 @@ SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vector3f&);
+SERIALIZE_METHOD_ARG2(TransformModule, SetRotation, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
 bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
@@ -137,6 +138,11 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 
 		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, transform, Vector3f, position);
 		transform->localPosition += position;
+		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, transform, Vector3f, rotation);
+		transform->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
 		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
