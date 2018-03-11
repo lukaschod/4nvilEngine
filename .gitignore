@@ -1,9 +1,12 @@
-## Projects
-/Projects/**/[Dd]ebug
-/Projects/**/[Rr]elease
-/Projects/**/x64
-/Projects/**/x86
-/Projects/**/*.db
-/Projects/**/*.opendb
-/Projects/**/*.user
-/Projects/**/.vs
+## Visual studio
+/com.4nvil.windowseditor/Projects/VisualStudio/**/[Dd]ebug
+/com.4nvil.windowseditor/Projects/VisualStudio/**/[Rr]elease
+/com.4nvil.windowseditor/Projects/VisualStudio/**/x64
+/com.4nvil.windowseditor/Projects/VisualStudio/**/x86
+/com.4nvil.windowseditor/Projects/VisualStudio/**/*.db
+/com.4nvil.windowseditor/Projects/VisualStudio/**/*.opendb
+/com.4nvil.windowseditor/Projects/VisualStudio/**/*.user
+/com.4nvil.windowseditor/Projects/VisualStudio/**/.vs
+
+## Builds
+/com.4nvil.windowseditor/Builds/

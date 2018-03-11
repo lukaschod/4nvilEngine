@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModuleHelper.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IFilter.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IGraphicsModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IRenderPass.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ISwapChain.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ITexture.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\Shader.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\VertexLayout.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseInputs.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\ViewInputs.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModuleExecutor.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModulePlanner.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\Module.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\IRenderLoop.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\IHeap.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\LinkedList.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\List.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\StringBuilder.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Common.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Delegate.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Enum.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Flags.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Color.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Math.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Quaternion.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Rect.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector2.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector3.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector4.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\StopWatch.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\String.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Testing.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\Common.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.cpp" />
+    <ClCompile Include="..\..\..\..\Source\WindowsEditor\Main.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0BE41D22-3E35-4D35-A139-5A7A4DB0FD13}</ProjectGuid>
+    <RootNamespace>com4nvilwindowseditor</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)..\..\..\Builds\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\shared;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\um;..\..\..\..\..\com.4nvil.core\Source;..\..\..\..\..\com.4nvil.editor\Source;..\..\..\..\..\com.4nvil.windows\Source;..\..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>ENABLED_DEBUG;ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
