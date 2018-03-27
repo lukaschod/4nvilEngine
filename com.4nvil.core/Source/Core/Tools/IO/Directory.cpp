@@ -1,6 +1,6 @@
-#include <Core\Tools\Windows\Common.h>
-#include <Core\Tools\Common.h>
-#include <Core\Tools\IO\Directory.h>
+#include <Core\Tools\Windows\Common.hpp>
+#include <Core\Tools\Common.hpp>
+#include <Core\Tools\IO\Directory.hpp>
 #include <filesystem>
 
 namespace Core::Directory

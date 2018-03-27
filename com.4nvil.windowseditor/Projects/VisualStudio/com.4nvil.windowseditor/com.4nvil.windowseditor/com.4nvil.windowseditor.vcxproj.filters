@@ -75,254 +75,254 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.hpp">
+      <Filter>Core\Assets\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.hpp">
+      <Filter>Core\Assets\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModuleHelper.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModuleHelper.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IFilter.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IFilter.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IGraphicsModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IGraphicsModule.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IRenderPass.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IRenderPass.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ISwapChain.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ISwapChain.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ITexture.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\ITexture.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\Shader.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\Shader.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\VertexLayout.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\VertexLayout.hpp">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseInputs.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\ViewInputs.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModuleExecutor.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModuleExecutor.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModulePlanner.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\IModulePlanner.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\Module.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\Module.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.hpp">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\IRenderLoop.hpp">
+      <Filter>Core\Rendering\RenderLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp">
+      <Filter>Core\Rendering\RenderLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.hpp">
       <Filter>Core\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Common.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Delegate.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Enum.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Flags.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\StopWatch.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\String.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Testing.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\IHeap.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\IHeap.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\LinkedList.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\List.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\List.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\LinkedList.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\StringBuilder.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\StringBuilder.hpp">
       <Filter>Core\Tools\Collections</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.hpp">
       <Filter>Core\Tools\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.hpp">
       <Filter>Core\Tools\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.hpp">
       <Filter>Core\Tools\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Color.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Color.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Math.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Math.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Quaternion.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Quaternion.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Rect.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Rect.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector2.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector2.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector3.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector3.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector4.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector4.hpp">
       <Filter>Core\Tools\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.hpp">
       <Filter>Core\Tools\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.hpp">
       <Filter>Core\Tools\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Common.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Delegate.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Enum.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Flags.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\StopWatch.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\String.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Testing.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.hpp">
       <Filter>Core\Views</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.h">
-      <Filter>Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseInputs.h">
-      <Filter>Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.h">
-      <Filter>Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.h">
-      <Filter>Windows\Views</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\Common.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.h">
-      <Filter>Windows\Graphics\Directx12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\IRenderLoop.h">
-      <Filter>Core\Rendering\RenderLoop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\ViewInputs.h">
-      <Filter>Core\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.h">
-      <Filter>Core\Rendering\RenderLoop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.h">
-      <Filter>Editor\Views</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.h">
-      <Filter>Editor\Views</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.h">
-      <Filter>Editor\Views</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.h">
-      <Filter>Core\Assets\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.h">
-      <Filter>Core\Assets\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.h">
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.hpp">
       <Filter>Editor\Project</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.h">
-      <Filter>Core\Assets</Filter>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\Common.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.hpp">
+      <Filter>Windows\Views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

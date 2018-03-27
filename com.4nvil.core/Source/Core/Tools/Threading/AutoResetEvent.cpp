@@ -1,4 +1,4 @@
-#include <Core\Tools\Threading\AutoResetEvent.h>
+#include <Core\Tools\Threading\AutoResetEvent.hpp>
 
 using namespace Core::Threading;
 

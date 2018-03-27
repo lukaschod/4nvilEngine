@@ -1,10 +1,10 @@
-#include <Core\Foundation\TransformModule.h>
-#include <Core\Foundation\MemoryModule.h>
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Rendering\MeshRendererModule.h>
-#include <Core\Rendering\MeshModule.h>
-#include <Core\Rendering\MaterialModule.h>
-#include <Core\Rendering\StorageModule.h>
+#include <Core\Foundation\TransformModule.hpp>
+#include <Core\Foundation\MemoryModule.hpp>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Rendering\MeshRendererModule.hpp>
+#include <Core\Rendering\MeshModule.hpp>
+#include <Core\Rendering\MaterialModule.hpp>
+#include <Core\Rendering\StorageModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

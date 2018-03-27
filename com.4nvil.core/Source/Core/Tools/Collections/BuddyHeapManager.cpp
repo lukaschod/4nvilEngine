@@ -1,4 +1,4 @@
-#include <Core\Tools\Collections\BuddyHeapManager.h>
+#include <Core\Tools\Collections\BuddyHeapManager.hpp>
 
 using namespace Core;
 

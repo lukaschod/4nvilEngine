@@ -1,5 +1,5 @@
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Rendering\ShaderModule.h>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Rendering\ShaderModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

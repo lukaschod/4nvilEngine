@@ -1,4 +1,4 @@
-#include <Core\Assets\Importers\PngImporterModule.h>
+#include <Core\Assets\Importers\PngImporterModule.hpp>
 
 using namespace Core;
 

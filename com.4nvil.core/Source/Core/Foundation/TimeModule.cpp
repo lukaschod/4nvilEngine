@@ -1,5 +1,5 @@
-#include <Core\Tools\Math\Math.h>
-#include <Core\Foundation\TimeModule.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Foundation\TimeModule.hpp>
 
 using namespace Core;
 

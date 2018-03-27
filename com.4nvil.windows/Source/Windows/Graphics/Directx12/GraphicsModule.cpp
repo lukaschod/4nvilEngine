@@ -1,6 +1,6 @@
-#include <Windows\Graphics\Directx12\GraphicsModule.h>
-#include <Windows\Graphics\Directx12\GraphicsPlannerModule.h>
-#include <Windows\Graphics\Directx12\GraphicsExecutorModule.h>
+#include <Windows\Graphics\Directx12\GraphicsModule.hpp>
+#include <Windows\Graphics\Directx12\GraphicsPlannerModule.hpp>
+#include <Windows\Graphics\Directx12\GraphicsExecutorModule.hpp>
 
 using namespace Core;
 using namespace Windows::Directx12;

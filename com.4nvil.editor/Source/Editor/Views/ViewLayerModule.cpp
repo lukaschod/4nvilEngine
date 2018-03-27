@@ -1,10 +1,10 @@
-#include <Core\Input\InputModule.h>
-#include <Core\Input\ViewInputs.h>
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Rendering\RenderLoop\IRenderLoop.h>
-#include <Core\Rendering\SurfaceModule.h>
-#include <Core\Rendering\ImageModule.h>
-#include <Editor\Views\ViewLayerModule.h>
+#include <Core\Input\InputModule.hpp>
+#include <Core\Input\ViewInputs.hpp>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Rendering\RenderLoop\IRenderLoop.hpp>
+#include <Core\Rendering\SurfaceModule.hpp>
+#include <Core\Rendering\ImageModule.hpp>
+#include <Editor\Views\ViewLayerModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

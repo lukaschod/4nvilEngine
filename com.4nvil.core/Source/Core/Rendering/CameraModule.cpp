@@ -1,9 +1,9 @@
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Foundation\TransformModule.h>
-#include <Core\Rendering\CameraModule.h>
-#include <Core\Rendering\StorageModule.h>
-#include <Core\Rendering\SurfaceModule.h>
-#include <Core\Rendering\ImageModule.h>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Foundation\TransformModule.hpp>
+#include <Core\Rendering\CameraModule.hpp>
+#include <Core\Rendering\StorageModule.hpp>
+#include <Core\Rendering\SurfaceModule.hpp>
+#include <Core\Rendering\ImageModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

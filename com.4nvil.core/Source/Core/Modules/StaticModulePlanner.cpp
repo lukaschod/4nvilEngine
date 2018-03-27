@@ -1,7 +1,7 @@
-#include <Core\Modules\StaticModulePlanner.h>
-#include <Core\Modules\Module.h>
-#include <Core\Tools\Collections\List.h>
-#include <Core\Tools\Math\Math.h>
+#include <Core\Modules\StaticModulePlanner.hpp>
+#include <Core\Modules\Module.hpp>
+#include <Core\Tools\Collections\List.hpp>
+#include <Core\Tools\Math\Math.hpp>
 
 using namespace Core;
 

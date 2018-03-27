@@ -1,8 +1,8 @@
-#include <Core\Foundation\MemoryModule.h>
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Rendering\MaterialModule.h>
-#include <Core\Rendering\ShaderModule.h>
-#include <Core\Rendering\StorageModule.h>
+#include <Core\Foundation\MemoryModule.hpp>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Rendering\MaterialModule.hpp>
+#include <Core\Rendering\ShaderModule.hpp>
+#include <Core\Rendering\StorageModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

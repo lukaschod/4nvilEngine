@@ -1,7 +1,7 @@
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Graphics\IRenderPass.h>
-#include <Core\Rendering\SurfaceModule.h>
-#include <Core\Rendering\ImageModule.h>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Graphics\IRenderPass.hpp>
+#include <Core\Rendering\SurfaceModule.hpp>
+#include <Core\Rendering\ImageModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

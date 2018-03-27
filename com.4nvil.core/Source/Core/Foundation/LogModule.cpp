@@ -1,8 +1,8 @@
 #include <stdarg.h>
-#include <Core\Tools\Math\Math.h>
-#include <Core\Tools\IO\Directory.h>
-#include <Core\Tools\Collections\StringBuilder.h>
-#include <Core\Foundation\LogModule.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Tools\IO\Directory.hpp>
+#include <Core\Tools\Collections\StringBuilder.hpp>
+#include <Core\Foundation\LogModule.hpp>
 
 using namespace Core;
 using namespace Core::IO;

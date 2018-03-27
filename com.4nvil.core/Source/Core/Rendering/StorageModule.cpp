@@ -1,6 +1,6 @@
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Graphics\IBuffer.h>
-#include <Core\Rendering\StorageModule.h>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Graphics\IBuffer.hpp>
+#include <Core\Rendering\StorageModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

@@ -1,4 +1,4 @@
-#include <Core\Input\InputModule.h>
+#include <Core\Input\InputModule.hpp>
 
 using namespace Core;
 

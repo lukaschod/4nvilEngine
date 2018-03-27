@@ -1,7 +1,7 @@
-#include <Core\Tools\Math\Math.h>
-#include <Core\Tools\Collections\FixedBlockHeap.h>
-#include <Core\Foundation\TransformModule.h>
-#include <Core\Foundation\MemoryModule.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Tools\Collections\FixedBlockHeap.hpp>
+#include <Core\Foundation\TransformModule.hpp>
+#include <Core\Foundation\MemoryModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

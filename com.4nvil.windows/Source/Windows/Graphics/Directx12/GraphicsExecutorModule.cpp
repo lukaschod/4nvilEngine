@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <Windows\Graphics\Directx12\GraphicsExecutorModule.h>
-#include <Windows\Graphics\Directx12\CmdQueue.h>
+#include <Windows\Graphics\Directx12\GraphicsExecutorModule.hpp>
+#include <Windows\Graphics\Directx12\CmdQueue.hpp>
 
 using namespace Windows;
 using namespace Windows::Directx12;

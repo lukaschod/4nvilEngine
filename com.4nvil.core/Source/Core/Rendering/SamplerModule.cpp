@@ -1,6 +1,6 @@
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Graphics\IFilter.h>
-#include <Core\Rendering\SamplerModule.h>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Graphics\IFilter.hpp>
+#include <Core\Rendering\SamplerModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

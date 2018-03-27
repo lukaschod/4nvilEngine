@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <Core\Modules\ModuleManager.h>
-#include <Core\Modules\ConcurrentModuleExecutor.h>
+#include <Core\Modules\ModuleManager.hpp>
+#include <Core\Modules\ConcurrentModuleExecutor.hpp>
 
 using namespace Core;
 

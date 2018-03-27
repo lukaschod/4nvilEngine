@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <Core\Tools\IO\FileStream.h>
+#include <Core\Tools\IO\FileStream.hpp>
 #include <stdarg.h>
 
 using namespace Core::IO;

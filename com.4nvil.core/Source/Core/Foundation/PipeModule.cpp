@@ -1,7 +1,7 @@
 #include <algorithm>
-#include <Core\Tools\Math\Math.h>
-#include <Core\Foundation\PipeModule.h>
-#include <Core\Foundation\ProfilerModule.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Foundation\PipeModule.hpp>
+#include <Core\Foundation\ProfilerModule.hpp>
 
 using namespace Core;
 

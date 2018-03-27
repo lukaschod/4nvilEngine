@@ -1,7 +1,7 @@
-#include <Core\Tools\Math\Math.h>
-#include <Core\Tools\Collections\StringBuilder.h>
-#include <Core\Foundation\ProfilerModule.h>
-#include <Core\Foundation\LogModule.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Tools\Collections\StringBuilder.hpp>
+#include <Core\Foundation\ProfilerModule.hpp>
+#include <Core\Foundation\LogModule.hpp>
 
 using namespace Core;
 

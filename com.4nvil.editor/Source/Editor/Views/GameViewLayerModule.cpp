@@ -1,5 +1,5 @@
-#include <Editor\Views\GameViewLayerModule.h>
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.h>
+#include <Editor\Views\GameViewLayerModule.hpp>
+#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
 
 using namespace Editor;
 

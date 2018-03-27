@@ -1,5 +1,5 @@
-#include <Core\Tools\Math\Matrix.h>
-#include <Core\Tools\Math\Math.h>
+#include <Core\Tools\Math\Matrix.hpp>
+#include <Core\Tools\Math\Math.hpp>
 
 using namespace Core;
 using namespace Core::Math;

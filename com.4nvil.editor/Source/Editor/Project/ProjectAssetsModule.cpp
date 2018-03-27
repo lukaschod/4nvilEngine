@@ -1,5 +1,5 @@
-#include <Core\Tools\IO\Directory.h>
-#include <Editor\Project\ProjectAssetsModule.h>
+#include <Core\Tools\IO\Directory.hpp>
+#include <Editor\Project\ProjectAssetsModule.hpp>
 
 using namespace Core;
 using namespace Editor;

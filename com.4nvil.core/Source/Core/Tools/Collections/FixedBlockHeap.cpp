@@ -1,5 +1,5 @@
-#include <Core\Tools\Math\Math.h>
-#include <Core\Tools\Collections\FixedBlockHeap.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Core\Tools\Collections\FixedBlockHeap.hpp>
 
 using namespace Core;
 

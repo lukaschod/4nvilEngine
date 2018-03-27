@@ -1,5 +1,5 @@
-#include <Core\Foundation\UnitModule.h>
-#include <Core\Foundation\MemoryModule.h>
+#include <Core\Foundation\UnitModule.hpp>
+#include <Core\Foundation\MemoryModule.hpp>
 
 using namespace Core;
 

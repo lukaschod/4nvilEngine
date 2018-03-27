@@ -1,5 +1,5 @@
-#include <Core\Input\MouseModule.h>
-#include <Core\Input\InputModule.h>
+#include <Core\Input\MouseModule.hpp>
+#include <Core\Input\InputModule.hpp>
 
 using namespace Core;
 

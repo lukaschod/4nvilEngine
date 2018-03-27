@@ -1,5 +1,5 @@
-#include <Core\Tools\Math\Math.h>
-#include <Windows\Graphics\Directx12\BufferHeap.h>
+#include <Core\Tools\Math\Math.hpp>
+#include <Windows\Graphics\Directx12\BufferHeap.hpp>
 
 using namespace Windows::Directx12;
 

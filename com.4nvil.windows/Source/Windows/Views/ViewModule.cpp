@@ -1,9 +1,9 @@
-#include <Core\Tools\Enum.h>
-#include <Core\Graphics\IGraphicsModule.h>
-#include <Core\Input\InputModule.h>
-#include <Core\Input\MouseInputs.h>
-#include <Core\Input\ViewInputs.h>
-#include <Windows\Views\ViewModule.h>
+#include <Core\Tools\Enum.hpp>
+#include <Core\Graphics\IGraphicsModule.hpp>
+#include <Core\Input\InputModule.hpp>
+#include <Core\Input\MouseInputs.hpp>
+#include <Core\Input\ViewInputs.hpp>
+#include <Windows\Views\ViewModule.hpp>
 #include <windowsx.h>
 
 using namespace Core;

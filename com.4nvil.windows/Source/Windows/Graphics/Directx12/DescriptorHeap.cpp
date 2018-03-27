@@ -1,4 +1,4 @@
-#include <Windows\Graphics\Directx12\DescriptorHeap.h>
+#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
 
 using namespace Windows::Directx12;
 

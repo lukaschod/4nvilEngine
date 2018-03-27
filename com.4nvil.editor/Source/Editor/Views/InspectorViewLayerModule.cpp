@@ -1,5 +1,5 @@
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.h>
-#include <Editor\Views\InspectorViewLayerModule.h>
+#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
+#include <Editor\Views\InspectorViewLayerModule.hpp>
 
 using namespace Editor;
 
