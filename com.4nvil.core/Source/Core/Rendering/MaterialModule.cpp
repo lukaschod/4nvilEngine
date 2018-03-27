@@ -1,3 +1,4 @@
+#include <Core\Foundation\MemoryModule.h>
 #include <Core\Graphics\IGraphicsModule.h>
 #include <Core\Rendering\MaterialModule.h>
 #include <Core\Rendering\ShaderModule.h>
@@ -6,30 +7,27 @@
 using namespace Core;
 using namespace Core::Graphics;
 
+static const char* memoryLabelMaterial = "Core::Material";
+
 void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
 	base::SetupExecuteOrder(moduleManager);
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(memoryLabelMaterial, new FixedBlockHeap(sizeof(Material)));
 
 	// TODO: Do we really need them?
 	ExecuteAfter<ShaderModule>(moduleManager);
 	ExecuteAfter<StorageModule>(moduleManager);
 }
 
-DECLARE_COMMAND_CODE(CreateMaterial);
-const Material* MaterialModule::RecCreateMaterial(const ExecutionContext& context)
+const Material* MaterialModule::AllocateMaterial() const
 {
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto properties = new MaterialProperties();
-	auto target = new Material(properties);
-	stream.Write(TO_COMMAND_CODE(CreateMaterial));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
+	auto properties = memoryModule->New<MaterialProperties>(memoryLabelMaterial);
+	return memoryModule->New<Material>(memoryLabelMaterial, properties);
 }
 
+SERIALIZE_METHOD_ARG1(MaterialModule, CreateMaterial, const Material*);
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
 
@@ -38,11 +36,13 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateMaterial, Material*, target);
+		target->created = true;
 		materialProperties.push_back((MaterialProperties*)target->properties);
 		materials.push_back(target);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetShader, Material*, material, const Shader*, shader);
+		ASSERT(material->created);
 		// Delete old pipelines
 		if (material->shader != nullptr)
 		{
@@ -76,6 +76,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const char*, name, const Storage*, storage);
+		ASSERT(material->created);
 		auto materialProperties = (MaterialProperties*) material->properties;
 		SetProperty(materialProperties, name, MaterialPropertyType::Storage, (void*) storage);
 		for (auto pipeline : material->pipelines)

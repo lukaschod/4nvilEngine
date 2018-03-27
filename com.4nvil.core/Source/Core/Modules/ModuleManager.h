@@ -31,19 +31,15 @@ namespace Core
 		// Adds module to manager, which later on will be used for planning and execution
 		void AddModule(Module* module);
 
+		// Request module manager to stop working, request will be handled before next frame
 		void RequestStop() { requestedStop = true; }
 		bool IsRunning() { return !requestedStop; }
 
-		template<class T> T* GetModule()
-		{
-			for (auto module : modules)
-			{
-				if (dynamic_cast<T*>(module) != 0)
-					return (T*) module;
-			}
-			ERROR("Can't find specified module");
-			return nullptr;
-		}
+		// Find module with specified type
+		template<class T> T* GetModule();
+
+		// Find modules with specified type
+		template<class T> List<T*> GetModules();
 
 		inline const List<Module*>& GetModules() const { return modules; }
 		inline uint32 GetWorkerCount() const { return executor->GetWorkerCount(); }
@@ -55,4 +51,28 @@ namespace Core
 		Threading::AutoResetEvent sleepEvent;
 		bool requestedStop;
 	};
+
+	template<class T> 
+	T* ModuleManager::GetModule()
+	{
+		for (auto module : modules)
+		{
+			if (dynamic_cast<T*>(module) != 0)
+				return (T*) module;
+		}
+		ERROR("Can't find specified module");
+		return nullptr;
+	}
+
+	template<class T>
+	List<T*> ModuleManager::GetModules()
+	{
+		List<T*> out;
+		for (auto module : modules)
+		{
+			if (dynamic_cast<T*>(module) != 0)
+				out.push_back((T*) module);
+		}
+		return out;
+	}
 }

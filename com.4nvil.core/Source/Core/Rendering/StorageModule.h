@@ -27,6 +27,8 @@ namespace Core
 	class StorageModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Storage* AllocateStorage(size_t size) const;

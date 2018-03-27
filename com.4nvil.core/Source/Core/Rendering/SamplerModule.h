@@ -11,22 +11,29 @@ namespace Core::Graphics
 
 namespace Core
 {
-	struct SamplerOptions : public Graphics::FilterOptions {};
-
 	struct Sampler
 	{
-		Sampler(const SamplerOptions& options, const Graphics::IFilter* filter) : filter(filter) {}
+		Sampler(const Graphics::IFilter* filter) 
+			: filter(filter)
+			, created(false)
+		{}
 		const Graphics::IFilter* filter;
+		bool created;
 	};
 
 	class SamplerModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-		const Sampler* RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options);
+		const Sampler* AllocateSampler() const;
 
 		inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
+
+	public:
+		void RecCreateSampler(const ExecutionContext& context, const Sampler* target);
 
 	protected:
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

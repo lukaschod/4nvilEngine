@@ -27,6 +27,8 @@ namespace Windows::Directx12
 	class GraphicsPlannerModule : public ComputeModule
 	{
 	public:
+		BASE_IS(ComputeModule);
+
 		GraphicsPlannerModule(ID3D12Device* device);
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;

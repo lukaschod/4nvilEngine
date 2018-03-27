@@ -20,6 +20,11 @@ namespace Core::IO
 			Write((void*) &data, sizeof(T));
 		}
 
+		inline void Write(std::string& data)
+		{
+			Write((void*) data.c_str(), data.size());
+		}
+
 		inline void Write(uint32 v)
 		{
 			Write((void*) &v, sizeof(uint32));
@@ -50,6 +55,13 @@ namespace Core::IO
 			T& ptr = *(T*) data;
 			this->data += sizeof(T);
 			return ptr;
+		}
+
+		inline std::string FastRead()
+		{
+			std::string out((const char*)data);
+			this->data += sizeof(out.size());
+			return out;
 		}
 
 		template<typename T>

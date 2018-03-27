@@ -11,25 +11,21 @@ void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
-DECLARE_COMMAND_CODE(CreateSampler);
-const Sampler* SamplerModule::RecCreateSampler(const ExecutionContext& context, const SamplerOptions& options)
+const Sampler* SamplerModule::AllocateSampler() const
 {
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto filter = graphicsModule->RecCreateIFilter(context, options);
-	auto target = new Sampler(options, filter);
-	stream.Write(TO_COMMAND_CODE(CreateSampler));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
+	auto filter = graphicsModule->AllocateFilter();
+	return new Sampler(filter);
 }
+
+SERIALIZE_METHOD_ARG1(SamplerModule, CreateSampler, const Sampler*);
 
 bool SamplerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateSampler, Sampler*, target);
+		target->created = true;
+		graphicsModule->RecCreateIFilter(context, target->filter);
 		samplers.push_back(target);
 		DESERIALIZE_METHOD_END
 	}

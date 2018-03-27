@@ -24,27 +24,41 @@ namespace Core
 			: Component(module)
 			, mesh(nullptr)
 			, material(nullptr)
+			, created(false)
 		{
 		}
 		const Mesh* mesh;
 		const Material* material;
 		const Storage* perMeshStorage;
+		bool created;
 	};
 
 	class MeshRendererModule : public ComponentModule
 	{
 	public:
+		BASE_IS(ComponentModule);
+
 		MeshRendererModule();
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;
-		virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
-		const MeshRenderer* RecCreateMeshRenderer(const ExecutionContext& context);
-		void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
-		void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+		const MeshRenderer* AllocateMeshRenderer();
+
+		// Returns all mesh renderers that currently allocated
+		const List<MeshRenderer*>& GetMeshRenderers() const;
+
+		// Returns storage that will have camera data
+		const Storage* GetPerAllRendererStorage() const;
 
 	public:
-		const List<MeshRenderer*>& GetMeshRenderers() const;
-		const Storage* GetPerAllRendererStorage() const;
+		virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+
+		void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
+
+		// Set mesh that will be used for rendering
+		void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+
+		// Set material that will be used for rendering
+		void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
 
 	protected:
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

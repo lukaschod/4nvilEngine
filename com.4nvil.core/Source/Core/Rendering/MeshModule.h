@@ -33,20 +33,26 @@ namespace Core
 		Mesh(const Graphics::VertexLayout& vertexLayout)
 			: vertexLayout(vertexLayout)
 			, vertexBuffer(nullptr)
+			, created(false)
 		{
 		}
 		const Graphics::VertexLayout vertexLayout;
 		const Graphics::IBuffer* vertexBuffer;
 		List<SubMesh> subMeshes;
 		Range<uint8> vertices;
+		bool created;
 	};
 
 	class MeshModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+		const Mesh* AllocateMesh(const Graphics::VertexLayout& vertexLayout) const;
 
+	public:
 		const Mesh* RecCreateMesh(const ExecutionContext& context, const Graphics::VertexLayout& vertexLayout);
 		void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8>& vertices);
 		void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32 index, const SubMesh& submesh);

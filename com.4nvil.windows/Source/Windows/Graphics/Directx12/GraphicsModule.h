@@ -29,8 +29,7 @@ namespace Windows::Directx12
 
 	struct Filter : public IFilter
 	{
-		Filter(const FilterOptions& options)
-			: IFilter(options)
+		Filter()
 		{
 		}
 		HeapMemory srvMemory;
@@ -232,11 +231,11 @@ namespace Windows::Directx12
 
 	struct SwapChain : public ISwapChain
 	{
-		SwapChain(const IView* view) :
-			ISwapChain(view),
-			bacBufferIndex(0),
-			bacBuffers(nullptr),
-			IDXGISwapChain3(nullptr)
+		SwapChain(const IView* view) 
+			: ISwapChain(view)
+			, bacBufferIndex(0)
+			, bacBuffers(nullptr)
+			, IDXGISwapChain3(nullptr)
 		{
 		}
 
@@ -262,21 +261,24 @@ namespace Windows::Directx12
 	class GraphicsModule : public IGraphicsModule
 	{
 	public:
+		BASE_IS(IGraphicsModule);
+
 		GraphicsModule();
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual const char* GetName() { return "Directx12::GraphicsModule"; }
 		virtual const IBuffer* AllocateBuffer(size_t size) override;
 		virtual const ITexture* AllocateTexture(uint32 width, uint32 height) override;
+		virtual const IFilter* AllocateFilter() override;
 		virtual const ISwapChain* AllocateSwapChain(const IView* view) override;
 		virtual const IRenderPass* AllocateRenderPass() override;
 
 	public:
-		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture) override;
+		virtual void RecCreateITexture(const ExecutionContext& context, const ITexture* target) override;
 
-		virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) override;
+		virtual void RecCreateIFilter(const ExecutionContext& context, const IFilter* target) override;
 
-		virtual const IRenderPass* RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* renderPass) override;
+		virtual void RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
 		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32 index, const ColorAttachment& attachment) override;
 		virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
 		virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
@@ -293,7 +295,7 @@ namespace Windows::Directx12
 		virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) override;
 		virtual void RecCopyBuffer(const ExecutionContext& context, const IBuffer* src, const IBuffer* dst, size_t size) override;
 
-		virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain = nullptr) override;
+		virtual void RecCreateISwapChain(const ExecutionContext& context, const ISwapChain* target) override;
 		virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 		virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 

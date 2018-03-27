@@ -9,6 +9,8 @@ namespace Core
 	class TimeModule : public ComputeModule
 	{
 	public:
+		BASE_IS(ComputeModule);
+
 		TimeModule();
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;

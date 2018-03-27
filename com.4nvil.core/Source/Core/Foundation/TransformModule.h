@@ -26,6 +26,10 @@ namespace Core
 		Transform(ComponentModule* module)
 			: Component(module)
 			, parent(nullptr)
+			, localPosition(0, 0, 0)
+			, localRotation(0, 0, 0, 1)
+			, localScale(1, 1, 1)
+			, created(false)
 		{
 		}
 
@@ -39,18 +43,21 @@ namespace Core
 		Math::Vector3f localScale;
 		Math::Vector3f position;
 		Flags<TransformStateFlags> flags;
+		bool created;
 	};
 
 	class TransformModule : public ComponentModule
 	{
 	public:
+		BASE_IS(ComponentModule);
+
 		TransformModule();
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Transform* AllocateTransform();
 
 	public:
-		const Transform* RecCreateTransform(const ExecutionContext& context, const Transform* transform = nullptr);
+		void RecCreateTransform(const ExecutionContext& context, const Transform* target);
 		virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
 		void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
 		void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
@@ -62,6 +69,7 @@ namespace Core
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
 	private:
+		UnitModule* unitModule;
 		MemoryModule* memoryModule;
 		Transform* root;
 		std::queue<Transform*> transformsToCalculate;

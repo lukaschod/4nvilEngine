@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.h" />
@@ -78,6 +81,7 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.h" />
@@ -92,6 +96,8 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp" />
@@ -120,6 +126,7 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.cpp" />
@@ -189,6 +196,12 @@
     <IncludePath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\shared;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\um;..\..\..\..\..\com.4nvil.core\Source;..\..\..\..\..\com.4nvil.editor\Source;..\..\..\..\..\com.4nvil.windows\Source;..\..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\..\..\Builds\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\d3dx12;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\shared;..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Include\10.0.14393.0\um;..\..\..\..\..\com.4nvil.core\Source;..\..\..\..\..\com.4nvil.editor\Source;..\..\..\..\..\com.4nvil.windows\Source;..\..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\..\com.4nvil.windows\External\Windows Kit\10\Lib\10.0.14393.0\um\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -229,11 +242,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

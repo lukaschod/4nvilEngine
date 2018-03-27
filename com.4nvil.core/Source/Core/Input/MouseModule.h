@@ -14,6 +14,8 @@ namespace Core
 	class MouseModule : public ComputeModule
 	{
 	public:
+		BASE_IS(ComputeModule);
+
 		MouseModule();
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;

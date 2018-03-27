@@ -45,15 +45,23 @@ bool ViewLayerModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 	{
 		DESERIALIZE_METHOD_ARG1_START(Show, const IView*, target);
 		view = target;
-		swapChain = graphicsModule->RecCreateISwapChain(context, view);
-		renderTarget = imageModule->RecCreateImage(context, view->width, view->height);
+
+		// Create swapchain that will be used with view
+		swapChain = graphicsModule->AllocateSwapChain(target);
+		graphicsModule->RecCreateISwapChain(context, swapChain);
+
+		// Created offscreen render target
+		renderTarget = imageModule->AllocateImage(view->width, view->height);
+		imageModule->RecCreateImage(context, renderTarget);
+
+		// Create surface that will target offscreen render target
 		surfaceModule->RecCreateSurface(context, surface);
 		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(renderTarget, LoadAction::Clear, StoreAction::Store));
 		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_START(Hide);
-		// TODO: leak
+		// TODO: fix leak
 		view = nullptr;
 		swapChain = nullptr;
 		DESERIALIZE_METHOD_END;
@@ -93,7 +101,7 @@ void ViewLayerModule::Execute(const ExecutionContext& context)
 		case ViewInputType::Resize:
 		{
 			auto& desc = stream.FastRead<ViewInputResizeDesc>(offset);
-			resize = false;
+			resize = true;
 			break;
 		}
 

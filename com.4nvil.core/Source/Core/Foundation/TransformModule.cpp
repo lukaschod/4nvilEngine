@@ -6,15 +6,20 @@
 using namespace Core;
 using namespace Core::Math;
 
-static const char* memoryLabelTransform = "Foundation::Transform";
+static const char* memoryLabelTransform = "Core::Transform";
 
 TransformModule::TransformModule() 
 {
 	root = new Transform(this);
-	root->localPosition = Vector3f(0, 0, 0);
-	root->localRotation = Quaternionf(0, 0, 0, 1);
-	root->localScale = Vector3f(1, 1, 1);
 	root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
+}
+
+void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
+{
+	base::SetupExecuteOrder(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
+	unitModule = ExecuteAfter<UnitModule>(moduleManager);
 }
 
 void TransformModule::Execute(const ExecutionContext& context)
@@ -55,7 +60,7 @@ void TransformModule::Execute(const ExecutionContext& context)
 			next->objectToWorld = next->localObjectToWorld;
 			next->objectToWorld.Multiply(parent->objectToWorld);
 			ASSERT(next->objectToWorld.IsValid());
-			next->position = next->objectToWorld.TransformPosition(Vector3f::zero).xyz();
+			next->position = next->objectToWorld.GetPosition().xyz();
 		}
 
 		// Add transform childs
@@ -64,33 +69,12 @@ void TransformModule::Execute(const ExecutionContext& context)
 	}
 }
 
-void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
-{
-	base::SetupExecuteOrder(moduleManager);
-	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
-}
-
 const Transform* TransformModule::AllocateTransform()
 {
-	return new Transform(this);
 	return memoryModule->New<Transform>(memoryLabelTransform, this);
 }
 
-DECLARE_COMMAND_CODE(CreateTransform);
-const Transform* TransformModule::RecCreateTransform(const ExecutionContext& context, const Transform* transform)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = transform == nullptr ? AllocateTransform() : transform;
-	stream.Write(TO_COMMAND_CODE(CreateTransform));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-//SERIALIZE_METHOD_CREATECMP(TransformModule, Transform);
-
+SERIALIZE_METHOD_ARG1(TransformModule, CreateTransform, const Transform*);
 SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
@@ -103,50 +87,54 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
-		target->localPosition = Vector3f(0, 0, 0);
-		target->localRotation = Quaternionf(0, 0, 0, 1);
-		target->localScale = Vector3f(1, 1, 1);
 		target->parent = root;
+		target->created = true;
 		root->childs.push_back(target);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, transform);
-		auto parent = transform->parent;
+		DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, target);
+		ASSERT(target->created);
+		auto parent = target->parent;
 		ASSERT(parent != nullptr);
-		parent->childs.remove(transform);
+		parent->childs.remove(target);
 
-		for (auto child : transform->childs)
+		for (auto child : target->childs)
 		{
 			auto unit = child->unit;
-			unit->module->RecDestroy(context, unit);
+			unitModule->RecDestroy(context, unit);
 		}
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, transform, Transform*, parent);
-		auto oldParent = transform->parent;
+		DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
+		ASSERT(target->created);
+		auto oldParent = target->parent;
 		ASSERT(oldParent != nullptr);
-		oldParent->childs.remove(transform);
+		oldParent->childs.remove(target);
 
-		parent->childs.push_back(transform);
-		transform->parent = parent;
+		parent->childs.push_back(target);
+		target->parent = parent;
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, transform, Vector3f, position);
-		transform->localPosition = position;
-		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, target, Vector3f, position);
+		target->localPosition = position;
+		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, transform, Vector3f, position);
-		transform->localPosition += position;
-		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, target, Vector3f, position);
+		ASSERT(target->created);
+		target->localPosition += position;
+		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, transform, Vector3f, rotation);
-		transform->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
-		transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+		DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, target, Vector3f, rotation);
+		ASSERT(target->created);
+		target->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
+		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
+
+		ASSERT(target->created);
 
 		// Find all target ancestors
 		worldToViewToCalculate.clear();

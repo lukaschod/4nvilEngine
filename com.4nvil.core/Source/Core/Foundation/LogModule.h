@@ -9,6 +9,8 @@ namespace Core
 	class LogModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override;
 		void RecWrite(const ExecutionContext& context, const char* name);
 		void RecWriteFmt(const ExecutionContext& context, const char* format, ...);

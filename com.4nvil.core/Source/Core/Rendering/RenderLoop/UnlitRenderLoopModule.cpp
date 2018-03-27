@@ -23,13 +23,13 @@ void UnlitRenderLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	storageModule = ExecuteAfter<StorageModule>(moduleManager);
 }
 
-SERIALIZE_METHOD_ARG2(UnlitRenderLoopModule, Render, const ISwapChain*, const ITexture*);
-
 void UnlitRenderLoopModule::Execute(const ExecutionContext& context)
 {
 	MARK_FUNCTION;
 	base::Execute(context);
 }
+
+SERIALIZE_METHOD_ARG2(UnlitRenderLoopModule, Render, const ISwapChain*, const ITexture*);
 
 bool UnlitRenderLoopModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -48,16 +48,15 @@ void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 	auto& cameras = cameraModule->GetCameras();
 	auto& meshRenderers = meshRendererModule->GetMeshRenderers();
 	auto perAllRendererStorage = meshRendererModule->GetPerAllRendererStorage();
+	graphicsModule->RecPushDebug(context, "UnlitRenderLoopModule::Render");
 	for (auto camera : cameras)
 	{
 		auto surface = camera->surface;
 		if (surface == nullptr)
 			continue;
 
-		//storageModule->RecUpdateStorage(context, perAllRendererStorage, 0, Range<void>(&camera->worldToCameraMatrix, sizeof(Matrix4x4f)));
-		storageModule->RecCopyStorage(context, camera->perCameraStorage, perAllRendererStorage, camera->perCameraStorage->size);
-
 		graphicsModule->RecPushDebug(context, "Camera::Render");
+		storageModule->RecCopyStorage(context, camera->perCameraStorage, perAllRendererStorage, camera->perCameraStorage->size);
 		graphicsModule->RecSetRenderPass(context, surface->renderPass);
 
 		for (auto meshRenderer : meshRenderers)
@@ -75,9 +74,6 @@ void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 				draw.properties = pipeline->properties;
 				draw.vertexBuffer = mesh->vertexBuffer;
 
-				//graphicsModule->RecSetBuffer(context, draw.properties, "_perCameraData", camera->perCameraStorage->buffer);
-				graphicsModule->RecSetBuffer(context, draw.properties, "_perMeshData", meshRenderer->perMeshStorage->buffer);
-
 				for (auto& subMesh : mesh->subMeshes)
 				{
 					draw.offset = subMesh.offset;
@@ -92,4 +88,5 @@ void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 
 	graphicsModule->RecFinalBlit(context, swapChain, renderTarget);
 	graphicsModule->RecPresent(context, swapChain, renderTarget);
+	graphicsModule->RecPopDebug(context);
 }

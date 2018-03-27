@@ -158,7 +158,7 @@ HWND ViewModule::TryCreateWindow(const IView* view)
 
 	case ViewType::Child:
 	{
-		windowStyle = WS_CHILD | WS_CLIPCHILDREN | WS_SIZEBOX;
+		windowStyle = WS_CHILD | WS_CLIPCHILDREN;
 		extendedStyle = WS_EX_TOOLWINDOW;
 		auto parent = (const View*) view->parent;
 		ASSERT(parent != nullptr);
@@ -235,41 +235,48 @@ void ViewModule::Execute(const ExecutionContext& context)
 	}
 }
 
-const IView* ViewModule::AllocateView(const ViewDesc& desc) const
+const IView* ViewModule::AllocateView()
 {
-	return new View(desc);
+	return new View();
 }
 
-DECLARE_COMMAND_CODE(CreateIView);
-const IView* ViewModule::RecCreateIView(const ExecutionContext& context, const ViewDesc& desc, const IView* view)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = view == nullptr ? AllocateView(desc) : view;
-	stream.Write(TO_COMMAND_CODE(CreateIView));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-const IView* ViewModule::RecCreateIView(const ExecutionContext& context, const IView* view)
-{
-	return RecCreateIView(context, ViewDesc(), view);
-}
+SERIALIZE_METHOD_ARG1(ViewModule, CreateIView, const IView*);
+SERIALIZE_METHOD_ARG2(ViewModule, SetRect, const IView*, const Rectf&);
+SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const char*);
+SERIALIZE_METHOD_ARG2(ViewModule, SetParent, const IView*, const IView*);
 
 bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateIView, View*, target);
+		target->created = true;
 		target->windowHandle = TryCreateWindow(target);
 		ASSERT(target->windowHandle != nullptr);
 
+		// Create input device, for tracking all events like size change...
 		InputDeviceDesc desc;
 		desc.typeName = "View";
 		target->viewInputDevice = inputModule->RecCreateInputDevice(context, desc);
 
 		views.push_back(target);
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(SetRect, View*, target, const Rectf, rect);
+		ASSERT(!target->created);
+		target->width = (uint32) rect.width;
+		target->height = (uint32) rect.height;
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(SetName, View*, target, const char*, name);
+		ASSERT(!target->created);
+		target->name = name;
+		DESERIALIZE_METHOD_END;
+
+		DESERIALIZE_METHOD_ARG2_START(SetParent, View*, target, const IView*, parent);
+		ASSERT(!target->created);
+		target->parent = parent;
+		target->type = ViewType::Child;
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

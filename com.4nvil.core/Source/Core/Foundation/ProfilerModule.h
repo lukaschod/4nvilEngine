@@ -39,6 +39,8 @@ namespace Core
 	class ProfilerModule : public Module
 	{
 	public:
+		BASE_IS(Module);
+
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;
 

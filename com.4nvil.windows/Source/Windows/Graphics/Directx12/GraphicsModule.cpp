@@ -5,8 +5,8 @@
 using namespace Core;
 using namespace Windows::Directx12;
 
-static const char* memoryLabelShaderArguments = "Graphics::ShaderArguments";
-static const char* memoryLabelBuffer = "Graphics::Buffer";
+static const char* memoryLabelShaderArguments = "Core::Graphics::ShaderArguments";
+static const char* memoryLabelBuffer = "Core::Graphics::Buffer";
 
 GraphicsModule::GraphicsModule()
 	: device(nullptr)
@@ -72,7 +72,14 @@ const IRenderPass* GraphicsModule::AllocateRenderPass()
 	return new RenderPass();
 }
 
-SERIALIZE_METHOD_CREATEGEN_ARG1(GraphicsModule, IFilter, Filter, const FilterOptions&);
+const IFilter* GraphicsModule::AllocateFilter()
+{
+	return new Filter();
+}
+
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateITexture, const ITexture*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIFilter, const IFilter*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIRenderPass, const IRenderPass*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, uint32, const ColorAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetDepthAttachment, const IRenderPass*, const DepthAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
@@ -82,6 +89,7 @@ SERIALIZE_METHOD_ARG3(GraphicsModule, SetBuffer, const IShaderArguments*, const 
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetTexture, const IShaderArguments*, const char*, const ITexture*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetFilter, const IShaderArguments*, const char*, const IFilter*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, Present, const ISwapChain*, const ITexture*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateISwapChain, const ISwapChain*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIBuffer, const IBuffer*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetBufferUsage, const IBuffer*, BufferUsageFlags);
@@ -98,45 +106,6 @@ const IShaderArguments* GraphicsModule::RecCreateIShaderArguments(const Executio
 	auto& stream = buffer->stream;
 	auto target = memoryModule->New<ShaderArguments>(memoryLabelShaderArguments, pipeline);
 	stream.Write(TO_COMMAND_CODE(CreateIShaderArguments));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-
-DECLARE_COMMAND_CODE(CreateISwapChain);
-const ISwapChain* GraphicsModule::RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = swapChain == nullptr ? AllocateSwapChain(view) : swapChain;
-	stream.Write(TO_COMMAND_CODE(CreateISwapChain));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-
-DECLARE_COMMAND_CODE(CreateITexture);
-const ITexture* GraphicsModule::RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = texture == nullptr ? AllocateTexture(width, height) : texture;
-	stream.Write(TO_COMMAND_CODE(CreateITexture));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-
-DECLARE_COMMAND_CODE(CreateIRenderPass);
-const IRenderPass* GraphicsModule::RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* renderPass)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = renderPass == nullptr ? AllocateRenderPass() : renderPass;
-	stream.Write(TO_COMMAND_CODE(CreateIRenderPass));
 	stream.Write(target);
 	stream.Align();
 	buffer->commandCount++;
@@ -1124,7 +1093,7 @@ float4 FragMain(VertData i) : SV_TARGET
 	target->renderPass = new RenderPass();
 	InitializeRenderPass(target->renderPass);
 
-	target->filter = new Filter(FilterOptions());
+	target->filter = new Filter();
 	InitializeFilter(target->filter);
 	SetFilter((ShaderArguments*) target->properties, "_mainTexSampler", target->filter);
 }

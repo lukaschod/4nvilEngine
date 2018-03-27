@@ -25,6 +25,8 @@ namespace Core
 	class InputModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override;
 
 		// Find input devices by the type name

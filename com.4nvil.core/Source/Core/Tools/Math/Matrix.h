@@ -22,6 +22,9 @@ namespace Core::Math
 		// Transform position without w normalization
 		Vector4<T> TransformPosition(const Vector3<T>& v) const;
 
+		// Transform zero vector position without w normalization
+		Vector4<T> GetPosition() const;
+
 		Matrix4x4<T> Multiply(const Matrix4x4<T>& m);
 		void Transpose();
 		T GetDeterminant() const;
@@ -96,6 +99,12 @@ namespace Core::Math
 		out += z * v.z; // MAD
 		out += w;		// ADD
 		return out;
+	}
+
+	template<class T>
+	inline Vector4<T> Matrix4x4<T>::GetPosition() const
+	{
+		return w;
 	}
 
 	template<class T>

@@ -12,6 +12,11 @@ void MeshModule::SetupExecuteOrder(ModuleManager* moduleManager)
 	graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
+const Mesh* MeshModule::AllocateMesh(const Graphics::VertexLayout& vertexLayout) const
+{
+	return new Mesh(vertexLayout);
+}
+
 DECLARE_COMMAND_CODE(CreateMesh);
 const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout)
 {
@@ -33,10 +38,12 @@ bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateMesh, Mesh*, target);
+		target->created = true;
 		meshes.push_back(target);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<uint8>, vertices);
+		ASSERT(target->created);
 		target->vertices = vertices;
 
 		target->vertexBuffer = graphicsModule->AllocateBuffer(vertices.size);
@@ -45,6 +52,7 @@ bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, uint32, index, SubMesh, submesh);
+		ASSERT(target->created);
 		target->subMeshes.safe_set(index, submesh);
 		DESERIALIZE_METHOD_END;
 	}

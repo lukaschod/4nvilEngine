@@ -61,3 +61,5 @@ namespace Core
 inline Name operator|(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) | static_cast<int>(b)); } \
 inline Name operator&(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) & static_cast<int>(b)); }
 }
+
+#define BASE_IS(Class) typedef Class base;

@@ -9,6 +9,7 @@ namespace Core
 	struct Storage;
 	struct Shader;
 	class ShaderModule;
+	class MemoryModule;
 	
 	namespace Graphics
 	{
@@ -54,22 +55,29 @@ namespace Core
 
 	struct Material
 	{
-		Material(const MaterialProperties* properties) :
-			shader(nullptr),
-			properties(properties)
+		Material(const MaterialProperties* properties) 
+			: shader(nullptr)
+			, properties(properties)
+			, created(false)
 		{
 		}
 		const Shader* shader;
 		const MaterialProperties* properties;
 		List<const MaterialPipeline*> pipelines;
+		bool created;
 	};
 
 	class MaterialModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-		const Material* RecCreateMaterial(const ExecutionContext& context);
+		const Material* AllocateMaterial() const;
+
+	public:
+		void RecCreateMaterial(const ExecutionContext& context, const Material* material);
 		void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
 		void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
 
@@ -81,8 +89,9 @@ namespace Core
 		inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const char* name);
 
 	private:
+		Graphics::IGraphicsModule* graphicsModule;
+		MemoryModule* memoryModule;
 		List<Material*> materials;
 		List<MaterialProperties*> materialProperties;
-		Graphics::IGraphicsModule* graphicsModule;
 	};
 }

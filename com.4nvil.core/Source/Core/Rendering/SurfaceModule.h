@@ -52,22 +52,28 @@ namespace Core
 
 	struct Surface
 	{
-		Surface() : renderPass(nullptr) {}
+		Surface(const Graphics::IRenderPass* renderPass) 
+			: renderPass(renderPass)
+			, created(false)
+		{}
 		const Graphics::IRenderPass* renderPass;
 		List<SurfaceColor> colors;
 		SurfaceDepth depth;
 		Math::Rectf viewport;
+		bool created;
 	};
 
 	class SurfaceModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Surface* AllocateSurface();
 
 	public:
-		const Surface* RecCreateSurface(const ExecutionContext& context, const Surface* surface = nullptr);
+		void RecCreateSurface(const ExecutionContext& context, const Surface* surface);
 		void RecSetColor(const ExecutionContext& context, const Surface* target, uint32 index, const SurfaceColor& color);
 		void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
 		void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);

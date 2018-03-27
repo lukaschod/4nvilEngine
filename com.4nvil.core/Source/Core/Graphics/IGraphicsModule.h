@@ -30,15 +30,16 @@ namespace Core::Graphics
 	public:
 		virtual const IBuffer* AllocateBuffer(size_t size) = 0;
 		virtual const ITexture* AllocateTexture(uint32 width, uint32 height) = 0;
+		virtual const IFilter* AllocateFilter() = 0;
 		virtual const ISwapChain* AllocateSwapChain(const IView* view) = 0;
 		virtual const IRenderPass* AllocateRenderPass() = 0;
 
 	public:
-		virtual const ITexture* RecCreateITexture(const ExecutionContext& context, uint32 width, uint32 height, const ITexture* texture = nullptr) = 0;
+		virtual void RecCreateITexture(const ExecutionContext& context, const ITexture* texture) = 0;
 
-		virtual const IFilter* RecCreateIFilter(const ExecutionContext& context, const FilterOptions& options) = 0;
+		virtual void RecCreateIFilter(const ExecutionContext& context, const IFilter* filter) = 0;
 
-		virtual const IRenderPass* RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* renderPass = nullptr) = 0;
+		virtual void RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* target) = 0;
 		virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32 index, const ColorAttachment& attachment) = 0;
 		virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) = 0;
 		virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) = 0;
@@ -55,7 +56,7 @@ namespace Core::Graphics
 		virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) = 0;
 		virtual void RecCopyBuffer(const ExecutionContext& context, const IBuffer* src, const IBuffer* dst, size_t size) = 0;
 
-		virtual const ISwapChain* RecCreateISwapChain(const ExecutionContext& context, const IView* view, const ISwapChain* swapChain = nullptr) = 0;
+		virtual void RecCreateISwapChain(const ExecutionContext& context, const ISwapChain* target) = 0;
 		virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 		virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 

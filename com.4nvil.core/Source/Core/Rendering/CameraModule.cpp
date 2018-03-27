@@ -68,19 +68,7 @@ Vector3f CameraModule::ScreenToViewport(const Camera* camera, const Vector3f& po
 	return viewPortPosition;
 }
 
-DECLARE_COMMAND_CODE(CreateCamera);
-const Camera* CameraModule::RecCreateCamera(const ExecutionContext& context, const Camera* camera)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = camera == nullptr ? AllocateCamera() : camera;
-	stream.Write(TO_COMMAND_CODE(CreateCamera));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-
+SERIALIZE_METHOD_ARG1(CameraModule, CreateCamera, const Camera*);
 SERIALIZE_METHOD_ARG2(CameraModule, SetSurface, const Camera*, const Surface*);
 SERIALIZE_METHOD_ARG1(CameraModule, Destroy, const Component*);
 
@@ -89,16 +77,18 @@ bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateCamera, Camera*, target);
+		target->created = true;
 		storageModule->RecCreateStorage(context, target->perCameraStorage);
 		cameras.push_back(target);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetSurface, Camera*, target, const Surface*, surface);
+		ASSERT(target->created);
 		target->surface = surface;
 
 		auto image = target->surface->colors[0].image;
 		target->aspect = (float)image->width / image->height;
-		target->projectionMatrix = Matrix4x4f::Perspective(target->aspect, Math::DegToRad(target->fieldOfView), target->nearClipPlane, target->farClipPlane);
+		target->projectionMatrix = Matrix4x4f::Perspective(target->aspect, Math::DegToRad(target->fieldOfView), target->nearClipPlane, target->farClipPlane); // TODO: sync matrix if surface changes
 		DESERIALIZE_METHOD_END;
 	}
 	return false;

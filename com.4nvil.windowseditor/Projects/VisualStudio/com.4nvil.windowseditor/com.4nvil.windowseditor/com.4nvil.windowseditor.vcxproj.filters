@@ -64,6 +64,15 @@
     <Filter Include="Windows\Graphics\Directx12">
       <UniqueIdentifier>{c9e1be19-919a-4527-a0de-700a435c3ceb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Assets">
+      <UniqueIdentifier>{2409a26b-541d-4191-b823-0e09c7748469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Assets\Importer">
+      <UniqueIdentifier>{a8fc421a-c1d1-4ab3-8336-509268e014f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Project">
+      <UniqueIdentifier>{5c5e7c9f-2188-4c8d-93cf-98d44adfbc8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.h">
@@ -303,6 +312,18 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.h">
       <Filter>Editor\Views</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.h">
+      <Filter>Core\Assets\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.h">
+      <Filter>Core\Assets\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.h">
+      <Filter>Editor\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">
@@ -424,6 +445,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp">
       <Filter>Editor\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.cpp">
+      <Filter>Core\Assets\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp">
+      <Filter>Editor\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp">
+      <Filter>Core\Assets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

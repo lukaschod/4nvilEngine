@@ -24,6 +24,8 @@ namespace Editor
 	class ViewLayerModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Surface* GetSurface() const { return surface; }

@@ -23,6 +23,8 @@ namespace Core
 	class UnlitRenderLoopModule : public IRenderLoopModule
 	{
 	public:
+		BASE_IS(IRenderLoopModule);
+
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context);
 

@@ -26,15 +26,14 @@ namespace Core
 
 	class Module
 	{
-	protected:
-		typedef Module base;
-
 	public:
+		BASE_IS(Module);
+
 		// This is where each Module will setup dependencies between other Modules using the ExecuteBefore and ExecuteAfter
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) {}
 
 		// This is where each Module job will be done, context contains additional information about execution
-		virtual void Execute(const ExecutionContext& context) = 0;
+		virtual void Execute(const ExecutionContext& context) {}
 
 		virtual size_t GetExecutionSize() { return 1; }
 		virtual size_t GetSplitExecutionSize() { return 1; }

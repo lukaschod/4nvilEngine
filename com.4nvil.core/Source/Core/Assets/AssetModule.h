@@ -2,10 +2,11 @@
 
 #include <Core\Tools\Common.h>
 
-namespace Core::Graphics
+namespace Core
 {
-	struct IFilter
+	class AssetsModule
 	{
-		IFilter() {}
+	public:
+
 	};
 }

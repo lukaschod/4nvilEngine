@@ -1,8 +1,23 @@
 #include <Core\Foundation\UnitModule.h>
+#include <Core\Foundation\MemoryModule.h>
 
 using namespace Core;
 
-SERIALIZE_METHOD_CREATECMP(UnitModule, Unit);
+static const char* memoryLabelUnit = "Core::Unit";
+
+void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
+{
+	base::SetupExecuteOrder(moduleManager);
+	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+	memoryModule->SetAllocator(memoryLabelUnit, new FixedBlockHeap(sizeof(Unit)));
+}
+
+const Unit* UnitModule::AllocateUnit() const
+{
+	return memoryModule->New<Unit>(memoryLabelUnit);
+}
+
+SERIALIZE_METHOD_ARG1(UnitModule, CreateUnit, const Unit*);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
 

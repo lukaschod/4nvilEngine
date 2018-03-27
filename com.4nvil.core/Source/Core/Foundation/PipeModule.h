@@ -10,16 +10,16 @@
 namespace Core
 {
 	typedef uint32 CommandCode;
-	struct CommandStream : public IO::MemoryStream {};
+	typedef IO::MemoryStream CommandStream;
 
 	struct CmdBuffer
 	{
 		CmdBuffer() : commandCount(0) {}
 
-		// Reced commands buffer
+		// Recorded commands with all its data
 		CommandStream stream;
 
-		// Reced commandcount
+		// Total count of commands recorded in this buffer
 		size_t commandCount;
 
 		// Index of the cmdbuffer
@@ -34,10 +34,9 @@ namespace Core
 
 	class PipeModule : public Module
 	{
-	protected:
-		typedef PipeModule base;
-
 	public:
+		BASE_IS(Module);
+
 		PipeModule();
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;

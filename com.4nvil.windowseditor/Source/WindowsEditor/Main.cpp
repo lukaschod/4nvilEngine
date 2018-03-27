@@ -46,6 +46,7 @@ struct Agent : public Component
 class AgentModule : public ComponentModule
 {
 public:
+	BASE_IS(ComponentModule);
 	DECLARE_COMMAND_CODE(CreateAgent);
 	DECLARE_COMMAND_CODE(SetDestination);
 
@@ -135,6 +136,8 @@ private:
 class AgentForceModule : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
 		base::SetupExecuteOrder(moduleManager);
@@ -229,6 +232,8 @@ private:
 class AgentDistModule : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
 	{
 		base::SetupExecuteOrder(moduleManager);
@@ -293,6 +298,8 @@ private:
 class ShutdownModule : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	ShutdownModule(ModuleManager* moduleManager)
 		: moduleManager(moduleManager)
 	{
@@ -318,6 +325,8 @@ private:
 class FpsLoggerModule : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	FpsLoggerModule()
 		: passedFrameCount(0)
 	{
@@ -364,6 +373,8 @@ private:
 class TestModule : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	TestModule() : frame(0) {}
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
@@ -442,19 +453,23 @@ float4 FragMain(VertData i) : SV_TARGET
 
 	const Unit* CreateQuad(const ExecutionContext& context, const Shader* shader, const Mesh* mesh, Vector3f position)
 	{
-		auto triangle = unitModule->RecCreateUnit(context);
+		auto triangle = unitModule->AllocateUnit();
+		unitModule->RecCreateUnit(context, triangle);
 
 		// Create transform
-		auto transform = transformModuke->RecCreateTransform(context);
+		auto transform = transformModuke->AllocateTransform();
 		transformModuke->RecSetPosition(context, transform, position);
+		transformModuke->RecCreateTransform(context, transform);
 		unitModule->RecAddComponent(context, triangle, transform);
 
-		auto material = materialModule->RecCreateMaterial(context);
+		auto material = materialModule->AllocateMaterial();
+		materialModule->RecCreateMaterial(context, material);
 		materialModule->RecSetShader(context, material, shader);
 
-		auto meshRenderer = meshRendererModule->RecCreateMeshRenderer(context);
+		auto meshRenderer = meshRendererModule->AllocateMeshRenderer();
 		meshRendererModule->RecSetMaterial(context, meshRenderer, material);
 		meshRendererModule->RecSetMesh(context, meshRenderer, mesh);
+		meshRendererModule->RecCreateMeshRenderer(context, meshRenderer);
 		unitModule->RecAddComponent(context, triangle, meshRenderer);
 
 		return triangle;
@@ -501,20 +516,25 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		for (int i = 0; i < 1; i++)
 		{
-			auto view = viewModule->RecCreateIView(context);
+			auto view = viewModule->AllocateView();
+			viewModule->RecSetName(context, view, "Performance Test with 40000 objects");
+			viewModule->RecCreateIView(context, view);
 
 			gameViewLayerModule->RecShow(context, view);
 
-			auto mainCamera = unitModule->RecCreateUnit(context);
+			auto mainCamera = unitModule->AllocateUnit();
+			unitModule->RecCreateUnit(context, mainCamera);
 			movingCamera = mainCamera;
 
 			// Create transform
-			auto transform = transformModuke->RecCreateTransform(context);
+			auto transform = transformModuke->AllocateTransform();
 			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
+			transformModuke->RecCreateTransform(context, transform);
 			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
-			auto camera = cameraModule->RecCreateCamera(context);
+			auto camera = cameraModule->AllocateCamera();
+			cameraModule->RecCreateCamera(context, camera);
 			cameraModule->RecSetSurface(context, camera, gameViewLayerModule->GetSurface());
 			unitModule->RecAddComponent(context, mainCamera, camera);
 		}
@@ -554,6 +574,8 @@ float4 FragMain(VertData i) : SV_TARGET
 class Test2Module : public ComputeModule
 {
 public:
+	BASE_IS(ComputeModule);
+
 	Test2Module() : frame(0) {}
 
 	virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
@@ -633,19 +655,23 @@ float4 FragMain(VertData i) : SV_TARGET
 
 	const Unit* CreateQuad(const ExecutionContext& context, const Shader* shader, const Mesh* mesh, Vector3f position)
 	{
-		auto triangle = unitModule->RecCreateUnit(context);
+		auto triangle = unitModule->AllocateUnit();
+		unitModule->RecCreateUnit(context, triangle);
 
 		// Create transform
-		auto transform = transformModuke->RecCreateTransform(context);
+		auto transform = transformModuke->AllocateTransform();
 		transformModuke->RecSetPosition(context, transform, position);
+		transformModuke->RecCreateTransform(context, transform);
 		unitModule->RecAddComponent(context, triangle, transform);
 
-		auto material = materialModule->RecCreateMaterial(context);
+		auto material = materialModule->AllocateMaterial();
+		materialModule->RecCreateMaterial(context, material);
 		materialModule->RecSetShader(context, material, shader);
 
-		auto meshRenderer = meshRendererModule->RecCreateMeshRenderer(context);
+		auto meshRenderer = meshRendererModule->AllocateMeshRenderer();
 		meshRendererModule->RecSetMaterial(context, meshRenderer, material);
 		meshRendererModule->RecSetMesh(context, meshRenderer, mesh);
+		meshRendererModule->RecCreateMeshRenderer(context, meshRenderer);
 		unitModule->RecAddComponent(context, triangle, meshRenderer);
 
 		auto agent = agentModule->RecCreateAgent(context);
@@ -687,92 +713,30 @@ float4 FragMain(VertData i) : SV_TARGET
 
 		logModule->RecWriteFmt(context, "Initializing test scene %d\n", 1);
 
-		// Create window
-		//auto view = viewModule->RecCreateIView(context);
-		//auto view2 = viewModule->RecCreateIView(context);
-
-		/*{
-		auto mainCamera = unitModule->RecCreateUnit(context);
-
-		// Create transform
-		auto transform = transformModuke->RecCreateTransform(context);
-		transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -1));
-		unitModule->RecAddComponent(context, mainCamera, transform);
-
-		// Create camera with window as target
-		auto surface = surfaceModule->RecCreateSurface(context);
-		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Clear, StoreAction::Store));
-		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0.5f, 0, 0.5f, 1)));
-		auto camera = cameraModule->RecCreateCamera(context);
-		cameraModule->RecSetSurface(context, camera, surface);
-		unitModule->RecAddComponent(context, mainCamera, camera);
-		}
-
-		{
-		auto mainCamera = unitModule->RecCreateUnit(context);
-
-		// Create transform
-		auto transform = transformModuke->RecCreateTransform(context);
-		transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -10));
-		unitModule->RecAddComponent(context, mainCamera, transform);
-
-		// Create camera with window as target
-		auto surface = surfaceModule->RecCreateSurface(context);
-		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Load, StoreAction::Store));
-		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 0.5f, 1)));
-		auto camera = cameraModule->RecCreateCamera(context);
-		cameraModule->RecSetSurface(context, camera, surface);
-		unitModule->RecAddComponent(context, mainCamera, camera);
-		}*/
-
 		int count = 30;
 		auto offset = count * 1;
 
-		/*ViewDesc viewDesc;
-		viewDesc.width = 2048;
-		viewDesc.height = 1536;
-		viewDesc.type = ViewType::Parent;
-		auto parent = viewModule->RecCreateIView(context, viewDesc);
-
-		viewDesc.width = 320;
-		viewDesc.height = 240;
-		viewDesc.parent = parent;
-		viewDesc.type = ViewType::Child;
-		auto view = viewModule->RecCreateIView(context, viewDesc);
-
-		auto mainCamera = unitModule->RecCreateUnit(context);
-		movingCamera = mainCamera;
-
-		// Create transform
-		auto transform = transformModuke->RecCreateTransform(context);
-		transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
-		unitModule->RecAddComponent(context, mainCamera, transform);
-
-		// Create camera with window as target
-		auto surface = surfaceModule->RecCreateSurface(context);
-		surfaceModule->RecSetColor(context, surface, 0, SurfaceColor(view->renderTarget, LoadAction::Clear, StoreAction::Store));
-		surfaceModule->RecSetViewport(context, surface, Viewport(Rectf(0, 0, 1, 1)));
-		auto camera = cameraModule->RecCreateCamera(context);
-		cameraModule->RecSetSurface(context, camera, surface);
-		unitModule->RecAddComponent(context, mainCamera, camera);*/
-
 		for (int i = 0; i < 1; i++)
 		{
-			auto view = viewModule->RecCreateIView(context);
+			auto view = viewModule->AllocateView();
+			viewModule->RecCreateIView(context, view);
 
 			gameViewLayerModule->RecShow(context, view);
 
-			auto mainCamera = unitModule->RecCreateUnit(context);
+			auto mainCamera = unitModule->AllocateUnit();
+			unitModule->RecCreateUnit(context, mainCamera);
 			movingCamera = mainCamera;
 
 			// Create transform
-			auto transform = transformModuke->RecCreateTransform(context);
+			auto transform = transformModuke->AllocateTransform();
 			transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
+			transformModuke->RecCreateTransform(context, transform);
 			unitModule->RecAddComponent(context, mainCamera, transform);
 
 			// Create camera with window as target
-			auto camera = cameraModule->RecCreateCamera(context);
+			auto camera = cameraModule->AllocateCamera();
 			cameraModule->RecSetSurface(context, camera, gameViewLayerModule->GetSurface());
+			cameraModule->RecCreateCamera(context, camera);
 			unitModule->RecAddComponent(context, mainCamera, camera);
 		}
 
@@ -842,18 +806,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 	moduleManager->AddModule(new Windows::ViewModule(hInst));
 	moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-	// Test project 1
+	/*// Test project 1
 	moduleManager->AddModule(new TestModule());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));
+	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
-	/*// Test project 2
+	// Test project 2
 	moduleManager->AddModule(new AgentModule());
 	moduleManager->AddModule(new AgentForceModule());
 	moduleManager->AddModule(new AgentDistModule());
 	moduleManager->AddModule(new Test2Module());
 	moduleManager->AddModule(new FpsLoggerModule());
-	moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+	moduleManager->AddModule(new ShutdownModule(moduleManager));
 
 	moduleManager->Start();
 	while (moduleManager->IsRunning())

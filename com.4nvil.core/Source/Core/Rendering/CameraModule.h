@@ -27,6 +27,7 @@ namespace Core
 			, nearClipPlane(0.3f)
 			, farClipPlane(1000)
 			, fieldOfView(60)
+			, created(false)
 		{
 		}
 
@@ -39,11 +40,15 @@ namespace Core
 		Math::Matrix4x4f projectionMatrix;
 		Math::Matrix4x4f worldToCameraMatrix;
 		Math::Matrix4x4f cameraToWorldMatrix;
+
+		bool created;
 	};
 
 	class CameraModule : public ComponentModule
 	{
 	public:
+		BASE_IS(ComponentModule);
+
 		virtual void Execute(const ExecutionContext& context) override;
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
@@ -60,7 +65,7 @@ namespace Core
 		Math::Vector3f ScreenToViewport(const Camera* camera, const Math::Vector3f& position);
 
 	public:
-		const Camera* RecCreateCamera(const ExecutionContext& context, const Camera* camera = nullptr);
+		void RecCreateCamera(const ExecutionContext& context, const Camera* target);
 		virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
 		void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
 

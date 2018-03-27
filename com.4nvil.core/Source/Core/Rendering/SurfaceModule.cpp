@@ -15,22 +15,11 @@ void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 const Surface* SurfaceModule::AllocateSurface()
 {
-	return new Surface();
+	auto renderPass = graphicsModule->AllocateRenderPass();
+	return new Surface(renderPass);
 }
 
-DECLARE_COMMAND_CODE(CreateSurface);
-const Surface* SurfaceModule::RecCreateSurface(const ExecutionContext& context, const Surface* surface)
-{
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
-	auto target = surface == nullptr ? AllocateSurface() : surface;
-	stream.Write(TO_COMMAND_CODE(CreateSurface));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
-	return target;
-}
-
+SERIALIZE_METHOD_ARG1(SurfaceModule, CreateSurface, const Surface*);
 SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32, const SurfaceColor&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetDepth, const Surface*, const SurfaceDepth&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetViewport, const Surface*, const Viewport&);
@@ -40,11 +29,13 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateSurface, Surface*, target);
-		target->renderPass = graphicsModule->RecCreateIRenderPass(context);
+		target->created = true;
+		graphicsModule->RecCreateIRenderPass(context, target->renderPass);
 		surfaces.push_back(target);
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG3_START(SetColor, Surface*, target, uint32, index, SurfaceColor, color);
+		ASSERT(target->created);
 		target->colors.safe_set(index, color);
 		ColorAttachment attachment;
 		attachment.texture = color.image->texture;
@@ -55,6 +46,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetDepth, Surface*, target, SurfaceDepth, depth);
+		ASSERT(target->created);
 		target->depth = depth;
 		DepthAttachment attachment;
 		attachment.texture = depth.image->texture;
@@ -65,6 +57,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 		DESERIALIZE_METHOD_END;
 
 		DESERIALIZE_METHOD_ARG2_START(SetViewport, Surface*, target, Viewport, viewport);
+		ASSERT(target->created);
 		graphicsModule->RecSetViewport(context, target->renderPass, viewport);
 		DESERIALIZE_METHOD_END;
 	}

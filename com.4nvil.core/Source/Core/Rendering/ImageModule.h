@@ -25,6 +25,7 @@ namespace Core
 			, sampler(nullptr)
 			, width(texture->width)
 			, height(texture->height)
+			, created(false)
 		{
 		}
 
@@ -32,18 +33,21 @@ namespace Core
 		const Sampler* sampler;
 		const uint32 width;
 		const uint32 height;
+		bool created;
 	};
 
 	class ImageModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		const Image* AllocateImage(uint32 width, uint32 height) const;
 
 	public:
-		const Image* RecCreateImage(const ExecutionContext& context, uint32 width, uint32 height, const Image* image = nullptr);
-		void RecSetSampler(const ExecutionContext& context, const Image* image, const Sampler* sampler);
+		void RecCreateImage(const ExecutionContext& context, const Image* target);
+		void RecSetSampler(const ExecutionContext& context, const Image* target, const Sampler* sampler);
 
 	protected:
 		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

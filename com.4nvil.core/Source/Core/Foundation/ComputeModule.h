@@ -8,10 +8,9 @@ namespace Core
 {
 	class ComputeModule : public Module
 	{
-	protected:
-		typedef ComputeModule base;
-
 	public:
+		BASE_IS(Module);
+
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
 
 	protected:

@@ -20,31 +20,16 @@ namespace Core
 		Child,
 	};
 
-	struct ViewDesc
-	{
-		ViewDesc()
-			: type(ViewType::Default)
-			, width(2048)
-			, height(1536)
-			, parent(nullptr)
-			, name("Unamed")
-		{ }
-		ViewType type;
-		uint32 width;
-		uint32 height;
-		const IView* parent;
-		const char* name;
-	};
-
 	struct IView
 	{
-		IView(const ViewDesc& desc)
-			: type(desc.type)
-			, width(desc.width)
-			, height(desc.height)
-			, name(desc.name)
-			, parent(desc.parent)
+		IView()
+			: type(ViewType::Parent)
+			, width(2048)
+			, height(1536)
+			, name("Unamed")
+			, parent(nullptr)
 			, viewInputDevice(nullptr)
+			, created(false)
 		{
 		}
 		ViewType type;
@@ -53,13 +38,19 @@ namespace Core
 		const char* name;
 		const IView* parent;
 		const InputDevice* viewInputDevice;
+		bool created;
 	};
 
 	class IViewModule : public PipeModule
 	{
 	public:
-		virtual const IView* RecCreateIView(const ExecutionContext& context, const IView* view = nullptr) = 0;
-		virtual const IView* RecCreateIView(const ExecutionContext& context, const ViewDesc& desc, const IView* view = nullptr) = 0;
+		virtual const IView* AllocateView() = 0;
 		virtual const List<const IView*>& GetViews() = 0;
+
+	public:
+		virtual void RecCreateIView(const ExecutionContext& context, const IView* target) = 0;
+		virtual void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) = 0;
+		virtual void RecSetName(const ExecutionContext& context, const IView* target, const char* name) = 0;
+		virtual void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) = 0;
 	};
 }

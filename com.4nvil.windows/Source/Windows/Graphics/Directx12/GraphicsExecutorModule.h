@@ -14,6 +14,8 @@ namespace Windows::Directx12
 	class GraphicsExecutorModule : public ComputeModule
 	{
 	public:
+		BASE_IS(ComputeModule);
+
 		GraphicsExecutorModule();
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 		virtual void Execute(const ExecutionContext& context) override;

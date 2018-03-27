@@ -20,6 +20,8 @@ namespace Core
 	class ShaderModule : public PipeModule
 	{
 	public:
+		BASE_IS(PipeModule);
+
 		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
 	public:

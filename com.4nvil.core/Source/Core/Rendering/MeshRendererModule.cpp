@@ -10,7 +10,7 @@ using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
 
-static const char* memoryLabelMeshRenderer = "Graphics::MeshRenderer";
+static const char* memoryLabelMeshRenderer = "Core::MeshRenderer";
 
 MeshRendererModule::MeshRendererModule()
 	: perAllRendererStorage(nullptr)
@@ -33,6 +33,7 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 void MeshRendererModule::Execute(const ExecutionContext& context)
 {
 	MARK_FUNCTION;
+
 	if (perAllRendererStorage == nullptr)
 	{
 		perAllRendererStorage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
@@ -50,33 +51,27 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
 	}
 }
 
-const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return meshRenderers; }
-const Storage * MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
-
-SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);
-SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMaterial, const MeshRenderer*, const Material*);
-SERIALIZE_METHOD_ARG1(MeshRendererModule, Destroy, const Component*);
-
-DECLARE_COMMAND_CODE(CreateMeshRenderer);
-const MeshRenderer* MeshRendererModule::RecCreateMeshRenderer(const ExecutionContext& context)
+const MeshRenderer* MeshRendererModule::AllocateMeshRenderer()
 {
-	auto buffer = GetRecordingBuffer(context);
-	auto& stream = buffer->stream;
 	auto target = memoryModule->New<MeshRenderer>(memoryLabelMeshRenderer, this);
-	stream.Write(TO_COMMAND_CODE(CreateMeshRenderer));
-	stream.Write(target);
-	stream.Align();
-	buffer->commandCount++;
+	target->perMeshStorage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
 	return target;
 }
-//SERIALIZE_METHOD_CREATECMP(MeshRendererModule, MeshRenderer);
+
+const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return meshRenderers; }
+const Storage* MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
+
+SERIALIZE_METHOD_ARG1(MeshRendererModule, Destroy, const Component*);
+SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);
+SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMaterial, const MeshRenderer*, const Material*);
+SERIALIZE_METHOD_ARG1(MeshRendererModule, CreateMeshRenderer, const MeshRenderer*);
 
 bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
 	switch (commandCode)
 	{
 		DESERIALIZE_METHOD_ARG1_START(CreateMeshRenderer, MeshRenderer*, target);
-		target->perMeshStorage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
+		target->created = true;
 		storageModule->RecCreateStorage(context, target->perMeshStorage);
 		meshRenderers.push_back(target);
 		DESERIALIZE_METHOD_END;
@@ -88,6 +83,7 @@ bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, Command
 		DESERIALIZE_METHOD_ARG2_START(SetMaterial, MeshRenderer*, target, const Material*, material);
 		target->material = material;
 		materialModule->RecSetStorage(context, target->material, "_perCameraData", perAllRendererStorage);
+		materialModule->RecSetStorage(context, target->material, "_perMeshData", target->perMeshStorage);
 		DESERIALIZE_METHOD_END;
 	}
 	return false;
