@@ -746,8 +746,8 @@ float4 FragMain(VertData i) : SV_TARGET
 
 			// Create camera with window as target
 			auto camera = cameraModule->AllocateCamera();
-			cameraModule->RecSetSurface(context, camera, gameViewLayerModule->GetSurface());
 			cameraModule->RecCreateCamera(context, camera);
+			cameraModule->RecSetSurface(context, camera, gameViewLayerModule->GetSurface());
 			unitModule->RecAddComponent(context, mainCamera, camera);
 		}
 

@@ -9,7 +9,7 @@
 *
 */
 
-#include <Windows/Graphics/Directx12/CmdQueue.h>
+#include <Windows/Graphics/Directx12/CmdQueue.hpp>
 
 using namespace Windows::Directx12;
 

@@ -85,7 +85,7 @@ void ProfilerModule::RecPushFunction(const ExecutionContext& context, const char
 	auto& worker = workers[context.workerIndex];
 	auto& functions = worker.functions;
 	auto parentIndex = functions.size() - 1;
-	functions.push_back(ProfiledFunction(name, stopWatch.GetElapsedMicroseconds() / 1000.0f, parentIndex));
+	functions.push_back(ProfiledFunction(name, stopWatch.GetElapsedMicroseconds() / 1000.0f, (int) parentIndex));
 
 	// Notice the parent about new child
 	if (parentIndex != -1)
