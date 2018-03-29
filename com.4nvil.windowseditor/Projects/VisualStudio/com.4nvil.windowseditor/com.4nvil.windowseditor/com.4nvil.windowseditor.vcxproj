@@ -140,6 +140,9 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.cpp" />
     <ClCompile Include="..\..\..\..\Source\WindowsEditor\Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="com.4nvil.windowseditor.licenseheader" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0BE41D22-3E35-4D35-A139-5A7A4DB0FD13}</ProjectGuid>
     <RootNamespace>com4nvilwindowseditor</RootNamespace>

@@ -456,4 +456,7 @@
       <Filter>Core\Assets</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="com.4nvil.windowseditor.licenseheader" />
+  </ItemGroup>
 </Project>
