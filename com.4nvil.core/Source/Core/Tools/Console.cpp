@@ -16,21 +16,21 @@
 
 namespace Core::Console
 {
-	void Write(const char* msg)
-	{
+    void Write(const char* msg)
+    {
 #if ENABLED_WINDOWS
-		OutputDebugString(msg);
+        OutputDebugString(msg);
 #else
-		ERROR("Not implemented");
+        ERROR("Not implemented");
 #endif
-	}
+    }
 
-	void WriteFmt(const char* format, ...)
-	{
-		char buffer[1024];
-		va_list ap;
-		va_start(ap, format);
-		vsprintf_s(buffer, 1024, format, ap);
-		Write(buffer);
-	}
+    void WriteFmt(const char* format, ...)
+    {
+        char buffer[1024];
+        va_list ap;
+        va_start(ap, format);
+        vsprintf_s(buffer, 1024, format, ap);
+        Write(buffer);
+    }
 };

@@ -15,8 +15,8 @@
 
 namespace Core::Graphics
 {
-	struct IFilter
-	{
-		IFilter() {}
-	};
+    struct IFilter
+    {
+        IFilter() {}
+    };
 }

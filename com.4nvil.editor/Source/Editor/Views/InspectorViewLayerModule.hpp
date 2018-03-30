@@ -15,12 +15,12 @@
 
 namespace Editor
 {
-	class InspectorViewLayerModule : public ViewLayerModule
-	{
-	public:
-		BASE_IS(ViewLayerModule);
+    class InspectorViewLayerModule : public ViewLayerModule
+    {
+    public:
+        BASE_IS(ViewLayerModule);
 
-	protected:
-		virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) override;
-	};
+    protected:
+        virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) override;
+    };
 }

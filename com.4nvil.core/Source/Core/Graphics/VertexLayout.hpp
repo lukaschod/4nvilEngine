@@ -17,28 +17,28 @@
 
 namespace Core::Graphics
 {
-	enum class VertexAttributeType
-	{
-		Position,
-		TexCoord0,
-	};
+    enum class VertexAttributeType
+    {
+        Position,
+        TexCoord0,
+    };
 
-	struct VertexAttributeLayout
-	{
-		VertexAttributeLayout() {}
-		VertexAttributeLayout(VertexAttributeType type, Math::ColorFormat format) :
-			type(type),
-			format(format)
-		{
-		}
+    struct VertexAttributeLayout
+    {
+        VertexAttributeLayout() {}
+        VertexAttributeLayout(VertexAttributeType type, Math::ColorFormat format) :
+            type(type),
+            format(format)
+        {
+        }
 
-		VertexAttributeType type;
-		Math::ColorFormat format;
-	};
+        VertexAttributeType type;
+        Math::ColorFormat format;
+    };
 
-	struct VertexLayout
-	{
-		List<VertexAttributeLayout> attributes;
-		uint32 stride;
-	};
+    struct VertexLayout
+    {
+        List<VertexAttributeLayout> attributes;
+        uint32 stride;
+    };
 }

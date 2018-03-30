@@ -17,14 +17,14 @@
 
 namespace Core
 {
-	class ComputeModule : public Module
-	{
-	public:
-		BASE_IS(Module);
+    class ComputeModule : public Module
+    {
+    public:
+        BASE_IS(Module);
 
-		virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
+        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
 
-	protected:
-		ProfilerModule* profilerModule;
-	};
+    protected:
+        ProfilerModule* profilerModule;
+    };
 }

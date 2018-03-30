@@ -16,5 +16,5 @@ using namespace Editor;
 
 IRenderLoopModule* InspectorViewLayerModule::GetRenderLoop(ModuleManager* moduleManager)
 {
-	return ExecuteBefore<UnlitRenderLoopModule>(moduleManager);
+    return ExecuteBefore<UnlitRenderLoopModule>(moduleManager);
 }

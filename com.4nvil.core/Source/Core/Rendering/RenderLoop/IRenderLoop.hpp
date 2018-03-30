@@ -16,15 +16,15 @@
 
 namespace Core::Graphics
 {
-	struct ITexture;
-	struct ISwapChain;
+    struct ITexture;
+    struct ISwapChain;
 }
 
 namespace Core
 {
-	class IRenderLoopModule : public PipeModule 
-	{
-	public:
-		virtual void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) = 0;
-	};
+    class IRenderLoopModule : public PipeModule 
+    {
+    public:
+        virtual void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) = 0;
+    };
 }

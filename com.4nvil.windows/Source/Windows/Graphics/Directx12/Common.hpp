@@ -27,5 +27,5 @@ using Microsoft::WRL::ComPtr;
 
 // Automatically enable debug layer on debug modes 
 #if !defined(ENABLED_D12_DEBUG_LAYER) && defined(ENABLED_DEBUG)
-#	define ENABLED_D12_DEBUG_LAYER
+#    define ENABLED_D12_DEBUG_LAYER
 #endif

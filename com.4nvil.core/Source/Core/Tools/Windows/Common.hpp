@@ -15,15 +15,15 @@
 
 // Exclude rarely-used stuff from Windows headers for speed up
 #ifndef WIN32_LEAN_AND_MEAN
-#	define WIN32_LEAN_AND_MEAN 
+#    define WIN32_LEAN_AND_MEAN 
 #endif
 #ifndef NOMINMAX
-#	define NOMINMAX
+#    define NOMINMAX
 #endif
 
 // Exclude ERROR macros for our usage
 #ifndef NOGDI
-#	define NOGDI
+#    define NOGDI
 #endif
 
 #include <windows.h>
@@ -32,18 +32,18 @@
 
 #ifdef ENABLED_DEBUG
 #define ASSERT_SUCCEEDED(hr) \
-	if (FAILED(hr)) \
-	{ \
-		_com_error err(hr); \
-		LPCTSTR errMsg = err.ErrorMessage(); \
-		Core::Console::Write("ERROR: Assertion failed \'" #hr "\'\n"); \
-		Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
-		Core::Console::Write("    Info: "); \
-		Core::Console::Write(errMsg); \
-		Core::Console::WriteFmt(" (hr = 0x%08X)", hr); \
-		Core::Console::Write("\n"); \
-		__debugbreak(); \
-	}
+    if (FAILED(hr)) \
+    { \
+        _com_error err(hr); \
+        LPCTSTR errMsg = err.ErrorMessage(); \
+        Core::Console::Write("ERROR: Assertion failed \'" #hr "\'\n"); \
+        Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
+        Core::Console::Write("    Info: "); \
+        Core::Console::Write(errMsg); \
+        Core::Console::WriteFmt(" (hr = 0x%08X)", hr); \
+        Core::Console::Write("\n"); \
+        __debugbreak(); \
+    }
 #else
 #define ASSERT_SUCCEEDED(hr) (void)(hr)
 #endif

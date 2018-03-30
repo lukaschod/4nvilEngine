@@ -16,15 +16,15 @@
 
 namespace Core
 {
-	class PngImporterModule : public IImporterModule
-	{
-	public:
-		virtual const char* GetSupportedExtension() override;
+    class PngImporterModule : public IImporterModule
+    {
+    public:
+        virtual const char* GetSupportedExtension() override;
 
-	public:
-		virtual void RecImport(const ExecutionContext& context, String& pathToFile) override;
+    public:
+        virtual void RecImport(const ExecutionContext& context, String& pathToFile) override;
 
-	protected:
-		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
-	};
+    protected:
+        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+    };
 }

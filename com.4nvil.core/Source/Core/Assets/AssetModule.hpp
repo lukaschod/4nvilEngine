@@ -15,9 +15,9 @@
 
 namespace Core
 {
-	class AssetsModule
-	{
-	public:
+    class AssetsModule
+    {
+    public:
 
-	};
+    };
 }

@@ -17,23 +17,23 @@
 
 namespace Core
 {
-	class LogModule : public PipeModule
-	{
-	public:
-		BASE_IS(PipeModule);
+    class LogModule : public PipeModule
+    {
+    public:
+        BASE_IS(PipeModule);
 
-		virtual void Execute(const ExecutionContext& context) override;
-		void RecWrite(const ExecutionContext& context, const char* name);
-		void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
+        virtual void Execute(const ExecutionContext& context) override;
+        void RecWrite(const ExecutionContext& context, const char* name);
+        void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
 
-	private:
-		void OpenStream();
-		void CloseStream();
+    private:
+        void OpenStream();
+        void CloseStream();
 
-	protected:
-		virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+    protected:
+        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
-	private:
-		IO::FileStream output;
-	};
+    private:
+        IO::FileStream output;
+    };
 }

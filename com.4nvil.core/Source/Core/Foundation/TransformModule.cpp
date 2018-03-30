@@ -21,68 +21,68 @@ static const char* memoryLabelTransform = "Core::Transform";
 
 TransformModule::TransformModule() 
 {
-	root = new Transform(this);
-	root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
+    root = new Transform(this);
+    root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
 }
 
 void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
-	base::SetupExecuteOrder(moduleManager);
-	memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
-	memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
-	unitModule = ExecuteAfter<UnitModule>(moduleManager);
+    base::SetupExecuteOrder(moduleManager);
+    memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
+    memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
+    unitModule = ExecuteAfter<UnitModule>(moduleManager);
 }
 
 void TransformModule::Execute(const ExecutionContext& context)
 {
-	MARK_FUNCTION;
-	base::Execute(context);
+    MARK_FUNCTION;
+    base::Execute(context);
 
-	// Do BFS to re-calculate new transformations
-	// TODO: Find performance BFS vs DFS, but my guess BFS better because cache might be used much more better
-	for (auto child : root->childs)
-		transformsToCalculate.push(child);
-	while (!transformsToCalculate.empty())
-	{
-		// Get next transform to calculate
-		auto next = transformsToCalculate.front();
-		transformsToCalculate.pop();
+    // Do BFS to re-calculate new transformations
+    // TODO: Find performance BFS vs DFS, but my guess BFS better because cache might be used much more better
+    for (auto child : root->childs)
+        transformsToCalculate.push(child);
+    while (!transformsToCalculate.empty())
+    {
+        // Get next transform to calculate
+        auto next = transformsToCalculate.front();
+        transformsToCalculate.pop();
 
-		auto parent = next->parent;
-		ASSERT(parent != nullptr);
+        auto parent = next->parent;
+        ASSERT(parent != nullptr);
 
-		// Check if we need to unmark changed state
-		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
-		{
-			next->flags.Remove(TransformStateFlags::LocalObjectToWorldChanged);
-			next->flags.Remove(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
-		}
+        // Check if we need to unmark changed state
+        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
+        {
+            next->flags.Remove(TransformStateFlags::LocalObjectToWorldChanged);
+            next->flags.Remove(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
+        }
 
-		// Check if we need update
-		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
-		{
-			next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
-			next->flags.Add(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
-		}
+        // Check if we need update
+        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
+        {
+            next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
+            next->flags.Add(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
+        }
 
-		// If nor local transformation changed nor the parent one, we can skip the combination of them
-		if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged) || parent->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
-		{
-			next->objectToWorld = next->localObjectToWorld;
-			next->objectToWorld.Multiply(parent->objectToWorld);
-			ASSERT(next->objectToWorld.IsValid());
-			next->position = next->objectToWorld.GetPosition().xyz();
-		}
+        // If nor local transformation changed nor the parent one, we can skip the combination of them
+        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged) || parent->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
+        {
+            next->objectToWorld = next->localObjectToWorld;
+            next->objectToWorld.Multiply(parent->objectToWorld);
+            ASSERT(next->objectToWorld.IsValid());
+            next->position = next->objectToWorld.GetPosition().xyz();
+        }
 
-		// Add transform childs
-		for (auto child : next->childs)
-			transformsToCalculate.push(child);
-	}
+        // Add transform childs
+        for (auto child : next->childs)
+            transformsToCalculate.push(child);
+    }
 }
 
 const Transform* TransformModule::AllocateTransform()
 {
-	return memoryModule->New<Transform>(memoryLabelTransform, this);
+    return memoryModule->New<Transform>(memoryLabelTransform, this);
 }
 
 SERIALIZE_METHOD_ARG1(TransformModule, CreateTransform, const Transform*);
@@ -95,85 +95,85 @@ SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
 bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
-	switch (commandCode)
-	{
-		DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
-		target->parent = root;
-		target->created = true;
-		root->childs.push_back(target);
-		DESERIALIZE_METHOD_END;
+    switch (commandCode)
+    {
+        DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
+        target->parent = root;
+        target->created = true;
+        root->childs.push_back(target);
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, target);
-		ASSERT(target->created);
-		auto parent = target->parent;
-		ASSERT(parent != nullptr);
-		parent->childs.remove(target);
+        DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, target);
+        ASSERT(target->created);
+        auto parent = target->parent;
+        ASSERT(parent != nullptr);
+        parent->childs.remove(target);
 
-		for (auto child : target->childs)
-		{
-			auto unit = child->unit;
-			unitModule->RecDestroy(context, unit);
-		}
-		DESERIALIZE_METHOD_END;
+        for (auto child : target->childs)
+        {
+            auto unit = child->unit;
+            unitModule->RecDestroy(context, unit);
+        }
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
-		ASSERT(target->created);
-		auto oldParent = target->parent;
-		ASSERT(oldParent != nullptr);
-		oldParent->childs.remove(target);
+        DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
+        ASSERT(target->created);
+        auto oldParent = target->parent;
+        ASSERT(oldParent != nullptr);
+        oldParent->childs.remove(target);
 
-		parent->childs.push_back(target);
-		target->parent = parent;
-		DESERIALIZE_METHOD_END;
+        parent->childs.push_back(target);
+        target->parent = parent;
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, target, Vector3f, position);
-		target->localPosition = position;
-		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
-		DESERIALIZE_METHOD_END;
+        DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, target, Vector3f, position);
+        target->localPosition = position;
+        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, target, Vector3f, position);
-		ASSERT(target->created);
-		target->localPosition += position;
-		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
-		DESERIALIZE_METHOD_END;
+        DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, target, Vector3f, position);
+        ASSERT(target->created);
+        target->localPosition += position;
+        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, target, Vector3f, rotation);
-		ASSERT(target->created);
-		target->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
-		target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
-		DESERIALIZE_METHOD_END;
+        DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, target, Vector3f, rotation);
+        ASSERT(target->created);
+        target->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
+        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        DESERIALIZE_METHOD_END;
 
-		DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
+        DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
 
-		ASSERT(target->created);
+        ASSERT(target->created);
 
-		// Find all target ancestors
-		worldToViewToCalculate.clear();
-		auto searchTransform = target;
-		while (searchTransform != root)
-		{
-			worldToViewToCalculate.push_back(searchTransform);
-			searchTransform = searchTransform->parent;
-		}
+        // Find all target ancestors
+        worldToViewToCalculate.clear();
+        auto searchTransform = target;
+        while (searchTransform != root)
+        {
+            worldToViewToCalculate.push_back(searchTransform);
+            searchTransform = searchTransform->parent;
+        }
 
-		// Calculate view matrix for each of them
-		Transform* parentTransform = nullptr;
-		while (!worldToViewToCalculate.empty())
-		{
-			auto transformToCalculate = worldToViewToCalculate.back();
-			worldToViewToCalculate.pop_back();
+        // Calculate view matrix for each of them
+        Transform* parentTransform = nullptr;
+        while (!worldToViewToCalculate.empty())
+        {
+            auto transformToCalculate = worldToViewToCalculate.back();
+            worldToViewToCalculate.pop_back();
 
-			if (parentTransform != nullptr)
-				transformToCalculate->worldToView = parentTransform->worldToView;
-			else
-				transformToCalculate->worldToView = Matrix4x4f::indentity;
-			transformToCalculate->worldToView.Multiply(Matrix4x4f::Rotate(-transformToCalculate->localRotation));
-			transformToCalculate->worldToView.Multiply(Matrix4x4f::Translate(-transformToCalculate->localPosition));
+            if (parentTransform != nullptr)
+                transformToCalculate->worldToView = parentTransform->worldToView;
+            else
+                transformToCalculate->worldToView = Matrix4x4f::indentity;
+            transformToCalculate->worldToView.Multiply(Matrix4x4f::Rotate(-transformToCalculate->localRotation));
+            transformToCalculate->worldToView.Multiply(Matrix4x4f::Translate(-transformToCalculate->localPosition));
 
-			parentTransform = transformToCalculate;
-		}
+            parentTransform = transformToCalculate;
+        }
 
-		DESERIALIZE_METHOD_END;
-	}
-	return false;
+        DESERIALIZE_METHOD_END;
+    }
+    return false;
 }

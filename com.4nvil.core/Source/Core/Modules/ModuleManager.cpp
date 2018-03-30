@@ -16,50 +16,50 @@
 using namespace Core;
 
 ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
-	: planner(planner)
-	, executor(executor)
-	, requestedStop(false)
+    : planner(planner)
+    , executor(executor)
+    , requestedStop(false)
 {
-	ASSERT(planner != nullptr);
-	ASSERT(executor != nullptr);
+    ASSERT(planner != nullptr);
+    ASSERT(executor != nullptr);
 
-	planner->Set_finishCallback([this]()
-	{
-		sleepEvent.Set();
-	});
+    planner->Set_finishCallback([this]()
+    {
+        sleepEvent.Set();
+    });
 }
 
 ModuleManager::~ModuleManager()
 {
-	for (auto module : modules)
-		delete module;
+    for (auto module : modules)
+        delete module;
 }
 
 void ModuleManager::Start()
 {
-	for (size_t i = 0; i < modules.size(); i++)
-		modules[i]->SetupExecuteOrder(this);
-	planner->Recreate(modules);
-	executor->Start();
+    for (size_t i = 0; i < modules.size(); i++)
+        modules[i]->SetupExecuteOrder(this);
+    planner->Recreate(modules);
+    executor->Start();
 }
 
 void ModuleManager::Stop()
 {
-	executor->Stop();
+    executor->Stop();
 }
 
 void ModuleManager::NewFrame()
 {
-	planner->Reset();
-	executor->Reset();
+    planner->Reset();
+    executor->Reset();
 }
 
 void ModuleManager::WaitForFrame()
 {
-	sleepEvent.WaitOne();
+    sleepEvent.WaitOne();
 }
 
 void ModuleManager::AddModule(Module* module)
 {
-	modules.push_back(module);
+    modules.push_back(module);
 }
