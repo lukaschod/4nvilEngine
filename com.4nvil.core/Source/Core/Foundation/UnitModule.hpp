@@ -27,15 +27,19 @@ namespace Core
 {
     struct Component
     {
-        Component(ComponentModule* module) :
-            module(module),
-            unit(nullptr)
+        Component(ComponentModule* module)
+            : module(module)
+            , unit(nullptr)
+            , enabled(true)
+            , activated(enabled)
         {
         }
         virtual ~Component() {}
 
         const Unit* unit;
         ComponentModule* module;
+        bool enabled;
+        bool activated;
     };
 
     class ComponentModule : public PipeModule
@@ -43,14 +47,30 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
+        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+        { 
+            base::SetupExecuteOrder(moduleManager); 
+            unitModule = ExecuteAfter<UnitModule>(moduleManager);
+        }
+
         virtual void RecDestroy(const ExecutionContext& context, const Component* unit) = 0;
+        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) {}
+        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) {}
+
+    protected:
+        UnitModule* unitModule;
     };
 
     // Container of components
     struct Unit
     {
-        Unit() {}
+        Unit()
+            : enabled(true)
+            , activated(enabled)
+        {}
         List<const Component*> components;
+        bool enabled;
+        bool activated;
     };
 
     class UnitModule : public PipeModule
@@ -73,6 +93,10 @@ namespace Core
 
         // Add component to unit container
         void RecAddComponent(const ExecutionContext& context, const Unit* target, const Component* component);
+
+        void RecSetEnable(const ExecutionContext& context, const Unit* target, bool enable);
+
+        void RecSetActive(const ExecutionContext& context, const Unit* target, bool activate);
 
     protected:
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;

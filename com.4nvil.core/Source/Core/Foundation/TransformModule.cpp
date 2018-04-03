@@ -30,7 +30,6 @@ void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
     base::SetupExecuteOrder(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
-    unitModule = ExecuteAfter<UnitModule>(moduleManager);
 }
 
 void TransformModule::Execute(const ExecutionContext& context)

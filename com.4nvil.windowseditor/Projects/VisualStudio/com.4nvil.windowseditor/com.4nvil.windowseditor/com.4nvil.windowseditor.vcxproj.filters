@@ -324,6 +324,9 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.hpp">
       <Filter>Windows\Views</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">
@@ -454,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp">
       <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.cpp">
+      <Filter>Core\Foundation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

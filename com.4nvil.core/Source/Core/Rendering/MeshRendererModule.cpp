@@ -35,7 +35,6 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
     materialModule = ExecuteBefore<MaterialModule>(moduleManager);
     storageModule = ExecuteBefore<StorageModule>(moduleManager);
     transformModule = ExecuteBefore<TransformModule>(moduleManager);
-    unitModule = ExecuteAfter<UnitModule>(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelMeshRenderer, new FixedBlockHeap(sizeof(MeshRenderer)));
     ExecuteBefore<IGraphicsModule>(moduleManager);

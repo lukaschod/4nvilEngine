@@ -25,7 +25,6 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
     surfaceModule = ExecuteAfter<SurfaceModule>(moduleManager);
     storageModule = ExecuteBefore<StorageModule>(moduleManager);
     transformModule = ExecuteBefore<TransformModule>(moduleManager);
-    unitModule = ExecuteAfter<UnitModule>(moduleManager);
 }
 
 void CameraModule::Execute(const ExecutionContext& context)

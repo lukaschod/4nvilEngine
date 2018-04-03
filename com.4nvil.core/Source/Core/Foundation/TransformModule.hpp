@@ -80,7 +80,6 @@ namespace Core
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        UnitModule* unitModule;
         MemoryModule* memoryModule;
         Transform* root;
         std::queue<Transform*> transformsToCalculate;

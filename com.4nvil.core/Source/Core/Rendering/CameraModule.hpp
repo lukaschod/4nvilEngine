@@ -88,6 +88,5 @@ namespace Core
         SurfaceModule* surfaceModule;
         StorageModule* storageModule;
         TransformModule* transformModule;
-        UnitModule* unitModule;
     };
 }

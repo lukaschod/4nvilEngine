@@ -439,7 +439,7 @@ VertData VertMain(AppData i)
 
 float4 FragMain(VertData i) : SV_TARGET
 {
-    return float4(1, 1, 0, 1);
+    return float4(1, 1, 1, 1);
 }
             )";
 
@@ -528,7 +528,7 @@ float4 FragMain(VertData i) : SV_TARGET
         for (int i = 0; i < 1; i++)
         {
             auto view = viewModule->AllocateView();
-            viewModule->RecSetName(context, view, "Performance Test with 40000 objects");
+            viewModule->RecSetName(context, view, "4nvilTest40k");
             viewModule->RecCreateIView(context, view);
 
             gameViewLayerModule->RecShow(context, view);
@@ -817,18 +817,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-    /*// Test project 1
+    // Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+    moduleManager->AddModule(new ShutdownModule(moduleManager));
 
-    // Test project 2
+    /*// Test project 2
     moduleManager->AddModule(new AgentModule());
     moduleManager->AddModule(new AgentForceModule());
     moduleManager->AddModule(new AgentDistModule());
     moduleManager->AddModule(new Test2Module());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));
+    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
     moduleManager->Start();
     while (moduleManager->IsRunning())

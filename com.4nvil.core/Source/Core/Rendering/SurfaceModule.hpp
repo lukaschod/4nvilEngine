@@ -31,21 +31,16 @@ namespace Core
     struct SurfaceColor
     {
         SurfaceColor() {}
-        SurfaceColor(const Image* image)
-            : image(image)
-            , loadAction(Graphics::LoadAction::Clear)
-            , storeAction(Graphics::StoreAction::Store)
-            , clearColor(0, 0.2f, 0.4f, 0)
-        {
-        }
 
         SurfaceColor(const Image* image, Graphics::LoadAction loadAction, Graphics::StoreAction storeAction)
             : image(image)
             , loadAction(loadAction)
             , storeAction(storeAction)
-            , clearColor(0, 0.2f, 0.4f, 0)
+            , clearColor(0.19f, 0.3f, 0.47f, 0)
         {
         }
+
+        SurfaceColor(const Image* image) : SurfaceColor(image, Graphics::LoadAction::Clear, Graphics::StoreAction::Store) {}
 
         const Image* image;
         Graphics::LoadAction loadAction;

@@ -80,7 +80,6 @@ namespace Core
         MeshModule* meshModule;
         StorageModule* storageModule;
         TransformModule* transformModule;
-        UnitModule* unitModule;
         MemoryModule* memoryModule;
         const Storage* perAllRendererStorage;
     };

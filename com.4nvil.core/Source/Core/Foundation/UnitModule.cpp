@@ -31,6 +31,8 @@ const Unit* UnitModule::AllocateUnit() const
 SERIALIZE_METHOD_ARG1(UnitModule, CreateUnit, const Unit*);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
+SERIALIZE_METHOD_ARG2(UnitModule, SetEnable, const Unit*, bool);
+SERIALIZE_METHOD_ARG2(UnitModule, SetActive, const Unit*, bool);
 
 bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -43,7 +45,31 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         DESERIALIZE_METHOD_ARG1_START(Destroy, Unit*, unit);
         units.remove(unit);
         for (auto component : unit->components)
-            component->module->RecDestroy(context, component);
+            component->module->RecDestroy(context, component); // We can access module here as all of them depend on unitmodule
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG2_START(SetEnable, Unit*, unit, bool, enable);
+        // Avoid multiple enables
+        if (unit->enabled == enable)
+            return true;
+
+        unit->enabled = enable;
+
+        // Update active state too
+        unit->activated = unit->activated & unit->enabled;
+        for (auto component : unit->components)
+            component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG2_START(SetActive, Unit*, unit, bool, active);
+        // Avoid multiple actives
+        if (unit->activated == active)
+            return true;
+
+        // Update active state too
+        unit->activated = active;
+        for (auto component : unit->components)
+            component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(AddComponent, Unit*, unit, Component*, component);
