@@ -12,11 +12,11 @@
 #pragma once
 
 #include <map>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\IO\MemoryStream.hpp>
-#include <Core\Modules\Module.hpp>
-#include <Core\Foundation\ProfilerModule.hpp>
-#include <Core\Foundation\PipeModuleHelper.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/IO/MemoryStream.hpp>
+#include <Core/Modules/Module.hpp>
+#include <Core/Foundation/ProfilerModule.hpp>
+#include <Core/Foundation/PipeModuleHelper.hpp>
 
 namespace Core
 {

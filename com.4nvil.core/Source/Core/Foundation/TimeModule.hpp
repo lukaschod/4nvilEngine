@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\StopWatch.hpp>
-#include <Core\Foundation\ComputeModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/StopWatch.hpp>
+#include <Core/Foundation/ComputeModule.hpp>
 
 namespace Core
 {

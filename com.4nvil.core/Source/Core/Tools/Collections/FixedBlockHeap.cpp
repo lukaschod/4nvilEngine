@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Tools\Math\Math.hpp>
-#include <Core\Tools\Collections\FixedBlockHeap.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Core/Tools/Collections/FixedBlockHeap.hpp>
 
 using namespace Core;
 

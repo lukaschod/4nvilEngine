@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Rendering\ShaderModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Rendering/ShaderModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

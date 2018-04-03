@@ -9,11 +9,11 @@
 *
 */
 
-#include <Core\Foundation\MemoryModule.hpp>
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Rendering\MaterialModule.hpp>
-#include <Core\Rendering\ShaderModule.hpp>
-#include <Core\Rendering\StorageModule.hpp>
+#include <Core/Foundation/MemoryModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Rendering/MaterialModule.hpp>
+#include <Core/Rendering/ShaderModule.hpp>
+#include <Core/Rendering/StorageModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

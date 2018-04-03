@@ -13,7 +13,7 @@
 
 #include <queue>
 #include <mutex>
-#include <Windows\Graphics\Directx12\Common.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
 
 namespace Windows::Directx12
 {

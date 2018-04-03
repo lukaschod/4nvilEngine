@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Foundation\PipeModule.hpp>
-#include <Core\Graphics\IRenderPass.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Graphics/IRenderPass.hpp>
 
 namespace Core
 {

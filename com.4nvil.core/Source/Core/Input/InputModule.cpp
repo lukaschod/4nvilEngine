@@ -9,7 +9,7 @@
 *
 */
 
-#include <Core\Input\InputModule.hpp>
+#include <Core/Input/InputModule.hpp>
 
 using namespace Core;
 

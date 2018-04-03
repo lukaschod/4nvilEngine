@@ -9,20 +9,44 @@
 *
 */
 
-#include <Core\Foundation\PipeModule.hpp>
+#include <Core/Foundation/UnitModule.hpp>
 
 namespace Core
 {
-    struct Scene
-    {
+    struct Transform;
+    class TransformModule;
+}
 
+namespace Core
+{
+    struct Scene : public Component
+    {
+        Scene(ComponentModule* module) 
+            : Component(module)
+            , transform(nullptr)
+            , created(false)
+        {}
+        const Transform* transform;
+        bool created;
     };
 
-    class SceneModule : public PipeModule
+    class SceneModule : public ComponentModule
     {
-        BASE_IS(PipeModule);
+    public:
+        BASE_IS(ComponentModule);
 
         virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Scene* AllocateScene() const;
+        const Scene* AllocateScene();
+
+    public:
+        void RecCreateScene(const ExecutionContext& context, const Scene* target);
+        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) override;
+        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) override;
+
+    protected:
+        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+    private:
+        TransformModule* transformModule;
     };
 }

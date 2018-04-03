@@ -9,16 +9,16 @@
 *
 */
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
-#include <Core\Rendering\MaterialModule.hpp>
-#include <Core\Rendering\StorageModule.hpp>
-#include <Core\Rendering\CameraModule.hpp>
-#include <Core\Rendering\MeshRendererModule.hpp>
-#include <Core\Rendering\SurfaceModule.hpp>
-#include <Core\Rendering\MeshModule.hpp>
-#include <Core\Rendering\ImageModule.hpp>
-#include <Core\Views\IViewModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Rendering/RenderLoop/UnlitRenderLoopModule.hpp>
+#include <Core/Rendering/MaterialModule.hpp>
+#include <Core/Rendering/StorageModule.hpp>
+#include <Core/Rendering/CameraModule.hpp>
+#include <Core/Rendering/MeshRendererModule.hpp>
+#include <Core/Rendering/SurfaceModule.hpp>
+#include <Core/Rendering/MeshModule.hpp>
+#include <Core/Rendering/ImageModule.hpp>
+#include <Core/Views/IViewModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

@@ -14,8 +14,8 @@
 #include <vector>
 #include <queue>
 #include <mutex>
-#include <Core\Tools\Common.hpp>
-#include <Core\Modules\IModulePlanner.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Modules/IModulePlanner.hpp>
 
 namespace Core
 {

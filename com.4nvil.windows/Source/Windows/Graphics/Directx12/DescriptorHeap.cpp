@@ -9,7 +9,7 @@
 *
 */
 
-#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
+#include <Windows/Graphics/Directx12/DescriptorHeap.hpp>
 
 using namespace Windows::Directx12;
 

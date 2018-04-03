@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Tools\Collections\BuddyHeapManager.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Collections/BuddyHeapManager.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
 
 using namespace Core;
 

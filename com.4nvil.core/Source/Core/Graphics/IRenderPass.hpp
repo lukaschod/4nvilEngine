@@ -11,11 +11,11 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Math\Color.hpp>
-#include <Core\Tools\Math\Rect.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Graphics\ITexture.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Math/Color.hpp>
+#include <Core/Tools/Math/Rect.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Graphics/ITexture.hpp>
 
 namespace Core::Graphics
 {

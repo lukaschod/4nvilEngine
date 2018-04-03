@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Math\Matrix.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Foundation\UnitModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Math/Matrix.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Foundation/UnitModule.hpp>
 
 namespace Core
 {

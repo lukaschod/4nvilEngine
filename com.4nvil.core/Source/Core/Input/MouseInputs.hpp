@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Math\Vector.hpp>
+#include <Core/Tools/Math/Vector.hpp>
 
 namespace Core
 {

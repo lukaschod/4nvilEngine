@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\IO\FileStream.hpp>
-#include <Core\Foundation\PipeModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/IO/FileStream.hpp>
+#include <Core/Foundation/PipeModule.hpp>
 
 namespace Core
 {

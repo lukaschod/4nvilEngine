@@ -9,7 +9,7 @@
 *
 */
 
-#include <Core\Tools\Collections\BuddyHeapManager.hpp>
+#include <Core/Tools/Collections/BuddyHeapManager.hpp>
 
 using namespace Core;
 

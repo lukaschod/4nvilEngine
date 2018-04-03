@@ -12,11 +12,11 @@
 #pragma once
 
 #include <queue>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Flags.hpp>
-#include <Core\Tools\Math\Matrix.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Foundation\UnitModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Flags.hpp>
+#include <Core/Tools/Math/Matrix.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Foundation/UnitModule.hpp>
 
 namespace Core
 {
@@ -62,7 +62,6 @@ namespace Core
     public:
         BASE_IS(ComponentModule);
 
-        TransformModule();
         virtual void Execute(const ExecutionContext& context) override;
         virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Transform* AllocateTransform();
@@ -70,14 +69,22 @@ namespace Core
     public:
         void RecCreateTransform(const ExecutionContext& context, const Transform* target);
         virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
+        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) override;
+        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) override;
         void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
         void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
         void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
         void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
+
+        // Recalculate worldToView matrix for transform
         void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
     protected:
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+    private:
+        void SetParent(Transform* target, Transform* parent);
+        void SetActiveRecursive(Transform* target, bool activate);
 
     private:
         MemoryModule* memoryModule;

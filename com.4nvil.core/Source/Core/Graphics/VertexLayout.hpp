@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Tools\Math\Color.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Math/Color.hpp>
 
 namespace Core::Graphics
 {

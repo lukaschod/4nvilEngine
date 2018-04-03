@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Foundation\ComputeModule.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
-#include <Windows\Graphics\Directx12\CmdQueue.hpp>
+#include <Core/Foundation/ComputeModule.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
+#include <Windows/Graphics/Directx12/CmdQueue.hpp>
 
 namespace Windows::Directx12
 {

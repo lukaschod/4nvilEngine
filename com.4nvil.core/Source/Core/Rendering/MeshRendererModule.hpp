@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Foundation\UnitModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Foundation/UnitModule.hpp>
 
 namespace Core
 {
@@ -62,6 +62,8 @@ namespace Core
 
     public:
         virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) override;
+        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) override;
 
         void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
 

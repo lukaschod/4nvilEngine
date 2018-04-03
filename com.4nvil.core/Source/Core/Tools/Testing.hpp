@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Console.hpp>
+#include <Core/Tools/Console.hpp>
 
 // Automatically enable asserting in debug mode
 #if !defined(ENABLED_ASSERT) && defined(ENABLED_DEBUG)

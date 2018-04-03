@@ -11,12 +11,12 @@
 
 #pragma once
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Foundation\MemoryModule.hpp>
-#include <Windows\Views\ViewModule.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
-#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
-#include <Windows\Graphics\Directx12\BufferHeap.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Foundation/MemoryModule.hpp>
+#include <Windows/Views/ViewModule.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
+#include <Windows/Graphics/Directx12/DescriptorHeap.hpp>
+#include <Windows/Graphics/Directx12/BufferHeap.hpp>
 
 using namespace Core::Math;
 using namespace Core::Graphics;

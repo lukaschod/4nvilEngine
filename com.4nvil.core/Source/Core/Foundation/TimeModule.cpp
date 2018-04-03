@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Tools\Math\Math.hpp>
-#include <Core\Foundation\TimeModule.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Core/Foundation/TimeModule.hpp>
 
 using namespace Core;
 

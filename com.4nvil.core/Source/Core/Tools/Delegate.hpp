@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Collections\List.hpp>
+#include <Core/Tools/Collections/List.hpp>
 
 namespace Core
 {

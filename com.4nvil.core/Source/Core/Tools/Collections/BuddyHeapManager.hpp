@@ -12,9 +12,9 @@
 #pragma once
 
 #include <mutex>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Tools\Collections\LinkedList.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Collections/LinkedList.hpp>
 
 namespace Core
 {

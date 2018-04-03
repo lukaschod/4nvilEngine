@@ -9,13 +9,13 @@
 *
 */
 
-#include <Core\Input\InputModule.hpp>
-#include <Core\Input\ViewInputs.hpp>
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Rendering\RenderLoop\IRenderLoop.hpp>
-#include <Core\Rendering\SurfaceModule.hpp>
-#include <Core\Rendering\ImageModule.hpp>
-#include <Editor\Views\ViewLayerModule.hpp>
+#include <Core/Input/InputModule.hpp>
+#include <Core/Input/ViewInputs.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Rendering/RenderLoop/IRenderLoop.hpp>
+#include <Core/Rendering/SurfaceModule.hpp>
+#include <Core/Rendering/ImageModule.hpp>
+#include <Editor/Views/ViewLayerModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

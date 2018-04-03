@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include <cstdarg>
-#include <Core\Tools\Windows\Common.hpp>
-#include <Core\Tools\Console.hpp>
+#include <Core/Tools/Windows/Common.hpp>
+#include <Core/Tools/Console.hpp>
 
 namespace Core::Console
 {

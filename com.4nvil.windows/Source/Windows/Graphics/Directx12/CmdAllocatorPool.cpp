@@ -9,7 +9,7 @@
 *
 */
 
-#include <Windows\Graphics\Directx12\CmdAllocatorPool.hpp>
+#include <Windows/Graphics/Directx12/CmdAllocatorPool.hpp>
 
 using namespace Windows::Directx12;
 

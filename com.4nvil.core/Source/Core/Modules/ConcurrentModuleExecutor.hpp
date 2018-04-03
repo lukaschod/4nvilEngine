@@ -13,10 +13,10 @@
 
 #include <vector>
 #include <thread>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Threading\AutoResetEvent.hpp>
-#include <Core\Modules\IModuleExecutor.hpp>
-#include <Core\Modules\Module.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Threading/AutoResetEvent.hpp>
+#include <Core/Modules/IModuleExecutor.hpp>
+#include <Core/Modules/Module.hpp>
 
 namespace Core
 {

@@ -12,7 +12,7 @@
 #pragma once
 
 #include <cmath>
-#include <Core\Tools\Common.hpp>
+#include <Core/Tools/Common.hpp>
 
 namespace Core
 {

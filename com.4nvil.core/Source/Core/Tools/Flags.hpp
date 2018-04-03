@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
+#include <Core/Tools/Common.hpp>
 
 namespace Core
 {

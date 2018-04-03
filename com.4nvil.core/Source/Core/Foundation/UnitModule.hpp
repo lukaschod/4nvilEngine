@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Foundation\PipeModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Foundation/PipeModule.hpp>
 
 namespace Core
 {
@@ -53,7 +53,7 @@ namespace Core
             unitModule = ExecuteAfter<UnitModule>(moduleManager);
         }
 
-        virtual void RecDestroy(const ExecutionContext& context, const Component* unit) = 0;
+        virtual void RecDestroy(const ExecutionContext& context, const Component* unit) {}
         virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) {}
         virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) {}
 
@@ -62,7 +62,7 @@ namespace Core
     };
 
     // Container of components
-    struct Unit
+    struct Unit final
     {
         Unit()
             : enabled(true)
@@ -73,7 +73,7 @@ namespace Core
         bool activated;
     };
 
-    class UnitModule : public PipeModule
+    class UnitModule final : public PipeModule
     {
     public:
         BASE_IS(PipeModule);

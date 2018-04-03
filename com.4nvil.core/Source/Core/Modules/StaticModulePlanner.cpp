@@ -9,10 +9,10 @@
 *
 */
 
-#include <Core\Modules\StaticModulePlanner.hpp>
-#include <Core\Modules\Module.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Tools\Math\Math.hpp>
+#include <Core/Modules/StaticModulePlanner.hpp>
+#include <Core/Modules/Module.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Math/Math.hpp>
 
 using namespace Core;
 

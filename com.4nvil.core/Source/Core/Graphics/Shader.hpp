@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\String.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Graphics\VertexLayout.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/String.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Graphics/VertexLayout.hpp>
 
 namespace Core::Graphics
 {

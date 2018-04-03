@@ -28,7 +28,7 @@
 
 #include <windows.h>
 #include <comdef.h>
-#include <Core\Tools\Common.hpp>
+#include <Core/Tools/Common.hpp>
 
 #ifdef ENABLED_DEBUG
 #define ASSERT_SUCCEEDED(hr) \

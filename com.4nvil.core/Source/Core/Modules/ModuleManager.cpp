@@ -10,8 +10,8 @@
 */
 
 #include <algorithm>
-#include <Core\Modules\ModuleManager.hpp>
-#include <Core\Modules\Module.hpp>
+#include <Core/Modules/ModuleManager.hpp>
+#include <Core/Modules/Module.hpp>
 
 using namespace Core;
 

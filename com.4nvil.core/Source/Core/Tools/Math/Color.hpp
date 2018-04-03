@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Math\Math.hpp>
+#include <Core/Tools/Math/Math.hpp>
 
 namespace Core::Math
 {

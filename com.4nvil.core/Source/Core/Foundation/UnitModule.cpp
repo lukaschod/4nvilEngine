@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Foundation\UnitModule.hpp>
-#include <Core\Foundation\MemoryModule.hpp>
+#include <Core/Foundation/UnitModule.hpp>
+#include <Core/Foundation/MemoryModule.hpp>
 
 using namespace Core;
 
@@ -54,9 +54,9 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
             return true;
 
         unit->enabled = enable;
+        unit->activated &= enable;
 
         // Update active state too
-        unit->activated = unit->activated & unit->enabled;
         for (auto component : unit->components)
             component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
         DESERIALIZE_METHOD_END;
@@ -65,9 +65,9 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         // Avoid multiple actives
         if (unit->activated == active)
             return true;
+        unit->activated = active;
 
         // Update active state too
-        unit->activated = active;
         for (auto component : unit->components)
             component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
         DESERIALIZE_METHOD_END;

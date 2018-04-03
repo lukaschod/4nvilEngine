@@ -11,11 +11,11 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Threading\AutoResetEvent.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Modules\IModuleExecutor.hpp>
-#include <Core\Modules\IModulePlanner.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Threading/AutoResetEvent.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Modules/IModuleExecutor.hpp>
+#include <Core/Modules/IModulePlanner.hpp>
 
 namespace Core
 {

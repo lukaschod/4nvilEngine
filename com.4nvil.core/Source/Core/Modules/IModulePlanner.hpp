@@ -12,8 +12,8 @@
 #pragma once
 
 #include <functional>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Collections\List.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
 
 namespace Core
 {

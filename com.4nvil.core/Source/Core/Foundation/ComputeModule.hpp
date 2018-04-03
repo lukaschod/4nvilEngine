@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Modules\Module.hpp>
-#include <Core\Foundation\ProfilerModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Modules/Module.hpp>
+#include <Core/Foundation/ProfilerModule.hpp>
 
 namespace Core
 {

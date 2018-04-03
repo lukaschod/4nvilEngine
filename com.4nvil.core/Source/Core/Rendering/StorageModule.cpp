@@ -9,9 +9,9 @@
 *
 */
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Graphics\IBuffer.hpp>
-#include <Core\Rendering\StorageModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Graphics/IBuffer.hpp>
+#include <Core/Rendering/StorageModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;

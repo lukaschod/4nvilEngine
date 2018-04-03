@@ -9,27 +9,24 @@
 *
 */
 
-#include <Core\Tools\Math\Math.hpp>
-#include <Core\Tools\Collections\FixedBlockHeap.hpp>
-#include <Core\Foundation\TransformModule.hpp>
-#include <Core\Foundation\MemoryModule.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Core/Tools/Collections/FixedBlockHeap.hpp>
+#include <Core/Foundation/TransformModule.hpp>
+#include <Core/Foundation/MemoryModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;
 
 static const char* memoryLabelTransform = "Core::Transform";
 
-TransformModule::TransformModule() 
-{
-    root = new Transform(this);
-    root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
-}
-
 void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
+
+    root = new Transform(this);
+    root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
 }
 
 void TransformModule::Execute(const ExecutionContext& context)
@@ -86,6 +83,8 @@ const Transform* TransformModule::AllocateTransform()
 
 SERIALIZE_METHOD_ARG1(TransformModule, CreateTransform, const Transform*);
 SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
+SERIALIZE_METHOD_ARG2(TransformModule, SetEnable, const Component*, bool);
+SERIALIZE_METHOD_ARG2(TransformModule, SetActive, const Component*, bool);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vector3f&);
@@ -97,7 +96,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
-        target->parent = root;
+        SetParent(target, root);
         target->created = true;
         root->childs.push_back(target);
         DESERIALIZE_METHOD_END;
@@ -108,6 +107,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         ASSERT(parent != nullptr);
         parent->childs.remove(target);
 
+        // Also all childs destroyed recursively
         for (auto child : target->childs)
         {
             auto unit = child->unit;
@@ -115,14 +115,34 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         }
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
+        DESERIALIZE_METHOD_ARG2_START(SetEnable, Transform*, target, bool, enable);
         ASSERT(target->created);
-        auto oldParent = target->parent;
-        ASSERT(oldParent != nullptr);
-        oldParent->childs.remove(target);
+        target->enabled = enable;
+        target->activated &= enable;
 
-        parent->childs.push_back(target);
-        target->parent = parent;
+        for (auto child : target->childs)
+        {
+            auto unit = child->unit;
+            unitModule->RecSetActive(context, unit, target->activated);
+        }
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG2_START(SetActive, Transform*, target, bool, activated);
+        ASSERT(target->created);
+        target->activated = activated;
+
+        for (auto child : target->childs)
+        {
+            auto unit = child->unit;
+            unitModule->RecSetActive(context, unit, target->activated);
+        }
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
+        if (target->created)
+            SetParent(target, parent);
+        else
+            target->parent = parent;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, target, Vector3f, position);
@@ -143,9 +163,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
-
         ASSERT(target->created);
-
         // Find all target ancestors
         worldToViewToCalculate.clear();
         auto searchTransform = target;
@@ -175,4 +193,25 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         DESERIALIZE_METHOD_END;
     }
     return false;
+}
+
+void TransformModule::SetParent(Transform* target, Transform* parent)
+{
+    auto oldParent = target->parent;
+    if (oldParent != nullptr)
+        oldParent->childs.remove(target);
+
+    parent->childs.push_back(target);
+    target->parent = parent;
+
+    SetActiveRecursive(target, target->enabled & target->parent->activated);
+}
+
+void TransformModule::SetActiveRecursive(Transform* target, bool activate)
+{
+    target->activated = activate;
+    for (auto child : target->childs)
+    {
+        SetActiveRecursive(child, activate);
+    }
 }

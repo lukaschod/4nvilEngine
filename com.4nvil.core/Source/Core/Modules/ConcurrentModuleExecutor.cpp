@@ -10,8 +10,8 @@
 */
 
 #include <algorithm>
-#include <Core\Modules\ModuleManager.hpp>
-#include <Core\Modules\ConcurrentModuleExecutor.hpp>
+#include <Core/Modules/ModuleManager.hpp>
+#include <Core/Modules/ConcurrentModuleExecutor.hpp>
 
 using namespace Core;
 

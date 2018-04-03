@@ -11,14 +11,14 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Foundation\PipeModule.hpp>
-#include <Core\Graphics\IRenderPass.hpp>
-#include <Core\Graphics\ITexture.hpp>
-#include <Core\Graphics\IFilter.hpp>
-#include <Core\Graphics\Shader.hpp>
-#include <Core\Graphics\IBuffer.hpp>
-#include <Core\Graphics\ISwapChain.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Graphics/IRenderPass.hpp>
+#include <Core/Graphics/ITexture.hpp>
+#include <Core/Graphics/IFilter.hpp>
+#include <Core/Graphics/Shader.hpp>
+#include <Core/Graphics/IBuffer.hpp>
+#include <Core/Graphics/ISwapChain.hpp>
 
 namespace Core
 {

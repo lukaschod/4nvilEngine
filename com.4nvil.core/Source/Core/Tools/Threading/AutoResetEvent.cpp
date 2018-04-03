@@ -9,7 +9,7 @@
 *
 */
 
-#include <Core\Tools\Threading\AutoResetEvent.hpp>
+#include <Core/Tools/Threading/AutoResetEvent.hpp>
 
 using namespace Core::Threading;
 

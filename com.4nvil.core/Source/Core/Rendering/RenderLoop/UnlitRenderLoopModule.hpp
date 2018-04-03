@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Rendering\RenderLoop\IRenderLoop.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Rendering/RenderLoop/IRenderLoop.hpp>
 
 namespace Core
 {

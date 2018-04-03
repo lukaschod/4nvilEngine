@@ -9,32 +9,33 @@
 *
 */
 
-#include <Core\Tools\Math\Vector.hpp>
-#include <Core\Tools\Math\Matrix.hpp>
-#include <Core\Tools\StopWatch.hpp>
-#include <Core\Modules\ModuleManager.hpp>
-#include <Core\Modules\ConcurrentModuleExecutor.hpp>
-#include <Core\Modules\StaticModulePlanner.hpp>
-#include <Core\Foundation\UnitModule.hpp>
-#include <Core\Foundation\TimeModule.hpp>
-#include <Core\Foundation\LogModule.hpp>
-#include <Core\Foundation\TransformModule.hpp>
-#include <Core\Foundation\ProfilerModule.hpp>
-#include <Core\Rendering\CameraModule.hpp>
-#include <Core\Rendering\ImageModule.hpp>
-#include <Core\Rendering\MaterialModule.hpp>
-#include <Core\Rendering\MeshModule.hpp>
-#include <Core\Rendering\MeshRendererModule.hpp>
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
-#include <Core\Rendering\ShaderModule.hpp>
-#include <Core\Rendering\StorageModule.hpp>
-#include <Core\Rendering\SurfaceModule.hpp>
-#include <Core\Rendering\SamplerModule.hpp>
-#include <Core\Input\InputModule.hpp>
-#include <Core\Input\MouseModule.hpp>
-#include <Windows\Graphics\Directx12\GraphicsModule.hpp>
-#include <Windows\Views\ViewModule.hpp>
-#include <Editor\Views\GameViewLayerModule.hpp>
+#include <Core/Tools/Math/Vector.hpp>
+#include <Core/Tools/Math/Matrix.hpp>
+#include <Core/Tools/StopWatch.hpp>
+#include <Core/Modules/ModuleManager.hpp>
+#include <Core/Modules/ConcurrentModuleExecutor.hpp>
+#include <Core/Modules/StaticModulePlanner.hpp>
+#include <Core/Foundation/UnitModule.hpp>
+#include <Core/Foundation/TimeModule.hpp>
+#include <Core/Foundation/LogModule.hpp>
+#include <Core/Foundation/TransformModule.hpp>
+#include <Core/Foundation/ProfilerModule.hpp>
+#include <Core/Foundation/SceneModule.hpp>
+#include <Core/Rendering/CameraModule.hpp>
+#include <Core/Rendering/ImageModule.hpp>
+#include <Core/Rendering/MaterialModule.hpp>
+#include <Core/Rendering/MeshModule.hpp>
+#include <Core/Rendering/MeshRendererModule.hpp>
+#include <Core/Rendering/RenderLoop/UnlitRenderLoopModule.hpp>
+#include <Core/Rendering/ShaderModule.hpp>
+#include <Core/Rendering/StorageModule.hpp>
+#include <Core/Rendering/SurfaceModule.hpp>
+#include <Core/Rendering/SamplerModule.hpp>
+#include <Core/Input/InputModule.hpp>
+#include <Core/Input/MouseModule.hpp>
+#include <Windows/Graphics/Directx12/GraphicsModule.hpp>
+#include <Windows/Views/ViewModule.hpp>
+#include <Editor/Views/GameViewLayerModule.hpp>
 
 using namespace Core;
 using namespace Core::Math;
@@ -94,7 +95,6 @@ public:
     virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
-        unitModule = ExecuteAfter<UnitModule>(moduleManager);
         memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
         memoryModule->SetAllocator("AgentModule", new FixedBlockHeap(sizeof(Agent)));
         mouseModule = ExecuteAfter<MouseModule>(moduleManager);
@@ -137,7 +137,6 @@ public:
     List<Agent*>* GetAgents() { return &agents; }
 
 private:
-    UnitModule* unitModule;
     MemoryModule* memoryModule;
     MouseModule* mouseModule;
     CameraModule* cameraModule;
@@ -579,6 +578,7 @@ float4 FragMain(VertData i) : SV_TARGET
     SurfaceModule* surfaceModule;
     IGraphicsModule* graphicsModule;
     LogModule* logModule;
+    SceneModule* sceneModule;
     uint32 frame;
 };
 
@@ -605,6 +605,7 @@ public:
         logModule = ExecuteBefore<LogModule>(moduleManager);
         agentModule = ExecuteBefore<AgentModule>(moduleManager);
         gameViewLayerModule = ExecuteBefore<GameViewLayerModule>(moduleManager);
+        sceneModule = ExecuteBefore<SceneModule>(moduleManager);
     }
 
     const Shader* CreateShader(const ExecutionContext& context)
@@ -664,7 +665,7 @@ float4 FragMain(VertData i) : SV_TARGET
         return shader;
     }
 
-    const Unit* CreateQuad(const ExecutionContext& context, const Shader* shader, const Mesh* mesh, Vector3f position)
+    const Unit* CreateQuad(const ExecutionContext& context, const Scene* scene, const Shader* shader, const Mesh* mesh, Vector3f position)
     {
         auto triangle = unitModule->AllocateUnit();
         unitModule->RecCreateUnit(context, triangle);
@@ -687,6 +688,8 @@ float4 FragMain(VertData i) : SV_TARGET
 
         auto agent = agentModule->RecCreateAgent(context);
         unitModule->RecAddComponent(context, triangle, agent);
+
+       // transformModuke->RecSetParent(context, transform, scene->transform);
 
         return triangle;
     }
@@ -724,7 +727,13 @@ float4 FragMain(VertData i) : SV_TARGET
 
         logModule->RecWriteFmt(context, "Initializing test scene %d\n", 1);
 
-        int count = 30;
+       // auto loadScene = sceneModule->AllocateScene();
+       // sceneModule->RecCreateScene(context, loadScene);
+
+        auto currentScene = sceneModule->AllocateScene();
+        //sceneModule->RecCreateScene(context, currentScene);
+
+        int count = 1;
         auto offset = count * 1;
 
         for (int i = 0; i < 1; i++)
@@ -757,7 +766,7 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             for (int j = 0; j < count; j++)
             {
-                auto quad = CreateQuad(context, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
+                auto quad = CreateQuad(context, currentScene, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
             }
         }
     }
@@ -781,6 +790,7 @@ float4 FragMain(VertData i) : SV_TARGET
     IGraphicsModule* graphicsModule;
     LogModule* logModule;
     AgentModule* agentModule;
+    SceneModule* sceneModule;
     uint32 frame;
 };
 
@@ -809,6 +819,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new ProfilerModule());
     moduleManager->AddModule(new InputModule());
     moduleManager->AddModule(new MouseModule());
+    moduleManager->AddModule(new SceneModule());
 
     // Editor
     moduleManager->AddModule(new Editor::GameViewLayerModule());
@@ -817,18 +828,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-    // Test project 1
+   /* // Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));
+    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
-    /*// Test project 2
+    // Test project 2
     moduleManager->AddModule(new AgentModule());
     moduleManager->AddModule(new AgentForceModule());
     moduleManager->AddModule(new AgentDistModule());
     moduleManager->AddModule(new Test2Module());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+    moduleManager->AddModule(new ShutdownModule(moduleManager));
 
     moduleManager->Start();
     while (moduleManager->IsRunning())

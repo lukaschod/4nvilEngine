@@ -12,11 +12,11 @@
 #pragma once
 
 #include <queue>
-#include <Core\Tools\Enum.hpp>
-#include <Core\Tools\IO\MemoryStream.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
-#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
-#include <Windows\Graphics\Directx12\CmdAllocatorPool.hpp>
+#include <Core/Tools/Enum.hpp>
+#include <Core/Tools/IO/MemoryStream.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
+#include <Windows/Graphics/Directx12/DescriptorHeap.hpp>
+#include <Windows/Graphics/Directx12/CmdAllocatorPool.hpp>
 
 using namespace Core;
 

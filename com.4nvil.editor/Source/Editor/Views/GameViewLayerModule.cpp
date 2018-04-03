@@ -9,8 +9,8 @@
 *
 */
 
-#include <Editor\Views\GameViewLayerModule.hpp>
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
+#include <Editor/Views/GameViewLayerModule.hpp>
+#include <Core/Rendering/RenderLoop/UnlitRenderLoopModule.hpp>
 
 using namespace Editor;
 

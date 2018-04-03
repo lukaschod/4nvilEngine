@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\String.hpp>
-#include <Core\Tools\Collections\List.hpp>
+#include <Core/Tools/String.hpp>
+#include <Core/Tools/Collections/List.hpp>
 
 namespace Core::Directory
 {

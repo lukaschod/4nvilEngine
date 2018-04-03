@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Core\Tools\Windows\Common.hpp>
+#include <Core/Tools/Windows/Common.hpp>
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <comdef.h>

@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Enum.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Enum.hpp>
 
 namespace Core::Graphics
 {

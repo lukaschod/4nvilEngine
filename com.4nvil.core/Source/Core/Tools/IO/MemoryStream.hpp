@@ -12,7 +12,7 @@
 #pragma once
 
 #include <stdlib.h>
-#include <Core\Tools\Common.hpp>
+#include <Core/Tools/Common.hpp>
 
 namespace Core::IO
 {

@@ -9,9 +9,9 @@
 *
 */
 
-#include <Core\Tools\Windows\Common.hpp>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\IO\Directory.hpp>
+#include <Core/Tools/Windows/Common.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/IO/Directory.hpp>
 #include <filesystem>
 
 namespace Core::Directory

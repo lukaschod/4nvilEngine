@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Assets\Importers\IImporterModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Assets/Importers/IImporterModule.hpp>
 
 namespace Core
 {

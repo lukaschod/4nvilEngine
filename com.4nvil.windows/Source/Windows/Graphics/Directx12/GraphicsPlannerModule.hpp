@@ -11,13 +11,13 @@
 
 #pragma once
 
-#include <Core\Tools\Enum.hpp>
-#include <Core\Foundation\ComputeModule.hpp>
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
-#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
-#include <Windows\Graphics\Directx12\CmdAllocatorPool.hpp>
-#include <Windows\Graphics\Directx12\CmdQueue.hpp>
+#include <Core/Tools/Enum.hpp>
+#include <Core/Foundation/ComputeModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
+#include <Windows/Graphics/Directx12/DescriptorHeap.hpp>
+#include <Windows/Graphics/Directx12/CmdAllocatorPool.hpp>
+#include <Windows/Graphics/Directx12/CmdQueue.hpp>
 
 using namespace Core::Math;
 using namespace Core::Graphics;

@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Tools\Math\Math.hpp>
-#include <Windows\Graphics\Directx12\BufferHeap.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Windows/Graphics/Directx12/BufferHeap.hpp>
 
 using namespace Windows::Directx12;
 

@@ -9,9 +9,9 @@
 *
 */
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Graphics\IFilter.hpp>
-#include <Core\Rendering\SamplerModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Graphics/IFilter.hpp>
+#include <Core/Rendering/SamplerModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

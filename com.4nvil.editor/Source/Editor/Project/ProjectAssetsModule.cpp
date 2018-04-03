@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Tools\IO\Directory.hpp>
-#include <Editor\Project\ProjectAssetsModule.hpp>
+#include <Core/Tools/IO/Directory.hpp>
+#include <Editor/Project/ProjectAssetsModule.hpp>
 
 using namespace Core;
 using namespace Editor;

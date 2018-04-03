@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\String.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Foundation\PipeModule.hpp>
+#include <Core/Tools/String.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Foundation/PipeModule.hpp>
 
 using namespace Core;
 

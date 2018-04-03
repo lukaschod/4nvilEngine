@@ -10,10 +10,10 @@
 */
 
 #include <stdarg.h>
-#include <Core\Tools\Math\Math.hpp>
-#include <Core\Tools\IO\Directory.hpp>
-#include <Core\Tools\Collections\StringBuilder.hpp>
-#include <Core\Foundation\LogModule.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Core/Tools/IO/Directory.hpp>
+#include <Core/Tools/Collections/StringBuilder.hpp>
+#include <Core/Foundation/LogModule.hpp>
 
 using namespace Core;
 using namespace Core::IO;

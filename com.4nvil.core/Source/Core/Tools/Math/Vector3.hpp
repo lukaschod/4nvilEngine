@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Tools\Math\Math.hpp>
-#include <Core\Tools\Math\Vector2.hpp>
+#include <Core/Tools/Math/Math.hpp>
+#include <Core/Tools/Math/Vector2.hpp>
 
 namespace Core::Math
 {

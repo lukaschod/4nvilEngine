@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Editor\Views\ViewLayerModule.hpp>
+#include <Editor/Views/ViewLayerModule.hpp>
 
 namespace Editor
 {

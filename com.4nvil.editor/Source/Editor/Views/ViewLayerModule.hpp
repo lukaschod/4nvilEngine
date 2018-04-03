@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Core\Foundation\PipeModule.hpp>
-#include <Core\Views\IViewModule.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Views/IViewModule.hpp>
 
 using namespace Core;
 

@@ -9,8 +9,8 @@
 *
 */
 
-#include <Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp>
-#include <Editor\Views\InspectorViewLayerModule.hpp>
+#include <Core/Rendering/RenderLoop/UnlitRenderLoopModule.hpp>
+#include <Editor/Views/InspectorViewLayerModule.hpp>
 
 using namespace Editor;
 

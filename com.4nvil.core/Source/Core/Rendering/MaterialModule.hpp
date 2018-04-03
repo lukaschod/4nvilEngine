@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Common.hpp>
-#include <Core\Foundation\PipeModule.hpp>
-#include <Core\Graphics\Shader.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Graphics/Shader.hpp>
 
 namespace Core
 {

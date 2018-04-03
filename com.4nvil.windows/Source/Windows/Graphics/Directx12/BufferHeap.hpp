@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Tools\Collections\BuddyHeapManager.hpp>
-#include <Windows\Graphics\Directx12\Common.hpp>
-#include <Windows\Graphics\Directx12\DescriptorHeap.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Collections/BuddyHeapManager.hpp>
+#include <Windows/Graphics/Directx12/Common.hpp>
+#include <Windows/Graphics/Directx12/DescriptorHeap.hpp>
 
 using namespace Core;
 

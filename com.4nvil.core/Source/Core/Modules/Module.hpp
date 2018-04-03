@@ -12,9 +12,9 @@
 #pragma once
 
 #include <typeinfo>
-#include <Core\Tools\Common.hpp>
-#include <Core\Tools\Collections\List.hpp>
-#include <Core\Modules\ModuleManager.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Modules/ModuleManager.hpp>
 
 namespace Core
 {

@@ -9,10 +9,10 @@
 *
 */
 
-#include <Core\Graphics\IGraphicsModule.hpp>
-#include <Core\Graphics\IRenderPass.hpp>
-#include <Core\Rendering\SurfaceModule.hpp>
-#include <Core\Rendering\ImageModule.hpp>
+#include <Core/Graphics/IGraphicsModule.hpp>
+#include <Core/Graphics/IRenderPass.hpp>
+#include <Core/Rendering/SurfaceModule.hpp>
+#include <Core/Rendering/ImageModule.hpp>
 
 using namespace Core;
 using namespace Core::Graphics;

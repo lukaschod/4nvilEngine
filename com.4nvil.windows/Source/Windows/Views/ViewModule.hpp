@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Core\Tools\Windows\Common.hpp>
-#include <Core\Rendering\ImageModule.hpp>
-#include <Core\Views\IViewModule.hpp>
+#include <Core/Tools/Windows/Common.hpp>
+#include <Core/Rendering/ImageModule.hpp>
+#include <Core/Views/IViewModule.hpp>
 
 using namespace Core;
 
