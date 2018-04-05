@@ -51,6 +51,14 @@ namespace Core
         virtual const char* GetName() { return "Unamed"; }
 
     protected:
+        // Marks that calling module must be executed before the Module. It is used by IModulePlanner to solve dependency trees
+        void ExecuteBefore(ModuleManager* moduleManager, Module* module)
+        {
+            ASSERT(moduleManager != nullptr && module != nullptr);
+            module->dependencies.safe_push_back(this);
+            module->OnDependancyAdd(moduleManager, this, true);
+        }
+
         // Marks that calling module must be executed before the Module of Type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees
         template<class T> T* ExecuteBefore(ModuleManager* moduleManager)
         {
@@ -59,6 +67,14 @@ namespace Core
             module->dependencies.safe_push_back(this);
             module->OnDependancyAdd(moduleManager, this, true);
             return (T*) module;
+        }
+
+        // Marks that calling module must be executed after the Module. It is used by IModulePlanner to solve dependency trees
+        void ExecuteAfter(ModuleManager* moduleManager, Module* module)
+        {
+            ASSERT(moduleManager != nullptr && module != nullptr);
+            dependencies.safe_push_back(module);
+            module->OnDependancyAdd(moduleManager, this, false);
         }
 
         // Marks that calling module must be executed after the Module of type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees

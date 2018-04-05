@@ -102,8 +102,12 @@ namespace Core
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
+        ComponentModule* GetComponentModule(Component* component);
+
+    private:
         MemoryModule* memoryModule;
         List<Unit*> units;
+        List<ComponentModule*> componentModules;
     };
 
     template<class T>

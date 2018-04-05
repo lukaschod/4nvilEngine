@@ -21,6 +21,11 @@ void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
     base::SetupExecuteOrder(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelUnit, new FixedBlockHeap(sizeof(Unit)));
+
+    // As most components will be used by unit, we should prepare pipe for them too
+    auto componentModules = moduleManager->GetModules<ComponentModule>();
+    for (auto componentModule : componentModules)
+        ExecuteBefore(moduleManager, componentModule);
 }
 
 const Unit* UnitModule::AllocateUnit() const
@@ -52,7 +57,6 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         // Avoid multiple enables
         if (unit->enabled == enable)
             return true;
-
         unit->enabled = enable;
         unit->activated &= enable;
 
@@ -78,6 +82,7 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
             oldUnit->components.remove(component);
         unit->components.push_back(component);
         component->unit = unit;
+        component->module->RecSetActive(context, component, unit->activated);
         DESERIALIZE_METHOD_END;
     }
     return false;

@@ -72,6 +72,9 @@ void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 
         for (auto meshRenderer : meshRenderers)
         {
+            if (!meshRenderer->activated)
+                continue;
+
             auto mesh = meshRenderer->mesh;
             auto material = meshRenderer->material;
             if (mesh == nullptr || material == nullptr)

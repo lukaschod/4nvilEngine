@@ -689,7 +689,7 @@ float4 FragMain(VertData i) : SV_TARGET
         auto agent = agentModule->RecCreateAgent(context);
         unitModule->RecAddComponent(context, triangle, agent);
 
-       // transformModuke->RecSetParent(context, transform, scene->transform);
+        sceneModule->RecAddUnit(context, scene, transform);
 
         return triangle;
     }
@@ -727,11 +727,12 @@ float4 FragMain(VertData i) : SV_TARGET
 
         logModule->RecWriteFmt(context, "Initializing test scene %d\n", 1);
 
-       // auto loadScene = sceneModule->AllocateScene();
-       // sceneModule->RecCreateScene(context, loadScene);
+        auto loadScene = sceneModule->AllocateScene();
+        sceneModule->RecCreateScene(context, loadScene);
+        sceneModule->RecSetEnable(context, loadScene, false);
 
         auto currentScene = sceneModule->AllocateScene();
-        //sceneModule->RecCreateScene(context, currentScene);
+        sceneModule->RecCreateScene(context, currentScene);
 
         int count = 1;
         auto offset = count * 1;
@@ -766,7 +767,7 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             for (int j = 0; j < count; j++)
             {
-                auto quad = CreateQuad(context, currentScene, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
+                auto quad = CreateQuad(context, loadScene, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
             }
         }
     }

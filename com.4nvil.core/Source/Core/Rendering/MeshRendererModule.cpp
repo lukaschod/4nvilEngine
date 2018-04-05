@@ -58,7 +58,6 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
         auto transform = unitModule->GetComponent<Transform>(meshRenderer);
         if (transform->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
             storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
-        TRACE("%d %f %f %f\n", transform, transform->position.x, transform->position.y, 0);
     }
 }
 

@@ -83,8 +83,7 @@ namespace Core
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        void SetParent(Transform* target, Transform* parent);
-        void SetActiveRecursive(Transform* target, bool activate);
+        void SetParent(const ExecutionContext& context, Transform* target, Transform* parent);
 
     private:
         MemoryModule* memoryModule;

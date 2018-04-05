@@ -25,7 +25,7 @@ void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelTransform, new FixedBlockHeap(sizeof(Transform)));
 
-    root = new Transform(this);
+    root = (Transform*)AllocateTransform();
     root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
 }
 
@@ -78,7 +78,10 @@ void TransformModule::Execute(const ExecutionContext& context)
 
 const Transform* TransformModule::AllocateTransform()
 {
-    return memoryModule->New<Transform>(memoryLabelTransform, this);
+    auto transform = memoryModule->New<Transform>(memoryLabelTransform, this);
+    transform->parent = root;
+    transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+    return transform;
 }
 
 SERIALIZE_METHOD_ARG1(TransformModule, CreateTransform, const Transform*);
@@ -96,9 +99,16 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
-        SetParent(target, root);
         target->created = true;
-        root->childs.push_back(target);
+
+        auto parent = target->parent;
+        parent->childs.push_back(target);
+        target->parent = parent;
+
+        bool activate = target->enabled & parent->activated;
+        for (auto child : target->childs)
+            unitModule->RecSetActive(context, child->unit, activate);
+
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, target);
@@ -116,31 +126,28 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetEnable, Transform*, target, bool, enable);
-        ASSERT(target->created);
         target->enabled = enable;
         target->activated &= enable;
-
-        for (auto child : target->childs)
+        if (target->created)
         {
-            auto unit = child->unit;
-            unitModule->RecSetActive(context, unit, target->activated);
+            for (auto child : target->childs)
+                unitModule->RecSetActive(context, child->unit, target->activated);
         }
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetActive, Transform*, target, bool, activated);
-        ASSERT(target->created);
         target->activated = activated;
-
-        for (auto child : target->childs)
+        if (target->created)
         {
-            auto unit = child->unit;
-            unitModule->RecSetActive(context, unit, target->activated);
+            for (auto child : target->childs)
+                unitModule->RecSetActive(context, child->unit, target->activated);
         }
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetParent, Transform*, target, Transform*, parent);
+        ASSERT(target != parent);
         if (target->created)
-            SetParent(target, parent);
+            SetParent(context, target, parent);
         else
             target->parent = parent;
         DESERIALIZE_METHOD_END;
@@ -195,7 +202,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     return false;
 }
 
-void TransformModule::SetParent(Transform* target, Transform* parent)
+void TransformModule::SetParent(const ExecutionContext& context, Transform* target, Transform* parent)
 {
     auto oldParent = target->parent;
     if (oldParent != nullptr)
@@ -204,14 +211,7 @@ void TransformModule::SetParent(Transform* target, Transform* parent)
     parent->childs.push_back(target);
     target->parent = parent;
 
-    SetActiveRecursive(target, target->enabled & target->parent->activated);
-}
-
-void TransformModule::SetActiveRecursive(Transform* target, bool activate)
-{
-    target->activated = activate;
+    bool activate = target->enabled & parent->activated;
     for (auto child : target->childs)
-    {
-        SetActiveRecursive(child, activate);
-    }
+        unitModule->RecSetActive(context, child->unit, activate);
 }

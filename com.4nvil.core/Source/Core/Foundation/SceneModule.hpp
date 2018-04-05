@@ -19,34 +19,36 @@ namespace Core
 
 namespace Core
 {
-    struct Scene : public Component
+    struct Scene
     {
-        Scene(ComponentModule* module) 
-            : Component(module)
+        Scene() 
+            : unit(nullptr)
             , transform(nullptr)
             , created(false)
         {}
+        const Unit* unit;
         const Transform* transform;
         bool created;
     };
 
-    class SceneModule : public ComponentModule
+    class SceneModule : public PipeModule
     {
     public:
-        BASE_IS(ComponentModule);
+        BASE_IS(PipeModule);
 
         virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Scene* AllocateScene();
 
     public:
         void RecCreateScene(const ExecutionContext& context, const Scene* target);
-        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) override;
-        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) override;
+        void RecSetEnable(const ExecutionContext& context, const Scene* target, bool enable);
+        void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
 
     protected:
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         TransformModule* transformModule;
+        UnitModule* unitModule;
     };
 }

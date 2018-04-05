@@ -17,19 +17,21 @@ using namespace Core;
 void SceneModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
-    transformModule = ExecuteAfter<TransformModule>(moduleManager);
+    transformModule = ExecuteBefore<TransformModule>(moduleManager);
+    unitModule = ExecuteAfter<UnitModule>(moduleManager);
 }
 
 const Scene* SceneModule::AllocateScene()
 {
-    auto scene = new Scene(this);
+    auto scene = new Scene();
+    scene->unit = unitModule->AllocateUnit();
     scene->transform = transformModule->AllocateTransform();
     return scene;
 }
 
 SERIALIZE_METHOD_ARG1(SceneModule, CreateScene, const Scene*);
-SERIALIZE_METHOD_ARG2(SceneModule, SetEnable, const Component*, bool);
-SERIALIZE_METHOD_ARG2(SceneModule, SetActive, const Component*, bool);
+SERIALIZE_METHOD_ARG2(SceneModule, SetEnable, const Scene*, bool);
+SERIALIZE_METHOD_ARG2(SceneModule, AddUnit, const Scene*, const Transform*);
 
 bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -38,22 +40,19 @@ bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         DESERIALIZE_METHOD_ARG1_START(CreateScene, Scene*, target);
         ASSERT(!target->created);
         target->created = true;
-        auto unit = unitModule->AllocateUnit();
-        unitModule->RecCreateUnit(context, unit);
+        unitModule->RecCreateUnit(context, target->unit);
         transformModule->RecCreateTransform(context, target->transform);
-        unitModule->RecAddComponent(context, unit, target->transform);
-        unitModule->RecAddComponent(context, unit, target);
+        unitModule->RecAddComponent(context, target->unit, target->transform);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetEnable, Scene*, target, bool, enable);
         ASSERT(target->created);
-        target->enabled = enable;
-        target->activated &= enable;
+        transformModule->RecSetEnable(context, target->transform, enable);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetActive, Scene*, target, bool, activated);
+        DESERIALIZE_METHOD_ARG2_START(AddUnit, Scene*, target, const Transform*, transform);
         ASSERT(target->created);
-        target->activated = activated;
+        transformModule->RecSetParent(context, transform, target->transform);
         DESERIALIZE_METHOD_END;
     }
     return false;

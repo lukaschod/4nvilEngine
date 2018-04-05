@@ -49,6 +49,9 @@ namespace Core
         // Find module with specified type
         template<class T> T* GetModule();
 
+        // Find module with specified type
+        Module* GetModule(const std::type_info& type);
+
         // Find modules with specified type
         template<class T> List<T*> GetModules();
 
