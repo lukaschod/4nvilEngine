@@ -18,6 +18,7 @@
 namespace Core
 {
     struct Unit;
+    struct Transform;
     class ComponentModule;
     class UnitModule;
     class MemoryModule;
@@ -30,16 +31,12 @@ namespace Core
         Component(ComponentModule* module)
             : module(module)
             , unit(nullptr)
-            , enabled(true)
-            , activated(enabled)
         {
         }
         virtual ~Component() {}
 
         const Unit* unit;
         ComponentModule* module;
-        bool enabled;
-        bool activated;
     };
 
     class ComponentModule : public PipeModule
@@ -54,8 +51,6 @@ namespace Core
         }
 
         virtual void RecDestroy(const ExecutionContext& context, const Component* unit) {}
-        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) {}
-        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) {}
 
     protected:
         UnitModule* unitModule;
@@ -67,8 +62,10 @@ namespace Core
         Unit()
             : enabled(true)
             , activated(enabled)
+            , relation(nullptr)
         {}
         List<const Component*> components;
+        const Transform* relation;
         bool enabled;
         bool activated;
     };
@@ -96,13 +93,13 @@ namespace Core
 
         void RecSetEnable(const ExecutionContext& context, const Unit* target, bool enable);
 
-        void RecSetActive(const ExecutionContext& context, const Unit* target, bool activate);
+        void RecUpdateActive(const ExecutionContext& context, const Unit* target);
 
     protected:
         virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        ComponentModule* GetComponentModule(Component* component);
+        void UpdateActive(const ExecutionContext& context, Unit* unit);
 
     private:
         MemoryModule* memoryModule;

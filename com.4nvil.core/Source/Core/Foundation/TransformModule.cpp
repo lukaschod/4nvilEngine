@@ -86,8 +86,6 @@ const Transform* TransformModule::AllocateTransform()
 
 SERIALIZE_METHOD_ARG1(TransformModule, CreateTransform, const Transform*);
 SERIALIZE_METHOD_ARG1(TransformModule, Destroy, const Component*);
-SERIALIZE_METHOD_ARG2(TransformModule, SetEnable, const Component*, bool);
-SERIALIZE_METHOD_ARG2(TransformModule, SetActive, const Component*, bool);
 SERIALIZE_METHOD_ARG2(TransformModule, SetParent, const Transform*, const Transform*);
 SERIALIZE_METHOD_ARG2(TransformModule, SetPosition, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vector3f&);
@@ -100,15 +98,9 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     {
         DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
         target->created = true;
-
         auto parent = target->parent;
         parent->childs.push_back(target);
         target->parent = parent;
-
-        bool activate = target->enabled & parent->activated;
-        for (auto child : target->childs)
-            unitModule->RecSetActive(context, child->unit, activate);
-
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(Destroy, Transform*, target);
@@ -122,25 +114,6 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
         {
             auto unit = child->unit;
             unitModule->RecDestroy(context, unit);
-        }
-        DESERIALIZE_METHOD_END;
-
-        DESERIALIZE_METHOD_ARG2_START(SetEnable, Transform*, target, bool, enable);
-        target->enabled = enable;
-        target->activated &= enable;
-        if (target->created)
-        {
-            for (auto child : target->childs)
-                unitModule->RecSetActive(context, child->unit, target->activated);
-        }
-        DESERIALIZE_METHOD_END;
-
-        DESERIALIZE_METHOD_ARG2_START(SetActive, Transform*, target, bool, activated);
-        target->activated = activated;
-        if (target->created)
-        {
-            for (auto child : target->childs)
-                unitModule->RecSetActive(context, child->unit, target->activated);
         }
         DESERIALIZE_METHOD_END;
 
@@ -211,7 +184,5 @@ void TransformModule::SetParent(const ExecutionContext& context, Transform* targ
     parent->childs.push_back(target);
     target->parent = parent;
 
-    bool activate = target->enabled & parent->activated;
-    for (auto child : target->childs)
-        unitModule->RecSetActive(context, child->unit, activate);
+    unitModule->RecUpdateActive(context, target->unit);
 }

@@ -18,7 +18,7 @@ void SceneModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     transformModule = ExecuteBefore<TransformModule>(moduleManager);
-    unitModule = ExecuteAfter<UnitModule>(moduleManager);
+    unitModule = ExecuteBefore<UnitModule>(moduleManager);
 }
 
 const Scene* SceneModule::AllocateScene()
@@ -47,7 +47,7 @@ bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
 
         DESERIALIZE_METHOD_ARG2_START(SetEnable, Scene*, target, bool, enable);
         ASSERT(target->created);
-        transformModule->RecSetEnable(context, target->transform, enable);
+        unitModule->RecSetEnable(context, target->unit, enable);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(AddUnit, Scene*, target, const Transform*, transform);

@@ -72,7 +72,7 @@ void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 
         for (auto meshRenderer : meshRenderers)
         {
-            if (!meshRenderer->activated)
+            if (!meshRenderer->unit->activated)
                 continue;
 
             auto mesh = meshRenderer->mesh;

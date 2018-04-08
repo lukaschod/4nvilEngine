@@ -72,8 +72,6 @@ const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return
 const Storage* MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
 
 SERIALIZE_METHOD_ARG1(MeshRendererModule, Destroy, const Component*);
-SERIALIZE_METHOD_ARG2(MeshRendererModule, SetEnable, const Component*, bool);
-SERIALIZE_METHOD_ARG2(MeshRendererModule, SetActive, const Component*, bool);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMaterial, const MeshRenderer*, const Material*);
 SERIALIZE_METHOD_ARG1(MeshRendererModule, CreateMeshRenderer, const MeshRenderer*);
@@ -86,17 +84,6 @@ bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, Command
         target->created = true;
         storageModule->RecCreateStorage(context, target->perMeshStorage);
         meshRenderers.push_back(target);
-        DESERIALIZE_METHOD_END;
-
-        DESERIALIZE_METHOD_ARG2_START(SetEnable, MeshRenderer*, target, bool, enable);
-        ASSERT(target->created);
-        target->enabled = enable;
-        target->activated &= enable;
-        DESERIALIZE_METHOD_END;
-
-        DESERIALIZE_METHOD_ARG2_START(SetActive, MeshRenderer*, target, bool, activated);
-        ASSERT(target->created);
-        target->activated = activated;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetMesh, MeshRenderer*, target, const Mesh*, mesh);

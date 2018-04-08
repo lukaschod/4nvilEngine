@@ -11,6 +11,7 @@
 
 #include <Core/Foundation/UnitModule.hpp>
 #include <Core/Foundation/MemoryModule.hpp>
+#include <Core/Foundation/TransformModule.hpp>
 
 using namespace Core;
 
@@ -37,7 +38,7 @@ SERIALIZE_METHOD_ARG1(UnitModule, CreateUnit, const Unit*);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
 SERIALIZE_METHOD_ARG2(UnitModule, SetEnable, const Unit*, bool);
-SERIALIZE_METHOD_ARG2(UnitModule, SetActive, const Unit*, bool);
+SERIALIZE_METHOD_ARG1(UnitModule, UpdateActive, const Unit*);
 
 bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -54,36 +55,47 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetEnable, Unit*, unit, bool, enable);
-        // Avoid multiple enables
-        if (unit->enabled == enable)
-            return true;
         unit->enabled = enable;
-        unit->activated &= enable;
-
-        // Update active state too
-        for (auto component : unit->components)
-            component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
+        UpdateActive(context, unit);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetActive, Unit*, unit, bool, active);
-        // Avoid multiple actives
-        if (unit->activated == active)
-            return true;
-        unit->activated = active;
-
-        // Update active state too
-        for (auto component : unit->components)
-            component->module->RecSetActive(context, component, unit->activated); // We can access module here as all of them depend on unitmodule
+        DESERIALIZE_METHOD_ARG1_START(UpdateActive, Unit*, unit);
+        UpdateActive(context, unit);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(AddComponent, Unit*, unit, Component*, component);
-        auto oldUnit = (Unit*) component->unit;
-        if (oldUnit != nullptr)
-            oldUnit->components.remove(component);
+        ASSERT(component->unit == nullptr);
+
+        // Check if it is relation component
+        auto relation = dynamic_cast<Transform*>(component);
+        if (relation != nullptr)
+            unit->relation = relation;
+
         unit->components.push_back(component);
         component->unit = unit;
-        component->module->RecSetActive(context, component, unit->activated);
         DESERIALIZE_METHOD_END;
     }
     return false;
+}
+
+void UnitModule::UpdateActive(const ExecutionContext& context, Unit* unit)
+{
+    auto activated = unit->enabled;
+    auto relation = unit->relation;
+    if (relation != nullptr)
+    {
+        auto parent = relation->parent;
+        if (parent != nullptr && parent->unit != nullptr)
+            activated &= parent->unit->activated;
+    }
+
+    if (activated == unit->activated)
+        return;
+    unit->activated = activated;
+
+    if (relation != nullptr)
+    {
+        for (auto child : relation->childs)
+            UpdateActive(context, (Unit*)child->unit);
+    }
 }

@@ -69,8 +69,6 @@ namespace Core
     public:
         void RecCreateTransform(const ExecutionContext& context, const Transform* target);
         virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
-        virtual void RecSetEnable(const ExecutionContext& context, const Component* unit, bool enable) override;
-        virtual void RecSetActive(const ExecutionContext& context, const Component* unit, bool activate) override;
         void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
         void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
         void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
