@@ -52,12 +52,12 @@ namespace Core
                 return *this;
             }
 
-            inline bool operator==(const Iterator& first)
+            inline Bool operator==(const Iterator& first)
             {
                 return link == first.link;
             }
 
-            inline bool operator!=(const Iterator& first)
+            inline Bool operator!=(const Iterator& first)
             {
                 return link != first.link;
             }
@@ -80,7 +80,7 @@ namespace Core
             endLink.prev = &beginLink;
         }
 
-        void Add(const T& value)
+        Void Add(const T& value)
         {
             auto link = PullUnusedLink();
             link->value = value;
@@ -88,14 +88,14 @@ namespace Core
             Connect(link, &endLink);
         }
 
-        void Remove(Iterator itr)
+        Void Remove(Iterator itr)
         {
             auto link = itr.link;
             Connect(link->prev, link->next);
             linkPool.push(link);
         }
 
-        void Insert(Iterator after, const T& value)
+        Void Insert(Iterator after, const T& value)
         {
             auto link = PullUnusedLink();
             link->value = value;
@@ -110,7 +110,7 @@ namespace Core
                     return itr;
         }
 
-        void Clear()
+        Void Clear()
         {
             for (auto itr = beginLink; itr != endLink; itr = itr.next)
                 linkPool.push(itr);
@@ -131,7 +131,7 @@ namespace Core
             return link;
         }
 
-        inline void Connect(Link* first, Link* second) const
+        inline Void Connect(Link* first, Link* second) const
         {
             ASSERT(first != second);
             first->next = second;

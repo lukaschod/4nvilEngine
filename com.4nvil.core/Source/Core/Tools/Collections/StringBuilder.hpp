@@ -17,7 +17,7 @@
 
 namespace Core
 {
-    template<size_t Size>
+    template<UInt Size>
     class StringBuilder
     {
     public:
@@ -27,14 +27,14 @@ namespace Core
         {
         }
 
-        inline void Append(void* data, size_t size)
+        inline Void Append(Void* data, UInt size)
         {
             ASSERT(current < end);
             memcpy(current, data, size);
             current += size;
         }
 
-        inline void Append(const char* value)
+        inline Void Append(const char* value)
         {
             ASSERT(current < end);
             auto size = strlen(value);
@@ -42,7 +42,7 @@ namespace Core
             current += size;
         }
 
-        inline void AppendFmt(const char* format, ...)
+        inline Void AppendFmt(const char* format, ...)
         {
             ASSERT(current < end);
             va_list ap;
@@ -51,7 +51,7 @@ namespace Core
             va_end(ap);
         }
 
-        inline void AppendFmt(const char* format, va_list ap)
+        inline Void AppendFmt(const char* format, va_list ap)
         {
             ASSERT(current < end);
             current += vsnprintf(current, Size, format, ap);
@@ -63,9 +63,9 @@ namespace Core
             return text;
         }
 
-        inline size_t GetSize()
+        inline UInt GetSize()
         {
-            return (size_t) (current - text) + 1;
+            return (UInt) (current - text) + 1;
         }
 
     private:

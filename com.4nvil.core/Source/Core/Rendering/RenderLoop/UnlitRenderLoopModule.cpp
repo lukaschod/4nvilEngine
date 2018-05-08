@@ -24,7 +24,7 @@ using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
 
-void UnlitRenderLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void UnlitRenderLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     cameraModule = ExecuteAfter<CameraModule>(moduleManager);
@@ -34,7 +34,7 @@ void UnlitRenderLoopModule::SetupExecuteOrder(ModuleManager* moduleManager)
     storageModule = ExecuteAfter<StorageModule>(moduleManager);
 }
 
-void UnlitRenderLoopModule::Execute(const ExecutionContext& context)
+Void UnlitRenderLoopModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     base::Execute(context);
@@ -42,7 +42,7 @@ void UnlitRenderLoopModule::Execute(const ExecutionContext& context)
 
 SERIALIZE_METHOD_ARG2(UnlitRenderLoopModule, Render, const ISwapChain*, const ITexture*);
 
-bool UnlitRenderLoopModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool UnlitRenderLoopModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -53,7 +53,7 @@ bool UnlitRenderLoopModule::ExecuteCommand(const ExecutionContext& context, Comm
     return false;
 }
 
-void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapChain* swapChain, const ITexture* renderTarget)
+Void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapChain* swapChain, const ITexture* renderTarget)
 {
     // TODO: make it one time only if any view is rendered
     auto& cameras = cameraModule->GetCameras();

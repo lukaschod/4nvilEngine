@@ -36,15 +36,15 @@ namespace Core
     public:
         BASE_IS(IRenderLoopModule);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context);
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context);
 
     public:
-        virtual void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) override;
+        virtual Void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) override;
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
-        void Render(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget);
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        Void Render(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget);
 
     private:
         CameraModule* cameraModule;

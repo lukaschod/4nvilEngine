@@ -24,7 +24,7 @@ namespace Core
         struct Callable
         {
             virtual ReturnType Call(ArgumentTypes... arguments) = 0;
-            virtual bool IsSame(Callable* other) = 0;
+            virtual Bool IsSame(Callable* other) = 0;
         };
 
         struct Function : public Callable
@@ -39,7 +39,7 @@ namespace Core
                 function(arguments...);
             }
 
-            virtual bool IsSame(Callable* other) override
+            virtual Bool IsSame(Callable* other) override
             {
                 auto _other = dynamic_cast<Function*>(other);
                 if (_other == nullptr)
@@ -65,7 +65,7 @@ namespace Core
                 (instance->*function)(arguments...);
             }
 
-            virtual bool IsSame(Callable* other) override
+            virtual Bool IsSame(Callable* other) override
             {
                 auto _other = dynamic_cast<Method*>(other);
                 if (_other == nullptr)
@@ -90,20 +90,20 @@ namespace Core
                 callable->Call(arguments...);
         }
 
-        void AddFunction(ReturnType(*function)(ArgumentTypes...))
+        Void AddFunction(ReturnType(*function)(ArgumentTypes...))
         {
             auto callable = new Function(function);
             callables.push_back(callable);
         }
 
         template<class ClassType>
-        void AddMethod(ReturnType(ClassType::*method)(ArgumentTypes...), ClassType* instance)
+        Void AddMethod(ReturnType(ClassType::*method)(ArgumentTypes...), ClassType* instance)
         {
             auto callable = new Method<ClassType>(method, instance);
             callables.push_back(callable);
         }
 
-        void RemoveFunction(ReturnType(*function)(ArgumentTypes...))
+        Void RemoveFunction(ReturnType(*function)(ArgumentTypes...))
         {
             Function temp(function);
             for (auto itr = callables.begin(); itr != callables.end(); itr++)
@@ -118,7 +118,7 @@ namespace Core
         }
 
         template<class ClassType>
-        void RemoveMethod(ReturnType(ClassType::*method)(ArgumentTypes...), ClassType* instance)
+        Void RemoveMethod(ReturnType(ClassType::*method)(ArgumentTypes...), ClassType* instance)
         {
             Method<ClassType> temp(method, instance);
             for (auto itr = callables.begin(); itr != callables.end(); itr++)

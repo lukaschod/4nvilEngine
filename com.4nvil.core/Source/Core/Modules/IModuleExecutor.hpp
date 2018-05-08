@@ -21,18 +21,18 @@ namespace Core
     {
     public:
         // Prepares for new frame
-        virtual void Reset() = 0;
+        virtual Void Reset() = 0;
 
         // Initializes the executor
-        virtual void Start() = 0;
+        virtual Void Start() = 0;
 
         // Finalizes the executor
-        virtual void Stop() = 0;
+        virtual Void Stop() = 0;
 
         // Returns if the executor is still running
-        virtual bool IsRunning() = 0;
+        virtual Bool IsRunning() = 0;
 
         // Returs the number of total workers
-        virtual uint32 GetWorkerCount() = 0;
+        virtual UInt32 GetWorkerCount() = 0;
     };
 }

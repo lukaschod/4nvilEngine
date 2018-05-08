@@ -33,14 +33,14 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
     public:
         const Shader* RecCreateShader(const ExecutionContext& context);
-        void RecSetShaderPipeline(const ExecutionContext& context, const Shader* target, uint32 index, const Graphics::ShaderPipelineDesc* desc);
+        Void RecSetShaderPipeline(const ExecutionContext& context, const Shader* target, UInt32 index, const Graphics::ShaderPipelineDesc* desc);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Shader*> shaders;

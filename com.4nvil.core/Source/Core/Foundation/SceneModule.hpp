@@ -28,7 +28,7 @@ namespace Core
         {}
         const Unit* unit;
         const Transform* transform;
-        bool created;
+        Bool created;
     };
 
     class SceneModule : public PipeModule
@@ -36,16 +36,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Scene* AllocateScene();
 
     public:
-        void RecCreateScene(const ExecutionContext& context, const Scene* target);
-        void RecSetEnable(const ExecutionContext& context, const Scene* target, bool enable);
-        void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
+        Void RecCreateScene(const ExecutionContext& context, const Scene* target);
+        Void RecSetEnable(const ExecutionContext& context, const Scene* target, Bool enable);
+        Void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         TransformModule* transformModule;

@@ -16,7 +16,7 @@
 using namespace Core;
 using namespace Core::Graphics;
 
-void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void SamplerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
@@ -30,7 +30,7 @@ const Sampler* SamplerModule::AllocateSampler() const
 
 SERIALIZE_METHOD_ARG1(SamplerModule, CreateSampler, const Sampler*);
 
-bool SamplerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool SamplerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {

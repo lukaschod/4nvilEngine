@@ -28,15 +28,15 @@ namespace Core::Graphics
 
     struct IBuffer
     {
-        IBuffer(size_t size) 
-            : data(new uint8[size], size)
+        IBuffer(UInt size) 
+            : data(new UInt8[size], size)
             , usage(BufferUsageFlags::Shader | BufferUsageFlags::CpuToGpu)
         {
         }
 
-        inline size_t GetSize() const { return data.size; }
+        inline UInt GetSize() const { return data.size; }
 
-        Range<uint8> data;
+        Range<UInt8> data;
         BufferUsageFlags usage;
     };
 }

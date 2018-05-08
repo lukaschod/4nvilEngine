@@ -28,14 +28,14 @@ namespace Core
             size = INT_MAX;
         }
 
-        HeapMemory(uint64 address, size_t size)
+        HeapMemory(UInt64 address, UInt size)
             : address(address)
             , size(size)
         {
         }
 
-        uint64 address;
-        size_t size;
+        UInt64 address;
+        UInt size;
     };
 
     class BuddyHeapManager
@@ -43,13 +43,13 @@ namespace Core
     public:
         BuddyHeapManager(const HeapMemory& bounds);
 
-        HeapMemory Allocate(size_t size);
-        bool Deallocate(const HeapMemory& memory);
-        bool Contains(const HeapMemory& memory);
+        HeapMemory Allocate(UInt size);
+        Bool Deallocate(const HeapMemory& memory);
+        Bool Contains(const HeapMemory& memory);
         const HeapMemory& GetBounds() const { return bounds; }
 
     private:
-        LinkedList<HeapMemory>::Iterator TryFindFreeBlock(size_t size);
+        LinkedList<HeapMemory>::Iterator TryFindFreeBlock(UInt size);
         LinkedList<HeapMemory>::Iterator TryFindClosestBlock(const HeapMemory& block);
 
     private:

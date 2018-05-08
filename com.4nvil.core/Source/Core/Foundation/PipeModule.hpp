@@ -20,7 +20,7 @@
 
 namespace Core
 {
-    typedef uint32 CommandCode;
+    typedef UInt32 CommandCode;
     typedef IO::MemoryStream CommandStream;
 
     struct CmdBuffer
@@ -31,13 +31,13 @@ namespace Core
         CommandStream stream;
 
         // Total count of commands recorded in this buffer
-        size_t commandCount;
+        UInt commandCount;
 
         // Index of the cmdbuffer
-        uint64 index;
+        UInt64 index;
 
         // On which worker the cmdbuffer was created
-        uint32 workerIndex;
+        UInt32 workerIndex;
 
         // Module that records this buffer
         Module* executingModule;
@@ -49,16 +49,16 @@ namespace Core
         BASE_IS(Module);
 
         PipeModule();
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
 
     protected:
         // This is where each PipeModule implementation will add its commands
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) = 0;
-        virtual void OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) = 0;
+        virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) override;
 
         // Sort the pipes according the order of Module execution, deducted from the dependancy tree
-        void SortPipes();
+        Void SortPipes();
 
         // Returns buffer that should be used for recording the commands
         CmdBuffer* GetRecordingBuffer(const ExecutionContext& context);
@@ -67,14 +67,14 @@ namespace Core
         // Pipe is simple one directiona connection between Modules
         struct Pipe
         {
-            Pipe(Module* source, size_t size) : buffers(size), source(source) {}
+            Pipe(Module* source, UInt size) : buffers(size), source(source) {}
             Module* source;
             List<CmdBuffer> buffers;
         };
 
         std::map<Module*, Pipe*> pipeMap; // Map between the Module and Pipe
         List<Pipe*> pipes; // All the Pipes that belong to this Module
-        bool isPipesSorted;
+        Bool isPipesSorted;
 
         struct CachedCmdBuffer
         {

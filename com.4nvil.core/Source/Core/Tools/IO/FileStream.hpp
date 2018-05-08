@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <Core/Tools/Common.hpp>
+#include <Core/Tools/IO/Stream.hpp>
 
 namespace Core::IO
 {
@@ -30,28 +31,31 @@ namespace Core::IO
         Write,
     };
 
-    class FileStream
+    class FileStream : public Stream
     {
     public:
         FileStream();
+        ~FileStream();
 
-        bool Open(const char* path, FileMode mode, FileAccess access);
-        void Close();
-        void Read(void* data, size_t size);
-        void Write(void* data, size_t size);
-        void ReadFmt(const char* format, ...);
-        void WriteFmt(const char* format, ...);
-        void WriteFmt(const char* format, va_list arguments);
-        inline bool IsOpened() const { return isOpened; }
+        virtual Void Close() override;
+        virtual Void Read(Void* data, UInt size) override;
+        virtual Void ReadFmt(const char* format, ...) override;
+        virtual Void Write(Void* data, UInt size) override;
+        virtual Void WriteFmt(const char* format, ...) override;
+        virtual Void WriteFmt(const char* format, va_list arguments) override;
+
+        Bool Open(const char* path, FileMode mode, FileAccess access);
+        Bool Open(const wchar_t* path, FileMode mode, FileAccess access);
+        inline Bool IsOpened() const { return isOpened; }
 
         // Forces all unwritten data to be written to the file
-        void Flush();
+        Void Flush();
 
     private:
         const char* TryGetMode(FileMode mode, FileAccess access);
 
     private:
         FILE* file;
-        bool isOpened;
+        Bool isOpened;
     };
 }

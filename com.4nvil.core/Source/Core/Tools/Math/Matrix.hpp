@@ -24,8 +24,8 @@ namespace Core::Math
         Matrix4x4() {}
         Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w);
 
-        bool operator==(const Matrix4x4<T>& other) const;
-        bool operator!=(const Matrix4x4<T>& other) const;
+        Bool operator==(const Matrix4x4<T>& other) const;
+        Bool operator!=(const Matrix4x4<T>& other) const;
 
         // Transform position without w normalization
         Vector4<T> TransformPosition(const Vector4<T>& v) const;
@@ -37,11 +37,11 @@ namespace Core::Math
         Vector4<T> GetPosition() const;
 
         Matrix4x4<T> Multiply(const Matrix4x4<T>& m);
-        void Transpose();
+        Void Transpose();
         T GetDeterminant() const;
 
         // Returns if all values are finite
-        bool IsValid() const;
+        Bool IsValid() const;
 
         static Matrix4x4<T> Rotate(const Quaternion<T>& rotation);
         static Matrix4x4<T> Scale(const Vector3<T>& scale);
@@ -60,12 +60,12 @@ namespace Core::Math
         Vector4<T> x, y, z, w;
     };
 
-    typedef Matrix4x4<float> Matrix4x4f;
-    typedef Matrix4x4<float> float4x4;
+    typedef Matrix4x4<Float> Matrix4x4f;
+    typedef Matrix4x4<Float> Float4x4;
 
-    float MatrixGetDeterminant(const float* in);
-    bool MatrixInvertGeneral3D(const float* in, float* out);
-    bool MatrixInvertFull(const float* m, float* out);
+    Float MatrixGetDeterminant(const Float* in);
+    Bool MatrixInvertGeneral3D(const Float* in, Float* out);
+    Bool MatrixInvertFull(const Float* m, Float* out);
 
     template<class T>
     inline Matrix4x4<T>::Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w)
@@ -77,13 +77,13 @@ namespace Core::Math
     }
 
     template<class T>
-    inline bool Matrix4x4<T>::operator==(const Matrix4x4<T>& other) const
+    inline Bool Matrix4x4<T>::operator==(const Matrix4x4<T>& other) const
     {
         return x == other.x && y == other.y && z == other.z && w == other.w;
     }
 
     template<class T>
-    inline bool Matrix4x4<T>::operator!=(const Matrix4x4<T>& other) const
+    inline Bool Matrix4x4<T>::operator!=(const Matrix4x4<T>& other) const
     {
         return x != other.x || y != other.y || z != other.z || w != other.w;
     }
@@ -150,7 +150,7 @@ namespace Core::Math
     }
 
     template<class T>
-    inline void Matrix4x4<T>::Transpose()
+    inline Void Matrix4x4<T>::Transpose()
     {
         Math::Swap(x.y, y.x);
         Math::Swap(x.z, z.x);
@@ -163,11 +163,11 @@ namespace Core::Math
     template<class T>
     inline T Matrix4x4<T>::GetDeterminant() const
     {
-        return (T) MatrixGetDeterminant((float*)this);
+        return (T) MatrixGetDeterminant((Float*)this);
     }
 
     template<class T>
-    bool Matrix4x4<T>::IsValid() const
+    Bool Matrix4x4<T>::IsValid() const
     {
         return x.IsValid() && y.IsValid() && z.IsValid() && w.IsValid();
     }
@@ -261,7 +261,7 @@ namespace Core::Math
     inline Matrix4x4<T> Matrix4x4<T>::Inverted(const Matrix4x4<T>& m)
     {
         Matrix4x4<T> out;
-        if (!MatrixInvertFull((const float*) &m, (float*) &out))
+        if (!MatrixInvertFull((const Float*) &m, (Float*) &out))
             return Matrix4x4<T>::zero;
         return out;
     }

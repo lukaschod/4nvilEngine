@@ -33,15 +33,15 @@ namespace Core
 
     struct MouseButtonState
     {
-        bool up;
-        bool down;
-        bool click;
+        Bool up;
+        Bool down;
+        Bool click;
     };
 
     struct MouseButtonDesc
     {
         MouseButtonType type;
-        bool isDown;
+        Bool isDown;
     };
 
     struct MousePositionDesc

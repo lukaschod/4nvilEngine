@@ -15,16 +15,16 @@
 using namespace Core;
 using namespace Core::Graphics;
 
-void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
 SERIALIZE_METHOD_CREATE(ShaderModule, Shader);
-SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, uint32, const ShaderPipelineDesc*);
+SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, UInt32, const ShaderPipelineDesc*);
 
-bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -32,7 +32,7 @@ bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream
         shaders.push_back(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, uint32, index, const ShaderPipelineDesc*, desc);
+        DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, UInt32, index, const ShaderPipelineDesc*, desc);
         auto pipeline = graphicsModule->RecCreateIShaderPipeline(context, desc);
         target->pipelines.push_back(pipeline);
         DESERIALIZE_METHOD_END;

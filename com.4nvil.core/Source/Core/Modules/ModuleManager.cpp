@@ -35,31 +35,31 @@ ModuleManager::~ModuleManager()
         delete module;
 }
 
-void ModuleManager::Start()
+Void ModuleManager::Start()
 {
-    for (size_t i = 0; i < modules.size(); i++)
+    for (UInt i = 0; i < modules.size(); i++)
         modules[i]->SetupExecuteOrder(this);
     planner->Recreate(modules);
     executor->Start();
 }
 
-void ModuleManager::Stop()
+Void ModuleManager::Stop()
 {
     executor->Stop();
 }
 
-void ModuleManager::NewFrame()
+Void ModuleManager::NewFrame()
 {
     planner->Reset();
     executor->Reset();
 }
 
-void ModuleManager::WaitForFrame()
+Void ModuleManager::WaitForFrame()
 {
     sleepEvent.WaitOne();
 }
 
-void ModuleManager::AddModule(Module* module)
+Void ModuleManager::AddModule(Module* module)
 {
     modules.push_back(module);
 }

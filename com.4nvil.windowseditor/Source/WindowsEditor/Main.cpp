@@ -49,10 +49,10 @@ struct Agent : public Component
     const Transform* transform;
     Vector3f velocity;
     Vector3f destination;
-    bool seekDestination;
-    float acceleration;
-    float maxSpeed;
-    float radius;
+    Bool seekDestination;
+    Float acceleration;
+    Float maxSpeed;
+    Float radius;
 };
 
 class AgentModule : public ComponentModule
@@ -79,7 +79,7 @@ public:
         return target;
     }
 
-    void RecSetDestination(const ExecutionContext& context, const Agent* target, const Transform* destination)
+    Void RecSetDestination(const ExecutionContext& context, const Agent* target, const Transform* destination)
     {
         auto buffer = GetRecordingBuffer(context);
         auto& stream = buffer->stream;
@@ -90,9 +90,9 @@ public:
         buffer->commandCount++;
     }
 
-    virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override {}
+    virtual Void RecDestroy(const ExecutionContext& context, const Component* unit) override {}
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
@@ -101,7 +101,7 @@ public:
         cameraModule = ExecuteAfter<CameraModule>(moduleManager);
     }
 
-    virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
+    virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override
     {
         switch (commandCode)
         {
@@ -118,7 +118,7 @@ public:
         return false;
     }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         MARK_FUNCTION;
         base::Execute(context);
@@ -148,7 +148,7 @@ class AgentForceModule : public ComputeModule
 public:
     BASE_IS(ComputeModule);
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         transformModule = ExecuteAfter<TransformModule>(moduleManager);
@@ -157,10 +157,10 @@ public:
         agents = agentModule->GetAgents();
     }
 
-    virtual size_t GetExecutionSize() override { return agents->size(); }
-    virtual size_t GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
+    virtual UInt GetExecutionSize() override { return agents->size(); }
+    virtual UInt GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         MARK_FUNCTION;
 
@@ -206,7 +206,7 @@ public:
     {
         Vector3f totalForce = 0;
         int neighboursCount = 0;
-        float seperation = 3;
+        Float seperation = 3;
 
         auto targetTransform = targetAgent->transform;
         for (auto agent : *agents)
@@ -220,7 +220,7 @@ public:
 
             if (distance <= seperation)
             {
-                float r = (agent->radius + targetAgent->radius);
+                Float r = (agent->radius + targetAgent->radius);
                 totalForce += pushForce*(1.0f - ((distance - r) / (seperation - r)));
                 neighboursCount++;
             }
@@ -244,7 +244,7 @@ class AgentDistModule : public ComputeModule
 public:
     BASE_IS(ComputeModule);
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         transformModule = ExecuteAfter<TransformModule>(moduleManager);
@@ -255,10 +255,10 @@ public:
         totalPassedTime = 0;
     }
 
-    virtual size_t GetExecutionSize() override { return agents->size(); }
-    virtual size_t GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
+    virtual UInt GetExecutionSize() override { return agents->size(); }
+    virtual UInt GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         MARK_FUNCTION;
 
@@ -290,7 +290,7 @@ public:
 
             if (distance > 0 && directionMagnitude > 0)
             {
-                totalForce += Vector3f(seperate.x, 0, seperate.y);
+                totalForce += seperate;// Vector3f(seperate.x, 0, seperate.y);
             }
         }
 
@@ -302,7 +302,7 @@ private:
     TimeModule* timeModule;
     AgentModule* agentModule;
     List<Agent*>* agents;
-    float totalPassedTime;
+    Float totalPassedTime;
 };
 
 class ShutdownModule : public ComputeModule
@@ -315,13 +315,13 @@ public:
     {
     }
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         viewModule = ExecuteAfter<IViewModule>(moduleManager);
     }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         if (viewModule->GetViews().size() == 0)
             moduleManager->RequestStop();
@@ -342,14 +342,14 @@ public:
     {
     }
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         logModule = ExecuteBefore<LogModule>(moduleManager);
         stopWatch.Start();
     }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         MARK_FUNCTION;
         
@@ -364,7 +364,7 @@ public:
             // 22 21 20
             // 16 15 15
 
-            auto msPerFrame = (float) dt / passedFrameCount;
+            auto msPerFrame = (Float) dt / passedFrameCount;
             TRACE("Frame took ms %f", msPerFrame);
             logModule->RecWriteFmt(context, "Frame took ms %f\n", msPerFrame);
 
@@ -377,7 +377,7 @@ public:
 private:
     StopWatch stopWatch;
     LogModule* logModule;
-    uint64 passedFrameCount;
+    UInt64 passedFrameCount;
 };
 
 class TestModule : public ComputeModule
@@ -387,7 +387,7 @@ public:
 
     TestModule() : frame(0) {}
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         viewModule = ExecuteBefore<IViewModule>(moduleManager);
@@ -411,22 +411,22 @@ public:
 
 cbuffer _perCameraData : register(b0)
 {
-    float4x4 _worldToCamera;
+    Float4x4 _worldToCamera;
 };
 
 cbuffer _perMeshData : register(b1)
 {
-    float4x4 _objectToWorld;
+    Float4x4 _objectToWorld;
 };
 
 struct AppData
 {
-    float4 position : POSITION;
+    Float4 position : POSITION;
 };
 
 struct VertData
 {
-    float4 position : SV_POSITION;
+    Float4 position : SV_POSITION;
 };
 
 VertData VertMain(AppData i)
@@ -436,9 +436,9 @@ VertData VertMain(AppData i)
     return o;
 }
 
-float4 FragMain(VertData i) : SV_TARGET
+Float4 FragMain(VertData i) : SV_TARGET
 {
-    return float4(1, 1, 1, 1);
+    return Float4(1, 1, 1, 1);
 }
             )";
 
@@ -447,7 +447,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
         auto shaderDesc = new ShaderPipelineDesc();
         shaderDesc->name = "Test";
-        shaderDesc->source = (const uint8*) source;
+        shaderDesc->source = (const UInt8*) source;
         shaderDesc->sourceSize = strlen(source);
         shaderDesc->states.zTest = ZTest::LEqual;
         shaderDesc->states.zWrite = ZWrite::On;
@@ -487,7 +487,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
     const Mesh* CreateMesh(const ExecutionContext& context)
     {
-        static float vertices[] = {
+        static Float vertices[] = {
             -0.5f, -0.5f, 0, 1,
             -0.5f, 0.5f, 0, 1,
             0.5f, 0.5f, 0, 1,
@@ -501,12 +501,12 @@ float4 FragMain(VertData i) : SV_TARGET
         vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
         auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
-        meshModule->RecSetVertices(context, mesh, Range<uint8>((uint8*) vertices, sizeof(vertices)));
+        meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
         return mesh;
     }
 
-    void Initialize(const ExecutionContext& context)
+    Void Initialize(const ExecutionContext& context)
     {
         MARK_FUNCTION;
 
@@ -555,12 +555,12 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             for (int j = 0; j < count; j++)
             {
-                auto quad = CreateQuad(context, testShader, mesh, Vector3f(i*2.0f - offset, j*2.0f - offset, 0.0f));
+                CreateQuad(context, testShader, mesh, Vector3f(i*2.0f - offset, j*2.0f - offset, 0.0f));
             }
         }
     }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         Initialize(context);
         frame++;
@@ -579,7 +579,7 @@ float4 FragMain(VertData i) : SV_TARGET
     IGraphicsModule* graphicsModule;
     LogModule* logModule;
     SceneModule* sceneModule;
-    uint32 frame;
+    UInt32 frame;
 };
 
 class Test2Module : public ComputeModule
@@ -589,7 +589,7 @@ public:
 
     Test2Module() : frame(0) {}
 
-    virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
     {
         base::SetupExecuteOrder(moduleManager);
         viewModule = ExecuteBefore<IViewModule>(moduleManager);
@@ -615,22 +615,22 @@ public:
 
 cbuffer _perCameraData : register(b0)
 {
-    float4x4 _worldToCamera;
+    Float4x4 _worldToCamera;
 };
 
 cbuffer _perMeshData : register(b1)
 {
-    float4x4 _objectToWorld;
+    Float4x4 _objectToWorld;
 };
 
 struct AppData
 {
-    float4 position : POSITION;
+    Float4 position : POSITION;
 };
 
 struct VertData
 {
-    float4 position : SV_POSITION;
+    Float4 position : SV_POSITION;
 };
 
 VertData VertMain(AppData i)
@@ -640,9 +640,9 @@ VertData VertMain(AppData i)
     return o;
 }
 
-float4 FragMain(VertData i) : SV_TARGET
+Float4 FragMain(VertData i) : SV_TARGET
 {
-    return float4(1, 1, 0, 1);
+    return Float4(1, 1, 0, 1);
 }
             )";
 
@@ -651,7 +651,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
         auto shaderDesc = new ShaderPipelineDesc();
         shaderDesc->name = "Test";
-        shaderDesc->source = (const uint8*) source;
+        shaderDesc->source = (const UInt8*) source;
         shaderDesc->sourceSize = strlen(source);
         shaderDesc->states.zTest = ZTest::LEqual;
         shaderDesc->states.zWrite = ZWrite::On;
@@ -696,7 +696,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
     const Mesh* CreateMesh(const ExecutionContext& context)
     {
-        volatile static float vertices[] = {
+        volatile static Float vertices[] = {
             -0.5f, -0.5f, 0, 1,
             -0.5f, 0.5f, 0, 1,
             0.5f, 0.5f, 0, 1,
@@ -710,12 +710,12 @@ float4 FragMain(VertData i) : SV_TARGET
         vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
         auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
-        meshModule->RecSetVertices(context, mesh, Range<uint8>((uint8*) vertices, sizeof(vertices)));
+        meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
         return mesh;
     }
 
-    void Initialize(const ExecutionContext& context)
+    Void Initialize(const ExecutionContext& context)
     {
         MARK_FUNCTION;
         static const Unit* movingCamera;
@@ -734,7 +734,7 @@ float4 FragMain(VertData i) : SV_TARGET
         auto currentScene = sceneModule->AllocateScene();
         sceneModule->RecCreateScene(context, currentScene);
 
-        int count = 1;
+        int count = 30;
         auto offset = count * 1;
 
         for (int i = 0; i < 1; i++)
@@ -767,12 +767,12 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             for (int j = 0; j < count; j++)
             {
-                auto quad = CreateQuad(context, loadScene, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
+                CreateQuad(context, currentScene, testShader, mesh, Vector3f(i * 2.0f - offset, j * 2.0f - offset, 0));
             }
         }
     }
 
-    virtual void Execute(const ExecutionContext& context) override
+    virtual Void Execute(const ExecutionContext& context) override
     {
         Initialize(context);
         frame++;
@@ -792,7 +792,7 @@ float4 FragMain(VertData i) : SV_TARGET
     LogModule* logModule;
     AgentModule* agentModule;
     SceneModule* sceneModule;
-    uint32 frame;
+    UInt32 frame;
 };
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)

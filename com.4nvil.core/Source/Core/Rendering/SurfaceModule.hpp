@@ -53,7 +53,7 @@ namespace Core
         const Image* image;
         Graphics::LoadAction loadAction;
         Graphics::StoreAction storeAction;
-        float clearDepth;
+        Float clearDepth;
     };
 
     struct Surface
@@ -66,7 +66,7 @@ namespace Core
         List<SurfaceColor> colors;
         SurfaceDepth depth;
         Math::Rectf viewport;
-        bool created;
+        Bool created;
     };
 
     class SurfaceModule : public PipeModule
@@ -74,18 +74,18 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Surface* AllocateSurface();
 
     public:
-        void RecCreateSurface(const ExecutionContext& context, const Surface* surface);
-        void RecSetColor(const ExecutionContext& context, const Surface* target, uint32 index, const SurfaceColor& color);
-        void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
-        void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);
+        Void RecCreateSurface(const ExecutionContext& context, const Surface* surface);
+        Void RecSetColor(const ExecutionContext& context, const Surface* target, UInt32 index, const SurfaceColor& color);
+        Void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
+        Void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Surface*> surfaces;

@@ -17,7 +17,7 @@ using namespace Core;
 
 static const char* memoryLabelUnit = "Core::Unit";
 
-void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
@@ -37,10 +37,10 @@ const Unit* UnitModule::AllocateUnit() const
 SERIALIZE_METHOD_ARG1(UnitModule, CreateUnit, const Unit*);
 SERIALIZE_METHOD_ARG1(UnitModule, Destroy, const Unit*);
 SERIALIZE_METHOD_ARG2(UnitModule, AddComponent, const Unit*, const Component*);
-SERIALIZE_METHOD_ARG2(UnitModule, SetEnable, const Unit*, bool);
+SERIALIZE_METHOD_ARG2(UnitModule, SetEnable, const Unit*, Bool);
 SERIALIZE_METHOD_ARG1(UnitModule, UpdateActive, const Unit*);
 
-bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -54,7 +54,7 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
             component->module->RecDestroy(context, component); // We can access module here as all of them depend on unitmodule
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetEnable, Unit*, unit, bool, enable);
+        DESERIALIZE_METHOD_ARG2_START(SetEnable, Unit*, unit, Bool, enable);
         unit->enabled = enable;
         UpdateActive(context, unit);
         DESERIALIZE_METHOD_END;
@@ -78,7 +78,7 @@ bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
     return false;
 }
 
-void UnitModule::UpdateActive(const ExecutionContext& context, Unit* unit)
+Void UnitModule::UpdateActive(const ExecutionContext& context, Unit* unit)
 {
     auto activated = unit->enabled;
     auto relation = unit->relation;

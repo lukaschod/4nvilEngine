@@ -18,13 +18,13 @@ using namespace Core;
 
 PipeModule::PipeModule() : isPipesSorted(false) {}
 
-void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     profilerModule = ExecuteAfter<ProfilerModule>(moduleManager);
     cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
 }
 
-void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore)
+Void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore)
 {
     ASSERT(pipeMap.find(module) == pipeMap.end());
     // Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
@@ -33,10 +33,10 @@ void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, b
     pipeMap[module] = pipe;
 }
 
-void PipeModule::SortPipes()
+Void PipeModule::SortPipes()
 {
     // Sort the pipies according the dependencies
-    std::function<bool(Module*, Module*)> recusrive = [&recusrive](Module* first, Module* second)
+    std::function<Bool(Module*, Module*)> recusrive = [&recusrive](Module* first, Module* second)
     {
         if (first == second)
             return false;
@@ -72,7 +72,7 @@ CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
     return buffer;
 }
 
-void PipeModule::Execute(const ExecutionContext& context)
+Void PipeModule::Execute(const ExecutionContext& context)
 {
     // TODO: Move it to some initialization
     // We can sort the pipes only once, as dependencies between the Modules are static

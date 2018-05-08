@@ -20,7 +20,7 @@ using namespace Core::Graphics;
 
 static const char* memoryLabelMaterial = "Core::Material";
 
-void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
@@ -42,7 +42,7 @@ SERIALIZE_METHOD_ARG1(MaterialModule, CreateMaterial, const Material*);
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
 
-bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -89,7 +89,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const char*, name, const Storage*, storage);
         ASSERT(material->created);
         auto materialProperties = (MaterialProperties*) material->properties;
-        SetProperty(materialProperties, name, MaterialPropertyType::Storage, (void*) storage);
+        SetProperty(materialProperties, name, MaterialPropertyType::Storage, (Void*) storage);
         for (auto pipeline : material->pipelines)
         {
             graphicsModule->RecSetBuffer(context, pipeline->properties, name, storage->buffer);
@@ -99,7 +99,7 @@ bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
     return false;
 }
 
-void MaterialModule::SetProperty(MaterialProperties* materialProperties, const char* name, MaterialPropertyType type, void* value)
+Void MaterialModule::SetProperty(MaterialProperties* materialProperties, const char* name, MaterialPropertyType type, Void* value)
 {
     auto& properties = materialProperties->properties;
     auto containedProperty = TryFindProperty(materialProperties, name);

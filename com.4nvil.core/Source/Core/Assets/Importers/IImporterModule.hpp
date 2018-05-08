@@ -13,7 +13,14 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/String.hpp>
+#include <Core/Tools/IO/Directory.hpp>
 #include <Core/Foundation/PipeModule.hpp>
+
+namespace Core
+{
+    struct Package;
+    struct Asset;
+}
 
 namespace Core
 {
@@ -25,10 +32,10 @@ namespace Core
     public:
         // Returns extension name that is supported by this importer
         // Extension must be without dot (etc png) and lower case
-        virtual const char* GetSupportedExtension() = 0;
+        virtual bool IsSupported(const DirectoryExtension& extension) = 0;
 
     public:
         // Records the to import data
-        virtual void RecImport(const ExecutionContext& context, String& pathToFile) = 0;
+        virtual const Asset* Import(const ExecutionContext& context, const Package* package, const Directory& directory) = 0;
     };
 }

@@ -35,16 +35,16 @@ namespace Core::Math
         inline const Vector4<T>& operator-=(T v) { x -= v; y -= v; z -= v; w -= v; return *this; }
         inline const Vector4<T>& operator*=(T v) { x *= v; y *= v; z *= v; w *= v; return *this; }
         inline const Vector4<T>& operator/=(T v) { x /= v; y /= v; z /= v; w /= v; return *this; }
-        inline bool operator==(const Vector4<T>& v) const { return(x == v.x && y == v.y && z == v.z && w == v.w); }
-        inline bool operator!=(const Vector4<T>& v) const { return(x != v.x && y != v.y && z != v.z && w != v.w); }
+        inline Bool operator==(const Vector4<T>& v) const { return(x == v.x && y == v.y && z == v.z && w == v.w); }
+        inline Bool operator!=(const Vector4<T>& v) const { return(x != v.x && y != v.y && z != v.z && w != v.w); }
 
-        inline void Normalize();
+        inline Void Normalize();
 
         // TODO: Temp
         inline Vector3<T> xyz() const { return Vector3<T>(x, y, z); }
 
         // Vector4 direction is Vector3 with w == 0
-        inline bool IsDirection() const { return Math::IsZero(w); }
+        inline Bool IsDirection() const { return Math::IsZero(w); }
 
         // Returns the distance of vector in power of 2
         inline T SqrMagnitude() const { return x*x + y*y + z*z + w*w; }
@@ -53,7 +53,7 @@ namespace Core::Math
         inline T Magnitude() const { return Math::Sqrt(SqrMagnitude()); }
 
         // Check if all values are valid for usage (If not nan)
-        inline bool IsValid() const { return !isnan(x) && !isnan(y) && !isnan(z) && !isnan(w); }
+        inline Bool IsValid() const { return !isnan(x) && !isnan(y) && !isnan(z) && !isnan(w); }
 
         // Returns combinatio of both vectors maximums
         inline static Vector4<T> Max(const Vector4<T>& left, const Vector4<T>& right);
@@ -68,8 +68,8 @@ namespace Core::Math
         T x, y, z, w;
     };
 
-    typedef Vector4<float> Vector4f;
-    typedef Vector4<float> float4;
+    typedef Vector4<Float> Vector4f;
+    typedef Vector4<Float> Float4;
 
     template<class T, class Vector>
     inline Vector4<T> operator+(const Vector4<T>& left, const Vector& right) { Vector4<T> out(left); out += right; return out; }
@@ -99,7 +99,7 @@ namespace Core::Math
     inline Vector4<T> operator-(const Vector4<T>& v) { return Vector4<T>(-v.x, -v.y, -v.z, -v.z); }
 
     template<class T>
-    inline void Vector4<T>::Normalize() 
+    inline Void Vector4<T>::Normalize() 
     {
         auto magnitude = Magnitude();
         ASSERT(!Math::IsZero(magnitude));

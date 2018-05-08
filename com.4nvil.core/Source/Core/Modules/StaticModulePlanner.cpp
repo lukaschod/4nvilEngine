@@ -47,7 +47,7 @@ StaticModulePlan::StaticModulePlan(List<Module*>& modules)
 
     // TODO: Validate the plan, etc. cycles
 
-    size_t addedCount = 0;
+    UInt addedCount = 0;
     while (addedCount != nodes.size())
     {
         for (auto node : nodes)
@@ -58,7 +58,7 @@ StaticModulePlan::StaticModulePlan(List<Module*>& modules)
     }
 }
 
-bool StaticModulePlan::TryAdd(StaticModulePlanNode* node)
+Bool StaticModulePlan::TryAdd(StaticModulePlanNode* node)
 {
     // Check if it is not already in plan
     auto module = node->module;
@@ -94,11 +94,11 @@ StaticModulePlanNode* StaticModulePlan::TryFindNode(Module* module)
     return root->TryFindNode(module);
 }
 
-void StaticModulePlan::Reset()
+Void StaticModulePlan::Reset()
 {
     for (auto node : nodes)
     {
-        node->dependencies = (uint32) node->module->Get_dependencies().size();
+        node->dependencies = (UInt32) node->module->Get_dependencies().size();
     }
 }
 
@@ -112,14 +112,14 @@ StaticModulePlanner::~StaticModulePlanner()
     SAFE_DELETE(plan);
 }
 
-void StaticModulePlanner::Recreate(List<Module*>& modules)
+Void StaticModulePlanner::Recreate(List<Module*>& modules)
 {
     std::lock_guard<std::mutex> lock(readyModulesMutex);
     SAFE_DELETE(plan);
     plan = new StaticModulePlan(modules);
 }
 
-void StaticModulePlanner::Reset()
+Void StaticModulePlanner::Reset()
 {
     std::lock_guard<std::mutex> lock(readyModulesMutex);
     plan->Reset(); // Reset dependencies
@@ -144,7 +144,7 @@ ModuleJob StaticModulePlanner::TryGetNext()
     return job;
 }
 
-void StaticModulePlanner::SetFinished(const ModuleJob& job)
+Void StaticModulePlanner::SetFinished(const ModuleJob& job)
 {
     auto module = job.module;
     ASSERT(module != nullptr);
@@ -181,7 +181,7 @@ void StaticModulePlanner::SetFinished(const ModuleJob& job)
         jobFinishCallback(readyJobs.size());
 }
 
-void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
+Void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
 {
     // TODO: Doesn't look that clean as it could be, maybe we can do better?
 
@@ -204,7 +204,7 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
     while (jobSize != 0)
     {
         auto split = node->module->GetSplitExecutionSize();
-        split = Math::Clamp(split, (size_t) 1, jobSize);
+        split = Math::Clamp(split, (UInt) 1, jobSize);
 
         ModuleJob childJob;
         childJob.module = node->module;
@@ -214,7 +214,7 @@ void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
         readyJobs.push(childJob);
         node->concunrency++;
 
-        offset += (uint32) split;
-        jobSize -= (uint32) split;
+        offset += (UInt32) split;
+        jobSize -= (UInt32) split;
     }
 }

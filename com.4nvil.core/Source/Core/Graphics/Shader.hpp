@@ -71,16 +71,16 @@ namespace Core::Graphics
         {
         }
 
-        ShaderProgram(const uint8* code, size_t size) :
+        ShaderProgram(const UInt8* code, UInt size) :
             available(true),
             code(code),
             size(size)
         {
         }
 
-        bool available;
-        const uint8* code;
-        size_t size;
+        Bool available;
+        const UInt8* code;
+        UInt size;
     };
 
     struct ShaderPipelineDesc
@@ -89,10 +89,10 @@ namespace Core::Graphics
         ShaderStates states;
         ShaderProgram programs[SHADER_PROGRAM_COUNT];
         VertexLayout vertexLayout;
-        uint32 varation;
+        UInt32 varation;
         String name;
-        const uint8* source;
-        size_t sourceSize;
+        const UInt8* source;
+        UInt sourceSize;
     };
 
     struct IShaderPipeline : public ShaderPipelineDesc
@@ -116,11 +116,11 @@ namespace Core::Graphics
         IShaderArguments(const IShaderPipeline* pipeline) : pipeline(pipeline)
         {
             auto size = pipeline->parameters.size();
-            values = new void*[size];
-            memset(values, 0, sizeof(void*) * size);
+            values = new Void*[size];
+            memset(values, 0, sizeof(Void*) * size);
         }
 
         const IShaderPipeline* pipeline;
-        void** values;
+        Void** values;
     };
 }

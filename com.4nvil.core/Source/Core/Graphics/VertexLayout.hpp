@@ -39,6 +39,6 @@ namespace Core::Graphics
     struct VertexLayout
     {
         List<VertexAttributeLayout> attributes;
-        uint32 stride;
+        UInt32 stride;
     };
 }

@@ -19,7 +19,7 @@ MouseModule::MouseModule()
 {
 }
 
-void MouseModule::Execute(const ExecutionContext& context)
+Void MouseModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION; 
 
@@ -38,8 +38,8 @@ void MouseModule::Execute(const ExecutionContext& context)
     // Examine all inputs and update the state of mouse
     auto& stream = device->inputStream;
     auto inputCount = device->inputCount;
-    size_t offset = 0;
-    for (uint32 i = 0; i < inputCount; i++)
+    UInt offset = 0;
+    for (UInt32 i = 0; i < inputCount; i++)
     {
         auto inputType = stream.FastRead<MouseInputType>(offset);
         switch (inputType)
@@ -69,7 +69,7 @@ void MouseModule::Execute(const ExecutionContext& context)
     }
 }
 
-void MouseModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void MouseModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     inputModule = ExecuteAfter<InputModule>(moduleManager);

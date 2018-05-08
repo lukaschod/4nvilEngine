@@ -13,7 +13,7 @@
 
 using namespace Windows::Directx12;
 
-DescriptorHeap::DescriptorHeap(ID3D12Device* device, HeapType type, size_t capacity) 
+DescriptorHeap::DescriptorHeap(ID3D12Device* device, HeapType type, UInt capacity) 
     : device(device)
     , type(type)
 {
@@ -77,7 +77,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::GetCpuHandle(const HeapMemory& memor
     return handle;
 }
 
-HeapMemory DescriptorHeap::Allocate(size_t size)
+HeapMemory DescriptorHeap::Allocate(UInt size)
 {
     for (auto heapManager : heapManagers)
     {
@@ -97,7 +97,7 @@ HeapMemory DescriptorHeap::Allocate(size_t size)
     }
 }
 
-void DescriptorHeap::Deallocate(const HeapMemory& memory)
+Void DescriptorHeap::Deallocate(const HeapMemory& memory)
 {
     for (auto heapManager : heapManagers)
         if (heapManager->Deallocate(memory))
@@ -105,7 +105,7 @@ void DescriptorHeap::Deallocate(const HeapMemory& memory)
     ERROR("Invalid HeapMemory");
 }
 
-void DescriptorHeap::Grow(size_t capacity)
+Void DescriptorHeap::Grow(UInt capacity)
 {
     ID3D12DescriptorHeap* heap;
     srvHeapDesc.NumDescriptors = (UINT) capacity;

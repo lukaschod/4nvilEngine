@@ -12,12 +12,41 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
+#include <Core/Tools/Guid.hpp>
+#include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/IO/Directory.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Assets/Importers/IImporterModule.hpp>
 
 namespace Core
 {
-    class AssetsModule
+    struct Asset
+    {
+
+    };
+
+    class AssetModule : public PipeModule
     {
     public:
+        BASE_IS(PipeModule);
 
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        Bool IsSupported(const Directory& directory) const;
+
+    public:
+        Void RecImport(const ExecutionContext& context, const Directory& directory, const Guid& guid);
+
+    protected:
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+
+    private:
+        struct DirectoryToAsset
+        {
+            Directory directory;
+            Guid guid;
+            const Asset* asset;
+        };
+        List<DirectoryToAsset> directoryToAsset;
+        List<IImporterModule*> importerModules;
     };
 }

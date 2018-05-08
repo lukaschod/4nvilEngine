@@ -22,7 +22,7 @@ using namespace Core::Math;
 using namespace Core::Graphics;
 using namespace Editor;
 
-void ViewLayerModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ViewLayerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     viewModule = ExecuteAfter<IViewModule>(moduleManager);
@@ -37,7 +37,7 @@ void ViewLayerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 }
 
 DECLARE_COMMAND_CODE(Show);
-void ViewLayerModule::RecShow(const ExecutionContext& context, const IView* target)
+Void ViewLayerModule::RecShow(const ExecutionContext& context, const IView* target)
 {
     auto buffer = GetRecordingBuffer(context);
     auto& stream = buffer->stream;
@@ -50,7 +50,7 @@ void ViewLayerModule::RecShow(const ExecutionContext& context, const IView* targ
 
 SERIALIZE_METHOD(ViewLayerModule, Hide);
 
-bool ViewLayerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool ViewLayerModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -80,12 +80,12 @@ bool ViewLayerModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     return false;
 }
 
-void ViewLayerModule::Render(const ExecutionContext& context)
+Void ViewLayerModule::Render(const ExecutionContext& context)
 {
     renderLoopModule->RecRender(context, swapChain, renderTarget->texture);
 }
 
-void ViewLayerModule::Execute(const ExecutionContext& context)
+Void ViewLayerModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
 
@@ -98,13 +98,13 @@ void ViewLayerModule::Execute(const ExecutionContext& context)
     if (device == nullptr)
         return;
 
-    bool render = true;
-    bool resize = false;
+    Bool render = true;
+    Bool resize = false;
 
     auto& stream = device->inputStream;
     auto inputCount = device->inputCount;
-    size_t offset = 0;
-    for (uint32 i = 0; i < inputCount; i++)
+    UInt offset = 0;
+    for (UInt32 i = 0; i < inputCount; i++)
     {
         auto inputType = stream.FastRead<ViewInputType>(offset);
         switch (inputType)

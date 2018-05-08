@@ -20,4 +20,17 @@ namespace Core::Enum
     {
         return static_cast<typename std::underlying_type<E>::type>(e);
     }
+
+    template<typename E> inline Bool Contains(E lhs, E rhs)
+    {
+        return (lhs & rhs) != static_cast<E>(0);
+    }
 }
+
+#define IMPLEMENT_ENUM_FLAG(Name) \
+inline Name operator|(Name lhs, Name rhs) { return static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) | static_cast<std::underlying_type_t<Name>>(rhs)); } \
+inline Name operator&(Name lhs, Name rhs) { return static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) & static_cast<std::underlying_type_t<Name>>(rhs)); } \
+inline Name operator^(Name lhs, Name rhs) { return static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) ^ static_cast<std::underlying_type_t<Name>>(rhs)); } \
+inline Name& operator|=(Name& lhs, Name rhs) { lhs = static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) | static_cast<std::underlying_type_t<Name>>(rhs)); return lhs; } \
+inline Name& operator&=(Name& lhs, Name rhs) { rhs = static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) & static_cast<std::underlying_type_t<Name>>(rhs)); return rhs; } \
+inline Name& operator^=(Name& lhs, Name rhs) { rhs = static_cast<Name>(static_cast<std::underlying_type_t<Name>>(lhs) ^ static_cast<std::underlying_type_t<Name>>(rhs)); return rhs; }

@@ -23,7 +23,7 @@ namespace Core
 
     struct ViewInputResizeDesc
     {
-        uint32 width;
-        uint32 height;
+        UInt32 width;
+        UInt32 height;
     };
 }

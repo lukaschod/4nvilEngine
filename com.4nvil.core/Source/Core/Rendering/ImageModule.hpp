@@ -42,9 +42,9 @@ namespace Core
 
         const Graphics::ITexture* texture;
         const Sampler* sampler;
-        const uint32 width;
-        const uint32 height;
-        bool created;
+        const UInt32 width;
+        const UInt32 height;
+        Bool created;
     };
 
     class ImageModule : public PipeModule
@@ -52,16 +52,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Image* AllocateImage(uint32 width, uint32 height) const;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        const Image* AllocateImage(UInt32 width, UInt32 height) const;
 
     public:
-        void RecCreateImage(const ExecutionContext& context, const Image* target);
-        void RecSetSampler(const ExecutionContext& context, const Image* target, const Sampler* sampler);
+        Void RecCreateImage(const ExecutionContext& context, const Image* target);
+        Void RecSetSampler(const ExecutionContext& context, const Image* target, const Sampler* sampler);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Image*> images;

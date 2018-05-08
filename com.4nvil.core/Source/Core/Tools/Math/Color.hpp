@@ -34,5 +34,5 @@ namespace Core::Math
         T r, g, b, a;
     };
 
-    typedef Color<float> Colorf;
+    typedef Color<Float> Colorf;
 }

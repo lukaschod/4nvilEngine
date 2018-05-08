@@ -45,7 +45,7 @@ namespace Core
         }
         const String name;
         const MaterialPropertyType type;
-        void* value;
+        Void* value;
     };
 
     struct MaterialProperties
@@ -75,7 +75,7 @@ namespace Core
         const Shader* shader;
         const MaterialProperties* properties;
         List<const MaterialPipeline*> pipelines;
-        bool created;
+        Bool created;
     };
 
     class MaterialModule : public PipeModule
@@ -83,20 +83,20 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Material* AllocateMaterial() const;
 
     public:
-        void RecCreateMaterial(const ExecutionContext& context, const Material* material);
-        void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
-        void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
+        Void RecCreateMaterial(const ExecutionContext& context, const Material* material);
+        Void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
+        Void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        inline void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, void* value);
+        inline Void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, Void* value);
         inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const char* name);
 
     private:

@@ -41,15 +41,15 @@
 #define WRITE_ARG4 stream.Write(argument1);stream.Write(argument2);stream.Write(argument3);stream.Write(argument4);
 
 #define SERIALIZE_METHOD(Module, Name) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Name, void, NOARG, NOARG, NOARG, NOARG)
+    SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, NOARG, NOARG, NOARG, NOARG)
 #define SERIALIZE_METHOD_ARG1(Module, Name, ArgumentType1) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Name, void, DECLARE_ARG1(ArgumentType1), WRITE_ARG1, NOARG, NOARG)
+    SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, DECLARE_ARG1(ArgumentType1), WRITE_ARG1, NOARG, NOARG)
 #define SERIALIZE_METHOD_ARG2(Module, Name, ArgumentType1, ArgumentType2) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Name, void, DECLARE_ARG2(ArgumentType1, ArgumentType2), WRITE_ARG2, NOARG, NOARG)
+    SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, DECLARE_ARG2(ArgumentType1, ArgumentType2), WRITE_ARG2, NOARG, NOARG)
 #define SERIALIZE_METHOD_ARG3(Module, Name, ArgumentType1, ArgumentType2, ArgumentType3) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Name, void, DECLARE_ARG3(ArgumentType1, ArgumentType2, ArgumentType3), WRITE_ARG3, NOARG, NOARG)
+    SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, DECLARE_ARG3(ArgumentType1, ArgumentType2, ArgumentType3), WRITE_ARG3, NOARG, NOARG)
 #define SERIALIZE_METHOD_ARG4(Module, Name, ArgumentType1, ArgumentType2, ArgumentType3, ArgumentType4) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Name, void, DECLARE_ARG4(ArgumentType1, ArgumentType2, ArgumentType3, ArgumentType4), WRITE_ARG3, NOARG, NOARG)
+    SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, DECLARE_ARG4(ArgumentType1, ArgumentType2, ArgumentType3, ArgumentType4), WRITE_ARG3, NOARG, NOARG)
 
 #define WRITE_TARGET stream.Write(target);
 #define RETURN_TARGET return target;

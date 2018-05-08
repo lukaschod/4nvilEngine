@@ -26,17 +26,17 @@ namespace Core
 
         List<StaticModulePlanNode*> childs;
         Module* module;
-        uint32 concunrency;
-        uint32 dependencies;
+        UInt32 concunrency;
+        UInt32 dependencies;
     };
 
     class StaticModulePlan
     {
     public:
         StaticModulePlan(List<Module*>& modules);
-        inline bool TryAdd(StaticModulePlanNode* node);
+        inline Bool TryAdd(StaticModulePlanNode* node);
         inline StaticModulePlanNode* TryFindNode(Module* module);
-        inline void Reset();
+        inline Void Reset();
 
         inline StaticModulePlanNode* GetRoot() const { return root; }
 
@@ -50,18 +50,18 @@ namespace Core
     public:
         StaticModulePlanner();
         ~StaticModulePlanner();
-        virtual void Recreate(List<Module*>& modules) override;
-        virtual void Reset() override;
+        virtual Void Recreate(List<Module*>& modules) override;
+        virtual Void Reset() override;
         virtual ModuleJob TryGetNext() override;
-        virtual void SetFinished(const ModuleJob& module) override;
+        virtual Void SetFinished(const ModuleJob& module) override;
 
     private:
-        void AddJob(StaticModulePlanNode* node);
+        Void AddJob(StaticModulePlanNode* node);
 
     private:
         StaticModulePlan* plan;
         std::queue<ModuleJob> readyJobs;
         std::mutex readyModulesMutex;
-        size_t jobExecutingCount;
+        UInt jobExecutingCount;
     };
 }

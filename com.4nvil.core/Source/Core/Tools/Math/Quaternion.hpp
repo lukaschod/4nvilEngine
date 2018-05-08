@@ -33,7 +33,7 @@ namespace Core::Math
         T x, y, z, w;
     };
 
-    typedef Quaternion<float> Quaternionf;
+    typedef Quaternion<Float> Quaternionf;
 
     template<class T>
     inline Quaternion<T> operator-(const Quaternion<T>& left) { return left; } // TODO: Make inversion

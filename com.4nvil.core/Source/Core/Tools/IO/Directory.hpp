@@ -13,17 +13,54 @@
 
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/Collections/List.hpp>
+#include <wchar.h>
 
-namespace Core::Directory
+namespace Core
 {
-    const size_t maxPathSize = 260;
+    class Directory 
+    {
+    public:
+        Directory() { *data = 0; }
+        Directory(const wchar_t* directory) { wcscpy(data, directory); }
+        Directory(const Directory& directory) { wcscpy(data, directory.data); }
 
-    // Returns path to current executable location
-    const char* GetExecutablePath();
+        Bool IsFile() const;
+        Bool GetExtension(DirectoryExtension& extension) const;
 
-    // Returns the names of subdirectories (including their paths) in the specified directory
-    List<String> GetDirectories(String& path);
+        inline UInt GetCapacity() const { return 260; }
 
-    // Returns the names of files (including their paths) in the specified directory
-    List<String> GetFiles(String& path);
+        inline UInt GetSize() const { return size; }
+
+        inline const wchar_t* ToCString() const { return data; }
+        inline wchar_t* ToString() { return data; }
+
+        inline Bool operator==(const Directory& lhs) const { return wcscmp(data, lhs.data) == 0; }
+        inline Bool operator!=(const Directory& lhs) const { return wcscmp(data, lhs.data) != 0; }
+
+        // Returns path to current executable location
+        static const Directory& GetExecutablePath();
+
+        // Returns the names of subdirectories (including their paths) in the specified directory
+        static Void GetDirectories(const Directory& path, List<Directory>& out);
+
+        // Returns the names of files (including their paths) in the specified directory
+        static Void GetFiles(const Directory& path, List<Directory>& out);
+
+    private:
+        wchar_t data[260];
+        UInt size;
+    };
+
+    class DirectoryExtension
+    {
+    public:
+        DirectoryExtension() { data = nullptr; }
+        DirectoryExtension(const wchar_t* extension) { data = extension; }
+
+        Bool operator==(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) == 0; }
+        Bool operator!=(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) != 0; }
+
+    private:
+        const wchar_t* data;
+    };
 }

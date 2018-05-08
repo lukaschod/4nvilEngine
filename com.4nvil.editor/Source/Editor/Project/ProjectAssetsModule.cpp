@@ -18,13 +18,13 @@ using namespace Editor;
 SERIALIZE_METHOD(ProjectAssetsModule, Synchronize);
 SERIALIZE_METHOD_ARG1(ProjectAssetsModule, SetPath, String&);
 
-void ProjectAssetsModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ProjectAssetsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     synchronizeIndex = 0;
 }
 
-bool ProjectAssetsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool ProjectAssetsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -40,7 +40,7 @@ bool ProjectAssetsModule::ExecuteCommand(const ExecutionContext& context, Comman
     return false;
 }
 
-void ProjectAssetsModule::Synchronize(ProjectDiretory* target)
+Void ProjectAssetsModule::Synchronize(ProjectDiretory* target)
 {
     // Check if we need to add new directories from physical paths
     auto directories = Directory::GetDirectories(target->path);
@@ -109,7 +109,7 @@ ProjectFile* ProjectAssetsModule::TryFindFile(ProjectDiretory* directory, String
     return nullptr;
 }
 
-void ProjectAssetsModule::DestroyDirectoryRecursive(ProjectDiretory* target)
+Void ProjectAssetsModule::DestroyDirectoryRecursive(ProjectDiretory* target)
 {
     for (auto file : target->files)
         DestroyFile(file);
@@ -120,7 +120,7 @@ void ProjectAssetsModule::DestroyDirectoryRecursive(ProjectDiretory* target)
     delete target;
 }
 
-void ProjectAssetsModule::DestroyFile(ProjectFile* target)
+Void ProjectAssetsModule::DestroyFile(ProjectFile* target)
 {
     delete target;
 }

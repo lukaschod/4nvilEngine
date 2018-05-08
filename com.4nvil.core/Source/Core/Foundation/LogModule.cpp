@@ -18,7 +18,7 @@
 using namespace Core;
 using namespace Core::IO;
 
-void LogModule::Execute(const ExecutionContext& context)
+Void LogModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     if (!output.IsOpened())
@@ -30,7 +30,7 @@ void LogModule::Execute(const ExecutionContext& context)
 SERIALIZE_METHOD_ARG1(LogModule, Write, const char*);
 
 DECLARE_COMMAND_CODE(WriteFmt);
-void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format, ...)
+Void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format, ...)
 {
     // Construct message
     va_list ap;
@@ -47,25 +47,25 @@ void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
     auto& stream = buffer->stream;
     stream.Write(TO_COMMAND_CODE(WriteFmt));
     stream.Write(size);
-    stream.Write((void*) message, size);
+    stream.Write((Void*) message, size);
     stream.Align();
     buffer->commandCount++;
 }
 
-void LogModule::OpenStream()
+Void LogModule::OpenStream()
 {
     StringBuilder<Directory::maxPathSize> path;
     path.AppendFmt("%s\\%s", Directory::GetExecutablePath(), "Log.txt");
     output.Open(path.ToString(), FileMode::Create, FileAccess::Write);
 }
 
-void LogModule::CloseStream()
+Void LogModule::CloseStream()
 {
     if (output.IsOpened())
         output.Close();
 }
 
-bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -73,7 +73,7 @@ bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& s
         output.WriteFmt(message);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(WriteFmt, size_t, size);
+        DESERIALIZE_METHOD_ARG1_START(WriteFmt, UInt, size);
         const char* message = (const char*) stream.Get_data();
         stream.Set_data(stream.Get_data() + size);
         output.WriteFmt(message);

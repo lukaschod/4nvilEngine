@@ -44,12 +44,12 @@ namespace Core
         {
         }
         ViewType type;
-        uint32 width;
-        uint32 height;
+        UInt32 width;
+        UInt32 height;
         const char* name;
         const IView* parent;
         const InputDevice* viewInputDevice;
-        bool created;
+        Bool created;
     };
 
     class IViewModule : public PipeModule
@@ -59,9 +59,9 @@ namespace Core
         virtual const List<const IView*>& GetViews() = 0;
 
     public:
-        virtual void RecCreateIView(const ExecutionContext& context, const IView* target) = 0;
-        virtual void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) = 0;
-        virtual void RecSetName(const ExecutionContext& context, const IView* target, const char* name) = 0;
-        virtual void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) = 0;
+        virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) = 0;
+        virtual Void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) = 0;
+        virtual Void RecSetName(const ExecutionContext& context, const IView* target, const char* name) = 0;
+        virtual Void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) = 0;
     };
 }

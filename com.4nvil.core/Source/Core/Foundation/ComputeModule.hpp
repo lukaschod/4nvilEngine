@@ -22,7 +22,7 @@ namespace Core
     public:
         BASE_IS(Module);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override { profilerModule = ExecuteAfter<ProfilerModule>(moduleManager); }
 
     protected:
         ProfilerModule* profilerModule;

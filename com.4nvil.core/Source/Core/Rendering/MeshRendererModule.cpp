@@ -28,7 +28,7 @@ MeshRendererModule::MeshRendererModule()
 {
 }
 
-void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     meshModule = ExecuteBefore<MeshModule>(moduleManager);
@@ -40,7 +40,7 @@ void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
     ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
-void MeshRendererModule::Execute(const ExecutionContext& context)
+Void MeshRendererModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
 
@@ -56,8 +56,8 @@ void MeshRendererModule::Execute(const ExecutionContext& context)
     for (auto meshRenderer : meshRenderers)
     {
         auto transform = unitModule->GetComponent<Transform>(meshRenderer);
-        if (transform->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
-            storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
+        if (Enum::Contains(transform->flags, TransformStateFlags::LocalObjectToWorldChanged))
+            storageModule->RecUpdateStorage(context, meshRenderer->perMeshStorage, 0, Range<Void>(&transform->objectToWorld, sizeof(Matrix4x4f)));
     }
 }
 
@@ -76,7 +76,7 @@ SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Me
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMaterial, const MeshRenderer*, const Material*);
 SERIALIZE_METHOD_ARG1(MeshRendererModule, CreateMeshRenderer, const MeshRenderer*);
 
-bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {

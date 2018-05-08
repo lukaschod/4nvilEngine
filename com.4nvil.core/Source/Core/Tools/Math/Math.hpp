@@ -20,21 +20,21 @@ namespace Core
     struct Range
     {
         Range() {}
-        Range(const T* pointer, size_t size)
+        Range(const T* pointer, UInt size)
             : pointer(pointer)
             , size(size)
         {
         }
 
         const T* pointer;
-        size_t size;
+        UInt size;
     };
 }
 
 namespace Core::Math
 {
-    const float epsilon = 1e-5f;
-    const float pi = 3.14159265359f;
+    const Float epsilon = 1e-5f;
+    const Float pi = 3.14159265359f;
 
     template<typename T>
     inline T Max(T first, T second) { return first > second ? first : second; }
@@ -45,7 +45,7 @@ namespace Core::Math
     template<typename T>
     inline T Sqrt(T v) { return sqrt(v); }
 
-    inline float DegToRad(float v) { return 3.14f * (v / 180.0f); }
+    inline Float DegToRad(Float v) { return 3.14f * (v / 180.0f); }
 
     template<typename T>
     inline T Sin(T v) { return sin(v); }
@@ -96,7 +96,7 @@ namespace Core::Math
     }
 
     template<typename T>
-    inline void Swap(T& first, T& second)
+    inline Void Swap(T& first, T& second)
     {
         T temp = first;
         first = second;
@@ -104,14 +104,14 @@ namespace Core::Math
     }
 
     template<typename T>
-    inline void CopySign(T& first, T& second) { copysign(first, second); }
+    inline Void CopySign(T& first, T& second) { copysign(first, second); }
 
-    inline bool IsZero(float value)
+    inline Bool IsZero(Float value)
     {
         return Math::Abs(value) < epsilon;
     }
 
-    inline size_t SplitJobs(size_t total, size_t pieces, size_t minimum = 1)
+    inline UInt SplitJobs(UInt total, UInt pieces, UInt minimum = 1)
     {
         return total > minimum ? (total / pieces) : total;
     }

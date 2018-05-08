@@ -17,7 +17,7 @@ using namespace Core::Math;
 
 #define MAT(m, r, c) (m)[c*4+r]
 
-float Core::Math::MatrixGetDeterminant(const float* in)
+Float Core::Math::MatrixGetDeterminant(const Float* in)
 {
     auto m00 = MAT(in, 0, 0);  auto m01 = MAT(in, 0, 1);  auto m02 = MAT(in, 0, 2);  auto m03 = MAT(in, 0, 3);
     auto m10 = MAT(in, 1, 0);  auto m11 = MAT(in, 1, 1);  auto m12 = MAT(in, 1, 2);  auto m13 = MAT(in, 1, 3);
@@ -34,10 +34,10 @@ float Core::Math::MatrixGetDeterminant(const float* in)
     return result;
 }
 
-bool Core::Math::MatrixInvertGeneral3D(const float* in, float* out)
+Bool Core::Math::MatrixInvertGeneral3D(const Float* in, Float* out)
 {
-    float pos, neg, t;
-    float det;
+    Float pos, neg, t;
+    Float det;
 
     // Calculate the determinant of upper left 3x3 sub-matrix and
     // determine if the matrix is singular.
@@ -114,12 +114,12 @@ bool Core::Math::MatrixInvertGeneral3D(const float* in, float* out)
 }
 
 #define PP_WRAP_CODE(code) do { code; } while(0)
-#define SWAP_ROWS(a, b) PP_WRAP_CODE(float *_tmp = a; (a)=(b); (b)=_tmp;)
-bool Core::Math::MatrixInvertFull(const float* m, float* out)
+#define SWAP_ROWS(a, b) PP_WRAP_CODE(Float *_tmp = a; (a)=(b); (b)=_tmp;)
+Bool Core::Math::MatrixInvertFull(const Float* m, Float* out)
 {
-    float wtmp[4][8];
-    float m0, m1, m2, m3, s;
-    float *r0, *r1, *r2, *r3;
+    Float wtmp[4][8];
+    Float m0, m1, m2, m3, s;
+    Float *r0, *r1, *r2, *r3;
 
     r0 = wtmp[0], r1 = wtmp[1], r2 = wtmp[2], r3 = wtmp[3];
 

@@ -14,7 +14,7 @@
 
 using namespace Windows::Directx12;
 
-BufferHeap::BufferHeap(ID3D12Device* device, size_t capacity, size_t alignment, D3D12_HEAP_TYPE type)
+BufferHeap::BufferHeap(ID3D12Device* device, UInt capacity, UInt alignment, D3D12_HEAP_TYPE type)
     : device(device)
     , alignment(alignment)
     , type(type)
@@ -44,7 +44,7 @@ ID3D12Resource* BufferHeap::GetResource(const HeapMemory& memory) const
     return resources[index];
 }
 
-uint8* BufferHeap::GetResourceMappedPointer(const HeapMemory& memory) const
+UInt8* BufferHeap::GetResourceMappedPointer(const HeapMemory& memory) const
 {
     auto index = FindIndex(memory);
     return resourceMappedPointers[index] + memory.address - heapManagers[index]->GetBounds().address;
@@ -56,13 +56,13 @@ D3D12_RESOURCE_STATES* BufferHeap::GetState(const HeapMemory& memory) const
     return (D3D12_RESOURCE_STATES*)states.data() + index;
 }
 
-uint64 BufferHeap::GetResourceOffset(const HeapMemory & memory) const
+UInt64 BufferHeap::GetResourceOffset(const HeapMemory & memory) const
 {
     auto index = FindIndex(memory);
     return memory.address - heapManagers[index]->GetBounds().address;
 }
 
-HeapMemory BufferHeap::Allocate(size_t size)
+HeapMemory BufferHeap::Allocate(UInt size)
 {
     size = Math::GetPadded(size, alignment);
     while (true)
@@ -78,7 +78,7 @@ HeapMemory BufferHeap::Allocate(size_t size)
     }
 }
 
-void BufferHeap::Deallocate(const HeapMemory& memory)
+Void BufferHeap::Deallocate(const HeapMemory& memory)
 {
     for (auto heapManager : heapManagers)
         if (heapManager->Deallocate(memory))
@@ -86,7 +86,7 @@ void BufferHeap::Deallocate(const HeapMemory& memory)
     ERROR("Invalid HeapMemory");
 }
 
-void BufferHeap::Grow(size_t capacity)
+Void BufferHeap::Grow(UInt capacity)
 {
     auto state = D3D12_RESOURCE_STATE_GENERIC_READ;
 
@@ -103,9 +103,9 @@ void BufferHeap::Grow(size_t capacity)
     // TODO: Clean it a bit, currently lets keep it that way to check if we win anything by always keeping resource mapped
     if (type == D3D12_HEAP_TYPE_UPLOAD)
     {
-        uint8* resourceMappedPointer;
+        UInt8* resourceMappedPointer;
         CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-        ASSERT_SUCCEEDED(resource->Map(0, &readRange, reinterpret_cast<void**>(&resourceMappedPointer)));
+        ASSERT_SUCCEEDED(resource->Map(0, &readRange, reinterpret_cast<Void**>(&resourceMappedPointer)));
         resourceMappedPointers.push_back(resourceMappedPointer);
     }
 

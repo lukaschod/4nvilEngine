@@ -22,16 +22,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override;
-        void RecWrite(const ExecutionContext& context, const char* name);
-        void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
+        virtual Void Execute(const ExecutionContext& context) override;
+        Void RecWrite(const ExecutionContext& context, const char* name);
+        Void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
 
     private:
-        void OpenStream();
-        void CloseStream();
+        Void OpenStream();
+        Void CloseStream();
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         IO::FileStream output;

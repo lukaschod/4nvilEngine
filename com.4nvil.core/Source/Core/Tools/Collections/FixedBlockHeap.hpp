@@ -21,26 +21,26 @@ namespace Core
     class FixedBlockHeap : public IHeap
     {
     public:
-        FixedBlockHeap(size_t elementSize);
+        FixedBlockHeap(UInt elementSize);
 
-        virtual void* Allocate() override;
-        virtual void Deallocate(void* pointer) override;
+        virtual Void* Allocate() override;
+        virtual Void Deallocate(Void* pointer) override;
 
     private:
         struct BlockHeader
         {
             BlockHeader() {}
-            BlockHeader(uint8* pointer) : pointer(pointer) {}
-            uint8* pointer;
+            BlockHeader(UInt8* pointer) : pointer(pointer) {}
+            UInt8* pointer;
         };
 
-        void AddHeapBlock(size_t size);
+        Void AddHeapBlock(UInt size);
 
     private:
         List<BlockHeader> freeBlockHeaders;
-        List<void*> totalBlocks;
-        size_t capacity;
-        size_t elementSize;
+        List<Void*> totalBlocks;
+        UInt capacity;
+        UInt elementSize;
 
         std::mutex allocationMutex;
     };

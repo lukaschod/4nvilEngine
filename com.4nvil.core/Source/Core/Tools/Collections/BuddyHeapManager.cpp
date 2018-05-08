@@ -23,7 +23,7 @@ BuddyHeapManager::BuddyHeapManager(const HeapMemory& bounds)
     freeBlocks.Add(bounds);
 }
 
-HeapMemory BuddyHeapManager::Allocate(size_t size)
+HeapMemory BuddyHeapManager::Allocate(UInt size)
 {
     ASSERT(size != 0);
 
@@ -49,7 +49,7 @@ HeapMemory BuddyHeapManager::Allocate(size_t size)
     return HeapMemory(address, size);
 }
 
-bool BuddyHeapManager::Deallocate(const HeapMemory& block)
+Bool BuddyHeapManager::Deallocate(const HeapMemory& block)
 {
     ASSERT(block.size != 0);
 
@@ -104,12 +104,12 @@ bool BuddyHeapManager::Deallocate(const HeapMemory& block)
     return true;
 }
 
-bool BuddyHeapManager::Contains(const HeapMemory& memory)
+Bool BuddyHeapManager::Contains(const HeapMemory& memory)
 {
     return bounds.address <= memory.address && memory.address + memory.size <= bounds.address + bounds.size;
 }
 
-LinkedList<HeapMemory>::Iterator BuddyHeapManager::TryFindFreeBlock(size_t size)
+LinkedList<HeapMemory>::Iterator BuddyHeapManager::TryFindFreeBlock(UInt size)
 {
     auto& itr = freeBlocks.begin();
     for (; itr != freeBlocks.end(); ++itr)

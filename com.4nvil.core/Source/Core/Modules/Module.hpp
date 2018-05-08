@@ -23,13 +23,13 @@ namespace Core
     struct ExecutionContext
     {
         // Index of worker in current execution
-        uint32 workerIndex;
+        UInt32 workerIndex;
 
         // Start of job offset index
-        uint32 start;
+        UInt32 start;
 
         // End of job offset index
-        uint32 end;
+        UInt32 end;
 
         // Module that is currently executed
         Module* executingModule;
@@ -41,22 +41,33 @@ namespace Core
         BASE_IS(Module);
 
         // This is where each Module will setup dependencies between other Modules using the ExecuteBefore and ExecuteAfter
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) {}
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) {}
 
         // This is where each Module job will be done, context contains additional information about execution
-        virtual void Execute(const ExecutionContext& context) {}
+        virtual Void Execute(const ExecutionContext& context) {}
 
-        virtual size_t GetExecutionSize() { return 1; }
-        virtual size_t GetSplitExecutionSize() { return 1; }
+        virtual UInt GetExecutionSize() { return 1; }
+        virtual UInt GetSplitExecutionSize() { return 1; }
         virtual const char* GetName() { return "Unamed"; }
 
     protected:
         // Marks that calling module must be executed before the Module. It is used by IModulePlanner to solve dependency trees
-        void ExecuteBefore(ModuleManager* moduleManager, Module* module)
+        Void ExecuteBefore(ModuleManager* moduleManager, Module* module)
         {
             ASSERT(moduleManager != nullptr && module != nullptr);
             module->dependencies.safe_push_back(this);
             module->OnDependancyAdd(moduleManager, this, true);
+        }
+
+        template<class T> Void ExecuteBefore(ModuleManager* moduleManager, List<T*>& modules)
+        {
+            ASSERT(moduleManager != nullptr);
+            moduleManager->GetModules<T>(modules);
+            for (auto module : modules)
+            {
+                module->dependencies.safe_push_back(this);
+                module->OnDependancyAdd(moduleManager, this, true);
+            }
         }
 
         // Marks that calling module must be executed before the Module of Type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees
@@ -70,11 +81,22 @@ namespace Core
         }
 
         // Marks that calling module must be executed after the Module. It is used by IModulePlanner to solve dependency trees
-        void ExecuteAfter(ModuleManager* moduleManager, Module* module)
+        Void ExecuteAfter(ModuleManager* moduleManager, Module* module)
         {
             ASSERT(moduleManager != nullptr && module != nullptr);
             dependencies.safe_push_back(module);
             module->OnDependancyAdd(moduleManager, this, false);
+        }
+
+        template<class T> Void ExecuteBefore(ModuleManager* moduleManager, List<T*>& modules)
+        {
+            ASSERT(moduleManager != nullptr);
+            moduleManager->GetModules<T>(modules);
+            for (auto module : modules)
+            {
+                dependencies.safe_push_back(module);
+                module->OnDependancyAdd(moduleManager, this, false);
+            }
         }
 
         // Marks that calling module must be executed after the Module of type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees
@@ -87,7 +109,7 @@ namespace Core
             return (T*) module;
         }
 
-        virtual void OnDependancyAdd(ModuleManager* moduleManager, Module* module, bool executeBefore) {}
+        virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
 
     private:
         AUTOMATED_PROPERTY_GETADR(List<Module*>, dependencies); // Modules that this current Module depends on

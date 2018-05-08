@@ -23,7 +23,7 @@ namespace Core
         typedef std::chrono::duration<unsigned long long, std::pico> picoseconds;
         typedef std::chrono::duration<unsigned long long, std::milli> milliseconds;
         typedef std::chrono::duration<unsigned long long, std::micro> microseconds;
-        typedef std::chrono::duration<double, typename clock::period> Cycle;
+        typedef std::chrono::duration<Double, typename clock::period> Cycle;
 
     public:
         StopWatch()
@@ -31,41 +31,41 @@ namespace Core
         {
         }
 
-        inline void Start()
+        inline Void Start()
         {
             ASSERT(!isRunning);
             start = end = clock::now();
             isRunning = true;
         }
 
-        inline void Restart()
+        inline Void Restart()
         {
             start = end = clock::now();
             isRunning = true;
         }
 
-        inline void Stop()
+        inline Void Stop()
         {
             ASSERT(isRunning);
             end = clock::now();
             isRunning = false;
         }
 
-        inline uint64 GetElapsedPicoseconds() const
+        inline UInt64 GetElapsedPicoseconds() const
         {
             auto current = isRunning ? clock::now() : clock::now();
             auto ticks_per_iter = Cycle(current - start) / 1;
             return std::chrono::duration_cast<picoseconds>(ticks_per_iter).count();
         }
 
-        inline uint64 GetElapsedMicroseconds() const
+        inline UInt64 GetElapsedMicroseconds() const
         {
             auto current = isRunning ? clock::now() : clock::now();
             auto ticks_per_iter = Cycle(current - start) / 1;
             return std::chrono::duration_cast<microseconds>(ticks_per_iter).count();
         }
 
-        inline uint64 GetElapsedMiliseconds() const
+        inline UInt64 GetElapsedMiliseconds() const
         {
             auto current = isRunning ? clock::now() : clock::now();
             auto ticks_per_iter = Cycle(current - start) / 1;
@@ -74,6 +74,6 @@ namespace Core
 
     private:
         std::chrono::high_resolution_clock::time_point start, end;
-        bool isRunning;
+        Bool isRunning;
     };
 }

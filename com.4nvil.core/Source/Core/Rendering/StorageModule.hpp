@@ -31,8 +31,8 @@ namespace Core
         {
         }
         const Graphics::IBuffer* buffer;
-        const size_t size;
-        bool created;
+        const UInt size;
+        Bool created;
     };
 
     class StorageModule : public PipeModule
@@ -40,17 +40,17 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Storage* AllocateStorage(size_t size) const;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        const Storage* AllocateStorage(UInt size) const;
 
-        void RecCreateStorage(const ExecutionContext& context, const Storage* storage);
-        void RecSetUsage(const ExecutionContext& context, const Storage* target, Graphics::BufferUsageFlags usage);
-        void RecUpdateStorage(const ExecutionContext& context, const Storage* target, uint32 targetOffset, Range<void>& data);
-        void RecCopyStorage(const ExecutionContext& context, const Storage* src, const Storage* dst, size_t size);
+        Void RecCreateStorage(const ExecutionContext& context, const Storage* storage);
+        Void RecSetUsage(const ExecutionContext& context, const Storage* target, Graphics::BufferUsageFlags usage);
+        Void RecUpdateStorage(const ExecutionContext& context, const Storage* target, UInt32 targetOffset, Range<Void>& data);
+        Void RecCopyStorage(const ExecutionContext& context, const Storage* src, const Storage* dst, UInt size);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Storage*> storages;

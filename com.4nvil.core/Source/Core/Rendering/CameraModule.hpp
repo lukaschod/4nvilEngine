@@ -44,15 +44,15 @@ namespace Core
 
         const Surface* surface;
         const Storage* perCameraStorage;
-        float nearClipPlane, farClipPlane;
-        float aspect;
-        float fieldOfView;
+        Float nearClipPlane, farClipPlane;
+        Float aspect;
+        Float fieldOfView;
 
         Math::Matrix4x4f projectionMatrix;
         Math::Matrix4x4f worldToCameraMatrix;
         Math::Matrix4x4f cameraToWorldMatrix;
 
-        bool created;
+        Bool created;
     };
 
     class CameraModule : public ComponentModule
@@ -60,8 +60,8 @@ namespace Core
     public:
         BASE_IS(ComponentModule);
 
-        virtual void Execute(const ExecutionContext& context) override;
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
         // Returns all cameras
         const List<Camera*>& GetCameras() const;
@@ -76,12 +76,12 @@ namespace Core
         Math::Vector3f ScreenToViewport(const Camera* camera, const Math::Vector3f& position);
 
     public:
-        void RecCreateCamera(const ExecutionContext& context, const Camera* target);
-        virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
-        void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
+        Void RecCreateCamera(const ExecutionContext& context, const Camera* target);
+        virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
+        Void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Camera*> cameras;

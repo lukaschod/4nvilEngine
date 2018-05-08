@@ -34,14 +34,14 @@ namespace Core
         inline const Iterator<TypeName>& operator*=(int v) { ptr *= v; return *this; }
         inline const Iterator<TypeName>& operator/=(int v) { ptr /= v; return *this; }
 
-        inline bool operator==(const Iterator<TypeName>& v) const { return ptr == v.ptr; }
-        inline bool operator!=(const Iterator<TypeName>& v) const { return ptr != v.ptr; }
-        inline bool operator<=(const Iterator<TypeName>& v) const { return ptr <= v.ptr; }
-        inline bool operator>=(const Iterator<TypeName>& v) const { return ptr >= v.ptr; }
-        inline bool operator&&(const Iterator<TypeName>& v) const { return ptr && v.ptr; }
-        inline bool operator||(const Iterator<TypeName>& v) const { return ptr || v.ptr; }
-        inline bool operator<(const Iterator<TypeName>& v) const { return ptr < v.ptr; }
-        inline bool operator>(const Iterator<TypeName>& v) const { return ptr > v.ptr; }
+        inline Bool operator==(const Iterator<TypeName>& v) const { return ptr == v.ptr; }
+        inline Bool operator!=(const Iterator<TypeName>& v) const { return ptr != v.ptr; }
+        inline Bool operator<=(const Iterator<TypeName>& v) const { return ptr <= v.ptr; }
+        inline Bool operator>=(const Iterator<TypeName>& v) const { return ptr >= v.ptr; }
+        inline Bool operator&&(const Iterator<TypeName>& v) const { return ptr && v.ptr; }
+        inline Bool operator||(const Iterator<TypeName>& v) const { return ptr || v.ptr; }
+        inline Bool operator<(const Iterator<TypeName>& v) const { return ptr < v.ptr; }
+        inline Bool operator>(const Iterator<TypeName>& v) const { return ptr > v.ptr; }
 
         inline const Iterator<TypeName>& operator++() { ptr++; return *this; }
         inline const Iterator<TypeName>& operator--() { ptr--; return *this; }
@@ -96,55 +96,55 @@ namespace Core
             reserve(1);
         }
 
-        List2(size_t capacity)
+        List2(UInt capacity)
         {
             _begin = (TypeName*) malloc(sizeof(TypeName) * capacity);
             _end = _begin + capacity;
             current = _begin;
         }
 
-        inline TypeName& get(size_t index) const
+        inline TypeName& get(UInt index) const
         {
             ASSERT(_begin <= _begin + index && _begin + index <= _end);
             return _begin[index];
         }
 
-        inline TypeName& operator[](size_t index) const
+        inline TypeName& operator[](UInt index) const
         {
             return get(index);
         }
 
-        inline void push_back(const TypeName& item)
+        inline Void push_back(const TypeName& item)
         {
             reserveFor(size() + 1);
             *current = item;
             current++;
         }
 
-        inline void push_back(const TypeName&& item)
+        inline Void push_back(const TypeName&& item)
         {
             reserveFor(size() + 1);
             *current = item;
             current++;
         }
 
-        inline void pop_back()
+        inline Void pop_back()
         {
             current--;
         }
 
-        inline void clear()
+        inline Void clear()
         {
             current = _begin;
         }
 
-        inline void resize(size_t _size)
+        inline Void resize(UInt _size)
         {
             reserveFor(size() + _size);
             current = _begin + _size;
         }
 
-        inline void reserve(size_t capacity)
+        inline Void reserve(UInt capacity)
         {
             auto size2 = size();
             _begin = (TypeName*) realloc(_begin, sizeof(TypeName) *capacity);
@@ -152,7 +152,7 @@ namespace Core
             current = _begin + size2;
         }
 
-        inline void erase(Iterator<TypeName>& itr)
+        inline Void erase(Iterator<TypeName>& itr)
         {
             memcpy(itr.ptr + 1, itr.ptr, (current - itr.ptr) * sizeof(TypeName));
             current--;
@@ -167,16 +167,16 @@ namespace Core
         }*/
 
         inline TypeName* data() const { return _begin; }
-        inline bool empty() const { return current == _begin; }
-        inline size_t size() const { return current - _begin; }
-        inline size_t capacity() const { return _end - _begin; }
+        inline Bool empty() const { return current == _begin; }
+        inline UInt size() const { return current - _begin; }
+        inline UInt capacity() const { return _end - _begin; }
         inline Iterator<TypeName> begin() const { return Iterator<TypeName>(_begin); }
         inline Iterator<TypeName> end() const { return Iterator<TypeName>(current); }
         inline TypeName& front() const { return *_begin; }
         inline TypeName& back() const { return *_end; }
 
     private:
-        inline void reserveFor(size_t size2)
+        inline Void reserveFor(UInt size2)
         {
             auto capacity2 = capacity();
             if (size() + size2 >= capacity2)
@@ -197,19 +197,19 @@ namespace Core
             std::vector<T>()
         {
         }
-        List(size_t size) :
+        List(UInt size) :
             std::vector<T>(size)
         {
         }
 
-        void remove(T item)
+        Void remove(T item)
         {
             auto target = std::find(begin(), end(), item);
             ASSERT(target != end());
             erase(target);
         }
 
-        void safe_set(uint32 index, T& item)
+        Void safe_set(UInt32 index, T& item)
         {
             if (size() <= index)
                 resize(index + 1);
@@ -228,7 +228,7 @@ namespace Core
             return -1;
         }
 
-        bool safe_push_back(T item)
+        Bool safe_push_back(T item)
         {
             auto index = find(item);
             if (index == -1)
@@ -239,7 +239,7 @@ namespace Core
             return false;
         }
 
-        void push_back_list(List<T>& list)
+        Void push_back_list(List<T>& list)
         {
             auto startSize = size();
             this->resize(size() + list.size());

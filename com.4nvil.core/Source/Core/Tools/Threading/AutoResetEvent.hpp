@@ -13,17 +13,18 @@
 
 #include <mutex>
 #include <condition_variable>
+#include <Core/Tools/Common.hpp>
 
 namespace Core::Threading
 {
     class AutoResetEvent
     {
     public:
-        explicit AutoResetEvent(bool initial = false);
+        explicit AutoResetEvent(Bool initial = false);
 
-        void Set();
-        void Reset();
-        bool WaitOne();
+        Void Set();
+        Void Reset();
+        Bool WaitOne();
 
     private:
         AutoResetEvent(const AutoResetEvent&);
@@ -32,6 +33,6 @@ namespace Core::Threading
     private:
         std::condition_variable signal;
         std::mutex protect;
-        bool flag;
+        Bool flag;
     };
 }

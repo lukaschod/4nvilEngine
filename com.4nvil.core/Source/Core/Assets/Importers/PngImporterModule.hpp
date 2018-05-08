@@ -22,9 +22,9 @@ namespace Core
         virtual const char* GetSupportedExtension() override;
 
     public:
-        virtual void RecImport(const ExecutionContext& context, String& pathToFile) override;
+        virtual Void RecImport(const ExecutionContext& context, String& pathToFile) override;
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
     };
 }

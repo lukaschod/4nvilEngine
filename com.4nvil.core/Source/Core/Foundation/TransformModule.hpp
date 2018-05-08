@@ -13,7 +13,7 @@
 
 #include <queue>
 #include <Core/Tools/Common.hpp>
-#include <Core/Tools/Flags.hpp>
+#include <Core/Tools/Enum.hpp>
 #include <Core/Tools/Math/Matrix.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Foundation/UnitModule.hpp>
@@ -31,6 +31,7 @@ namespace Core
         LocalObjectToWorldChanged = 1 << 0,
         LocalObjectToWorldUnsetNextFrame = 1 << 1,
     };
+    IMPLEMENT_ENUM_FLAG(TransformStateFlags);
 
     struct Transform : public Component
     {
@@ -53,8 +54,8 @@ namespace Core
         Math::Quaternionf localRotation;
         Math::Vector3f localScale;
         Math::Vector3f position;
-        Flags<TransformStateFlags> flags;
-        bool created;
+        TransformStateFlags flags;
+        Bool created;
     };
 
     class TransformModule : public ComponentModule
@@ -62,26 +63,26 @@ namespace Core
     public:
         BASE_IS(ComponentModule);
 
-        virtual void Execute(const ExecutionContext& context) override;
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Transform* AllocateTransform();
 
     public:
-        void RecCreateTransform(const ExecutionContext& context, const Transform* target);
-        virtual void RecDestroy(const ExecutionContext& context, const Component* unit) override;
-        void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
-        void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
-        void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
-        void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
+        Void RecCreateTransform(const ExecutionContext& context, const Transform* target);
+        virtual Void RecDestroy(const ExecutionContext& context, const Component* unit) override;
+        Void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
+        Void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
+        Void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
+        Void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
 
         // Recalculate worldToView matrix for transform
-        void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
+        Void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        void SetParent(const ExecutionContext& context, Transform* target, Transform* parent);
+        Void SetParent(const ExecutionContext& context, Transform* target, Transform* parent);
 
     private:
         MemoryModule* memoryModule;

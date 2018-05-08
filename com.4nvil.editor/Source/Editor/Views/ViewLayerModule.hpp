@@ -37,18 +37,18 @@ namespace Editor
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override;
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Surface* GetSurface() const { return surface; }
 
     public:
-        void RecShow(const ExecutionContext& context, const IView* view);
-        void RecHide(const ExecutionContext& context);
+        Void RecShow(const ExecutionContext& context, const IView* view);
+        Void RecHide(const ExecutionContext& context);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
         virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) = 0;
-        virtual void Render(const ExecutionContext& context);
+        virtual Void Render(const ExecutionContext& context);
 
     protected:
         Graphics::IGraphicsModule* graphicsModule;

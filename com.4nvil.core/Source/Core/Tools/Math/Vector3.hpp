@@ -32,10 +32,10 @@ namespace Core::Math
         inline const Vector3<T>& operator/=(const Vector3<T>& v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
         inline const Vector3<T>& operator*=(T v) { x *= v; y *= v; z *= v; return *this; }
         inline const Vector3<T>& operator/=(T v) { x /= v; y /= v; z /= v; return *this; }
-        inline bool operator==(const Vector3<T>& v) const { return(x == v.x && y == v.y && z == v.z); }
-        inline bool operator!=(const Vector3<T>& v) const { return(x != v.x && y != v.y && z != v.z); }
+        inline Bool operator==(const Vector3<T>& v) const { return(x == v.x && y == v.y && z == v.z); }
+        inline Bool operator!=(const Vector3<T>& v) const { return(x != v.x && y != v.y && z != v.z); }
 
-        inline void Normalize();
+        inline Void Normalize();
 
         // Returns the distance of vector in power of 2
         inline T SqrMagnitude() const { return x*x + y*y + z*z; }
@@ -44,7 +44,7 @@ namespace Core::Math
         inline T Magnitude() const { return Math::Sqrt(SqrMagnitude()); }
 
         // Returns if all values are finite
-        inline bool IsValid() const { return !isfinite(x) && !isfinite(y) && !isfinite(z); }
+        inline Bool IsValid() const { return !isfinite(x) && !isfinite(y) && !isfinite(z); }
 
     public:
         const static Vector3<T> zero;
@@ -54,7 +54,7 @@ namespace Core::Math
         T x, y, z;
     };
 
-    typedef Vector3<float> Vector3f;
+    typedef Vector3<Float> Vector3f;
 
     template<class T>
     inline Vector3<T> operator-(const Vector3<T>& left) { return Vector3<T>(-left.x, -left.y, -left.z); }
@@ -72,7 +72,7 @@ namespace Core::Math
     inline Vector3<T> operator/(const Vector3<T>& left, const Other& right) { Vector3<T> out(left); out /= right; return out; }
 
     template<class T>
-    inline void Vector3<T>::Normalize()
+    inline Void Vector3<T>::Normalize()
     {
         auto magnitude = Magnitude();
         ASSERT(!Math::IsZero(magnitude));

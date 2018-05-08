@@ -60,12 +60,12 @@ CmdBuffer* CmdQueue::Pull()
     return nullptr;
 }
 
-void CmdQueue::Push(CmdBuffer * buffer)
+Void CmdQueue::Push(CmdBuffer * buffer)
 {
     readyBuffers.push(buffer);
 }
 
-void CmdQueue::Reset(CmdBuffer* buffer, ID3D12CommandAllocator* allocator)
+Void CmdQueue::Reset(CmdBuffer* buffer, ID3D12CommandAllocator* allocator)
 {
     if (buffer->commandList == nullptr)
     {
@@ -78,12 +78,12 @@ void CmdQueue::Reset(CmdBuffer* buffer, ID3D12CommandAllocator* allocator)
     buffer->stream.Reset();
 }
 
-void CmdQueue::Close(CmdBuffer* buffer)
+Void CmdQueue::Close(CmdBuffer* buffer)
 {
     buffer->commandList->Close();
 }
 
-void CmdQueue::Execute(CmdBuffer* buffer, bool isLast)
+Void CmdQueue::Execute(CmdBuffer* buffer, Bool isLast)
 {
     if (buffer->swapChain != nullptr)
     {
@@ -117,13 +117,13 @@ void CmdQueue::Execute(CmdBuffer* buffer, bool isLast)
     }
 }
 
-uint64 CmdQueue::GetCompletedBufferIndex()
+UInt64 CmdQueue::GetCompletedBufferIndex()
 {
     // TODO: Sync?
     return fence->GetCompletedValue();
 }
 
-void CmdQueue::WaitForBufferIndexToComplete(uint64 index)
+Void CmdQueue::WaitForBufferIndexToComplete(UInt64 index)
 {
     if (index <= fence->GetCompletedValue())
         return;

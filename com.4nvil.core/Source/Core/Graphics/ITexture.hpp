@@ -12,6 +12,7 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
+#include <Core/Tools/Enum.hpp>
 
 namespace Core::Graphics
 {
@@ -26,14 +27,14 @@ namespace Core::Graphics
     struct ITexture
     {
         ITexture() {}
-        ITexture(uint32 width, uint32 height) 
+        ITexture(UInt32 width, UInt32 height) 
             : width(width)
             , height(height)
             , usage(TextureUsageFlags::Render | TextureUsageFlags::Shader)
         {
         }
-        uint32 width;
-        uint32 height;
+        UInt32 width;
+        UInt32 height;
         TextureUsageFlags usage;
     };
 }

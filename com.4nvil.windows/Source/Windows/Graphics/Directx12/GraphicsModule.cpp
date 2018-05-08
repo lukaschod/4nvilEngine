@@ -25,12 +25,12 @@ GraphicsModule::GraphicsModule()
     , resourceCounter(0)
 {}
 
-void GraphicsModule::Execute(const ExecutionContext& context)
+Void GraphicsModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     // Deallocate all memory that is not used by GPU
     auto completedBufferIndex = planner->GetCompletedBufferIndex();
-    for (size_t i = srvHeapMemoryToFree.size(); i-->0 ;)
+    for (UInt i = srvHeapMemoryToFree.size(); i-->0 ;)
     {
         auto memory = srvHeapMemoryToFree.back();
         if (memory.first > completedBufferIndex)
@@ -38,7 +38,7 @@ void GraphicsModule::Execute(const ExecutionContext& context)
         srvHeapMemoryToFree.pop_back();
         srvHeap->Deallocate(memory.second);
     }
-    for (size_t i = samplersHeapMemoryToFree.size(); i-->0;)
+    for (UInt i = samplersHeapMemoryToFree.size(); i-->0;)
     {
         auto memory = samplersHeapMemoryToFree.back();
         if (memory.first > completedBufferIndex)
@@ -51,7 +51,7 @@ void GraphicsModule::Execute(const ExecutionContext& context)
     base::Execute(context);
 }
 
-void GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     Initialize();
@@ -63,12 +63,12 @@ void GraphicsModule::SetupExecuteOrder(ModuleManager* moduleManager)
     memoryModule->SetAllocator(memoryLabelBuffer, new FixedBlockHeap(sizeof(Buffer)));
 }
 
-const IBuffer* GraphicsModule::AllocateBuffer(size_t size)
+const IBuffer* GraphicsModule::AllocateBuffer(UInt size)
 {
     return memoryModule->New<Buffer>(memoryLabelBuffer, size);
 }
 
-const ITexture* GraphicsModule::AllocateTexture(uint32 width, uint32 height)
+const ITexture* GraphicsModule::AllocateTexture(UInt32 width, UInt32 height)
 {
     return new Texture(width, height);
 }
@@ -91,7 +91,7 @@ const IFilter* GraphicsModule::AllocateFilter()
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateITexture, const ITexture*);
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIFilter, const IFilter*);
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIRenderPass, const IRenderPass*);
-SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, uint32, const ColorAttachment&);
+SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, UInt32, const ColorAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetDepthAttachment, const IRenderPass*, const DepthAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
 SERIALIZE_METHOD_ARG1(GraphicsModule, SetRenderPass, const IRenderPass*);
@@ -104,8 +104,8 @@ SERIALIZE_METHOD_ARG1(GraphicsModule, CreateISwapChain, const ISwapChain*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIBuffer, const IBuffer*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetBufferUsage, const IBuffer*, BufferUsageFlags);
-SERIALIZE_METHOD_ARG3(GraphicsModule, UpdateBuffer, const IBuffer*, void*, size_t);
-SERIALIZE_METHOD_ARG3(GraphicsModule, CopyBuffer, const IBuffer*, const IBuffer*, size_t);
+SERIALIZE_METHOD_ARG3(GraphicsModule, UpdateBuffer, const IBuffer*, Void*, UInt);
+SERIALIZE_METHOD_ARG3(GraphicsModule, CopyBuffer, const IBuffer*, const IBuffer*, UInt);
 SERIALIZE_METHOD_ARG1(GraphicsModule, PushDebug, const char*);
 SERIALIZE_METHOD(GraphicsModule, PopDebug);
 SERIALIZE_METHOD_ARG1(GraphicsModule, Draw, const DrawDesc&);
@@ -123,7 +123,7 @@ const IShaderArguments* GraphicsModule::RecCreateIShaderArguments(const Executio
     return target;
 }
 
-bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -139,7 +139,7 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         InitializeRenderPass(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetColorAttachment, RenderPass*, target, uint32, index, ColorAttachment, attachment);
+        DESERIALIZE_METHOD_ARG3_START(SetColorAttachment, RenderPass*, target, UInt32, index, ColorAttachment, attachment);
         SetColorAttachment(context, target, index, attachment);
         DESERIALIZE_METHOD_END;
 
@@ -202,11 +202,11 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         target->usage = usage;
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, Buffer*, target, void*, data, size_t, size);
-        UpdateBuffer(target, 0, Range<uint8>((const uint8*)data, size));
+        DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, Buffer*, target, Void*, data, UInt, size);
+        UpdateBuffer(target, 0, Range<UInt8>((const UInt8*)data, size));
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(CopyBuffer, Buffer*, src, Buffer*, dst, size_t, size);
+        DESERIALIZE_METHOD_ARG3_START(CopyBuffer, Buffer*, src, Buffer*, dst, UInt, size);
         SetBufferState(context, dst, D3D12_RESOURCE_STATE_COPY_DEST);
         planner->RecCopyBuffer(src, dst, size);
         DESERIALIZE_METHOD_END;
@@ -226,7 +226,7 @@ bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
     return false;
 }
 
-void GraphicsModule::SetTextureState(const ExecutionContext& context, Texture* target, D3D12_RESOURCE_STATES state)
+Void GraphicsModule::SetTextureState(const ExecutionContext& context, Texture* target, D3D12_RESOURCE_STATES state)
 {
     if (target->currentState == state)
         return;
@@ -236,7 +236,7 @@ void GraphicsModule::SetTextureState(const ExecutionContext& context, Texture* t
     target->currentState = state;
 }
 
-void GraphicsModule::SetBufferState(const ExecutionContext& context, Buffer* target, D3D12_RESOURCE_STATES state)
+Void GraphicsModule::SetBufferState(const ExecutionContext& context, Buffer* target, D3D12_RESOURCE_STATES state)
 {
     /*if (target->currentState == state)
         return;
@@ -252,29 +252,29 @@ void GraphicsModule::SetBufferState(const ExecutionContext& context, Buffer* tar
     target->SetState(state);
 }
 
-void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer)
+Void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer)
 {
     ASSERT(buffer != nullptr);
     auto pipeline = (ShaderPipeline*) target->pipeline;
     auto& rootParameters = pipeline->rootParameters;
     auto& rootArguments = target->rootArguments;
     ASSERT(rootParameters.size() == rootArguments.size());
-    for (size_t i = 0; i < rootParameters.size(); i++)
+    for (UInt i = 0; i < rootParameters.size(); i++)
     {
         auto& rootParameter = rootParameters[i];
         switch (rootParameter.type)
         {
         /*case RootParamterType::TableSRV:
         {
-            for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
+            for (UInt j = 0; j < rootParameter.supParameters.size(); j++)
             {
                 auto& rootSubParameter = rootParameter.supParameters[j];
                 if (strcmp(rootSubParameter.name, name) != 0)
                     continue;
 
-                if (rootArguments[i].subData[j] == (uint64) buffer)
+                if (rootArguments[i].subData[j] == (UInt64) buffer)
                     continue;
-                rootArguments[i].subData[j] = (uint64) buffer;
+                rootArguments[i].subData[j] = (UInt64) buffer;
 
                 auto memory = target->rootArguments[i].memory;
                 memory.pointer += j;
@@ -299,21 +299,21 @@ void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const 
                 continue;
 
             // TODO: Check if we can really cache the gpu virtual address safely
-             rootArguments[i].subData = (uint64*) buffer->cachedResourceGpuVirtualAddress;
-            // rootArguments[i].subData = (uint64*) buffer->resource->GetGPUVirtualAddress();
+             rootArguments[i].subData = (UInt64*) buffer->cachedResourceGpuVirtualAddress;
+            // rootArguments[i].subData = (UInt64*) buffer->resource->GetGPUVirtualAddress();
             break;
         }
         }
     }
 }
 
-void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const Texture* texture)
+Void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const Texture* texture)
 {
     ASSERT(texture != nullptr);
     auto pipeline = (ShaderPipeline*) target->pipeline;
     auto& rootParameters = pipeline->rootParameters;
     auto& rootArguments = target->rootArguments;
-    for (size_t i = 0; i < rootParameters.size(); i++)
+    for (UInt i = 0; i < rootParameters.size(); i++)
     {
         auto& rootParameter = rootParameters[i];
         auto& rootArgument = rootArguments[i];
@@ -321,7 +321,7 @@ void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
         {
         case RootParamterType::TableSRV:
         {
-            for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
+            for (UInt j = 0; j < rootParameter.supParameters.size(); j++)
             {
                 // Find argument that we want to change
                 auto& rootSubParameter = rootParameter.supParameters[j];
@@ -329,21 +329,21 @@ void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
                     continue;
 
                 // Don't update if the argument didn't changed
-                if (rootArgument.subData[j] == (uint64) texture)
+                if (rootArgument.subData[j] == (UInt64) texture)
                     return;
-                rootArgument.subData[j] = (uint64) texture;
+                rootArgument.subData[j] = (UInt64) texture;
 
-                // If draw was used before, we want to make changes in new heap, to avoid race condition
+                // If draw was used before, we want to make changes in new heap, to aVoid race condition
                 if (rootArgument.IsCurrentlyUsedByDraw)
                 {
                     rootArgument.IsCurrentlyUsedByDraw = false;
 
                     // Mark this memory as we need to deallocate once the buffer is finished
-                    srvHeapMemoryToFree.push_back(std::pair<uint64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
+                    srvHeapMemoryToFree.push_back(std::pair<UInt64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
 
                     rootArgument.memory = srvHeap->Allocate(rootArgument.memory.size);
                     auto memory = rootArgument.memory;
-                    for (size_t k = 0; k < rootParameter.supParameters.size(); k++)
+                    for (UInt k = 0; k < rootParameter.supParameters.size(); k++)
                     {
                         if (rootParameter.supParameters[i].isTexture)
                         {
@@ -370,12 +370,12 @@ void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
     }
 }
 
-void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const Filter* filter)
+Void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const Filter* filter)
 {
     auto pipeline = (ShaderPipeline*) target->pipeline;
     auto& rootParameters = pipeline->rootParameters;
     auto& rootArguments = target->rootArguments;
-    for (size_t i = 0; i < rootParameters.size(); i++)
+    for (UInt i = 0; i < rootParameters.size(); i++)
     {
         auto& rootParameter = rootParameters[i];
         auto& rootArgument = rootArguments[i];
@@ -383,7 +383,7 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
         {
         case RootParamterType::TableSamplers:
         {
-            for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
+            for (UInt j = 0; j < rootParameter.supParameters.size(); j++)
             {
                 // Find argument that we want to change
                 auto& rootSubParameter = rootParameter.supParameters[j];
@@ -391,21 +391,21 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
                     continue;
 
                 // Don't update if the argument didn't changed
-                if (rootArgument.subData[j] == (uint64) filter)
+                if (rootArgument.subData[j] == (UInt64) filter)
                     return;
-                rootArgument.subData[j] = (uint64) filter;
+                rootArgument.subData[j] = (UInt64) filter;
 
-                // If draw was used before, we want to make changes in new heap, to avoid race condition
+                // If draw was used before, we want to make changes in new heap, to aVoid race condition
                 if (rootArgument.IsCurrentlyUsedByDraw)
                 {
                     rootArgument.IsCurrentlyUsedByDraw = false;
 
                     // Mark this memory as we need to deallocate once the buffer is finished
-                    samplersHeapMemoryToFree.push_back(std::pair<uint64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
+                    samplersHeapMemoryToFree.push_back(std::pair<UInt64, HeapMemory>(planner->GetRecordingBufferIndex(), rootArgument.memory));
 
                     rootArgument.memory = samplersHeap->Allocate(rootArgument.memory.size);
                     auto memory = rootArgument.memory;
-                    for (size_t k = 0; k < rootParameter.supParameters.size(); k++)
+                    for (UInt k = 0; k < rootParameter.supParameters.size(); k++)
                     {
                         device->CopyDescriptorsSimple(1, samplersHeap->GetCpuHandle(memory), samplersCpuHeap->GetCpuHandle(filter->srvMemory), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
                         memory.address++;
@@ -424,7 +424,7 @@ void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const 
     }
 }
 
-void GraphicsModule::SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32 index, const ColorAttachment& attachment)
+Void GraphicsModule::SetColorAttachment(const ExecutionContext& context, RenderPass* target, UInt32 index, const ColorAttachment& attachment)
 {
     target->colors[index] = attachment;
 
@@ -444,7 +444,7 @@ void GraphicsModule::SetColorAttachment(const ExecutionContext& context, RenderP
         SetViewport(context, target, target->viewport);
 }
 
-void GraphicsModule::SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment)
+Void GraphicsModule::SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment)
 {
     target->depth = attachment;
 
@@ -453,7 +453,7 @@ void GraphicsModule::SetDepthAttachment(const ExecutionContext& context, RenderP
         target->depthDescriptor = rtvHeap->GetCpuHandle(texture->rtvMemory);
 }
 
-void GraphicsModule::SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport)
+Void GraphicsModule::SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport)
 {
     if (target->colors[0].texture == nullptr)
         return;
@@ -480,7 +480,7 @@ void GraphicsModule::SetViewport(const ExecutionContext& context, RenderPass* ta
     target->d12Viewport.Height = rect.height;
 }
 
-void GraphicsModule::SetRenderPass(const ExecutionContext & context, const RenderPass * target)
+Void GraphicsModule::SetRenderPass(const ExecutionContext & context, const RenderPass * target)
 {
     for (auto& color : target->colors)
     {
@@ -503,18 +503,18 @@ void GraphicsModule::SetRenderPass(const ExecutionContext & context, const Rende
     planner->RecSetRenderPass(target);
 }
 
-void GraphicsModule::UpdateBuffer(Buffer* target, uint32 targetOffset, Range<uint8> data)
+Void GraphicsModule::UpdateBuffer(Buffer* target, UInt32 targetOffset, Range<UInt8> data)
 {
     planner->RecUpdateBuffer(target, targetOffset, data);
 }
 
-inline void GraphicsModule::Draw(const ExecutionContext& context, const DrawDesc& target)
+inline Void GraphicsModule::Draw(const ExecutionContext& context, const DrawDesc& target)
 {
     auto pipeline = (ShaderPipeline*) target.pipeline;
     auto arguments = (ShaderArguments*) target.properties;
     auto& rootParameters = pipeline->rootParameters;
     auto& rootArguments = arguments->rootArguments;
-    for (size_t i = 0; i < rootParameters.size(); i++)
+    for (UInt i = 0; i < rootParameters.size(); i++)
     {
         auto& rootParameter = rootParameters[i];
         switch (rootParameter.type)
@@ -522,7 +522,7 @@ inline void GraphicsModule::Draw(const ExecutionContext& context, const DrawDesc
         case RootParamterType::TableSRV:
         {
             auto& rootArgument = rootArguments[i];
-            for (size_t j = 0; j < rootParameter.supParameters.size(); j++)
+            for (UInt j = 0; j < rootParameter.supParameters.size(); j++)
             {
                 if (rootParameter.supParameters[j].isTexture)
                 {
@@ -550,7 +550,7 @@ inline void GraphicsModule::Draw(const ExecutionContext& context, const DrawDesc
     planner->RecDraw(target);
 }
 
-void GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
+Void GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
 {
     wchar_t name[128];
     va_list ap;
@@ -559,7 +559,7 @@ void GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
     object->SetName(name);
 }
 
-void GraphicsModule::BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest)
+Void GraphicsModule::BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest)
 {
     // TODO: Make it cleaner, maybe move blit to abstraction if possible
     static BlitCopyDesc* blitCopy = nullptr;
@@ -576,7 +576,7 @@ void GraphicsModule::BlitCopy(const ExecutionContext& context, Texture* src, Tex
     Draw(context, *blitCopy);
 }
 
-void GraphicsModule::Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen)
+Void GraphicsModule::Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen)
 {
     planner->RecRequestSplit();
 
@@ -593,7 +593,7 @@ void GraphicsModule::Present(const ExecutionContext& context, SwapChain* swapCha
     swapChain->bacBufferIndex = (swapChain->bacBufferIndex + 1) % swapChain->bacBufferCount;
 }
 
-bool GraphicsModule::Initialize()
+Bool GraphicsModule::Initialize()
 {
     UINT dxgiFactoryFlags = 0;
 #if defined(ENABLED_D12_DEBUG_LAYER)
@@ -601,7 +601,7 @@ bool GraphicsModule::Initialize()
     // NOTE: Enabling the debug layer after device creation will invalidate the active device.
     {
         ID3D12Debug* debugController;
-        if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
+        if (SUCCEEDED(D3D12GetDebugUInterface(IID_PPV_ARGS(&debugController))))
         {
             debugController->EnableDebugLayer();
 
@@ -639,7 +639,7 @@ bool GraphicsModule::Initialize()
     return true;
 }
 
-void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
+Void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
 {
     auto view = swapChain->view;
     auto bacBufferCount = swapChain->bacBufferCount;
@@ -674,7 +674,7 @@ void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
     // This sample does not support fullscreen transitions.
     ASSERT_SUCCEEDED(factory->MakeWindowAssociation(windowHandle, DXGI_MWA_NO_ALT_ENTER));
 
-    ASSERT_SUCCEEDED(swapChain1->QueryInterface(IID_PPV_ARGS(&swapChain->IDXGISwapChain3)));
+    ASSERT_SUCCEEDED(swapChain1->QueryUInterface(IID_PPV_ARGS(&swapChain->IDXGISwapChain3)));
     auto d12SwapChain = swapChain->IDXGISwapChain3;
     swapChain->bacBufferIndex = d12SwapChain->GetCurrentBackBufferIndex();
 
@@ -682,7 +682,7 @@ void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
 
     // Create backbuffers
     swapChain->bacBuffers = new Texture*[bacBufferCount];
-    for (uint32 i = 0; i < bacBufferCount; i++)
+    for (UInt32 i = 0; i < bacBufferCount; i++)
     {
         auto bacBufferMemory = HeapMemory(memory.address + i, 1);
 
@@ -700,7 +700,7 @@ void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
     }
 }
 
-void GraphicsModule::InitializeTexture(Texture* texture)
+Void GraphicsModule::InitializeTexture(Texture* texture)
 {
     D3D12_RESOURCE_DESC textureDesc = {};
     textureDesc.MipLevels = 1;
@@ -708,7 +708,7 @@ void GraphicsModule::InitializeTexture(Texture* texture)
     textureDesc.Width = texture->width;
     textureDesc.Height = texture->height;
     textureDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-    if ((texture->usage & TextureUsageFlags::Render) != TextureUsageFlags::None)
+    if (Enum::Contains(texture->usage, TextureUsageFlags::Render))
         textureDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
     textureDesc.DepthOrArraySize = 1;
     textureDesc.SampleDesc.Count = 1;
@@ -716,10 +716,10 @@ void GraphicsModule::InitializeTexture(Texture* texture)
     textureDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 
     D3D12_CLEAR_VALUE clearValue;
-    bool useClearVlaue = false;
+    Bool useClearVlaue = false;
 
     // If we match the clear values with render pass, we win performance
-    if ((texture->usage & TextureUsageFlags::Render) != TextureUsageFlags::None)
+    if (Enum::Contains(texture->usage, TextureUsageFlags::Render))
     {
         clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         clearValue.Color[0] = 0;
@@ -738,7 +738,7 @@ void GraphicsModule::InitializeTexture(Texture* texture)
         IID_PPV_ARGS(&texture->resource)));
 
     // Create SRV
-    if ((texture->usage & TextureUsageFlags::Shader) != TextureUsageFlags::None)
+    if (Enum::Contains(texture->usage, TextureUsageFlags::Shader))
     {
         texture->srvMemory = srvCpuHeap->Allocate(1);
         D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -750,14 +750,14 @@ void GraphicsModule::InitializeTexture(Texture* texture)
     }
 
     // Create RTV
-    if ((texture->usage & TextureUsageFlags::Render) != TextureUsageFlags::None)
+    if (Enum::Contains(texture->usage, TextureUsageFlags::Render))
     {
         texture->rtvMemory = rtvHeap->Allocate(1);
         device->CreateRenderTargetView(texture->resource, nullptr, rtvHeap->GetCpuHandle(texture->rtvMemory));
     }
 }
 
-inline void GraphicsModule::InitializeFilter(Filter* filter)
+inline Void GraphicsModule::InitializeFilter(Filter* filter)
 {
     filter->srvMemory = samplersHeap->Allocate(1);
     // TODO: Maybe lets keep desc in texture?
@@ -778,11 +778,11 @@ inline void GraphicsModule::InitializeFilter(Filter* filter)
     device->CreateSampler(&samplerDesc, samplersHeap->GetCpuHandle(filter->srvMemory));
 }
 
-void GraphicsModule::InitializeRenderPass(RenderPass* renderPass)
+Void GraphicsModule::InitializeRenderPass(RenderPass* renderPass)
 {
 }
 
-void GraphicsModule::InitializeBuffer(Buffer* target)
+Void GraphicsModule::InitializeBuffer(Buffer* target)
 {
     /*ASSERT_SUCCEEDED(device->CreateCommittedResource(
     &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -819,7 +819,7 @@ void GraphicsModule::InitializeBuffer(Buffer* target)
 
 }
 
-void GraphicsModule::CompilePipeline(ShaderPipeline* pipeline)
+Void GraphicsModule::CompilePipeline(ShaderPipeline* pipeline)
 {
     // TODO: Make it universal
     ComPtr<ID3DBlob> vertexShader;
@@ -841,14 +841,14 @@ void GraphicsModule::CompilePipeline(ShaderPipeline* pipeline)
     if (error.Get() != NULL)
         ERROR((const char*) error.Get()->GetBufferPointer());
 
-    pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)] = ShaderProgram(new uint8[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
-    pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)] = ShaderProgram(new uint8[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
+    pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)] = ShaderProgram(new UInt8[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
+    pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)] = ShaderProgram(new UInt8[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
 
-    memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)].code, (const uint8*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
-    memcpy((void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)].code, (const uint8*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
+    memcpy((Void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)].code, (const UInt8*) vertexShader.Get()->GetBufferPointer(), vertexShader.Get()->GetBufferSize());
+    memcpy((Void*) pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)].code, (const UInt8*) pixelShader.Get()->GetBufferPointer(), pixelShader.Get()->GetBufferSize());
 }
 
-void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
+Void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
 {
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 
@@ -925,7 +925,7 @@ void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
             }
             case RootParamterType::TableSRV:
             {
-                uint32 srvCount = 0;
+                UInt32 srvCount = 0;
                 rootParameter.GetCounts(&srvCount, nullptr);
 
                 CD3DX12_DESCRIPTOR_RANGE1 ranges[1];
@@ -936,7 +936,7 @@ void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
             }
             case RootParamterType::TableSamplers:
             {
-                uint32 samplersCount = 0;
+                UInt32 samplersCount = 0;
                 rootParameter.GetCounts(nullptr, &samplersCount);
 
                 CD3DX12_DESCRIPTOR_RANGE1 ranges[1];
@@ -1001,7 +1001,7 @@ void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
     ASSERT_SUCCEEDED(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pipeline->pipelineState)));
 }
 
-void GraphicsModule::InitializeProperties(ShaderArguments* target)
+Void GraphicsModule::InitializeProperties(ShaderArguments* target)
 {
     auto pipeline = (ShaderPipeline*) target->pipeline;
     auto& rootParameters = pipeline->rootParameters;
@@ -1031,21 +1031,21 @@ void GraphicsModule::InitializeProperties(ShaderArguments* target)
     }
 }
 
-void GraphicsModule::InitializeBlitCopy(BlitCopyDesc* target)
+Void GraphicsModule::InitializeBlitCopy(BlitCopyDesc* target)
 {
     auto source =
         R"(
 
 struct AppData
 {
-    float3 position : POSITION;
-    float2 uv : TEXCOORD;
+    Float3 position : POSITION;
+    Float2 uv : TEXCOORD;
 };
 
 struct VertData
 {
-    float4 position : SV_POSITION;
-    float2 uv : TEXCOORD;
+    Float4 position : SV_POSITION;
+    Float2 uv : TEXCOORD;
 };
 
 Texture2D _mainTex : register(t0);
@@ -1054,14 +1054,14 @@ SamplerState _mainTexSampler : register(s0);
 VertData VertMain(AppData i)
 {
     VertData o;
-    o.position = float4(i.position, 1);
+    o.position = Float4(i.position, 1);
     o.uv = i.uv;
     return o;
 }
 
-float4 FragMain(VertData i) : SV_TARGET
+Float4 FragMain(VertData i) : SV_TARGET
 {
-    return _mainTex.Sample(_mainTexSampler, float2(i.uv.x, 1 - i.uv.y));
+    return _mainTex.Sample(_mainTexSampler, Float2(i.uv.x, 1 - i.uv.y));
 }
             )";
 
@@ -1071,7 +1071,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
     auto shaderDesc = new ShaderPipelineDesc();
     shaderDesc->name = "Test";
-    shaderDesc->source = (const uint8*) source;
+    shaderDesc->source = (const UInt8*) source;
     shaderDesc->sourceSize = strlen(source);
     shaderDesc->states.zTest = ZTest::LEqual;
     shaderDesc->states.zWrite = ZWrite::On;
@@ -1085,7 +1085,7 @@ float4 FragMain(VertData i) : SV_TARGET
     target->properties = new ShaderArguments(target->pipeline);
     InitializeProperties((ShaderArguments*) target->properties);
 
-    static float vertices[] = {
+    static Float vertices[] = {
         -1, -1, 0,    0, 0,
         -1, 1, 0,    0, 1,
         1, 1, 0,    1, 1,
@@ -1096,7 +1096,7 @@ float4 FragMain(VertData i) : SV_TARGET
     };
     target->vertexBuffer = new Buffer(sizeof(vertices));
     InitializeBuffer((Buffer*) target->vertexBuffer);
-    UpdateBuffer((Buffer*) target->vertexBuffer, 0, Range<uint8>((const uint8*) vertices, sizeof(vertices)));
+    UpdateBuffer((Buffer*) target->vertexBuffer, 0, Range<UInt8>((const UInt8*) vertices, sizeof(vertices)));
 
     target->offset = 0;
     target->size = 3*2;
@@ -1141,16 +1141,16 @@ const char* GraphicsModule::Convert(VertexAttributeType type)
     return nullptr;
 }
 
-uint32 GraphicsModule::GetSize(ColorFormat format)
+UInt32 GraphicsModule::GetSize(ColorFormat format)
 {
     switch (format)
     {
     case ColorFormat::RGBA32:
-        return sizeof(float) * 4;
+        return sizeof(Float) * 4;
     case ColorFormat::RGB24:
-        return sizeof(float) * 3;
+        return sizeof(Float) * 3;
     case ColorFormat::RG16:
-        return sizeof(float) * 2;
+        return sizeof(Float) * 2;
     }
 
     ERROR("Format is not convertable");

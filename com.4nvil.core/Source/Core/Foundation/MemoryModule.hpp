@@ -21,7 +21,7 @@ namespace Core
     class MemoryModule : public Module
     {
     public:
-        virtual void Execute(const ExecutionContext& context) override {}
+        virtual Void Execute(const ExecutionContext& context) override {}
 
         template<class T, class ... N>
         T* New(const char* memoryType, N ... args)
@@ -33,7 +33,7 @@ namespace Core
             return target;
         }
 
-        void SetAllocator(const char* memoryType, IHeap* allocator)
+        Void SetAllocator(const char* memoryType, IHeap* allocator)
         {
             auto allocatorDup = allocators.find(memoryType);
             ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)),
@@ -42,7 +42,7 @@ namespace Core
         }
 
         template<class T>
-        void Delete(const char* memoryType, T* target)
+        Void Delete(const char* memoryType, T* target)
         {
             auto allocator = allocators.find(memoryType);
             ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);

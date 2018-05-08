@@ -13,7 +13,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\LibraryImporterModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.hpp" />
@@ -64,9 +68,11 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Delegate.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Enum.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Flags.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Hash.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Stream.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Color.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Math.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.hpp" />
@@ -80,6 +86,7 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\String.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Testing.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Types.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.hpp" />
@@ -98,7 +105,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\LibraryImporterModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp" />

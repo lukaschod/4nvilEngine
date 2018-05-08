@@ -29,7 +29,7 @@ namespace Core
             , created(false)
         {}
         const Graphics::IFilter* filter;
-        bool created;
+        Bool created;
     };
 
     class SamplerModule : public PipeModule
@@ -37,17 +37,17 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Sampler* AllocateSampler() const;
 
         inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
 
     public:
-        void RecCreateSampler(const ExecutionContext& context, const Sampler* target);
+        Void RecCreateSampler(const ExecutionContext& context, const Sampler* target);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Sampler*> samplers;

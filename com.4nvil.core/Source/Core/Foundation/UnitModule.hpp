@@ -44,13 +44,13 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
         { 
             base::SetupExecuteOrder(moduleManager); 
             unitModule = ExecuteAfter<UnitModule>(moduleManager);
         }
 
-        virtual void RecDestroy(const ExecutionContext& context, const Component* unit) {}
+        virtual Void RecDestroy(const ExecutionContext& context, const Component* unit) {}
 
     protected:
         UnitModule* unitModule;
@@ -66,8 +66,8 @@ namespace Core
         {}
         List<const Component*> components;
         const Transform* relation;
-        bool enabled;
-        bool activated;
+        Bool enabled;
+        Bool activated;
     };
 
     class UnitModule final : public PipeModule
@@ -75,7 +75,7 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Unit* AllocateUnit() const;
 
         // Find component from argument component
@@ -85,21 +85,21 @@ namespace Core
         template<class T> const T* GetComponent(const Unit* target);
 
     public:
-        void RecCreateUnit(const ExecutionContext& context, const Unit* target);
-        void RecDestroy(const ExecutionContext& context, const Unit* target);
+        Void RecCreateUnit(const ExecutionContext& context, const Unit* target);
+        Void RecDestroy(const ExecutionContext& context, const Unit* target);
 
         // Add component to unit container
-        void RecAddComponent(const ExecutionContext& context, const Unit* target, const Component* component);
+        Void RecAddComponent(const ExecutionContext& context, const Unit* target, const Component* component);
 
-        void RecSetEnable(const ExecutionContext& context, const Unit* target, bool enable);
+        Void RecSetEnable(const ExecutionContext& context, const Unit* target, Bool enable);
 
-        void RecUpdateActive(const ExecutionContext& context, const Unit* target);
+        Void RecUpdateActive(const ExecutionContext& context, const Unit* target);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        void UpdateActive(const ExecutionContext& context, Unit* unit);
+        Void UpdateActive(const ExecutionContext& context, Unit* unit);
 
     private:
         MemoryModule* memoryModule;

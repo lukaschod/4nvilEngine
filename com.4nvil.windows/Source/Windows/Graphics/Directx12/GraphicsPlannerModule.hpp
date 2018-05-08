@@ -41,33 +41,33 @@ namespace Windows::Directx12
         BASE_IS(ComputeModule);
 
         GraphicsPlannerModule(ID3D12Device* device);
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
-        virtual size_t GetExecutionSize() override;
-        virtual size_t GetSplitExecutionSize() override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        virtual UInt GetExecutionSize() override;
+        virtual UInt GetSplitExecutionSize() override;
         virtual const char* GetName() { return "GraphicsPlannerModule"; }
 
-        void RecRequestSplit();
-        void RecPushDebug(const char* name);
-        void RecPopDebug();
-        void RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
-        void RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
-        void RecSetRenderPass(const RenderPass* target, bool ignoreLoadAction = false);
-        void RecUpdateBuffer(const Buffer* target, uint32 targetOffset, Range<uint8> data);
-        void RecCopyBuffer(const Buffer* src, const Buffer* dst, size_t size);
-        void RecPresent(const SwapChain* swapchain);
-        void RecDraw(const DrawDesc& target);
-        void RecSetHeap(const DescriptorHeap** heap);
+        Void RecRequestSplit();
+        Void RecPushDebug(const char* name);
+        Void RecPopDebug();
+        Void RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+        Void RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
+        Void RecSetRenderPass(const RenderPass* target, Bool ignoreLoadAction = false);
+        Void RecUpdateBuffer(const Buffer* target, UInt32 targetOffset, Range<UInt8> data);
+        Void RecCopyBuffer(const Buffer* src, const Buffer* dst, UInt size);
+        Void RecPresent(const SwapChain* swapchain);
+        Void RecDraw(const DrawDesc& target);
+        Void RecSetHeap(const DescriptorHeap** heap);
 
-        void Reset();
+        Void Reset();
         ID3D12CommandQueue* GetDirectQueue();
-        uint64 GetRecordingBufferIndex();
-        uint64 GetCompletedBufferIndex();
+        UInt64 GetRecordingBufferIndex();
+        UInt64 GetCompletedBufferIndex();
 
     private:
         inline Directx12::CmdBuffer* ContinueRecording();
-        inline void SplitRecording();
-        inline bool ExecuteCommand(const ExecutionContext& context, Directx12::CmdBuffer* buffer, CommandCode commandCode);
+        inline Void SplitRecording();
+        inline Bool ExecuteCommand(const ExecutionContext& context, Directx12::CmdBuffer* buffer, CommandCode commandCode);
 
     private:
         CmdQueue* directQueue;
@@ -76,21 +76,21 @@ namespace Windows::Directx12
 
         struct RecingOptimizer
         {
-            inline void MarSetRenderPass(RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
-            inline void MarDraw() { drawCount++; }
-            inline void MarSetHeap(DescriptorHeap** heaps) { memcpy((void*) lastHeaps, (void*) heaps, sizeof(DescriptorHeap*) * Enum::ToUnderlying(HeapType::Count)); }
-            inline bool ShouldSplitRecording() { return drawCount == 500; }
+            inline Void MarSetRenderPass(RenderPass* renderPass) { lastRenderPass = renderPass; drawCount = 0; }
+            inline Void MarDraw() { drawCount++; }
+            inline Void MarSetHeap(DescriptorHeap** heaps) { memcpy((Void*) lastHeaps, (Void*) heaps, sizeof(DescriptorHeap*) * Enum::ToUnderlying(HeapType::Count)); }
+            inline Bool ShouldSplitRecording() { return drawCount == 500; }
 
             RenderPass* lastRenderPass;
             DescriptorHeap* lastHeaps[Enum::ToUnderlying(HeapType::Count)];
-            size_t drawCount;
+            UInt drawCount;
         };
         RecingOptimizer recordingOptimizer;
 
         struct DrawOptimizer
         {
             DrawOptimizer() { Clear(); }
-            void Clear()
+            Void Clear()
             {
                 lastPipeline = nullptr;
                 lastVertexBuffer = nullptr; memset(rootArguments, 0, sizeof(UINT64) * 30);

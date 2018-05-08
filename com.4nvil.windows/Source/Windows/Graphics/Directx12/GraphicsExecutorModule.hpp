@@ -28,11 +28,11 @@ namespace Windows::Directx12
         BASE_IS(ComputeModule);
 
         GraphicsExecutorModule();
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
         virtual const char* GetName() override { return "GraphicsExecutorModule"; }
 
-        void RecCmdBuffer(const ExecutionContext& context, const Directx12::CmdBuffer* buffer);
+        Void RecCmdBuffer(const ExecutionContext& context, const Directx12::CmdBuffer* buffer);
 
     private:
         struct Context
@@ -43,6 +43,6 @@ namespace Windows::Directx12
 
         List<const Directx12::CmdBuffer*> cmdBuffersToExecute;
         List<ID3D12GraphicsCommandList*> batchedCommandLists;
-        AUTOMATED_PROPERTY_GET(uint64, completedBufferIndex);
+        AUTOMATED_PROPERTY_GET(UInt64, completedBufferIndex);
     };
 }

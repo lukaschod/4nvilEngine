@@ -19,29 +19,29 @@ namespace Core::IO
     class MemoryStream
     {
     public:
-        MemoryStream(size_t capacity = 128)
+        MemoryStream(UInt capacity = 128)
         {
-            end = begin = data = (uint8*) malloc(capacity);
+            end = begin = data = (UInt8*) malloc(capacity);
             end += capacity;
         }
 
         template<typename T>
-        inline void Write(T& data)
+        inline Void Write(T& data)
         {
-            Write((void*) &data, sizeof(T));
+            Write((Void*) &data, sizeof(T));
         }
 
-        inline void Write(std::string& data)
+        inline Void Write(std::string& data)
         {
-            Write((void*) data.c_str(), data.size());
+            Write((Void*) data.c_str(), data.size());
         }
 
-        inline void Write(uint32 v)
+        inline Void Write(UInt32 v)
         {
-            Write((void*) &v, sizeof(uint32));
+            Write((Void*) &v, sizeof(UInt32));
         }
 
-        inline void Write(void* data, size_t size)
+        inline Void Write(Void* data, UInt size)
         {
             MakeSureHaveSpace(size);
             memcpy(this->data, data, size);
@@ -49,12 +49,12 @@ namespace Core::IO
         }
 
         template<typename T>
-        inline void Read(T& data)
+        inline Void Read(T& data)
         {
-            Read((void*) &data, sizeof(T));
+            Read((Void*) &data, sizeof(T));
         }
 
-        inline void Read(void* data, size_t size)
+        inline Void Read(Void* data, UInt size)
         {
             memcpy(data, this->data, size);
             this->data += size;
@@ -76,45 +76,45 @@ namespace Core::IO
         }
 
         template<typename T>
-        inline T& FastRead(size_t& offset) const
+        inline T& FastRead(UInt& offset) const
         {
             T& ptr = *(T*) (begin + offset);
             offset += sizeof(T);
             return ptr;
         }
 
-        inline void Reset()
+        inline Void Reset()
         {
             data = begin;
         }
 
-        inline size_t GetCapacity()
+        inline UInt GetCapacity()
         {
             return end - begin;
         }
 
-        inline void Align(size_t padding = sizeof(void*))
+        inline Void Align(UInt padding = sizeof(Void*))
         {
-            data += (size_t) data % padding;
+            data += (UInt) data % padding;
             ASSERT(data <= end);
         }
 
     private:
-        inline void MakeSureHaveSpace(size_t size)
+        inline Void MakeSureHaveSpace(UInt size)
         {
             while (data + size > end)
             {
                 auto capacity = data - begin;
                 auto requiredCapacity = (end - begin) * 2;
-                begin = (uint8*) realloc(begin, requiredCapacity);
+                begin = (UInt8*) realloc(begin, requiredCapacity);
                 data = begin + capacity;
                 end = begin + requiredCapacity;
             }
         }
 
     private:
-        uint8* begin;
-        uint8* end;
-        AUTOMATED_PROPERTY_GETSET(uint8*, data);
+        UInt8* begin;
+        UInt8* end;
+        AUTOMATED_PROPERTY_GETSET(UInt8*, data);
     };
 }

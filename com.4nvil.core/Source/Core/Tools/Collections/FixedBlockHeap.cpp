@@ -14,15 +14,15 @@
 
 using namespace Core;
 
-FixedBlockHeap::FixedBlockHeap(size_t elementSize)
+FixedBlockHeap::FixedBlockHeap(UInt elementSize)
     : elementSize(elementSize)
     , capacity(0)
 {
-    elementSize += elementSize % sizeof(void*); // Align according the curent target
+    elementSize += elementSize % sizeof(Void*); // Align according the curent target
     AddHeapBlock(128);
 }
 
-void* FixedBlockHeap::Allocate()
+Void* FixedBlockHeap::Allocate()
 {
     std::lock_guard<std::mutex> lock(allocationMutex );
 
@@ -35,18 +35,18 @@ void* FixedBlockHeap::Allocate()
     return pointer;
 }
 
-void FixedBlockHeap::Deallocate(void* pointer)
+Void FixedBlockHeap::Deallocate(Void* pointer)
 {
     std::lock_guard<std::mutex> lock(allocationMutex);
-    freeBlockHeaders.push_back(BlockHeader((uint8*)pointer));
+    freeBlockHeaders.push_back(BlockHeader((UInt8*)pointer));
 }
 
-void FixedBlockHeap::AddHeapBlock(size_t count)
+Void FixedBlockHeap::AddHeapBlock(UInt count)
 {
     ASSERT(freeBlockHeaders.empty());
 
     auto size = count * elementSize;
-    auto block = (uint8*) malloc(size);
+    auto block = (UInt8*) malloc(size);
     totalBlocks.push_back(block);
 
     auto pointer = block + size - elementSize;

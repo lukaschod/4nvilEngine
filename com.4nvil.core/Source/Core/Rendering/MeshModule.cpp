@@ -17,7 +17,7 @@ using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
 
-void MeshModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void MeshModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
@@ -41,10 +41,10 @@ const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const Ver
     return target;
 }
 
-SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<uint8>&);
-SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, uint32, const SubMesh&);
+SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<UInt8>&);
+SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, UInt32, const SubMesh&);
 
-bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -53,16 +53,16 @@ bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         meshes.push_back(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<uint8>, vertices);
+        DESERIALIZE_METHOD_ARG2_START(SetVertices, Mesh*, target, Range<UInt8>, vertices);
         ASSERT(target->created);
         target->vertices = vertices;
 
         target->vertexBuffer = graphicsModule->AllocateBuffer(vertices.size);
         graphicsModule->RecCreateIBuffer(context, target->vertexBuffer);
-        graphicsModule->RecUpdateBuffer(context, target->vertexBuffer, (void*) target->vertices.pointer, target->vertices.size);
+        graphicsModule->RecUpdateBuffer(context, target->vertexBuffer, (Void*) target->vertices.pointer, target->vertices.size);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, uint32, index, SubMesh, submesh);
+        DESERIALIZE_METHOD_ARG3_START(SetSubMesh, Mesh*, target, UInt32, index, SubMesh, submesh);
         ASSERT(target->created);
         target->subMeshes.safe_set(index, submesh);
         DESERIALIZE_METHOD_END;

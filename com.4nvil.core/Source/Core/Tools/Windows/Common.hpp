@@ -45,7 +45,7 @@
         __debugbreak(); \
     }
 #else
-#define ASSERT_SUCCEEDED(hr) (void)(hr)
+#define ASSERT_SUCCEEDED(hr) (Void)(hr)
 #endif
 
 #else

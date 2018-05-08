@@ -16,14 +16,14 @@
 using namespace Core;
 using namespace Core::Graphics;
 
-void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ImageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
     samplerModule = ExecuteBefore<SamplerModule>(moduleManager);
 }
 
-const Image* ImageModule::AllocateImage(uint32 width, uint32 height) const
+const Image* ImageModule::AllocateImage(UInt32 width, UInt32 height) const
 {
     auto texture = graphicsModule->AllocateTexture(width, height);
     return new Image(texture);
@@ -32,7 +32,7 @@ const Image* ImageModule::AllocateImage(uint32 width, uint32 height) const
 SERIALIZE_METHOD_ARG1(ImageModule, CreateImage, const Image*);
 SERIALIZE_METHOD_ARG2(ImageModule, SetSampler, const Image*, const Sampler*);
 
-bool ImageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool ImageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {

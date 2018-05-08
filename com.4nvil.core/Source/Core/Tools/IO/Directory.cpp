@@ -14,47 +14,70 @@
 #include <Core/Tools/IO/Directory.hpp>
 #include <filesystem>
 
-namespace Core::Directory
+using namespace Core;
+namespace filesystem = std::experimental::filesystem;
+
+Bool Directory::IsFile() const
 {
-    namespace filesystem = std::experimental::filesystem;
+    filesystem::directory_entry temp(data);
+    return temp.status().type() == filesystem::v1::file_type::regular;
+}
 
-    const char* GetExecutablePath()
-    {
-        static char path[maxPathSize];
-        static bool pathValid = false;
+Bool Directory::GetExtension(DirectoryExtension& extension) const
+{
+    auto last = wcsrchr(data, '.');
+    if (last == nullptr)
+        return false;
 
-        // Store executable path on demand
+    extension = last;
+    return true;
+}
+
+const Directory& Directory::GetExecutablePath()
+{
+    static Directory path;
+    static Bool pathValid = false;
+
+    // Store executable path on demand
 #if ENABLED_WINDOWS
-        if (!pathValid)
-        {
-            HMODULE hModule = GetModuleHandleW(NULL);
-            GetModuleFileName(hModule, path, maxPathSize);
-            char* last = strrchr(path, '\\');
-            *last = 0;
-            pathValid = true;
-        }
+    if (!pathValid)
+    {
+        // Get the actual directory
+        auto hModule = GetModuleHandleW(NULL);
+        GetModuleFileNameW(hModule, path.ToString(), path.GetCapacity());
+
+        // Add terminator
+        auto last = wcsrchr(path.ToString(), '\\');
+        *last = 0;
+        pathValid = true;
+    }
 #endif
 
-        ASSERT(pathValid);
+    ASSERT(pathValid);
 
-        return path;
-    }
+    return path;
+}
 
-    List<String> GetDirectories(String& path)
+Void Directory::GetDirectories(const Directory& path, List<Directory>& out)
+{
+    for (auto& directory : filesystem::directory_iterator(path.ToCString()))
     {
-        List<String> out;
-        for (auto& directory : filesystem::directory_iterator(path))
-            if (directory.status().type() == filesystem::v1::file_type::directory)
-                out.push_back(directory.path().string());
-        return out;
+        //if (directory.status().type() == filesystem::v1::file_type::directory)
+        {
+            Directory directory(directory.path().c_str());
+            out.push_back(directory);
+        }
     }
+}
 
-    List<String> GetFiles(String& path)
+Void Directory::GetFiles(const Directory& path, List<Directory>& out)
+{
+    for (auto& directory : filesystem::directory_iterator(path.ToCString()))
     {
-        List<String> out;
-        for (auto& directory : filesystem::directory_iterator(path))
-            if (directory.status().type() == filesystem::v1::file_type::regular)
-                out.push_back(directory.path().string());
-        return out;
+        if (directory.status().type() == filesystem::v1::file_type::regular)
+        {
+            Directory directory(directory.path().c_str());
+            out.push_back(directory);
+        }
     }
 }

@@ -8,3 +8,38 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *
 */
+
+#include <Core/Assets/AssetModule.hpp>
+
+using namespace Core;
+
+Void AssetModule::SetupExecuteOrder(ModuleManager* moduleManager)
+{
+    base::SetupExecuteOrder(moduleManager);
+    ExecuteBefore<IImporterModule>(moduleManager, importerModules);
+}
+
+Bool AssetModule::IsSupported(const Directory& directory) const
+{
+    DirectoryExtension extension;
+    ASSERT(directory.GetExtension(extension));
+
+    for (auto importerModule : importerModules)
+    {
+        if (importerModule->IsSupported(extension))
+            return true;
+    }
+    return false;
+}
+
+SERIALIZE_METHOD_ARG2(AssetModule, Import, const Directory&, const Guid&);
+
+Bool AssetModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+{
+    switch (commandCode)
+    {
+        DESERIALIZE_METHOD_ARG2_START(Import, const Directory*, directory, const Guid, guid);
+        DESERIALIZE_METHOD_END;
+    }
+    return false;
+}

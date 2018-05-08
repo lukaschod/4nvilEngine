@@ -14,7 +14,7 @@
 
 using namespace Core;
 
-void SceneModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void SceneModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     transformModule = ExecuteBefore<TransformModule>(moduleManager);
@@ -30,10 +30,10 @@ const Scene* SceneModule::AllocateScene()
 }
 
 SERIALIZE_METHOD_ARG1(SceneModule, CreateScene, const Scene*);
-SERIALIZE_METHOD_ARG2(SceneModule, SetEnable, const Scene*, bool);
+SERIALIZE_METHOD_ARG2(SceneModule, SetEnable, const Scene*, Bool);
 SERIALIZE_METHOD_ARG2(SceneModule, AddUnit, const Scene*, const Transform*);
 
-bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -45,7 +45,7 @@ bool SceneModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         unitModule->RecAddComponent(context, target->unit, target->transform);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetEnable, Scene*, target, bool, enable);
+        DESERIALIZE_METHOD_ARG2_START(SetEnable, Scene*, target, Bool, enable);
         ASSERT(target->created);
         unitModule->RecSetEnable(context, target->unit, enable);
         DESERIALIZE_METHOD_END;

@@ -16,13 +16,13 @@ using namespace Core;
 
 TimeModule::TimeModule() {}
 
-void TimeModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void TimeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     stopWatch.Start();
 }
 
-void TimeModule::Execute(const ExecutionContext& context)
+Void TimeModule::Execute(const ExecutionContext& context)
 {
     stopWatch.Stop();
     deltaTimeMs = stopWatch.GetElapsedMiliseconds();

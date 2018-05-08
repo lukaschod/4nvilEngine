@@ -16,7 +16,7 @@
 
 namespace Core::Console
 {
-    void Write(const char* msg)
+    Void Write(const char* msg)
     {
 #if ENABLED_WINDOWS
         OutputDebugString(msg);
@@ -25,7 +25,7 @@ namespace Core::Console
 #endif
     }
 
-    void WriteFmt(const char* format, ...)
+    Void WriteFmt(const char* format, ...)
     {
         char buffer[1024];
         va_list ap;

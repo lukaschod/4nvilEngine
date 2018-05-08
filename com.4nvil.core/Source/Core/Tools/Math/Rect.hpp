@@ -30,5 +30,5 @@ namespace Core::Math
         T x, y, width, height;
     };
 
-    typedef Rect<float> Rectf;
+    typedef Rect<Float> Rectf;
 }

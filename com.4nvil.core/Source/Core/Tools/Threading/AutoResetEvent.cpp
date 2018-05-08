@@ -13,25 +13,25 @@
 
 using namespace Core::Threading;
 
-AutoResetEvent::AutoResetEvent(bool initial)
+AutoResetEvent::AutoResetEvent(Bool initial)
     : flag(initial)
 {
 }
 
-void AutoResetEvent::Set()
+Void AutoResetEvent::Set()
 {
     std::lock_guard<std::mutex> _(protect);
     flag = true;
     signal.notify_one();
 }
 
-void AutoResetEvent::Reset()
+Void AutoResetEvent::Reset()
 {
     std::lock_guard<std::mutex> _(protect);
     flag = false;
 }
 
-bool AutoResetEvent::WaitOne()
+Bool AutoResetEvent::WaitOne()
 {
     std::unique_lock<std::mutex> lk(protect);
     while (!flag) // prevent spurious wakeups from doing harm

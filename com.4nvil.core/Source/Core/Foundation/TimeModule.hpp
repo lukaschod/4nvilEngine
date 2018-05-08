@@ -23,14 +23,14 @@ namespace Core
         BASE_IS(ComputeModule);
 
         TimeModule();
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
-        inline uint64 GetDeltaTimeMs() const { return deltaTimeMs; }
-        inline float GetDeltaTime() const { return deltaTime; }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        inline UInt64 GetDeltaTimeMs() const { return deltaTimeMs; }
+        inline Float GetDeltaTime() const { return deltaTime; }
 
     private:
         StopWatch stopWatch;
-        uint64 deltaTimeMs;
-        float deltaTime;
+        UInt64 deltaTimeMs;
+        Float deltaTime;
     };
 }

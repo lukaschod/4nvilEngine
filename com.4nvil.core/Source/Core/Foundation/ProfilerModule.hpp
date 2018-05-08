@@ -22,7 +22,7 @@ namespace Core
         ProfiledFunction() {}
         ProfiledFunction(
             const char* name,
-            float start,
+            Float start,
             int parentIndex
         )
             : name(name)
@@ -33,15 +33,15 @@ namespace Core
         {
         }
         const char* name;
-        float start;
-        float end;
-        size_t childFunctionCount;
+        Float start;
+        Float end;
+        UInt childFunctionCount;
         int parentIndex;
     };
 
     struct ProfiledWorker
     {
-        uint32 workerIndex;
+        UInt32 workerIndex;
         List<ProfiledFunction> functions;
     };
 
@@ -52,20 +52,20 @@ namespace Core
     public:
         BASE_IS(Module);
 
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
 
-        void TraceFunctions();
+        Void TraceFunctions();
 
     public:
-        void RecPushFunction(const ExecutionContext& context, const char* name);
-        void RecPopFunction(const ExecutionContext& context);
+        Void RecPushFunction(const ExecutionContext& context, const char* name);
+        Void RecPopFunction(const ExecutionContext& context);
 
     private:
         LogModule* logModule;
         List<ProfiledWorker> workers;
         StopWatch stopWatch;
-        uint64 frameLeftUntilProfile;
+        UInt64 frameLeftUntilProfile;
     };
 
 #if !defined(ENABLED_MARK_FUNCTION) && defined(ENABLED_DEBUG)
@@ -75,7 +75,7 @@ namespace Core
 #ifdef ENABLED_MARK_FUNCTION
 #   define MARK_FUNCTION ProfileFunction profileFunction(context, profilerModule, __FUNCTION__)
 #else
-#   define MARK_FUNCTION (void) 0
+#   define MARK_FUNCTION (Void) 0
 #endif
 
     struct ProfileFunction

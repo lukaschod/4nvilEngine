@@ -17,7 +17,7 @@
 using namespace Core;
 using namespace Core::Graphics;
 
-void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void SurfaceModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
@@ -31,11 +31,11 @@ const Surface* SurfaceModule::AllocateSurface()
 }
 
 SERIALIZE_METHOD_ARG1(SurfaceModule, CreateSurface, const Surface*);
-SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, uint32, const SurfaceColor&);
+SERIALIZE_METHOD_ARG3(SurfaceModule, SetColor, const Surface*, UInt32, const SurfaceColor&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetDepth, const Surface*, const SurfaceDepth&);
 SERIALIZE_METHOD_ARG2(SurfaceModule, SetViewport, const Surface*, const Viewport&);
 
-bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -45,7 +45,7 @@ bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
         surfaces.push_back(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetColor, Surface*, target, uint32, index, SurfaceColor, color);
+        DESERIALIZE_METHOD_ARG3_START(SetColor, Surface*, target, UInt32, index, SurfaceColor, color);
         ASSERT(target->created);
         target->colors.safe_set(index, color);
         ColorAttachment attachment;

@@ -18,7 +18,7 @@
 
 namespace Core
 {
-    typedef uint32_t InputType;
+    typedef UInt32_t InputType;
 
     struct InputDeviceDesc
     {
@@ -30,7 +30,7 @@ namespace Core
     {
         InputDeviceDesc desc;
         IO::MemoryStream inputStream;
-        uint32 inputCount;
+        UInt32 inputCount;
     };
 
     class InputModule : public PipeModule
@@ -38,23 +38,23 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override;
+        virtual Void Execute(const ExecutionContext& context) override;
 
         // Find input devices by the type name
         const InputDevice* TryFindInputDevice(const char* typeName) const;
 
         // Record abstract input
-        void RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, uint8* data, size_t size);
+        Void RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, UInt8* data, UInt size);
 
         // Create new input device, type name must be unique
         const InputDevice* RecCreateInputDevice(const ExecutionContext& context, const InputDeviceDesc& desc);
 
     private:
         // Remove all previous inputs
-        void Reset();
+        Void Reset();
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<InputDevice*> devices;

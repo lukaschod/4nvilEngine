@@ -59,7 +59,7 @@ namespace Core::Graphics
         const ITexture* texture;
         StoreAction storeAction;
         LoadAction loadAction;
-        float clearDepth;
+        Float clearDepth;
     };
 
     struct Viewport
@@ -77,8 +77,8 @@ namespace Core::Graphics
         {
         }
         Math::Rectf rect;
-        float nearClipPlane;
-        float farClipPlane;
+        Float nearClipPlane;
+        Float farClipPlane;
     };
 
     struct IRenderPass
@@ -88,11 +88,11 @@ namespace Core::Graphics
             memset(colors, 0, sizeof(ColorAttachment));
         }
 
-        inline float GetAspect() const
+        inline Float GetAspect() const
         {
             auto texture = colors[0].texture;
             ASSERT(texture != nullptr);
-            return (float) texture->width / texture->height;
+            return (Float) texture->width / texture->height;
         }
 
         ColorAttachment colors[COLOR_ATTACHMENT_MAX_COUNT];

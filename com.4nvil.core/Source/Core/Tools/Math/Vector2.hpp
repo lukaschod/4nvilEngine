@@ -28,5 +28,5 @@ namespace Core::Math
         T x, y;
     };
 
-    typedef Vector2<float> Vector2f;
+    typedef Vector2<Float> Vector2f;
 }

@@ -15,17 +15,17 @@
 
 using namespace Core;
 
-ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, uint32 workerCount) 
+ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, UInt32 workerCount) 
     : planner(planner)
     , isRunning(false)
 {
-    for (uint32 i = 0; i < workerCount; i++)
+    for (UInt32 i = 0; i < workerCount; i++)
     {
         auto worker = new ConcurrentModuleWorker(i, this, planner);
         workers.push_back(worker);
     }
 
-    planner->Set_jobFinishCallback([this](size_t readyJobCount)
+    planner->Set_jobFinishCallback([this](UInt readyJobCount)
     {
         // Check if we need to wakeup some workers
         for (auto worker : workers)
@@ -46,27 +46,27 @@ ConcurrentModuleExecutor::~ConcurrentModuleExecutor()
         delete worker;
 }
 
-void ConcurrentModuleExecutor::Reset()
+Void ConcurrentModuleExecutor::Reset()
 {
     for (auto worker : workers)
         worker->Reset();
 }
 
-void ConcurrentModuleExecutor::Start()
+Void ConcurrentModuleExecutor::Start()
 {
     isRunning = true;
     for (auto worker : workers)
         worker->Start();
 }
 
-void ConcurrentModuleExecutor::Stop()
+Void ConcurrentModuleExecutor::Stop()
 {
     isRunning = false;
     for (auto worker : workers)
         worker->Stop();
 }
 
-ConcurrentModuleWorker::ConcurrentModuleWorker(uint32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner) 
+ConcurrentModuleWorker::ConcurrentModuleWorker(UInt32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner) 
     : planner(planner)
     , thread(nullptr)
     , isRunning(false)
@@ -83,12 +83,12 @@ ConcurrentModuleWorker::~ConcurrentModuleWorker()
     SAFE_DELETE(thread);
 }
 
-void ConcurrentModuleWorker::Reset()
+Void ConcurrentModuleWorker::Reset()
 {
     Wakeup();
 }
 
-void ConcurrentModuleWorker::Start()
+Void ConcurrentModuleWorker::Start()
 {
     ASSERT(!isRunning);
     SAFE_DELETE(thread);
@@ -96,7 +96,7 @@ void ConcurrentModuleWorker::Start()
     thread = new std::thread(&ConcurrentModuleWorker::Run, this);
 }
 
-void ConcurrentModuleWorker::Stop()
+Void ConcurrentModuleWorker::Stop()
 {
     ASSERT(isRunning);
     isRunning = false;
@@ -105,7 +105,7 @@ void ConcurrentModuleWorker::Stop()
     thread->join();
 }
 
-void ConcurrentModuleWorker::Run()
+Void ConcurrentModuleWorker::Run()
 {
     while (isRunning)
     {
@@ -130,7 +130,7 @@ void ConcurrentModuleWorker::Run()
         context.workerIndex = index;
         context.executingModule = module;
         context.start = job.offset;
-        context.end = job.offset + (uint32)job.size;
+        context.end = job.offset + (UInt32)job.size;
 
         // Execute the job here
         module->Execute(context);
@@ -141,13 +141,13 @@ void ConcurrentModuleWorker::Run()
     }
 }
 
-void ConcurrentModuleWorker::Sleep()
+Void ConcurrentModuleWorker::Sleep()
 {
     isSleeping = true;
     event.WaitOne();
 }
 
-void ConcurrentModuleWorker::Wakeup()
+Void ConcurrentModuleWorker::Wakeup()
 {
     event.Set();
     isSleeping = false;

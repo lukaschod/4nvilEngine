@@ -19,7 +19,7 @@
 using namespace Core;
 using namespace Core::Math;
 
-void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     surfaceModule = ExecuteAfter<SurfaceModule>(moduleManager);
@@ -27,7 +27,7 @@ void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
     transformModule = ExecuteBefore<TransformModule>(moduleManager);
 }
 
-void CameraModule::Execute(const ExecutionContext& context)
+Void CameraModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     base::Execute(context);
@@ -39,7 +39,7 @@ void CameraModule::Execute(const ExecutionContext& context)
         target->worldToCameraMatrix = transform->worldToView;
         target->worldToCameraMatrix.Multiply(target->projectionMatrix);
         target->cameraToWorldMatrix = Matrix4x4f::Inverted(target->worldToCameraMatrix);
-        storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
+        storageModule->RecUpdateStorage(context, target->perCameraStorage, 0, Range<Void>(&target->worldToCameraMatrix, sizeof(Matrix4x4f)));
     }
 }
 
@@ -82,7 +82,7 @@ SERIALIZE_METHOD_ARG1(CameraModule, CreateCamera, const Camera*);
 SERIALIZE_METHOD_ARG2(CameraModule, SetSurface, const Camera*, const Surface*);
 SERIALIZE_METHOD_ARG1(CameraModule, Destroy, const Component*);
 
-bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -97,7 +97,7 @@ bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream
         target->surface = surface;
 
         auto image = target->surface->colors[0].image;
-        target->aspect = (float)image->width / image->height;
+        target->aspect = (Float)image->width / image->height;
         target->projectionMatrix = Matrix4x4f::Perspective(target->aspect, Math::DegToRad(target->fieldOfView), target->nearClipPlane, target->farClipPlane); // TODO: sync matrix if surface changes
         DESERIALIZE_METHOD_END;
     }

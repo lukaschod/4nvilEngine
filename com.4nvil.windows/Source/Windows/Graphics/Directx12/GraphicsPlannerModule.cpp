@@ -27,7 +27,7 @@ GraphicsPlannerModule::GraphicsPlannerModule(ID3D12Device* device)
     directAllocatorPool = new CmdAllocatorPool(device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 }
 
-void GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void GraphicsPlannerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     executor = ExecuteBefore<GraphicsExecutorModule>(moduleManager);
@@ -40,26 +40,26 @@ Directx12::CmdBuffer* GraphicsPlannerModule::ContinueRecording()
     return recordedCmdBuffers.back();
 }
 
-void GraphicsPlannerModule::SplitRecording()
+Void GraphicsPlannerModule::SplitRecording()
 {
     auto buffer = directQueue->Pull();
     recordedCmdBuffers.push_back(buffer);
 }
 
-uint64 GraphicsPlannerModule::GetRecordingBufferIndex()
+UInt64 GraphicsPlannerModule::GetRecordingBufferIndex()
 {
     return ContinueRecording()->index;
 }
 
-uint64 GraphicsPlannerModule::GetCompletedBufferIndex()
+UInt64 GraphicsPlannerModule::GetCompletedBufferIndex()
 {
     return executor->Get_completedBufferIndex();
 }
 
-size_t GraphicsPlannerModule::GetExecutionSize() { return recordedCmdBuffers.size(); }
-size_t GraphicsPlannerModule::GetSplitExecutionSize() { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
+UInt GraphicsPlannerModule::GetExecutionSize() { return recordedCmdBuffers.size(); }
+UInt GraphicsPlannerModule::GetSplitExecutionSize() { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
 
-void GraphicsPlannerModule::Execute(const ExecutionContext& context)
+Void GraphicsPlannerModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
 
@@ -109,7 +109,7 @@ void GraphicsPlannerModule::Execute(const ExecutionContext& context)
 }
 
 DECLARE_COMMAND_CODE(PushDebug);
-void GraphicsPlannerModule::RecPushDebug(const char* name)
+Void GraphicsPlannerModule::RecPushDebug(const char* name)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -120,7 +120,7 @@ void GraphicsPlannerModule::RecPushDebug(const char* name)
 }
 
 DECLARE_COMMAND_CODE(PopDebug);
-void GraphicsPlannerModule::RecPopDebug()
+Void GraphicsPlannerModule::RecPopDebug()
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -130,7 +130,7 @@ void GraphicsPlannerModule::RecPopDebug()
 }
 
 DECLARE_COMMAND_CODE(SetTextureState);
-void GraphicsPlannerModule::RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
+Void GraphicsPlannerModule::RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -143,7 +143,7 @@ void GraphicsPlannerModule::RecSetTextureState(const Texture* target, D3D12_RESO
 }
 
 DECLARE_COMMAND_CODE(SetBufferState);
-void GraphicsPlannerModule::RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
+Void GraphicsPlannerModule::RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -156,20 +156,20 @@ void GraphicsPlannerModule::RecSetBufferState(const Buffer* target, D3D12_RESOUR
 }
 
 DECLARE_COMMAND_CODE(SetRenderPass);
-void GraphicsPlannerModule::RecSetRenderPass(const RenderPass* target, bool ignoreLoadAction)
+Void GraphicsPlannerModule::RecSetRenderPass(const RenderPass* target, Bool ignoreLoadAction)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
     stream.Write(TO_COMMAND_CODE(SetRenderPass));
     recordingOptimizer.MarSetRenderPass((RenderPass*)target);
-    stream.Write((void*)target, sizeof(RenderPass)); // We need copy here, because renderpass lives on cpu
+    stream.Write((Void*)target, sizeof(RenderPass)); // We need copy here, because renderpass lives on cpu
     stream.Write(ignoreLoadAction);
     stream.Align();
     buffer->commandCount++;
 }
 
 DECLARE_COMMAND_CODE(UpdateBuffer);
-void GraphicsPlannerModule::RecUpdateBuffer(const Buffer* target, uint32 targetOffset, Range<uint8> data)
+Void GraphicsPlannerModule::RecUpdateBuffer(const Buffer* target, UInt32 targetOffset, Range<UInt8> data)
 { 
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -182,7 +182,7 @@ void GraphicsPlannerModule::RecUpdateBuffer(const Buffer* target, uint32 targetO
 }
 
 DECLARE_COMMAND_CODE(CopyBuffer);
-void GraphicsPlannerModule::RecCopyBuffer(const Buffer* source, const Buffer* destination, size_t size)
+Void GraphicsPlannerModule::RecCopyBuffer(const Buffer* source, const Buffer* destination, UInt size)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -194,7 +194,7 @@ void GraphicsPlannerModule::RecCopyBuffer(const Buffer* source, const Buffer* de
     buffer->commandCount++;
 }
 
-void GraphicsPlannerModule::RecPresent(const SwapChain* swapchain)
+Void GraphicsPlannerModule::RecPresent(const SwapChain* swapchain)
 {
     SplitRecording();
     auto buffer = ContinueRecording();
@@ -203,7 +203,7 @@ void GraphicsPlannerModule::RecPresent(const SwapChain* swapchain)
 }
 
 DECLARE_COMMAND_CODE(Draw);
-void GraphicsPlannerModule::RecDraw(const DrawDesc& target)
+Void GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 {
     // Lets try to split big command lists this way we can distribut work accross workers
     if (recordingOptimizer.ShouldSplitRecording())
@@ -220,7 +220,7 @@ void GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 
     auto& rootParameters = ((ShaderPipeline*) target.pipeline)->rootParameters;
     auto& rootArguments = ((ShaderArguments*) target.properties)->rootArguments;
-    for (size_t i = 0; i < rootParameters.size(); i++)
+    for (UInt i = 0; i < rootParameters.size(); i++)
     {
         auto& rootParameter = rootParameters[i];
         auto& rootArgument = rootArguments[i];
@@ -247,7 +247,7 @@ void GraphicsPlannerModule::RecDraw(const DrawDesc& target)
 }
 
 DECLARE_COMMAND_CODE(SetHeap);
-void GraphicsPlannerModule::RecSetHeap(const DescriptorHeap** heap)
+Void GraphicsPlannerModule::RecSetHeap(const DescriptorHeap** heap)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -258,12 +258,12 @@ void GraphicsPlannerModule::RecSetHeap(const DescriptorHeap** heap)
     buffer->commandCount++;
 }
 
-void GraphicsPlannerModule::RecRequestSplit()
+Void GraphicsPlannerModule::RecRequestSplit()
 {
     SplitRecording();
 }
 
-void GraphicsPlannerModule::Reset()
+Void GraphicsPlannerModule::Reset()
 {
     for (auto& cmdBuffer : recordedCmdBuffers)
         directQueue->Push(cmdBuffer);
@@ -275,7 +275,7 @@ ID3D12CommandQueue* GraphicsPlannerModule::GetDirectQueue()
     return directQueue->Get_queue();
 }
 
-bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Directx12::CmdBuffer* buffer, CommandCode commandCode)
+Bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Directx12::CmdBuffer* buffer, CommandCode commandCode)
 {
     auto& stream = buffer->stream;
     auto commandList = (ID3D12GraphicsCommandList*)buffer->commandList;
@@ -295,7 +295,7 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
         commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(target->resource, currentState, nextState));
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetRenderPass, RenderPass, target, bool, ignoreLoadAction);
+        DESERIALIZE_METHOD_ARG2_START(SetRenderPass, RenderPass, target, Bool, ignoreLoadAction);
         auto count = target.colorDescriptorsCount;
         ASSERT(count != 0);
         if (target.depth.texture != nullptr)
@@ -320,7 +320,7 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
             auto& color = target.colors[i];
             if (color.loadAction == LoadAction::Clear)
             {
-                const float clearColor[] = { color.clearColor.r, color.clearColor.g, color.clearColor.b, color.clearColor.a };
+                const Float clearColor[] = { color.clearColor.r, color.clearColor.g, color.clearColor.b, color.clearColor.a };
                 commandList->ClearRenderTargetView(target.colorDescriptors[i], clearColor, 0, nullptr);
             }
         }
@@ -332,12 +332,12 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
         }
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const Buffer*, target, uint32, targetOffset, Range<uint8>, data);
+        DESERIALIZE_METHOD_ARG3_START(UpdateBuffer, const Buffer*, target, UInt32, targetOffset, Range<UInt8>, data);
         ASSERT(target->resourceMappedPointer != nullptr && data.pointer != nullptr && data.size != 0);
         memcpy(target->resourceMappedPointer + targetOffset, data.pointer, data.size);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(CopyBuffer, const Buffer*, src, const Buffer*, dst, size_t, size);
+        DESERIALIZE_METHOD_ARG3_START(CopyBuffer, const Buffer*, src, const Buffer*, dst, UInt, size);
         commandList->CopyBufferRegion(dst->resource, dst->resourceOffset, src->resource, src->resourceOffset, size);
         DESERIALIZE_METHOD_END;
 
@@ -355,7 +355,7 @@ bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
         
         auto& rootParameters = ((ShaderPipeline*) target.pipeline)->rootParameters;
         auto& rootArguments = ((ShaderArguments*) target.properties)->rootArguments;
-        for (size_t i = 0; i < rootParameters.size(); i++)
+        for (UInt i = 0; i < rootParameters.size(); i++)
         {
             auto& rootParameter = rootParameters[i];
             auto& rootArgument = rootArguments[i];

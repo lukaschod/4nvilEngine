@@ -41,7 +41,7 @@ namespace Core
         const Mesh* mesh;
         const Material* material;
         const Storage* perMeshStorage;
-        bool created;
+        Bool created;
     };
 
     class MeshRendererModule : public ComponentModule
@@ -50,8 +50,8 @@ namespace Core
         BASE_IS(ComponentModule);
 
         MeshRendererModule();
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
         const MeshRenderer* AllocateMeshRenderer();
 
         // Returns all mesh renderers that currently allocated
@@ -61,18 +61,18 @@ namespace Core
         const Storage* GetPerAllRendererStorage() const;
 
     public:
-        virtual void RecDestroy(const ExecutionContext& context, const Component* target) override;
+        virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
 
-        void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
+        Void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
 
         // Set mesh that will be used for rendering
-        void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+        Void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
 
         // Set material that will be used for rendering
-        void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+        Void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<MeshRenderer*> meshRenderers;

@@ -32,10 +32,10 @@ namespace Core
     struct SubMesh
     {
         SubMesh() {}
-        SubMesh(uint32 offset, uint32 size, MeshTopology topology) : offset(offset), size(size), topology(topology) {}
-        SubMesh(uint32 size) : SubMesh(0, size, MeshTopology::Triangles) {}
-        uint32 offset;
-        uint32 size;
+        SubMesh(UInt32 offset, UInt32 size, MeshTopology topology) : offset(offset), size(size), topology(topology) {}
+        SubMesh(UInt32 size) : SubMesh(0, size, MeshTopology::Triangles) {}
+        UInt32 offset;
+        UInt32 size;
         MeshTopology topology;
     };
 
@@ -50,8 +50,8 @@ namespace Core
         const Graphics::VertexLayout vertexLayout;
         const Graphics::IBuffer* vertexBuffer;
         List<SubMesh> subMeshes;
-        Range<uint8> vertices;
-        bool created;
+        Range<UInt8> vertices;
+        Bool created;
     };
 
     class MeshModule : public PipeModule
@@ -59,17 +59,17 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Mesh* AllocateMesh(const Graphics::VertexLayout& vertexLayout) const;
 
     public:
         const Mesh* RecCreateMesh(const ExecutionContext& context, const Graphics::VertexLayout& vertexLayout);
-        void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<uint8>& vertices);
-        void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, uint32 index, const SubMesh& submesh);
+        Void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<UInt8>& vertices);
+        Void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, UInt32 index, const SubMesh& submesh);
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Mesh*> meshes;

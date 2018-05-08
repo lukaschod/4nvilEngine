@@ -25,42 +25,42 @@ namespace Core
     class ConcurrentModuleWorker
     {
     public:
-        ConcurrentModuleWorker(uint32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner);
+        ConcurrentModuleWorker(UInt32 index, ConcurrentModuleExecutor* executor, IModulePlanner* planner);
         ~ConcurrentModuleWorker();
-        void Reset();
-        void Start();
-        void Stop();
+        Void Reset();
+        Void Start();
+        Void Stop();
 
     private:
-        void Run();
-        void Sleep();
-        void Wakeup();
+        Void Run();
+        Void Sleep();
+        Void Wakeup();
 
     private:
         IModulePlanner* planner;
         Threading::AutoResetEvent event;
         std::thread* thread;
-        bool isRunning;
-        uint32 cyclesBeforeSleep;
-        uint32 index;
-        uint64 executionIndex;
-        AUTOMATED_PROPERTY_GET(bool, isSleeping);
+        Bool isRunning;
+        UInt32 cyclesBeforeSleep;
+        UInt32 index;
+        UInt64 executionIndex;
+        AUTOMATED_PROPERTY_GET(Bool, isSleeping);
     };
 
     class ConcurrentModuleExecutor : public IModuleExecutor
     {
     public:
-        ConcurrentModuleExecutor(IModulePlanner* planner, uint32 workerCount = 1);
+        ConcurrentModuleExecutor(IModulePlanner* planner, UInt32 workerCount = 1);
         ~ConcurrentModuleExecutor();
-        virtual void Reset() override;
-        virtual void Start() override;
-        virtual void Stop() override;
-        virtual bool IsRunning() { return isRunning; };
-        virtual uint32 GetWorkerCount() override { return (uint32) workers.size(); }
+        virtual Void Reset() override;
+        virtual Void Start() override;
+        virtual Void Stop() override;
+        virtual Bool IsRunning() { return isRunning; };
+        virtual UInt32 GetWorkerCount() override { return (UInt32) workers.size(); }
 
     private:
         List<ConcurrentModuleWorker*> workers;
         IModulePlanner* planner;
-        bool isRunning;
+        Bool isRunning;
     };
 }

@@ -11,22 +11,8 @@
 
 #pragma once
 
+#include <Core/Tools/Types.hpp>
 #include <Core/Tools/Testing.hpp>
-
-typedef signed char        int8;
-typedef short              int16;
-typedef int                int32;
-typedef long long          int64;
-typedef unsigned char      uint8;
-typedef unsigned short     uint16;
-typedef unsigned int       uint32;
-typedef unsigned long long uint64;
-
-#ifdef _WIN64
-typedef unsigned __int64 size_t;
-#else
-typedef unsigned int     size_t;
-#endif
 
 namespace Core
 {
@@ -55,7 +41,7 @@ namespace Core
     public: GETTER(Type, Name) SETTER(Type, Name) \
     protected:
 
-#define SETTER(Type, Name) inline void Set_##Name(Type value) { Name = value; }
+#define SETTER(Type, Name) inline Void Set_##Name(Type value) { Name = value; }
 #define GETTER(Type, Name) inline Type Get_##Name() const { return Name; }
 
 #define SAFE_DELETE(Pointer) if (Pointer != nullptr) delete Pointer;
@@ -67,10 +53,6 @@ namespace Core
         SAFE_DELETE(item); \
         Vector.pop_back(); \
     }
-
-#define IMPLEMENT_ENUM_FLAG(Name) \
-inline Name operator|(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) | static_cast<int>(b)); } \
-inline Name operator&(Name a, Name b) { return static_cast<Name>(static_cast<int>(a) & static_cast<int>(b)); }
 }
 
 #define BASE_IS(Class) typedef Class base;

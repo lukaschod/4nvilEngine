@@ -23,7 +23,7 @@
 
 // Assert with custom message use it for debugging purpose
 #define RELEASE_ASSERT_MSG(isFalse, ...) \
-    if (!(bool)(isFalse)) \
+    if (!(Bool)(isFalse)) \
     { \
         Core::Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
         Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
@@ -35,7 +35,7 @@
 
 // Default assert use it for debugging purpose
 #define RELEASE_ASSERT(isFalse) \
-    if (!(bool)(isFalse)) \
+    if (!(Bool)(isFalse)) \
     { \
         Core::Console::Write("ERROR: Assertion failed \'" #isFalse "\'\n"); \
         Core::Console::Write("    In: " STRINGIFY_BUILTIN(__FILE__) " @ " STRINGIFY_BUILTIN(__LINE__) "\n"); \
@@ -65,7 +65,9 @@
 #    define ASSERT_MSG(isFalse, ...) RELEASE_ASSERT_MSG(isFalse, __VA_ARGS__)
 #    define ERROR(...) RELEASE_ERROR(__VA_ARGS__)
 #else
-#    define ASSERT(isFalse) (void)(isFalse)
-#    define ASSERT_MSG(isFalse, ...) (void)(isFalse)
-#    define ERROR(...) (void)0
+#    define ASSERT(isFalse) (Void)(isFalse)
+#    define ASSERT_MSG(isFalse, ...) (Void)(isFalse)
+#    define ERROR(...) (Void)0
 #endif
+
+#define NOT_IMPLEMENTED() ERROR("Not Implemented");

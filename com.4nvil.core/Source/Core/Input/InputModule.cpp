@@ -13,7 +13,7 @@
 
 using namespace Core;
 
-void InputModule::Execute(const ExecutionContext& context)
+Void InputModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     Reset();
@@ -29,7 +29,7 @@ const InputDevice* InputModule::TryFindInputDevice(const char* typeName) const
 }
 
 DECLARE_COMMAND_CODE(Input);
-void InputModule::RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, uint8* data, size_t size)
+Void InputModule::RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, UInt8* data, UInt size)
 {
     auto buffer = GetRecordingBuffer(context);
     auto& stream = buffer->stream;
@@ -57,14 +57,14 @@ const InputDevice* InputModule::RecCreateInputDevice(const ExecutionContext& con
     return device;
 }
 
-bool InputModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool InputModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
         DESERIALIZE_METHOD_START(Input);
         auto device = stream.FastRead<InputDevice*>();
         auto inputType = stream.FastRead<InputType>();
-        auto size = stream.FastRead<size_t>();
+        auto size = stream.FastRead<UInt>();
         auto pointer = stream.Get_data();
         stream.Set_data(pointer + size);
         device->inputStream.Write(inputType);
@@ -80,7 +80,7 @@ bool InputModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
     return false;
 }
 
-void InputModule::Reset()
+Void InputModule::Reset()
 {
     for (auto device : devices)
     {

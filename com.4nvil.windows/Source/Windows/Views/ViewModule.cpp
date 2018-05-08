@@ -28,7 +28,7 @@ ViewModule::ViewModule(HINSTANCE instanceHandle)
 {
 }
 
-void ViewModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ViewModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
@@ -42,7 +42,7 @@ const List<const IView*>& ViewModule::GetViews()
     return *data;
 }
 
-void ViewModule::CloseWindow(HWND windowHandle)
+Void ViewModule::CloseWindow(HWND windowHandle)
 {
     auto view = TryFindView(windowHandle);
     ASSERT(view != nullptr);
@@ -60,12 +60,12 @@ struct WndProcData
 };
 static WndProcData wndProcData;
 
-static void RecButtonInput(MouseButtonType type, bool isDown)
+static Void RecButtonInput(MouseButtonType type, Bool isDown)
 {
     MouseButtonDesc desc;
     desc.isDown = isDown;
     desc.type = type;
-    wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Button), (uint8*) &desc, sizeof(desc));
+    wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Button), (UInt8*) &desc, sizeof(desc));
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -79,8 +79,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         auto yPos = GET_Y_LPARAM(lParam);
 
         MousePositionDesc desc;
-        desc.position = Vector2f((float) xPos, (float) yPos);
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Move), (uint8*) &desc, sizeof(desc));
+        desc.position = Vector2f((Float) xPos, (Float) yPos);
+        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Move), (UInt8*) &desc, sizeof(desc));
         break;
     }
 
@@ -90,10 +90,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         ViewInputResizeDesc desc;
-        desc.width = (uint32) lParam;
-        desc.height = (uint32) (lParam << 32);
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Resize), (uint8*) &desc, sizeof(desc));
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Render), (uint8*) nullptr, 0);
+        desc.width = (UInt32) lParam;
+        desc.height = (UInt32) (lParam << 32);
+        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Resize), (UInt8*) &desc, sizeof(desc));
+        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Render), (UInt8*) nullptr, 0);
         break;
     }
 
@@ -119,7 +119,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-bool ViewModule::RegisterDefaultWindowClass()
+Bool ViewModule::RegisterDefaultWindowClass()
 {
     ASSERT(instanceHandle != nullptr);
     ASSERT(defaultWindowClassName == nullptr);
@@ -148,8 +148,8 @@ HWND ViewModule::TryCreateWindow(const IView* view)
 
     // TODO: Fix this normally to respect to actual current screen
     /*HDC screen = GetDC(0);
-    float dpiX = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSX));
-    float dpiY = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSY));
+    Float dpiX = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSX));
+    Float dpiY = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSY));
     ReleaseDC(0, screen);*/
 
     DWORD windowStyle = WS_OVERLAPPEDWINDOW;
@@ -217,7 +217,7 @@ View* ViewModule::TryFindView(HWND windowHandle)
     return nullptr;
 }
 
-void ViewModule::Execute(const ExecutionContext& context)
+Void ViewModule::Execute(const ExecutionContext& context)
 {
     base::Execute(context);
 
@@ -256,7 +256,7 @@ SERIALIZE_METHOD_ARG2(ViewModule, SetRect, const IView*, const Rectf&);
 SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const char*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetParent, const IView*, const IView*);
 
-bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -275,8 +275,8 @@ bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
 
         DESERIALIZE_METHOD_ARG2_START(SetRect, View*, target, const Rectf, rect);
         ASSERT(!target->created);
-        target->width = (uint32) rect.width;
-        target->height = (uint32) rect.height;
+        target->width = (UInt32) rect.width;
+        target->height = (UInt32) rect.height;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetName, View*, target, const char*, name);

@@ -17,7 +17,7 @@ const char* PngImporterModule::GetSupportedExtension() { return "png"; }
 
 SERIALIZE_METHOD_ARG1(PngImporterModule, Import, String&);
 
-bool PngImporterModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool PngImporterModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {

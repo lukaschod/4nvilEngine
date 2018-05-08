@@ -16,7 +16,7 @@
 
 using namespace Core;
 
-void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     logModule = ExecuteBefore<LogModule>(moduleManager);
@@ -26,7 +26,7 @@ void ProfilerModule::SetupExecuteOrder(ModuleManager* moduleManager)
     stopWatch.Restart();
 }
 
-void ProfilerModule::Execute(const ExecutionContext& context)
+Void ProfilerModule::Execute(const ExecutionContext& context)
 {
     stopWatch.Restart();
 
@@ -55,7 +55,7 @@ void ProfilerModule::Execute(const ExecutionContext& context)
 }
 
 #include <algorithm>
-void ProfilerModule::TraceFunctions()
+Void ProfilerModule::TraceFunctions()
 {
     List<ProfiledFunction> functions;
     for (auto& worker : workers)
@@ -80,7 +80,7 @@ void ProfilerModule::TraceFunctions()
     TRACE(message.ToString());
 }
 
-void ProfilerModule::RecPushFunction(const ExecutionContext& context, const char* name)
+Void ProfilerModule::RecPushFunction(const ExecutionContext& context, const char* name)
 {
     auto& worker = workers[context.workerIndex];
     auto& functions = worker.functions;
@@ -92,7 +92,7 @@ void ProfilerModule::RecPushFunction(const ExecutionContext& context, const char
         functions[parentIndex].childFunctionCount++;
 }
 
-void ProfilerModule::RecPopFunction(const ExecutionContext& context)
+Void ProfilerModule::RecPopFunction(const ExecutionContext& context)
 {
     auto& worker = workers[context.workerIndex];
     auto& functions = worker.functions;

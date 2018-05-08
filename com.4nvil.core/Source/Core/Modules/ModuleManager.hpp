@@ -28,23 +28,23 @@ namespace Core
         ~ModuleManager();
 
         // Initializes the ModuleManager and other Modules
-        void Start();
+        Void Start();
 
         // Finalizes ModuleManager and other Modules
-        void Stop();
+        Void Stop();
 
         // Begins new iteration of frame, where all modules will be re-executed at given time
-        void NewFrame();
+        Void NewFrame();
 
         // Waits until the current frame finishes
-        void WaitForFrame();
+        Void WaitForFrame();
 
         // Adds module to manager, which later on will be used for planning and execution
-        void AddModule(Module* module);
+        Void AddModule(Module* module);
 
         // Request module manager to stop working, request will be handled before next frame
-        void RequestStop() { requestedStop = true; }
-        bool IsRunning() { return !requestedStop; }
+        Void RequestStop() { requestedStop = true; }
+        Bool IsRunning() { return !requestedStop; }
 
         // Find module with specified type
         template<class T> T* GetModule();
@@ -56,14 +56,14 @@ namespace Core
         template<class T> List<T*> GetModules();
 
         inline const List<Module*>& GetModules() const { return modules; }
-        inline uint32 GetWorkerCount() const { return executor->GetWorkerCount(); }
+        inline UInt32 GetWorkerCount() const { return executor->GetWorkerCount(); }
 
     private:
         List<Module*> modules; // Modules contained by the manager
         IModulePlanner* planner; // Planner that will be used for planning Module execution
         IModuleExecutor* executor; // Executor that will be sued for Module execution
         Threading::AutoResetEvent sleepEvent;
-        bool requestedStop;
+        Bool requestedStop;
     };
 
     template<class T> 
@@ -79,14 +79,12 @@ namespace Core
     }
 
     template<class T>
-    List<T*> ModuleManager::GetModules()
+    Void ModuleManager::GetModules(List<T*>& out)
     {
-        List<T*> out;
         for (auto module : modules)
         {
             if (dynamic_cast<T*>(module) != 0)
                 out.push_back((T*) module);
         }
-        return out;
     }
 }

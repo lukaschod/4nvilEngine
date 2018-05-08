@@ -20,7 +20,12 @@ FileStream::FileStream()
 {
 }
 
-bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
+FileStream::~FileStream()
+{
+    ASSERT(!isOpened);
+}
+
+Bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
 {
     ASSERT_MSG(file == nullptr, "File is already opened");
     auto modeTexted = TryGetMode(mode, access);
@@ -29,25 +34,34 @@ bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
     return isOpened;
 }
 
-void FileStream::Close()
+Bool FileStream::Open(const wchar_t* path, FileMode mode, FileAccess access)
+{
+    ASSERT_MSG(file == nullptr, "File is already opened");
+    auto modeTexted = TryGetMode(mode, access);
+    file = fwopen(path, modeTexted);
+    isOpened = file != nullptr;
+    return isOpened;
+}
+
+Void FileStream::Close()
 {
     ASSERT(isOpened);
     fclose(file);
 }
 
-void FileStream::Read(void* data, size_t size)
+Void FileStream::Read(Void* data, UInt size)
 {
     ASSERT(isOpened);
-    fread(data, sizeof(uint8), size, file);
+    fread(data, sizeof(UInt8), size, file);
 }
 
-void FileStream::Write(void* data, size_t size)
+Void FileStream::Write(Void* data, UInt size)
 {
     ASSERT(isOpened);
-    fwrite(data, sizeof(uint8), size, file);
+    fwrite(data, sizeof(UInt8), size, file);
 }
 
-void FileStream::ReadFmt(const char* format, ...)
+Void FileStream::ReadFmt(const char* format, ...)
 {
     ASSERT(isOpened);
     va_list ap;
@@ -56,7 +70,7 @@ void FileStream::ReadFmt(const char* format, ...)
     va_end(ap);
 }
 
-void FileStream::WriteFmt(const char* format, ...)
+Void FileStream::WriteFmt(const char* format, ...)
 {
     ASSERT(isOpened);
     va_list ap;
@@ -65,13 +79,13 @@ void FileStream::WriteFmt(const char* format, ...)
     va_end(ap);
 }
 
-void FileStream::WriteFmt(const char* format, va_list arguments)
+Void FileStream::WriteFmt(const char* format, va_list arguments)
 {
     ASSERT(isOpened);
     vfprintf(file, format, arguments);
 }
 
-void FileStream::Flush()
+Void FileStream::Flush()
 {
     ASSERT(isOpened);
     fflush(file);

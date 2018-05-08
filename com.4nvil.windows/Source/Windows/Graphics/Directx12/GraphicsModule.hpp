@@ -33,7 +33,7 @@ namespace Windows::Directx12
 
         D3D12_CPU_DESCRIPTOR_HANDLE colorDescriptors[COLOR_ATTACHMENT_MAX_COUNT];
         D3D12_CPU_DESCRIPTOR_HANDLE depthDescriptor;
-        size_t colorDescriptorsCount;
+        UInt colorDescriptorsCount;
         D3D12_VIEWPORT d12Viewport;
         D3D12_RECT d12ScissorRect;
     };
@@ -48,7 +48,7 @@ namespace Windows::Directx12
 
     struct Texture : public ITexture
     {
-        Texture(uint32 width, uint32 height)
+        Texture(UInt32 width, UInt32 height)
             : ITexture(width, height)
             , resource(nullptr)
             , currentState(D3D12_RESOURCE_STATE_COPY_DEST)
@@ -71,20 +71,20 @@ namespace Windows::Directx12
             , cachedGpuVirtualAddress(0)
         { }
 
-        void SetState(D3D12_RESOURCE_STATES& newState)
+        Void SetState(D3D12_RESOURCE_STATES& newState)
         {
             state = (memory.address == 0) ? (D3D12_RESOURCE_STATES*) newState : &newState;
         }
 
         D3D12_RESOURCE_STATES GetState()
         {
-            return (memory.address == 0) ? static_cast<D3D12_RESOURCE_STATES>((uint64)state) : *state;
+            return (memory.address == 0) ? static_cast<D3D12_RESOURCE_STATES>((UInt64)state) : *state;
         }
 
         HeapMemory memory;
         ID3D12Resource* resource;
         D3D12_RESOURCE_STATES* state;
-        uint8* cachedMappedPointer;
+        UInt8* cachedMappedPointer;
         D3D12_GPU_VIRTUAL_ADDRESS cachedGpuVirtualAddress;
     };
 
@@ -100,7 +100,7 @@ namespace Windows::Directx12
 
     struct Buffer : public IBuffer
     {
-        Buffer(size_t size)
+        Buffer(UInt size)
             : IBuffer(size)
             , resource(nullptr)
             //, currentState(D3D12_RESOURCE_STATE_COPY_DEST)
@@ -109,31 +109,31 @@ namespace Windows::Directx12
         {
         }
 
-        void SetState(D3D12_RESOURCE_STATES newState)
+        Void SetState(D3D12_RESOURCE_STATES newState)
         {
             if (memory.address == 0)
-                state = (void*) newState;
+                state = (Void*) newState;
             else
                 *(D3D12_RESOURCE_STATES*) state = newState;
         }
 
         D3D12_RESOURCE_STATES GetState() const
         {
-            return (memory.address == 0) ? (D3D12_RESOURCE_STATES)(uint64)state : *(D3D12_RESOURCE_STATES*)state;
+            return (memory.address == 0) ? (D3D12_RESOURCE_STATES)(UInt64)state : *(D3D12_RESOURCE_STATES*)state;
         }
 
         HeapMemory memory;
         ID3D12Resource* resource;
-        void* state;
+        Void* state;
         //D3D12_RESOURCE_STATES currentState;
         D3D12_GPU_VIRTUAL_ADDRESS cachedResourceGpuVirtualAddress;
-        uint8* resourceMappedPointer;
-        uint64 resourceOffset;
+        UInt8* resourceMappedPointer;
+        UInt64 resourceOffset;
     };
 
     struct RootSubParamter
     {
-        RootSubParamter(const char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, bool isTexture = false)
+        RootSubParamter(const char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, Bool isTexture = false)
             : name(name)
             , type(type)
             , isTexture(isTexture)
@@ -141,7 +141,7 @@ namespace Windows::Directx12
         }
         const D3D12_DESCRIPTOR_RANGE_TYPE type;
         const char* const name;
-        const bool isTexture;
+        const Bool isTexture;
     };
 
     enum class RootParamterType
@@ -163,7 +163,7 @@ namespace Windows::Directx12
             return parameter;
         }
 
-        void GetCounts(uint32* srvCount, uint32* samplersCount) const
+        Void GetCounts(UInt32* srvCount, UInt32* samplersCount) const
         {
             for (auto& supParameter : supParameters)
             {
@@ -215,19 +215,19 @@ namespace Windows::Directx12
             : memory(memory)
             , IsCurrentlyUsedByDraw(false)
         {
-            subData = new uint64(memory.size);
-            memset(subData, 0, sizeof(uint64) * memory.size);
+            subData = new UInt64(memory.size);
+            memset(subData, 0, sizeof(UInt64) * memory.size);
         }
 
-        RootArgument(uint64 data) :
+        RootArgument(UInt64 data) :
             IsCurrentlyUsedByDraw(false)
         {
-            subData = (uint64*) data;
+            subData = (UInt64*) data;
         }
 
         HeapMemory memory;
-        uint64* subData;
-        bool IsCurrentlyUsedByDraw;
+        UInt64* subData;
+        Bool IsCurrentlyUsedByDraw;
     };
 
     struct ShaderArguments : public IShaderArguments
@@ -254,9 +254,9 @@ namespace Windows::Directx12
         inline Texture* GetBacBuffer() const { return bacBuffers[bacBufferIndex]; }
 
         Texture** bacBuffers;
-        uint32 bacBufferIndex;
-        uint32 width;
-        uint32 height;
+        UInt32 bacBufferIndex;
+        UInt32 width;
+        UInt32 height;
 
         IDXGISwapChain3* IDXGISwapChain3;
     };
@@ -275,79 +275,79 @@ namespace Windows::Directx12
         BASE_IS(IGraphicsModule);
 
         GraphicsModule();
-        virtual void Execute(const ExecutionContext& context) override;
-        virtual void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        virtual Void Execute(const ExecutionContext& context) override;
+        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         virtual const char* GetName() { return "Directx12::GraphicsModule"; }
-        virtual const IBuffer* AllocateBuffer(size_t size) override;
-        virtual const ITexture* AllocateTexture(uint32 width, uint32 height) override;
+        virtual const IBuffer* AllocateBuffer(UInt size) override;
+        virtual const ITexture* AllocateTexture(UInt32 width, UInt32 height) override;
         virtual const IFilter* AllocateFilter() override;
         virtual const ISwapChain* AllocateSwapChain(const IView* view) override;
         virtual const IRenderPass* AllocateRenderPass() override;
 
     public:
-        virtual void RecCreateITexture(const ExecutionContext& context, const ITexture* target) override;
+        virtual Void RecCreateITexture(const ExecutionContext& context, const ITexture* target) override;
 
-        virtual void RecCreateIFilter(const ExecutionContext& context, const IFilter* target) override;
+        virtual Void RecCreateIFilter(const ExecutionContext& context, const IFilter* target) override;
 
-        virtual void RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
-        virtual void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, uint32 index, const ColorAttachment& attachment) override;
-        virtual void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
-        virtual void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
-        virtual void RecSetRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
+        virtual Void RecCreateIRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
+        virtual Void RecSetColorAttachment(const ExecutionContext& context, const IRenderPass* target, UInt32 index, const ColorAttachment& attachment) override;
+        virtual Void RecSetDepthAttachment(const ExecutionContext& context, const IRenderPass* target, const DepthAttachment& attachment) override;
+        virtual Void RecSetViewport(const ExecutionContext& context, const IRenderPass* target, const Viewport& viewport) override;
+        virtual Void RecSetRenderPass(const ExecutionContext& context, const IRenderPass* target) override;
 
         virtual const IShaderPipeline* RecCreateIShaderPipeline(const ExecutionContext& context, const ShaderPipelineDesc* desc) override;
         virtual const IShaderArguments* RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline) override;
-        virtual void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) override;
-        virtual void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
-        virtual void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
+        virtual Void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) override;
+        virtual Void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
+        virtual Void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
 
-        virtual void RecCreateIBuffer(const ExecutionContext& context, const IBuffer* target) override;
-        virtual void RecSetBufferUsage(const ExecutionContext& context, const IBuffer* target, BufferUsageFlags usage) override;
-        virtual void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, void* data, size_t size) override;
-        virtual void RecCopyBuffer(const ExecutionContext& context, const IBuffer* src, const IBuffer* dst, size_t size) override;
+        virtual Void RecCreateIBuffer(const ExecutionContext& context, const IBuffer* target) override;
+        virtual Void RecSetBufferUsage(const ExecutionContext& context, const IBuffer* target, BufferUsageFlags usage) override;
+        virtual Void RecUpdateBuffer(const ExecutionContext& context, const IBuffer* target, Void* data, UInt size) override;
+        virtual Void RecCopyBuffer(const ExecutionContext& context, const IBuffer* src, const IBuffer* dst, UInt size) override;
 
-        virtual void RecCreateISwapChain(const ExecutionContext& context, const ISwapChain* target) override;
-        virtual void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
-        virtual void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
+        virtual Void RecCreateISwapChain(const ExecutionContext& context, const ISwapChain* target) override;
+        virtual Void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
+        virtual Void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 
-        virtual void RecPushDebug(const ExecutionContext& context, const char* name) override;
-        virtual void RecPopDebug(const ExecutionContext& context) override;
+        virtual Void RecPushDebug(const ExecutionContext& context, const char* name) override;
+        virtual Void RecPopDebug(const ExecutionContext& context) override;
 
-        virtual void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
+        virtual Void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
 
     protected:
-        virtual bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        inline bool Initialize();
-        inline void InitializeSwapCain(SwapChain* swapChain);
-        inline void InitializeTexture(Texture* texure);
-        inline void InitializeFilter(Filter* filter);
-        inline void InitializeRenderPass(RenderPass* renderPass);
-        inline void InitializeBuffer(Buffer* buffer);
-        inline void InitializePipeline(ShaderPipeline* pipeleine);
-        inline void CompilePipeline(ShaderPipeline* pipeleine);
-        inline void InitializeProperties(ShaderArguments* target);
-        inline void InitializeBlitCopy(BlitCopyDesc* target);
+        inline Bool Initialize();
+        inline Void InitializeSwapCain(SwapChain* swapChain);
+        inline Void InitializeTexture(Texture* texure);
+        inline Void InitializeFilter(Filter* filter);
+        inline Void InitializeRenderPass(RenderPass* renderPass);
+        inline Void InitializeBuffer(Buffer* buffer);
+        inline Void InitializePipeline(ShaderPipeline* pipeleine);
+        inline Void CompilePipeline(ShaderPipeline* pipeleine);
+        inline Void InitializeProperties(ShaderArguments* target);
+        inline Void InitializeBlitCopy(BlitCopyDesc* target);
 
         DXGI_FORMAT Convert(ColorFormat format);
         const char* Convert(VertexAttributeType type);
-        uint32 GetSize(ColorFormat format);
+        UInt32 GetSize(ColorFormat format);
 
-        inline void Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen);
-        inline void BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest);
-        inline void SetTextureState(const ExecutionContext& context, Texture* target, D3D12_RESOURCE_STATES state);
-        inline void SetBufferState(const ExecutionContext& context, Buffer* target, D3D12_RESOURCE_STATES state);
-        inline void SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer);
-        inline void SetTexture(ShaderArguments* target, const char* name, const Texture* texture);
-        inline void SetFilter(ShaderArguments* target, const char* name, const Filter* filter);
-        inline void SetColorAttachment(const ExecutionContext& context, RenderPass* target, uint32 index, const ColorAttachment& attachment);
-        inline void SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment);
-        inline void SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport);
-        inline void SetRenderPass(const ExecutionContext& context, const RenderPass* target);
-        inline void UpdateBuffer(Buffer* target, uint32 targetOffset, Range<uint8> data);
-        inline void Draw(const ExecutionContext& context, const DrawDesc& target);
-        inline void SetName(ID3D12Object* object, const wchar_t* format, ...);
+        inline Void Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen);
+        inline Void BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest);
+        inline Void SetTextureState(const ExecutionContext& context, Texture* target, D3D12_RESOURCE_STATES state);
+        inline Void SetBufferState(const ExecutionContext& context, Buffer* target, D3D12_RESOURCE_STATES state);
+        inline Void SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer);
+        inline Void SetTexture(ShaderArguments* target, const char* name, const Texture* texture);
+        inline Void SetFilter(ShaderArguments* target, const char* name, const Filter* filter);
+        inline Void SetColorAttachment(const ExecutionContext& context, RenderPass* target, UInt32 index, const ColorAttachment& attachment);
+        inline Void SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment);
+        inline Void SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport);
+        inline Void SetRenderPass(const ExecutionContext& context, const RenderPass* target);
+        inline Void UpdateBuffer(Buffer* target, UInt32 targetOffset, Range<UInt8> data);
+        inline Void Draw(const ExecutionContext& context, const DrawDesc& target);
+        inline Void SetName(ID3D12Object* object, const wchar_t* format, ...);
 
     private:
         GraphicsPlannerModule* planner;
@@ -356,9 +356,9 @@ namespace Windows::Directx12
         DescriptorHeap* samplersHeap;
         BufferHeap* bufferUploadHeap;
         BufferHeap* bufferDefaultHeap;
-        List<std::pair<uint64, HeapMemory>> srvHeapMemoryToFree;
-        List<std::pair<uint64, HeapMemory>> samplersHeapMemoryToFree;
-        uint64 resourceCounter;
+        List<std::pair<UInt64, HeapMemory>> srvHeapMemoryToFree;
+        List<std::pair<UInt64, HeapMemory>> samplersHeapMemoryToFree;
+        UInt64 resourceCounter;
         DescriptorHeap* srvCpuHeap;
         DescriptorHeap* samplersCpuHeap;
 

@@ -19,7 +19,7 @@ using namespace Core::Math;
 
 static const char* memoryLabelTransform = "Core::Transform";
 
-void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
@@ -29,7 +29,7 @@ void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
     root->objectToWorld = Matrix4x4f::TRS(root->localPosition, root->localRotation, root->localScale);
 }
 
-void TransformModule::Execute(const ExecutionContext& context)
+Void TransformModule::Execute(const ExecutionContext& context)
 {
     MARK_FUNCTION;
     base::Execute(context);
@@ -48,21 +48,22 @@ void TransformModule::Execute(const ExecutionContext& context)
         ASSERT(parent != nullptr);
 
         // Check if we need to unmark changed state
-        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
+        if (Enum::Contains(next->flags, TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
         {
-            next->flags.Remove(TransformStateFlags::LocalObjectToWorldChanged);
-            next->flags.Remove(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
+            next->flags ^= TransformStateFlags::LocalObjectToWorldChanged;
+            next->flags ^= TransformStateFlags::LocalObjectToWorldUnsetNextFrame;
         }
 
         // Check if we need update
-        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
+        if (Enum::Contains(next->flags, TransformStateFlags::LocalObjectToWorldChanged))
         {
             next->localObjectToWorld = Matrix4x4f::TRS(next->localPosition, next->localRotation, next->localScale);
-            next->flags.Add(TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
+            next->flags |= TransformStateFlags::LocalObjectToWorldUnsetNextFrame;
         }
 
         // If nor local transformation changed nor the parent one, we can skip the combination of them
-        if (next->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged) || parent->flags.Contains(TransformStateFlags::LocalObjectToWorldChanged))
+        if (Enum::Contains(next->flags, TransformStateFlags::LocalObjectToWorldChanged) ||
+            Enum::Contains(parent->flags, TransformStateFlags::LocalObjectToWorldChanged))
         {
             next->objectToWorld = next->localObjectToWorld;
             next->objectToWorld.Multiply(parent->objectToWorld);
@@ -80,7 +81,7 @@ const Transform* TransformModule::AllocateTransform()
 {
     auto transform = memoryModule->New<Transform>(memoryLabelTransform, this);
     transform->parent = root;
-    transform->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+    transform->flags = TransformStateFlags::LocalObjectToWorldChanged;
     return transform;
 }
 
@@ -92,7 +93,7 @@ SERIALIZE_METHOD_ARG2(TransformModule, AddPosition, const Transform*, const Vect
 SERIALIZE_METHOD_ARG2(TransformModule, SetRotation, const Transform*, const Vector3f&);
 SERIALIZE_METHOD_ARG1(TransformModule, CalculateWorldToView, const Transform*);
 
-bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
@@ -127,19 +128,19 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 
         DESERIALIZE_METHOD_ARG2_START(SetPosition, Transform*, target, Vector3f, position);
         target->localPosition = position;
-        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        target->flags |= TransformStateFlags::LocalObjectToWorldChanged;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(AddPosition, Transform*, target, Vector3f, position);
         ASSERT(target->created);
         target->localPosition += position;
-        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        target->flags |= TransformStateFlags::LocalObjectToWorldChanged;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetRotation, Transform*, target, Vector3f, rotation);
         ASSERT(target->created);
         target->localRotation = Quaternionf::FromEuler(rotation.x, rotation.y, rotation.z);
-        target->flags.Add(TransformStateFlags::LocalObjectToWorldChanged);
+        target->flags |= TransformStateFlags::LocalObjectToWorldChanged;
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(CalculateWorldToView, Transform*, target);
@@ -175,7 +176,7 @@ bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     return false;
 }
 
-void TransformModule::SetParent(const ExecutionContext& context, Transform* target, Transform* parent)
+Void TransformModule::SetParent(const ExecutionContext& context, Transform* target, Transform* parent)
 {
     auto oldParent = target->parent;
     if (oldParent != nullptr)
