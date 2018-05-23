@@ -13,18 +13,3 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Assets/Importers/IImporterModule.hpp>
-
-namespace Core
-{
-    class PngImporterModule : public IImporterModule
-    {
-    public:
-        virtual const char* GetSupportedExtension() override;
-
-    public:
-        virtual Void RecImport(const ExecutionContext& context, String& pathToFile) override;
-
-    protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
-    };
-}

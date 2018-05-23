@@ -20,10 +20,10 @@ namespace Core
     {
     private:
         typedef std::chrono::high_resolution_clock clock;
-        typedef std::chrono::duration<unsigned long long, std::pico> picoseconds;
-        typedef std::chrono::duration<unsigned long long, std::milli> milliseconds;
-        typedef std::chrono::duration<unsigned long long, std::micro> microseconds;
-        typedef std::chrono::duration<Double, typename clock::period> Cycle;
+        typedef std::chrono::duration<UInt64, std::pico> picoseconds;
+        typedef std::chrono::duration<UInt64, std::milli> milliseconds;
+        typedef std::chrono::duration<UInt64, std::micro> microseconds;
+        typedef std::chrono::duration<Float64, typename clock::period> Cycle;
 
     public:
         StopWatch()

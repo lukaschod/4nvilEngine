@@ -11,20 +11,40 @@
 
 #pragma once
 
+#include <Core/Tools/Common.hpp>
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <wchar.h>
 
 namespace Core
 {
+    class DirectoryExtension
+    {
+    public:
+        DirectoryExtension() { data = nullptr; }
+        DirectoryExtension(const wchar_t* extension) { data = extension; }
+
+        Bool operator==(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) == 0; }
+        Bool operator!=(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) != 0; }
+
+    private:
+        const wchar_t* data;
+    };
+
     class Directory 
     {
     public:
-        Directory() { *data = 0; }
-        Directory(const wchar_t* directory) { wcscpy(data, directory); }
-        Directory(const Directory& directory) { wcscpy(data, directory.data); }
+        Directory() { *data = 0; size = 0; }
+        Directory(const wchar_t* directory) { wcscpy(data, directory); RecalculateSize(); }
+        Directory(const Directory& directory) { wcscpy(data, directory.data); RecalculateSize(); }
 
+        // Append value on end of directory
+        Bool Append(const wchar_t* value);
+
+        // Is directory a file, checks not extension
         Bool IsFile() const;
+
+        // Returns extension of directory
         Bool GetExtension(DirectoryExtension& extension) const;
 
         inline UInt GetCapacity() const { return 260; }
@@ -32,7 +52,6 @@ namespace Core
         inline UInt GetSize() const { return size; }
 
         inline const wchar_t* ToCString() const { return data; }
-        inline wchar_t* ToString() { return data; }
 
         inline Bool operator==(const Directory& lhs) const { return wcscmp(data, lhs.data) == 0; }
         inline Bool operator!=(const Directory& lhs) const { return wcscmp(data, lhs.data) != 0; }
@@ -47,20 +66,10 @@ namespace Core
         static Void GetFiles(const Directory& path, List<Directory>& out);
 
     private:
-        wchar_t data[260];
-        UInt size;
-    };
-
-    class DirectoryExtension
-    {
-    public:
-        DirectoryExtension() { data = nullptr; }
-        DirectoryExtension(const wchar_t* extension) { data = extension; }
-
-        Bool operator==(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) == 0; }
-        Bool operator!=(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) != 0; }
+        inline Void RecalculateSize();
 
     private:
-        const wchar_t* data;
+        wchar_t data[260];
+        UInt size;
     };
 }

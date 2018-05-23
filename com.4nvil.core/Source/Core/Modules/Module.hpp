@@ -88,7 +88,7 @@ namespace Core
             module->OnDependancyAdd(moduleManager, this, false);
         }
 
-        template<class T> Void ExecuteBefore(ModuleManager* moduleManager, List<T*>& modules)
+        template<class T> Void ExecuteAfter(ModuleManager* moduleManager, List<T*>& modules)
         {
             ASSERT(moduleManager != nullptr);
             moduleManager->GetModules<T>(modules);

@@ -16,6 +16,7 @@
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/TransferModule.hpp>
 
 namespace Core
 {
@@ -35,8 +36,20 @@ namespace Core
         Guid guid;
     };
 
-    struct Library
+    Void Transferer(ITransfer* transfer, const List<Tracked>& value)
     {
+        auto size = value.size();
+        transfer->Transfer((UInt8*) &size, sizeof(UInt));
+        transfer->Transfer((UInt8*) value.data(), sizeof(Tracked) * value.size());
+    }
+
+    struct Library : public Transferable
+    {
+        virtual Void Transfer(ITransfer* transfer) override
+        {
+            Transferer(transfer, trackeds);
+        }
+
         List<Tracked> trackeds;
     };
 
@@ -65,5 +78,6 @@ namespace Core
 
     private:
         AssetModule* assetModule;
+        TransferModule* transferModule;
     };
 }

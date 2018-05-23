@@ -17,6 +17,18 @@
 using namespace Core;
 namespace filesystem = std::experimental::filesystem;
 
+Bool Directory::Append(const wchar_t* value)
+{
+    // Check if it will not exceed the capacity
+    auto sizeOfValue = wcslen(value);
+    if (GetSize() + sizeOfValue > GetCapacity())
+        return false;
+
+    wcscpy(data + size, value);
+    RecalculateSize();
+    return true;
+}
+
 Bool Directory::IsFile() const
 {
     filesystem::directory_entry temp(data);
@@ -44,10 +56,10 @@ const Directory& Directory::GetExecutablePath()
     {
         // Get the actual directory
         auto hModule = GetModuleHandleW(NULL);
-        GetModuleFileNameW(hModule, path.ToString(), path.GetCapacity());
+        GetModuleFileNameW(hModule, path.data, path.GetCapacity());
 
         // Add terminator
-        auto last = wcsrchr(path.ToString(), '\\');
+        auto last = wcsrchr(path.data, '\\');
         *last = 0;
         pathValid = true;
     }
@@ -80,4 +92,9 @@ Void Directory::GetFiles(const Directory& path, List<Directory>& out)
             out.push_back(directory);
         }
     }
+}
+
+Void Directory::RecalculateSize()
+{
+    size = wcslen(data);
 }

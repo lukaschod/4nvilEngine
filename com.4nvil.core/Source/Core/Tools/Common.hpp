@@ -11,6 +11,8 @@
 
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <Core/Tools/Types.hpp>
 #include <Core/Tools/Testing.hpp>
 

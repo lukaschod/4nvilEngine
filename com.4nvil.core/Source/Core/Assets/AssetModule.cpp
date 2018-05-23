@@ -21,15 +21,7 @@ Void AssetModule::SetupExecuteOrder(ModuleManager* moduleManager)
 
 Bool AssetModule::IsSupported(const Directory& directory) const
 {
-    DirectoryExtension extension;
-    ASSERT(directory.GetExtension(extension));
-
-    for (auto importerModule : importerModules)
-    {
-        if (importerModule->IsSupported(extension))
-            return true;
-    }
-    return false;
+    return TryGetImporter(directory) != nullptr;
 }
 
 SERIALIZE_METHOD_ARG2(AssetModule, Import, const Directory&, const Guid&);
@@ -38,8 +30,33 @@ Bool AssetModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
 {
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG2_START(Import, const Directory*, directory, const Guid, guid);
+        DESERIALIZE_METHOD_ARG2_START(Import, const Directory, directory, const Guid, guid);
+        Import(context, directory, guid);
         DESERIALIZE_METHOD_END;
     }
     return false;
+}
+
+IImporterModule* AssetModule::TryGetImporter(const Directory& directory) const
+{
+    DirectoryExtension extension;
+    ASSERT(directory.GetExtension(extension));
+
+    for (auto importerModule : importerModules)
+    {
+        if (importerModule->IsSupported(extension))
+            return importerModule;
+    }
+    return nullptr;
+}
+
+Void AssetModule::Import(const ExecutionContext& context, const Directory& directory, const Guid& guid)
+{
+    auto importer = TryGetImporter(directory);
+    ASSERT(importer != nullptr);
+
+    DirectoryToAsset d2a;
+    d2a.asset = importer->Import(context, directory);
+    d2a.directory = directory;
+    d2a.guid = guid;
 }

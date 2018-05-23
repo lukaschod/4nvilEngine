@@ -27,6 +27,7 @@ namespace Core
     struct Package
     {
         Directory directory;
+        Directory libraryDirectory;
         const Library* library;
     };
 
@@ -49,7 +50,8 @@ namespace Core
     private:
         Void SyncPackage(const ExecutionContext& context, Package* package);
         Void SyncPackageDirectory(const ExecutionContext& context, Package* package, const Directory& directory);
-        Void SyncPackageLibrary(const ExecutionContext& context, Package* package, const Directory& directory);
+        Void LoadLibrary(const ExecutionContext& context, Package* package, const Directory& directory);
+        Void SaveLibrary(const ExecutionContext& context, Package* package);
 
     private:
         LibraryModule* libraryModule;

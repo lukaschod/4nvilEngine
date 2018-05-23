@@ -37,6 +37,10 @@ Bool PackageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
     DESERIALIZE_METHOD_ARG1_START(CreatePackage, Package*, target);
     libraryModule->RecCreateLibrary(context, target->library);
     packages.push_back(target);
+
+    // Lets create default directory for library
+    target->libraryDirectory = target->directory;
+    target->libraryDirectory.Append(L"Library.library");
     DESERIALIZE_METHOD_END;
 
     DESERIALIZE_METHOD_ARG1_START(SyncPackage, Package*, package);
@@ -48,9 +52,9 @@ Bool PackageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 
 Void PackageModule::SyncPackage(const ExecutionContext& context, Package* package)
 {
-    SyncPackageLibrary(context, package, package->directory);
+    LoadLibrary(context, package, package->directory);
     SyncPackageDirectory(context, package, package->directory);
-    libraryModule->RecSaveLibrary(context, package->directory);
+    SaveLibrary(context, package);
 }
 
 Void PackageModule::SyncPackageDirectory(const ExecutionContext& context, Package* package, const Directory& directory)
@@ -67,7 +71,7 @@ Void PackageModule::SyncPackageDirectory(const ExecutionContext& context, Packag
     }
 }
 
-Void PackageModule::SyncPackageLibrary(const ExecutionContext& context, Package* package, const Directory& directory)
+Void PackageModule::LoadLibrary(const ExecutionContext& context, Package* package, const Directory& directory)
 {
     List<Directory> directories; // reuse it
     Directory::GetDirectories(directory, directories);
@@ -79,9 +83,17 @@ Void PackageModule::SyncPackageLibrary(const ExecutionContext& context, Package*
             DirectoryExtension extension;
             ASSERT(directory.GetExtension(extension));
             if (extension == DirectoryExtension(L".library"))
+            {
                 libraryModule->RecLoadLibrary(context, package->library, directory);
+                package->libraryDirectory = directory;
+            }
         }
         else
             SyncPackageDirectory(context, package, directory);
     }
+}
+
+Void PackageModule::SaveLibrary(const ExecutionContext& context, Package* package)
+{
+    libraryModule->RecSaveLibrary(context, package->library, package->libraryDirectory);
 }

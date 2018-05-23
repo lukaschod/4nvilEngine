@@ -18,7 +18,7 @@
 
 namespace Core
 {
-    typedef UInt32_t InputType;
+    typedef UInt32 InputType;
 
     struct InputDeviceDesc
     {

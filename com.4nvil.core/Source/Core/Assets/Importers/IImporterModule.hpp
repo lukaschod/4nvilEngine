@@ -15,11 +15,12 @@
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/TransferModule.hpp>
 
 namespace Core
 {
     struct Package;
-    struct Asset;
+    struct Transferable;
 }
 
 namespace Core
@@ -35,7 +36,7 @@ namespace Core
         virtual bool IsSupported(const DirectoryExtension& extension) = 0;
 
     public:
-        // Records the to import data
-        virtual const Asset* Import(const ExecutionContext& context, const Package* package, const Directory& directory) = 0;
+        virtual const Transferable* Import(const ExecutionContext& context, const Directory& directory) = 0;
+        virtual const Transferable* Import(const ExecutionContext& context, const Guid& guid) = 0;
     };
 }

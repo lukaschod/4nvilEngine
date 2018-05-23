@@ -29,6 +29,7 @@ const Library* LibraryModule::AllocateLibrary()
 
 SERIALIZE_METHOD_ARG1(LibraryModule, CreateLibrary, const Library*);
 SERIALIZE_METHOD_ARG2(LibraryModule, Track, const Library*, const Directory&);
+SERIALIZE_METHOD_ARG2(LibraryModule, SaveLibrary, const Library*, const Directory&);
 SERIALIZE_METHOD_ARG2(LibraryModule, LoadLibrary, const Library*, const Directory&);
 
 Bool LibraryModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
@@ -42,10 +43,17 @@ Bool LibraryModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
         Track(context, target, directory);
         DESERIALIZE_METHOD_END;
 
+        DESERIALIZE_METHOD_ARG2_START(SaveLibrary, Library*, target, const Directory, directory);
+        FileStream stream;
+        stream.Open(directory.ToCString(), FileMode::Create, FileAccess::Write);
+        transferModule->Write(&stream, target);
+        stream.Close();
+        DESERIALIZE_METHOD_END;
+
         DESERIALIZE_METHOD_ARG2_START(LoadLibrary, Library*, target, const Directory, directory);
         FileStream stream;
         stream.Open(directory.ToCString(), FileMode::Open, FileAccess::Read);
-        transferModule->Transfter(target, stream);
+        transferModule->Read(&stream, target);
         stream.Close();
         DESERIALIZE_METHOD_END;
     }
@@ -54,15 +62,16 @@ Bool LibraryModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 
 Void LibraryModule::Track(const ExecutionContext& context, Library* target, const Directory& directory)
 {
+    // Check if this file format supported by asset module
     if (!assetModule->IsSupported(directory))
         return;
 
+    // Do not track again same file
     if (Contains(target, directory))
         return;
 
     auto guid = GenerateGuid();
-    auto& trackeds = target->trackeds;
-    trackeds.push_back(Tracked(directory, guid));
+    target->trackeds.push_back(Tracked(directory, guid));
 
     assetModule->RecImport(context, directory, guid);
 }

@@ -411,22 +411,22 @@ public:
 
 cbuffer _perCameraData : register(b0)
 {
-    Float4x4 _worldToCamera;
+    float4x4 _worldToCamera;
 };
 
 cbuffer _perMeshData : register(b1)
 {
-    Float4x4 _objectToWorld;
+    float4x4 _objectToWorld;
 };
 
 struct AppData
 {
-    Float4 position : POSITION;
+    float4 position : POSITION;
 };
 
 struct VertData
 {
-    Float4 position : SV_POSITION;
+    float4 position : SV_POSITION;
 };
 
 VertData VertMain(AppData i)
@@ -436,9 +436,9 @@ VertData VertMain(AppData i)
     return o;
 }
 
-Float4 FragMain(VertData i) : SV_TARGET
+float4 FragMain(VertData i) : SV_TARGET
 {
-    return Float4(1, 1, 1, 1);
+    return float4(1, 1, 1, 1);
 }
             )";
 
@@ -615,22 +615,22 @@ public:
 
 cbuffer _perCameraData : register(b0)
 {
-    Float4x4 _worldToCamera;
+    float4x4 _worldToCamera;
 };
 
 cbuffer _perMeshData : register(b1)
 {
-    Float4x4 _objectToWorld;
+    float4x4 _objectToWorld;
 };
 
 struct AppData
 {
-    Float4 position : POSITION;
+    float4 position : POSITION;
 };
 
 struct VertData
 {
-    Float4 position : SV_POSITION;
+    float4 position : SV_POSITION;
 };
 
 VertData VertMain(AppData i)
@@ -640,9 +640,9 @@ VertData VertMain(AppData i)
     return o;
 }
 
-Float4 FragMain(VertData i) : SV_TARGET
+float4 FragMain(VertData i) : SV_TARGET
 {
-    return Float4(1, 1, 0, 1);
+    return float4(1, 1, 0, 1);
 }
             )";
 

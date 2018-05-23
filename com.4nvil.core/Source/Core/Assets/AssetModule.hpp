@@ -20,11 +20,6 @@
 
 namespace Core
 {
-    struct Asset
-    {
-
-    };
-
     class AssetModule : public PipeModule
     {
     public:
@@ -40,11 +35,15 @@ namespace Core
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
+        IImporterModule* TryGetImporter(const Directory& directory) const;
+        Void Import(const ExecutionContext& context, const Directory& directory, const Guid& guid);
+
+    private:
         struct DirectoryToAsset
         {
             Directory directory;
             Guid guid;
-            const Asset* asset;
+            const Transferable* asset;
         };
         List<DirectoryToAsset> directoryToAsset;
         List<IImporterModule*> importerModules;

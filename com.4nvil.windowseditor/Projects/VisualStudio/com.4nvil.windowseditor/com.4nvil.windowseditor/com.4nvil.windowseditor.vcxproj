@@ -13,11 +13,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.hpp" />
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\LibraryImporterModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp" />
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.hpp" />
@@ -26,6 +24,7 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.hpp" />
@@ -105,16 +104,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp" />
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\LibraryImporterModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp" />
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.cpp" />

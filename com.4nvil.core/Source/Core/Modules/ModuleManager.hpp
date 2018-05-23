@@ -53,7 +53,7 @@ namespace Core
         Module* GetModule(const std::type_info& type);
 
         // Find modules with specified type
-        template<class T> List<T*> GetModules();
+        template<class T> Void GetModules(List<T*>& out);
 
         inline const List<Module*>& GetModules() const { return modules; }
         inline UInt32 GetWorkerCount() const { return executor->GetWorkerCount(); }

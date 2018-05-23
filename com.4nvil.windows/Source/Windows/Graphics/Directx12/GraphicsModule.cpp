@@ -601,7 +601,7 @@ Bool GraphicsModule::Initialize()
     // NOTE: Enabling the debug layer after device creation will invalidate the active device.
     {
         ID3D12Debug* debugController;
-        if (SUCCEEDED(D3D12GetDebugUInterface(IID_PPV_ARGS(&debugController))))
+        if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
         {
             debugController->EnableDebugLayer();
 
@@ -674,7 +674,7 @@ Void GraphicsModule::InitializeSwapCain(SwapChain* swapChain)
     // This sample does not support fullscreen transitions.
     ASSERT_SUCCEEDED(factory->MakeWindowAssociation(windowHandle, DXGI_MWA_NO_ALT_ENTER));
 
-    ASSERT_SUCCEEDED(swapChain1->QueryUInterface(IID_PPV_ARGS(&swapChain->IDXGISwapChain3)));
+    ASSERT_SUCCEEDED(swapChain1->QueryInterface(IID_PPV_ARGS(&swapChain->IDXGISwapChain3)));
     auto d12SwapChain = swapChain->IDXGISwapChain3;
     swapChain->bacBufferIndex = d12SwapChain->GetCurrentBackBufferIndex();
 
