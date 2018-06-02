@@ -17,7 +17,7 @@
 using namespace Core;
 using namespace Core::Math;
 
-static const char* memoryLabelTransform = "Core::Transform";
+static const Char* memoryLabelTransform = "Core::Transform";
 
 Void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {

@@ -37,7 +37,7 @@ namespace Core
 
     struct MaterialProperty
     {
-        MaterialProperty(const char* name, MaterialPropertyType type)
+        MaterialProperty(const Char* name, MaterialPropertyType type)
             : name(name)
             , type(type)
             , value(nullptr)
@@ -90,14 +90,14 @@ namespace Core
     public:
         Void RecCreateMaterial(const ExecutionContext& context, const Material* material);
         Void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
-        Void RecSetStorage(const ExecutionContext& context, const Material* target, const char* name, const Storage* storage);
+        Void RecSetStorage(const ExecutionContext& context, const Material* target, const Char* name, const Storage* storage);
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        inline Void SetProperty(MaterialProperties* properties, const char* name, MaterialPropertyType type, Void* value);
-        inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const char* name);
+        inline Void SetProperty(MaterialProperties* properties, const Char* name, MaterialPropertyType type, Void* value);
+        inline MaterialProperty* TryFindProperty(MaterialProperties* properties, const Char* name);
 
     private:
         Graphics::IGraphicsModule* graphicsModule;

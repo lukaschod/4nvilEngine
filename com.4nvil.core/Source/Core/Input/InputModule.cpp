@@ -20,7 +20,7 @@ Void InputModule::Execute(const ExecutionContext& context)
     base::Execute(context);
 }
 
-const InputDevice* InputModule::TryFindInputDevice(const char* typeName) const
+const InputDevice* InputModule::TryFindInputDevice(const Char* typeName) const
 {
     for (auto device : devices)
         if (strcmp(device->desc.typeName, typeName) == 0)

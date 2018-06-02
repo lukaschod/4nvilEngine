@@ -48,7 +48,7 @@ namespace Core
 
         virtual UInt GetExecutionSize() { return 1; }
         virtual UInt GetSplitExecutionSize() { return 1; }
-        virtual const char* GetName() { return "Unamed"; }
+        virtual const Char* GetName() { return "Unamed"; }
 
     protected:
         virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}

@@ -21,7 +21,7 @@ namespace Core
     {
         ProfiledFunction() {}
         ProfiledFunction(
-            const char* name,
+            const Char* name,
             Float start,
             int parentIndex
         )
@@ -32,7 +32,7 @@ namespace Core
             , parentIndex(parentIndex)
         {
         }
-        const char* name;
+        const Char* name;
         Float start;
         Float end;
         UInt childFunctionCount;
@@ -58,7 +58,7 @@ namespace Core
         Void TraceFunctions();
 
     public:
-        Void RecPushFunction(const ExecutionContext& context, const char* name);
+        Void RecPushFunction(const ExecutionContext& context, const Char* name);
         Void RecPopFunction(const ExecutionContext& context);
 
     private:
@@ -84,7 +84,7 @@ namespace Core
         ProfileFunction(
             const ExecutionContext& context,
             ProfilerModule* profiler,
-            const char* name)
+            const Char* name)
             : profiler(profiler)
             , context(context)
         {

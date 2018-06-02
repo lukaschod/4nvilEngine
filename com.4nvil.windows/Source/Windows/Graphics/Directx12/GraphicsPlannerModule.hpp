@@ -45,10 +45,10 @@ namespace Windows::Directx12
         virtual Void Execute(const ExecutionContext& context) override;
         virtual UInt GetExecutionSize() override;
         virtual UInt GetSplitExecutionSize() override;
-        virtual const char* GetName() { return "GraphicsPlannerModule"; }
+        virtual const Char* GetName() { return "GraphicsPlannerModule"; }
 
         Void RecRequestSplit();
-        Void RecPushDebug(const char* name);
+        Void RecPushDebug(const Char* name);
         Void RecPopDebug();
         Void RecSetTextureState(const Texture* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);
         Void RecSetBufferState(const Buffer* target, D3D12_RESOURCE_STATES currentState, D3D12_RESOURCE_STATES nextState);

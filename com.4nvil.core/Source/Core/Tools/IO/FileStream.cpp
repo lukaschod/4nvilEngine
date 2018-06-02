@@ -24,7 +24,7 @@ FileStream::~FileStream()
     ASSERT(!isOpened);
 }
 
-Bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
+Bool FileStream::Open(const Char* path, FileMode mode, FileAccess access)
 {
     ASSERT_MSG(file == nullptr, "File is already opened");
     auto modeTexted = TryGetMode(mode, access);
@@ -51,7 +51,7 @@ Void FileStream::Write(Void* data, UInt size)
     fwrite(data, sizeof(UInt8), size, file);
 }
 
-Void FileStream::ReadFmt(const char* format, ...)
+Void FileStream::ReadFmt(const Char* format, ...)
 {
     ASSERT(isOpened);
     va_list ap;
@@ -60,7 +60,7 @@ Void FileStream::ReadFmt(const char* format, ...)
     va_end(ap);
 }
 
-Void FileStream::WriteFmt(const char* format, ...)
+Void FileStream::WriteFmt(const Char* format, ...)
 {
     ASSERT(isOpened);
     va_list ap;
@@ -69,7 +69,7 @@ Void FileStream::WriteFmt(const char* format, ...)
     va_end(ap);
 }
 
-Void FileStream::WriteFmt(const char* format, va_list arguments)
+Void FileStream::WriteFmt(const Char* format, va_list arguments)
 {
     ASSERT(isOpened);
     vfprintf(file, format, arguments);
@@ -81,7 +81,7 @@ Void FileStream::Flush()
     fflush(file);
 }
 
-const char* FileStream::TryGetMode(FileMode mode, FileAccess access)
+const Char* FileStream::TryGetMode(FileMode mode, FileAccess access)
 {
     switch (mode)
     {

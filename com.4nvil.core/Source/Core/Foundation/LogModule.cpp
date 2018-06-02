@@ -27,10 +27,10 @@ Void LogModule::Execute(const ExecutionContext& context)
     output.Flush();
 }
 
-SERIALIZE_METHOD_ARG1(LogModule, Write, const char*);
+SERIALIZE_METHOD_ARG1(LogModule, Write, const Char*);
 
 DECLARE_COMMAND_CODE(WriteFmt);
-Void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format, ...)
+Void LogModule::RecWriteFmt(const ExecutionContext& context, const Char* format, ...)
 {
     // Construct message
     va_list ap;
@@ -70,12 +70,12 @@ Bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& s
 {
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG1_START(Write, const char*, message);
+        DESERIALIZE_METHOD_ARG1_START(Write, const Char*, message);
         output.WriteFmt(message);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(WriteFmt, UInt, size);
-        const char* message = (const char*) stream.Get_data();
+        const Char* message = (const Char*) stream.Get_data();
         stream.Set_data(stream.Get_data() + size);
         output.WriteFmt(message);
         DESERIALIZE_METHOD_END;

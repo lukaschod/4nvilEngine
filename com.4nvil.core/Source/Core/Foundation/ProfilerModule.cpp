@@ -80,7 +80,7 @@ Void ProfilerModule::TraceFunctions()
     TRACE(message.ToString());
 }
 
-Void ProfilerModule::RecPushFunction(const ExecutionContext& context, const char* name)
+Void ProfilerModule::RecPushFunction(const ExecutionContext& context, const Char* name)
 {
     auto& worker = workers[context.workerIndex];
     auto& functions = worker.functions;

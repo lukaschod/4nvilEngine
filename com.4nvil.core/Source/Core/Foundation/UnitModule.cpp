@@ -15,7 +15,7 @@
 
 using namespace Core;
 
-static const char* memoryLabelUnit = "Core::Unit";
+static const Char* memoryLabelUnit = "Core::Unit";
 
 Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {

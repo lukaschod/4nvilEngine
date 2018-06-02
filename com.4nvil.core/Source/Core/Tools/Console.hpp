@@ -16,8 +16,8 @@
 namespace Core::Console
 {
     // Prints message into the IDEA console
-    Void Write(const char* msg);
+    Void Write(const Char* msg);
 
     // Prints formated message into the IDEA console
-    Void WriteFmt(const char* format, ...);
+    Void WriteFmt(const Char* format, ...);
 };

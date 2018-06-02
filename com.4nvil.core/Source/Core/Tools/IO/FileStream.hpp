@@ -39,19 +39,19 @@ namespace Core::IO
 
         virtual Void Close() override;
         virtual Void Read(Void* data, UInt size) override;
-        virtual Void ReadFmt(const char* format, ...) override;
+        virtual Void ReadFmt(const Char* format, ...) override;
         virtual Void Write(Void* data, UInt size) override;
-        virtual Void WriteFmt(const char* format, ...) override;
-        virtual Void WriteFmt(const char* format, va_list arguments) override;
+        virtual Void WriteFmt(const Char* format, ...) override;
+        virtual Void WriteFmt(const Char* format, va_list arguments) override;
 
-        Bool Open(const char* path, FileMode mode, FileAccess access);
+        Bool Open(const Char* path, FileMode mode, FileAccess access);
         inline Bool IsOpened() const { return isOpened; }
 
         // Forces all unwritten data to be written to the file
         Void Flush();
 
     private:
-        const char* TryGetMode(FileMode mode, FileAccess access);
+        const Char* TryGetMode(FileMode mode, FileAccess access);
 
     private:
         FILE* file;

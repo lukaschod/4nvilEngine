@@ -34,7 +34,7 @@ namespace Core
             current += size;
         }
 
-        inline Void Append(const char* value)
+        inline Void Append(const Char* value)
         {
             ASSERT(current < end);
             auto size = strlen(value);
@@ -42,7 +42,7 @@ namespace Core
             current += size;
         }
 
-        inline Void AppendFmt(const char* format, ...)
+        inline Void AppendFmt(const Char* format, ...)
         {
             ASSERT(current < end);
             va_list ap;
@@ -51,13 +51,13 @@ namespace Core
             va_end(ap);
         }
 
-        inline Void AppendFmt(const char* format, va_list ap)
+        inline Void AppendFmt(const Char* format, va_list ap)
         {
             ASSERT(current < end);
             current += vsnprintf(current, Size, format, ap);
         }
 
-        inline const char* ToString()
+        inline const Char* ToString()
         {
             *current = 0; // Add null terminator on demand
             return text;
@@ -69,8 +69,8 @@ namespace Core
         }
 
     private:
-        char text[Size];
-        char* end;
-        char* current;
+        Char text[Size];
+        Char* end;
+        Char* current;
     };
 }

@@ -70,7 +70,7 @@ namespace Core::IO
 
         inline std::string FastRead()
         {
-            std::string out((const char*)data);
+            std::string out((const Char*)data);
             this->data += sizeof(out.size());
             return out;
         }

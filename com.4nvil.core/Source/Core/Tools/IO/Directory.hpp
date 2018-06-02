@@ -49,7 +49,7 @@ namespace Core
 
         inline UInt GetSize() const { return size; }
 
-        inline const char* ToCString() const { return data; }
+        inline const Char* ToCString() const { return data; }
 
         inline Bool operator==(const Directory& lhs) const { return strcmp(data, lhs.data) == 0; }
         inline Bool operator!=(const Directory& lhs) const { return strcmp(data, lhs.data) != 0; }

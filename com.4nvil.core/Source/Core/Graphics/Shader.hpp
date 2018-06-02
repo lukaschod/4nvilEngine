@@ -29,7 +29,7 @@ namespace Core::Graphics
     struct ShaderParameter
     {
         ShaderParameter() {}
-        ShaderParameter(const char* name, ShaderParameterType type) : name(name), type(type) {}
+        ShaderParameter(const Char* name, ShaderParameterType type) : name(name), type(type) {}
         String name;
         ShaderParameterType type;
     };

@@ -63,7 +63,7 @@ namespace Windows
 
         // Set name to view
         // Can't be called after creation of view
-        virtual Void RecSetName(const ExecutionContext& context, const IView* target, const char* name) override;
+        virtual Void RecSetName(const ExecutionContext& context, const IView* target, const Char* name) override;
 
         // Set parent to view
         // Can't be called after creation of view
@@ -83,7 +83,7 @@ namespace Windows
         const InputDevice* inputDevice;
         ImageModule* imageModule;
         List<View*> views;
-        const char* defaultWindowClassName;
+        const Char* defaultWindowClassName;
         HINSTANCE instanceHandle;
     };
 }

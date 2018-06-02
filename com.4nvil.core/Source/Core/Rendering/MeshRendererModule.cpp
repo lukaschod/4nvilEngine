@@ -21,7 +21,7 @@ using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
 
-static const char* memoryLabelMeshRenderer = "Core::MeshRenderer";
+static const Char* memoryLabelMeshRenderer = "Core::MeshRenderer";
 
 MeshRendererModule::MeshRendererModule()
     : perAllRendererStorage(nullptr)

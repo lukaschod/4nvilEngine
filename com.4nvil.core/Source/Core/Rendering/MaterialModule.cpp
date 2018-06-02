@@ -18,7 +18,7 @@
 using namespace Core;
 using namespace Core::Graphics;
 
-static const char* memoryLabelMaterial = "Core::Material";
+static const Char* memoryLabelMaterial = "Core::Material";
 
 Void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
@@ -40,7 +40,7 @@ const Material* MaterialModule::AllocateMaterial() const
 
 SERIALIZE_METHOD_ARG1(MaterialModule, CreateMaterial, const Material*);
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
-SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const char*, const Storage*);
+SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const Char*, const Storage*);
 
 Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -86,7 +86,7 @@ Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const char*, name, const Storage*, storage);
+        DESERIALIZE_METHOD_ARG3_START(SetStorage, Material*, material, const Char*, name, const Storage*, storage);
         ASSERT(material->created);
         auto materialProperties = (MaterialProperties*) material->properties;
         SetProperty(materialProperties, name, MaterialPropertyType::Storage, (Void*) storage);
@@ -99,7 +99,7 @@ Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
     return false;
 }
 
-Void MaterialModule::SetProperty(MaterialProperties* materialProperties, const char* name, MaterialPropertyType type, Void* value)
+Void MaterialModule::SetProperty(MaterialProperties* materialProperties, const Char* name, MaterialPropertyType type, Void* value)
 {
     auto& properties = materialProperties->properties;
     auto containedProperty = TryFindProperty(materialProperties, name);
@@ -111,7 +111,7 @@ Void MaterialModule::SetProperty(MaterialProperties* materialProperties, const c
     containedProperty->value = value;
 }
 
-MaterialProperty* MaterialModule::TryFindProperty(MaterialProperties* materialProperties, const char* name)
+MaterialProperty* MaterialModule::TryFindProperty(MaterialProperties* materialProperties, const Char* name)
 {
     auto& properties = materialProperties->properties;
     for (auto& property : properties)

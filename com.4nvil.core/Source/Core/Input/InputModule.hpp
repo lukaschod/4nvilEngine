@@ -22,8 +22,8 @@ namespace Core
 
     struct InputDeviceDesc
     {
-        const char* typeName;
-        const char* vendorName;
+        const Char* typeName;
+        const Char* vendorName;
     };
 
     struct InputDevice
@@ -41,7 +41,7 @@ namespace Core
         virtual Void Execute(const ExecutionContext& context) override;
 
         // Find input devices by the type name
-        const InputDevice* TryFindInputDevice(const char* typeName) const;
+        const InputDevice* TryFindInputDevice(const Char* typeName) const;
 
         // Record abstract input
         Void RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, UInt8* data, UInt size);

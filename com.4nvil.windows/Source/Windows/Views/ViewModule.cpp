@@ -252,7 +252,7 @@ const IView* ViewModule::AllocateView()
 
 SERIALIZE_METHOD_ARG1(ViewModule, CreateIView, const IView*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetRect, const IView*, const Rectf&);
-SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const char*);
+SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const Char*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetParent, const IView*, const IView*);
 
 Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
@@ -278,7 +278,7 @@ Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         target->height = (UInt32) rect.height;
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(SetName, View*, target, const char*, name);
+        DESERIALIZE_METHOD_ARG2_START(SetName, View*, target, const Char*, name);
         ASSERT(!target->created);
         target->name = name;
         DESERIALIZE_METHOD_END;

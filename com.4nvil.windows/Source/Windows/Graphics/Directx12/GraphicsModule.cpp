@@ -16,8 +16,8 @@
 using namespace Core;
 using namespace Windows::Directx12;
 
-static const char* memoryLabelShaderArguments = "Core::Graphics::ShaderArguments";
-static const char* memoryLabelBuffer = "Core::Graphics::Buffer";
+static const Char* memoryLabelShaderArguments = "Core::Graphics::ShaderArguments";
+static const Char* memoryLabelBuffer = "Core::Graphics::Buffer";
 
 GraphicsModule::GraphicsModule()
     : device(nullptr)
@@ -96,9 +96,9 @@ SERIALIZE_METHOD_ARG2(GraphicsModule, SetDepthAttachment, const IRenderPass*, co
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
 SERIALIZE_METHOD_ARG1(GraphicsModule, SetRenderPass, const IRenderPass*);
 SERIALIZE_METHOD_CREATEGEN_ARG1(GraphicsModule, IShaderPipeline, ShaderPipeline, const ShaderPipelineDesc*);
-SERIALIZE_METHOD_ARG3(GraphicsModule, SetBuffer, const IShaderArguments*, const char*, const IBuffer*);
-SERIALIZE_METHOD_ARG3(GraphicsModule, SetTexture, const IShaderArguments*, const char*, const ITexture*);
-SERIALIZE_METHOD_ARG3(GraphicsModule, SetFilter, const IShaderArguments*, const char*, const IFilter*);
+SERIALIZE_METHOD_ARG3(GraphicsModule, SetBuffer, const IShaderArguments*, const Char*, const IBuffer*);
+SERIALIZE_METHOD_ARG3(GraphicsModule, SetTexture, const IShaderArguments*, const Char*, const ITexture*);
+SERIALIZE_METHOD_ARG3(GraphicsModule, SetFilter, const IShaderArguments*, const Char*, const IFilter*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, Present, const ISwapChain*, const ITexture*);
 SERIALIZE_METHOD_ARG1(GraphicsModule, CreateISwapChain, const ISwapChain*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
@@ -106,7 +106,7 @@ SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIBuffer, const IBuffer*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetBufferUsage, const IBuffer*, BufferUsageFlags);
 SERIALIZE_METHOD_ARG3(GraphicsModule, UpdateBuffer, const IBuffer*, Void*, UInt);
 SERIALIZE_METHOD_ARG3(GraphicsModule, CopyBuffer, const IBuffer*, const IBuffer*, UInt);
-SERIALIZE_METHOD_ARG1(GraphicsModule, PushDebug, const char*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, PushDebug, const Char*);
 SERIALIZE_METHOD(GraphicsModule, PopDebug);
 SERIALIZE_METHOD_ARG1(GraphicsModule, Draw, const DrawDesc&);
 
@@ -163,15 +163,15 @@ Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         InitializeProperties(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetTexture, ShaderArguments*, target, const char*, name, Texture*, texture);
+        DESERIALIZE_METHOD_ARG3_START(SetTexture, ShaderArguments*, target, const Char*, name, Texture*, texture);
         SetTexture(target, name, texture);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetFilter, ShaderArguments*, target, const char*, name, Filter*, filter);
+        DESERIALIZE_METHOD_ARG3_START(SetFilter, ShaderArguments*, target, const Char*, name, Filter*, filter);
         SetFilter(target, name, filter);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG3_START(SetBuffer, ShaderArguments*, target, const char*, name, Buffer*, buffer);
+        DESERIALIZE_METHOD_ARG3_START(SetBuffer, ShaderArguments*, target, const Char*, name, Buffer*, buffer);
         SetBuffer(target, name, buffer);
         DESERIALIZE_METHOD_END;
 
@@ -211,7 +211,7 @@ Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         planner->RecCopyBuffer(src, dst, size);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(PushDebug, const char*, name);
+        DESERIALIZE_METHOD_ARG1_START(PushDebug, const Char*, name);
         planner->RecPushDebug(name);
         DESERIALIZE_METHOD_END;
 
@@ -252,7 +252,7 @@ Void GraphicsModule::SetBufferState(const ExecutionContext& context, Buffer* tar
     target->SetState(state);
 }
 
-Void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer)
+Void GraphicsModule::SetBuffer(ShaderArguments* target, const Char* name, const Buffer* buffer)
 {
     ASSERT(buffer != nullptr);
     auto pipeline = (ShaderPipeline*) target->pipeline;
@@ -307,7 +307,7 @@ Void GraphicsModule::SetBuffer(ShaderArguments* target, const char* name, const 
     }
 }
 
-Void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const Texture* texture)
+Void GraphicsModule::SetTexture(ShaderArguments* target, const Char* name, const Texture* texture)
 {
     ASSERT(texture != nullptr);
     auto pipeline = (ShaderPipeline*) target->pipeline;
@@ -370,7 +370,7 @@ Void GraphicsModule::SetTexture(ShaderArguments* target, const char* name, const
     }
 }
 
-Void GraphicsModule::SetFilter(ShaderArguments* target, const char* name, const Filter* filter)
+Void GraphicsModule::SetFilter(ShaderArguments* target, const Char* name, const Filter* filter)
 {
     auto pipeline = (ShaderPipeline*) target->pipeline;
     auto& rootParameters = pipeline->rootParameters;
@@ -835,11 +835,11 @@ Void GraphicsModule::CompilePipeline(ShaderPipeline* pipeline)
     ComPtr<ID3DBlob> error;
     D3DCompile(pipeline->source, pipeline->sourceSize, nullptr, nullptr, nullptr, "VertMain", "vs_5_0", compileFlags, 0, &vertexShader, &error);
     if (error.Get() != NULL)
-        ERROR((const char*) error.Get()->GetBufferPointer());
+        ERROR((const Char*) error.Get()->GetBufferPointer());
 
     D3DCompile(pipeline->source, pipeline->sourceSize, nullptr, nullptr, nullptr, "FragMain", "ps_5_0", compileFlags, 0, &pixelShader, &error);
     if (error.Get() != NULL)
-        ERROR((const char*) error.Get()->GetBufferPointer());
+        ERROR((const Char*) error.Get()->GetBufferPointer());
 
     pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Vertex)] = ShaderProgram(new UInt8[vertexShader.Get()->GetBufferSize()], vertexShader.Get()->GetBufferSize());
     pipeline->programs[Enum::ToUnderlying(ShaderProgramType::Fragment)] = ShaderProgram(new UInt8[pixelShader.Get()->GetBufferSize()], pixelShader.Get()->GetBufferSize());
@@ -955,7 +955,7 @@ Void GraphicsModule::InitializePipeline(ShaderPipeline* pipeline)
         ComPtr<ID3DBlob> error;
         D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, rootSignatureFeatures.HighestVersion, &signature, &error);
         if (error.Get() != NULL)
-            ERROR((const char*)error.Get()->GetBufferPointer());
+            ERROR((const Char*)error.Get()->GetBufferPointer());
 
         ASSERT_SUCCEEDED(device->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&pipeline->rootSignature)));
         psoDesc.pRootSignature = pipeline->rootSignature;
@@ -1126,7 +1126,7 @@ DXGI_FORMAT GraphicsModule::Convert(ColorFormat format)
     return (DXGI_FORMAT) -1;
 }
 
-const char* GraphicsModule::Convert(VertexAttributeType type)
+const Char* GraphicsModule::Convert(VertexAttributeType type)
 {
     // TODO: Table lookup
     switch (type)

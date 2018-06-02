@@ -133,14 +133,14 @@ namespace Windows::Directx12
 
     struct RootSubParamter
     {
-        RootSubParamter(const char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, Bool isTexture = false)
+        RootSubParamter(const Char* name, D3D12_DESCRIPTOR_RANGE_TYPE type, Bool isTexture = false)
             : name(name)
             , type(type)
             , isTexture(isTexture)
         {
         }
         const D3D12_DESCRIPTOR_RANGE_TYPE type;
-        const char* const name;
+        const Char* const name;
         const Bool isTexture;
     };
 
@@ -156,7 +156,7 @@ namespace Windows::Directx12
         RootParamter() {}
         RootParamter(RootParamterType type) : type(type) {}
 
-        static RootParamter AsConstantBuffer(const char* name)
+        static RootParamter AsConstantBuffer(const Char* name)
         {
             RootParamter parameter(RootParamterType::ConstantBuffer);
             parameter.supParameters.push_back(RootSubParamter(name, (D3D12_DESCRIPTOR_RANGE_TYPE) -1));
@@ -277,7 +277,7 @@ namespace Windows::Directx12
         GraphicsModule();
         virtual Void Execute(const ExecutionContext& context) override;
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual const char* GetName() { return "Directx12::GraphicsModule"; }
+        virtual const Char* GetName() { return "Directx12::GraphicsModule"; }
         virtual const IBuffer* AllocateBuffer(UInt size) override;
         virtual const ITexture* AllocateTexture(UInt32 width, UInt32 height) override;
         virtual const IFilter* AllocateFilter() override;
@@ -297,9 +297,9 @@ namespace Windows::Directx12
 
         virtual const IShaderPipeline* RecCreateIShaderPipeline(const ExecutionContext& context, const ShaderPipelineDesc* desc) override;
         virtual const IShaderArguments* RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline) override;
-        virtual Void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) override;
-        virtual Void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) override;
-        virtual Void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) override;
+        virtual Void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const ITexture* texture) override;
+        virtual Void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const IFilter* filter) override;
+        virtual Void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const IBuffer* buffer) override;
 
         virtual Void RecCreateIBuffer(const ExecutionContext& context, const IBuffer* target) override;
         virtual Void RecSetBufferUsage(const ExecutionContext& context, const IBuffer* target, BufferUsageFlags usage) override;
@@ -310,7 +310,7 @@ namespace Windows::Directx12
         virtual Void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
         virtual Void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) override;
 
-        virtual Void RecPushDebug(const ExecutionContext& context, const char* name) override;
+        virtual Void RecPushDebug(const ExecutionContext& context, const Char* name) override;
         virtual Void RecPopDebug(const ExecutionContext& context) override;
 
         virtual Void RecDraw(const ExecutionContext& context, const DrawDesc& target) override;
@@ -331,16 +331,16 @@ namespace Windows::Directx12
         inline Void InitializeBlitCopy(BlitCopyDesc* target);
 
         DXGI_FORMAT Convert(ColorFormat format);
-        const char* Convert(VertexAttributeType type);
+        const Char* Convert(VertexAttributeType type);
         UInt32 GetSize(ColorFormat format);
 
         inline Void Present(const ExecutionContext& context, SwapChain* swapChain, Texture* offscreen);
         inline Void BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest);
         inline Void SetTextureState(const ExecutionContext& context, Texture* target, D3D12_RESOURCE_STATES state);
         inline Void SetBufferState(const ExecutionContext& context, Buffer* target, D3D12_RESOURCE_STATES state);
-        inline Void SetBuffer(ShaderArguments* target, const char* name, const Buffer* buffer);
-        inline Void SetTexture(ShaderArguments* target, const char* name, const Texture* texture);
-        inline Void SetFilter(ShaderArguments* target, const char* name, const Filter* filter);
+        inline Void SetBuffer(ShaderArguments* target, const Char* name, const Buffer* buffer);
+        inline Void SetTexture(ShaderArguments* target, const Char* name, const Texture* texture);
+        inline Void SetFilter(ShaderArguments* target, const Char* name, const Filter* filter);
         inline Void SetColorAttachment(const ExecutionContext& context, RenderPass* target, UInt32 index, const ColorAttachment& attachment);
         inline Void SetDepthAttachment(const ExecutionContext& context, RenderPass* target, const DepthAttachment& attachment);
         inline Void SetViewport(const ExecutionContext& context, RenderPass* target, const Viewport& viewport);

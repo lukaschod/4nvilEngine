@@ -58,9 +58,9 @@ namespace Core::Graphics
 
         virtual const IShaderPipeline* RecCreateIShaderPipeline(const ExecutionContext& context, const ShaderPipelineDesc* desc) = 0;
         virtual const IShaderArguments* RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline) = 0;
-        virtual Void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const ITexture* texture) = 0;
-        virtual Void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IFilter* filter) = 0;
-        virtual Void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const char* name, const IBuffer* buffer) = 0;
+        virtual Void RecSetTexture(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const ITexture* texture) = 0;
+        virtual Void RecSetFilter(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const IFilter* filter) = 0;
+        virtual Void RecSetBuffer(const ExecutionContext& context, const IShaderArguments* properties, const Char* name, const IBuffer* buffer) = 0;
 
         virtual Void RecCreateIBuffer(const ExecutionContext& context, const IBuffer* target) = 0;
         virtual Void RecSetBufferUsage(const ExecutionContext& context, const IBuffer* target, BufferUsageFlags usage) = 0;
@@ -71,7 +71,7 @@ namespace Core::Graphics
         virtual Void RecPresent(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
         virtual Void RecFinalBlit(const ExecutionContext& context, const ISwapChain* swapchain, const ITexture* offscreen) = 0;
 
-        virtual Void RecPushDebug(const ExecutionContext& context, const char* name) = 0;
+        virtual Void RecPushDebug(const ExecutionContext& context, const Char* name) = 0;
         virtual Void RecPopDebug(const ExecutionContext& context) = 0;
 
         virtual Void RecDraw(const ExecutionContext& context, const DrawDesc& target) = 0;

@@ -24,7 +24,7 @@ namespace Core
         virtual Void Execute(const ExecutionContext& context) override {}
 
         template<class T, class ... N>
-        T* New(const char* memoryType, N ... args)
+        T* New(const Char* memoryType, N ... args)
         {
             auto allocator = allocators.find(memoryType);
             ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
@@ -33,7 +33,7 @@ namespace Core
             return target;
         }
 
-        Void SetAllocator(const char* memoryType, IHeap* allocator)
+        Void SetAllocator(const Char* memoryType, IHeap* allocator)
         {
             auto allocatorDup = allocators.find(memoryType);
             ASSERT_MSG(!(allocatorDup != allocators.end() && typeid(allocatorDup->second) != typeid(allocator)),
@@ -42,7 +42,7 @@ namespace Core
         }
 
         template<class T>
-        Void Delete(const char* memoryType, T* target)
+        Void Delete(const Char* memoryType, T* target)
         {
             auto allocator = allocators.find(memoryType);
             ASSERT_MSG(allocator != allocators.end(), "Allocator with memory type %d is not set", memoryType);
@@ -51,6 +51,6 @@ namespace Core
         }
 
     private:
-        std::map<const char*, IHeap*> allocators;
+        std::map<const Char*, IHeap*> allocators;
     };
 }

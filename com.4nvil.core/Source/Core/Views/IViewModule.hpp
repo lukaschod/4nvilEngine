@@ -46,7 +46,7 @@ namespace Core
         ViewType type;
         UInt32 width;
         UInt32 height;
-        const char* name;
+        const Char* name;
         const IView* parent;
         const InputDevice* viewInputDevice;
         Bool created;
@@ -61,7 +61,7 @@ namespace Core
     public:
         virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) = 0;
         virtual Void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) = 0;
-        virtual Void RecSetName(const ExecutionContext& context, const IView* target, const char* name) = 0;
+        virtual Void RecSetName(const ExecutionContext& context, const IView* target, const Char* name) = 0;
         virtual Void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) = 0;
     };
 }

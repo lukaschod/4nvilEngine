@@ -23,8 +23,8 @@ namespace Core
         BASE_IS(PipeModule);
 
         virtual Void Execute(const ExecutionContext& context) override;
-        Void RecWrite(const ExecutionContext& context, const char* name);
-        Void RecWriteFmt(const ExecutionContext& context, const char* format, ...);
+        Void RecWrite(const ExecutionContext& context, const Char* name);
+        Void RecWriteFmt(const ExecutionContext& context, const Char* format, ...);
 
     private:
         Void OpenStream();

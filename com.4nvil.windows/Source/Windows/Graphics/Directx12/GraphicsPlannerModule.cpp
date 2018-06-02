@@ -109,7 +109,7 @@ Void GraphicsPlannerModule::Execute(const ExecutionContext& context)
 }
 
 DECLARE_COMMAND_CODE(PushDebug);
-Void GraphicsPlannerModule::RecPushDebug(const char* name)
+Void GraphicsPlannerModule::RecPushDebug(const Char* name)
 {
     auto buffer = ContinueRecording();
     auto& stream = buffer->stream;
@@ -281,7 +281,7 @@ Bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
     auto commandList = (ID3D12GraphicsCommandList*)buffer->commandList;
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG1_START(PushDebug, const char*, name);
+        DESERIALIZE_METHOD_ARG1_START(PushDebug, const Char*, name);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_START(PopDebug);
