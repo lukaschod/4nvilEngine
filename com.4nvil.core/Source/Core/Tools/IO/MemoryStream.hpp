@@ -112,9 +112,10 @@ namespace Core::IO
             }
         }
 
+    public:
+        UInt8* data;
     private:
         UInt8* begin;
         UInt8* end;
-        AUTOMATED_PROPERTY_GETSET(UInt8*, data);
     };
 }

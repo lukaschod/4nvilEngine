@@ -53,7 +53,7 @@ UInt64 GraphicsPlannerModule::GetRecordingBufferIndex()
 
 UInt64 GraphicsPlannerModule::GetCompletedBufferIndex()
 {
-    return executor->Get_completedBufferIndex();
+    return executor->GetCompletedBufferIndex();
 }
 
 UInt GraphicsPlannerModule::GetExecutionSize() { return recordedCmdBuffers.size(); }
@@ -272,7 +272,7 @@ Void GraphicsPlannerModule::Reset()
 
 ID3D12CommandQueue* GraphicsPlannerModule::GetDirectQueue()
 {
-    return directQueue->Get_queue();
+    return directQueue->GetQueue();
 }
 
 Bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Directx12::CmdBuffer* buffer, CommandCode commandCode)

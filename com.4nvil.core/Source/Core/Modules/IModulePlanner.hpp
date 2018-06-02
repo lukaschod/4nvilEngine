@@ -51,8 +51,14 @@ namespace Core
         // Thread-safe
         virtual Void SetFinished(const ModuleJob& job) = 0;
 
+        // Set callback for job finish
+        inline Void SetJobFinishCallback(std::function<Void(UInt)> callback) { jobFinishCallback = callback; }
+
+        // Set callback for finish
+        inline Void SetFinishCallback(std::function<Void(Void)> callback) { finishCallback = callback; }
+
     public:
-        AUTOMATED_PROPERTY_SET(std::function<Void(UInt)>, jobFinishCallback);
-        AUTOMATED_PROPERTY_SET(std::function<Void(Void)>, finishCallback);
+        std::function<Void(UInt)> jobFinishCallback;
+        std::function<Void(Void)> finishCallback;
     };
 }

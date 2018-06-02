@@ -65,8 +65,8 @@ Bool InputModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         auto device = stream.FastRead<InputDevice*>();
         auto inputType = stream.FastRead<InputType>();
         auto size = stream.FastRead<UInt>();
-        auto pointer = stream.Get_data();
-        stream.Set_data(pointer + size);
+        auto pointer = stream.data;
+        stream.data += size;
         device->inputStream.Write(inputType);
         if (size != 0)
             device->inputStream.Write(pointer, size);

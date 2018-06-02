@@ -31,6 +31,7 @@ namespace Windows::Directx12
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         virtual Void Execute(const ExecutionContext& context) override;
         virtual const Char* GetName() override { return "GraphicsExecutorModule"; }
+        inline UInt64 GetCompletedBufferIndex() const { return completedBufferIndex; }
 
         Void RecCmdBuffer(const ExecutionContext& context, const Directx12::CmdBuffer* buffer);
 
@@ -43,6 +44,6 @@ namespace Windows::Directx12
 
         List<const Directx12::CmdBuffer*> cmdBuffersToExecute;
         List<ID3D12GraphicsCommandList*> batchedCommandLists;
-        AUTOMATED_PROPERTY_GET(UInt64, completedBufferIndex);
+        UInt64 completedBufferIndex;
     };
 }

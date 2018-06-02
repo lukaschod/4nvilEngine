@@ -65,7 +65,7 @@ Bool StaticModulePlan::TryAdd(StaticModulePlanNode* node)
     if (TryFindNode(module) != nullptr)
         return false;
 
-    auto& dependencies = module->Get_dependencies();
+    auto& dependencies = module->GetDependencies();
 
     // If thre is no dependencies we can freely add it to root
     if (dependencies.empty())
@@ -98,7 +98,7 @@ Void StaticModulePlan::Reset()
 {
     for (auto node : nodes)
     {
-        node->dependencies = (UInt32) node->module->Get_dependencies().size();
+        node->dependencies = (UInt32) node->module->GetDependencies().size();
     }
 }
 
@@ -109,13 +109,15 @@ StaticModulePlanner::StaticModulePlanner()
 
 StaticModulePlanner::~StaticModulePlanner()
 {
-    SAFE_DELETE(plan);
+    if (plan != nullptr)
+        delete plan;
 }
 
 Void StaticModulePlanner::Recreate(List<Module*>& modules)
 {
     std::lock_guard<std::mutex> lock(readyModulesMutex);
-    SAFE_DELETE(plan);
+    if (plan != nullptr)
+        delete plan;
     plan = new StaticModulePlan(modules);
 }
 

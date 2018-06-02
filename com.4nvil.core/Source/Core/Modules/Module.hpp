@@ -49,6 +49,7 @@ namespace Core
         virtual UInt GetExecutionSize() { return 1; }
         virtual UInt GetSplitExecutionSize() { return 1; }
         virtual const Char* GetName() { return "Unamed"; }
+        inline const List<Module*>& GetDependencies() const { return dependencies; }
 
     protected:
         virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
@@ -114,6 +115,6 @@ namespace Core
         }
 
     private:
-        AUTOMATED_PROPERTY_GETADR(List<Module*>, dependencies); // Modules that this current Module depends on
+        List<Module*> dependencies; // Modules that this current Module depends on
     };
 }

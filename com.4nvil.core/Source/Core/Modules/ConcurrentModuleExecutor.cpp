@@ -25,7 +25,7 @@ ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, UInt
         workers.push_back(worker);
     }
 
-    planner->Set_jobFinishCallback([this](UInt readyJobCount)
+    planner->SetJobFinishCallback([this](UInt readyJobCount)
     {
         // Check if we need to wakeup some workers
         for (auto worker : workers)
@@ -33,7 +33,7 @@ ConcurrentModuleExecutor::ConcurrentModuleExecutor(IModulePlanner* planner, UInt
             if (readyJobCount == 0)
                 return;
 
-            if (worker->Get_isSleeping())
+            if (worker->IsSleeping())
                 worker->Reset();
             readyJobCount--;
         }
@@ -80,7 +80,8 @@ ConcurrentModuleWorker::ConcurrentModuleWorker(UInt32 index, ConcurrentModuleExe
 
 ConcurrentModuleWorker::~ConcurrentModuleWorker()
 {
-    SAFE_DELETE(thread);
+    if (thread != nullptr)
+        delete thread;
 }
 
 Void ConcurrentModuleWorker::Reset()
@@ -91,7 +92,8 @@ Void ConcurrentModuleWorker::Reset()
 Void ConcurrentModuleWorker::Start()
 {
     ASSERT(!isRunning);
-    SAFE_DELETE(thread);
+    if (thread != nullptr)
+        delete thread;
     isRunning = true;
     thread = new std::thread(&ConcurrentModuleWorker::Run, this);
 }

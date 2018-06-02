@@ -75,8 +75,8 @@ Bool LogModule::ExecuteCommand(const ExecutionContext& context, CommandStream& s
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(WriteFmt, UInt, size);
-        const Char* message = (const Char*) stream.Get_data();
-        stream.Set_data(stream.Get_data() + size);
+        auto message = (const Char*) stream.data;
+        stream.data += size;
         output.WriteFmt(message);
         DESERIALIZE_METHOD_END;
     }

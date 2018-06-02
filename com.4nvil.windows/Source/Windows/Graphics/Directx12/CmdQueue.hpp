@@ -69,11 +69,12 @@ namespace Windows::Directx12
 
         UInt64 GetCompletedBufferIndex();
         Void WaitForBufferIndexToComplete(UInt64 index);
+        inline ID3D12CommandQueue* GetQueue() { return queue; }
 
     private:
         const D3D12_COMMAND_LIST_TYPE type;
         ID3D12Device* const device;
-        AUTOMATED_PROPERTY_GET(ID3D12CommandQueue*, queue);
+        ID3D12CommandQueue* queue;
         ID3D12Fence* fence;
         HANDLE waitBufferCompletionEvent;
         std::mutex waitBufferCompletionMutex;

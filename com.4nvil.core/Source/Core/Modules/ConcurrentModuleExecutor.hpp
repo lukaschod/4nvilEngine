@@ -30,6 +30,7 @@ namespace Core
         Void Reset();
         Void Start();
         Void Stop();
+        Bool IsSleeping() const { return isSleeping; }
 
     private:
         Void Run();
@@ -44,7 +45,7 @@ namespace Core
         UInt32 cyclesBeforeSleep;
         UInt32 index;
         UInt64 executionIndex;
-        AUTOMATED_PROPERTY_GET(Bool, isSleeping);
+        Bool isSleeping;
     };
 
     class ConcurrentModuleExecutor : public IModuleExecutor

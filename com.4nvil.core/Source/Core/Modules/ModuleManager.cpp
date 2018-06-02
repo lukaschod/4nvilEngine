@@ -23,7 +23,7 @@ ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
     ASSERT(planner != nullptr);
     ASSERT(executor != nullptr);
 
-    planner->Set_finishCallback([this]()
+    planner->SetFinishCallback([this]()
     {
         sleepEvent.Set();
     });

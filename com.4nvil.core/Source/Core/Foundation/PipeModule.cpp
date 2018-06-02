@@ -41,7 +41,7 @@ Void PipeModule::SortPipes()
         if (first == second)
             return false;
 
-        for (auto module : second->Get_dependencies())
+        for (auto module : second->GetDependencies())
             if (!recusrive(first, module))
                 return false;
 

@@ -46,7 +46,7 @@ namespace Windows::Directx12
         int FindIndex(const HeapMemory& memory) const;
 
     private:
-        AUTOMATED_PROPERTY_GET(HeapType, type);
+        HeapType type;
         D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc;
         List<BuddyHeapManager*> heapManagers;
         List<ID3D12DescriptorHeap*> descriptorHeaps;
