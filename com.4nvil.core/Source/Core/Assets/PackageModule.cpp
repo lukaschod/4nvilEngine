@@ -40,7 +40,7 @@ Bool PackageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 
     // Lets create default directory for library
     target->libraryDirectory = target->directory;
-    target->libraryDirectory.Append(L"Library.library");
+    target->libraryDirectory.Append("Library.library");
     DESERIALIZE_METHOD_END;
 
     DESERIALIZE_METHOD_ARG1_START(SyncPackage, Package*, package);
@@ -82,7 +82,7 @@ Void PackageModule::LoadLibrary(const ExecutionContext& context, Package* packag
         {
             DirectoryExtension extension;
             ASSERT(directory.GetExtension(extension));
-            if (extension == DirectoryExtension(L".library"))
+            if (extension == DirectoryExtension(".library"))
             {
                 libraryModule->RecLoadLibrary(context, package->library, directory);
                 package->libraryDirectory = directory;

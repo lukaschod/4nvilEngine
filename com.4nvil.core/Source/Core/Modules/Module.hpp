@@ -51,6 +51,8 @@ namespace Core
         virtual const char* GetName() { return "Unamed"; }
 
     protected:
+        virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
+
         // Marks that calling module must be executed before the Module. It is used by IModulePlanner to solve dependency trees
         Void ExecuteBefore(ModuleManager* moduleManager, Module* module)
         {
@@ -63,10 +65,11 @@ namespace Core
         {
             ASSERT(moduleManager != nullptr);
             moduleManager->GetModules<T>(modules);
-            for (auto module : modules)
+            for (Module* module : modules)
             {
                 module->dependencies.safe_push_back(this);
                 module->OnDependancyAdd(moduleManager, this, true);
+                modules.push_back((T*) module);
             }
         }
 
@@ -92,10 +95,11 @@ namespace Core
         {
             ASSERT(moduleManager != nullptr);
             moduleManager->GetModules<T>(modules);
-            for (auto module : modules)
+            for (Module* module : modules)
             {
                 dependencies.safe_push_back(module);
                 module->OnDependancyAdd(moduleManager, this, false);
+                modules.push_back((T*) module);
             }
         }
 
@@ -108,8 +112,6 @@ namespace Core
             module->OnDependancyAdd(moduleManager, this, false);
             return (T*) module;
         }
-
-        virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
 
     private:
         AUTOMATED_PROPERTY_GETADR(List<Module*>, dependencies); // Modules that this current Module depends on

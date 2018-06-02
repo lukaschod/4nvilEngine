@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <Core/Tools/Types.hpp>
 #include <type_traits>
 
 namespace Core::Enum
@@ -21,7 +22,7 @@ namespace Core::Enum
         return static_cast<typename std::underlying_type<E>::type>(e);
     }
 
-    template<typename E> inline Bool Contains(E lhs, E rhs)
+    template<typename E> Bool Contains(E lhs, E rhs)
     {
         return (lhs & rhs) != static_cast<E>(0);
     }

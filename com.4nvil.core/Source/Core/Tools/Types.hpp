@@ -27,3 +27,6 @@ typedef float               Float;
 typedef double              Float64;
 typedef Float               Float32;
 typedef bool                Bool;
+
+typedef char                Char;
+typedef char                Char8;

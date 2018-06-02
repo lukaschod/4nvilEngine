@@ -54,9 +54,10 @@ Void LogModule::RecWriteFmt(const ExecutionContext& context, const char* format,
 
 Void LogModule::OpenStream()
 {
-    StringBuilder<Directory::maxPathSize> path;
-    path.AppendFmt("%s\\%s", Directory::GetExecutablePath(), "Log.txt");
-    output.Open(path.ToString(), FileMode::Create, FileAccess::Write);
+    auto path = Directory::GetExecutablePath();
+    path.Append("/");
+    path.Append("Log.txt");
+    output.Open(path.ToCString(), FileMode::Create, FileAccess::Write);
 }
 
 Void LogModule::CloseStream()

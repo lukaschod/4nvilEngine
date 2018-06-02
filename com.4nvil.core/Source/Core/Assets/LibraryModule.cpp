@@ -16,6 +16,13 @@
 using namespace Core;
 using namespace Core::IO;
 
+Void Core::Transferer(ITransfer* transfer, const List<Tracked>& value)
+{
+    auto size = value.size();
+    transfer->Transfer((UInt8*) &size, sizeof(UInt));
+    transfer->Transfer((UInt8*) value.data(), sizeof(Tracked) * value.size());
+}
+
 Void LibraryModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);

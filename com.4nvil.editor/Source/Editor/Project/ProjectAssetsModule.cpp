@@ -9,7 +9,7 @@
 *
 */
 
-#include <Core/Tools/IO/Directory.hpp>
+/*#include <Core/Tools/IO/Directory.hpp>
 #include <Editor/Project/ProjectAssetsModule.hpp>
 
 using namespace Core;
@@ -123,4 +123,4 @@ Void ProjectAssetsModule::DestroyDirectoryRecursive(ProjectDiretory* target)
 Void ProjectAssetsModule::DestroyFile(ProjectFile* target)
 {
     delete target;
-}
+}*/

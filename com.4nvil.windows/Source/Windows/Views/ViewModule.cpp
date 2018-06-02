@@ -70,7 +70,6 @@ static Void RecButtonInput(MouseButtonType type, Bool isDown)
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    TRACE("%x %d %d", msg, wParam, lParam);
     switch (msg)
     {
     case WM_MOUSEMOVE:

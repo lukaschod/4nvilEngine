@@ -36,12 +36,7 @@ namespace Core
         Guid guid;
     };
 
-    Void Transferer(ITransfer* transfer, const List<Tracked>& value)
-    {
-        auto size = value.size();
-        transfer->Transfer((UInt8*) &size, sizeof(UInt));
-        transfer->Transfer((UInt8*) value.data(), sizeof(Tracked) * value.size());
-    }
+    Void Transferer(ITransfer* transfer, const List<Tracked>& value);
 
     struct Library : public Transferable
     {

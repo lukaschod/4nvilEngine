@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <stdio.h>
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/IO/Stream.hpp>
+#include <stdio.h>
 
 namespace Core::IO
 {
@@ -45,7 +45,6 @@ namespace Core::IO
         virtual Void WriteFmt(const char* format, va_list arguments) override;
 
         Bool Open(const char* path, FileMode mode, FileAccess access);
-        Bool Open(const wchar_t* path, FileMode mode, FileAccess access);
         inline Bool IsOpened() const { return isOpened; }
 
         // Forces all unwritten data to be written to the file

@@ -9,7 +9,7 @@
 *
 */
 
-#pragma once
+/*#pragma once
 
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/Collections/List.hpp>
@@ -64,4 +64,4 @@ namespace Editor
         ProjectDiretory mainDirectory;
         UInt64 synchronizeIndex;
     };
-}
+}*/

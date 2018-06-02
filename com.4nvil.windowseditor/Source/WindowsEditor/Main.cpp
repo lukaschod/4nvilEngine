@@ -829,18 +829,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-   /* // Test project 1
+    // Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+    moduleManager->AddModule(new ShutdownModule(moduleManager));
 
-    // Test project 2
+    /*// Test project 2
     moduleManager->AddModule(new AgentModule());
     moduleManager->AddModule(new AgentForceModule());
     moduleManager->AddModule(new AgentDistModule());
     moduleManager->AddModule(new Test2Module());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));
+    moduleManager->AddModule(new ShutdownModule(moduleManager));*/
 
     moduleManager->Start();
     while (moduleManager->IsRunning())

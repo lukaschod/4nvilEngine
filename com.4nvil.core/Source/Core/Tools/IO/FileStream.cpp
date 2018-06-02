@@ -9,7 +9,6 @@
 *
 */
 
-#define _CRT_SECURE_NO_WARNINGS
 #include <Core/Tools/IO/FileStream.hpp>
 #include <stdarg.h>
 
@@ -30,15 +29,6 @@ Bool FileStream::Open(const char* path, FileMode mode, FileAccess access)
     ASSERT_MSG(file == nullptr, "File is already opened");
     auto modeTexted = TryGetMode(mode, access);
     file = fopen(path, modeTexted);
-    isOpened = file != nullptr;
-    return isOpened;
-}
-
-Bool FileStream::Open(const wchar_t* path, FileMode mode, FileAccess access)
-{
-    ASSERT_MSG(file == nullptr, "File is already opened");
-    auto modeTexted = TryGetMode(mode, access);
-    file = fwopen(path, modeTexted);
     isOpened = file != nullptr;
     return isOpened;
 }

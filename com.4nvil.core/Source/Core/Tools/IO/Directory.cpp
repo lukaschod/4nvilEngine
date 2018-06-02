@@ -8,23 +8,36 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *
 */
-
-#include <Core/Tools/Windows/Common.hpp>
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/IO/Directory.hpp>
+#if ENABLED_WINDOWS
+#   include <Core/Tools/Windows/Common.hpp>
+#endif
 #include <filesystem>
 
 using namespace Core;
 namespace filesystem = std::experimental::filesystem;
 
-Bool Directory::Append(const wchar_t* value)
+Directory::Directory(const Directory& directory)
+{ 
+    strcpy(data, directory.data); 
+    RecalculateSize(); 
+}
+
+Directory::Directory(const wchar_t* directory)
+{
+    wcstombs(data, directory, 260);
+    RecalculateSize();
+}
+
+Bool Directory::Append(const Char8* value)
 {
     // Check if it will not exceed the capacity
-    auto sizeOfValue = wcslen(value);
+    auto sizeOfValue = strlen(value);
     if (GetSize() + sizeOfValue > GetCapacity())
         return false;
 
-    wcscpy(data + size, value);
+    strcpy(data + size, value);
     RecalculateSize();
     return true;
 }
@@ -37,7 +50,7 @@ Bool Directory::IsFile() const
 
 Bool Directory::GetExtension(DirectoryExtension& extension) const
 {
-    auto last = wcsrchr(data, '.');
+    auto last = strrchr(data, '.');
     if (last == nullptr)
         return false;
 
@@ -56,10 +69,10 @@ const Directory& Directory::GetExecutablePath()
     {
         // Get the actual directory
         auto hModule = GetModuleHandleW(NULL);
-        GetModuleFileNameW(hModule, path.data, path.GetCapacity());
+        GetModuleFileName(hModule, path.data, (DWORD) path.GetCapacity());
 
         // Add terminator
-        auto last = wcsrchr(path.data, '\\');
+        auto last = strrchr(path.data, '\\');
         *last = 0;
         pathValid = true;
     }
@@ -94,7 +107,4 @@ Void Directory::GetFiles(const Directory& path, List<Directory>& out)
     }
 }
 
-Void Directory::RecalculateSize()
-{
-    size = wcslen(data);
-}
+Void Directory::RecalculateSize() { size = strlen(data); }

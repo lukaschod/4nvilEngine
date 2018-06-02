@@ -717,14 +717,14 @@ Void GraphicsModule::InitializeTexture(Texture* texture)
 
     D3D12_CLEAR_VALUE clearValue;
     Bool useClearVlaue = false;
-
+    
     // If we match the clear values with render pass, we win performance
     if (Enum::Contains(texture->usage, TextureUsageFlags::Render))
     {
         clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        clearValue.Color[0] = 0;
-        clearValue.Color[1] = 0.2f;
-        clearValue.Color[2] = 0.4f;
+        clearValue.Color[0] = 0.19f;
+        clearValue.Color[1] = 0.3f;
+        clearValue.Color[2] = 0.47f;
         clearValue.Color[3] = 0;
         useClearVlaue = true;
     }
@@ -1038,14 +1038,14 @@ Void GraphicsModule::InitializeBlitCopy(BlitCopyDesc* target)
 
 struct AppData
 {
-    Float3 position : POSITION;
-    Float2 uv : TEXCOORD;
+    float3 position : POSITION;
+    float2 uv : TEXCOORD;
 };
 
 struct VertData
 {
-    Float4 position : SV_POSITION;
-    Float2 uv : TEXCOORD;
+    float4 position : SV_POSITION;
+    float2 uv : TEXCOORD;
 };
 
 Texture2D _mainTex : register(t0);
@@ -1054,14 +1054,14 @@ SamplerState _mainTexSampler : register(s0);
 VertData VertMain(AppData i)
 {
     VertData o;
-    o.position = Float4(i.position, 1);
+    o.position = float4(i.position, 1);
     o.uv = i.uv;
     return o;
 }
 
-Float4 FragMain(VertData i) : SV_TARGET
+float4 FragMain(VertData i) : SV_TARGET
 {
-    return _mainTex.Sample(_mainTexSampler, Float2(i.uv.x, 1 - i.uv.y));
+    return _mainTex.Sample(_mainTexSampler, float2(i.uv.x, 1 - i.uv.y));
 }
             )";
 

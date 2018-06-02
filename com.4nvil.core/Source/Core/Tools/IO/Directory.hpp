@@ -14,7 +14,6 @@
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/Collections/List.hpp>
-#include <wchar.h>
 
 namespace Core
 {
@@ -22,24 +21,23 @@ namespace Core
     {
     public:
         DirectoryExtension() { data = nullptr; }
-        DirectoryExtension(const wchar_t* extension) { data = extension; }
+        DirectoryExtension(const Char8* extension) { data = extension; }
 
-        Bool operator==(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) == 0; }
-        Bool operator!=(const DirectoryExtension& lhs) const { return wcscmp(data, lhs.data) != 0; }
+        Bool operator==(const DirectoryExtension& lhs) const { return strcmp(data, lhs.data) == 0; }
+        Bool operator!=(const DirectoryExtension& lhs) const { return strcmp(data, lhs.data) != 0; }
 
     private:
-        const wchar_t* data;
+        const Char* data;
     };
 
     class Directory 
     {
     public:
         Directory() { *data = 0; size = 0; }
-        Directory(const wchar_t* directory) { wcscpy(data, directory); RecalculateSize(); }
-        Directory(const Directory& directory) { wcscpy(data, directory.data); RecalculateSize(); }
+        Directory(const Directory& directory);
 
         // Append value on end of directory
-        Bool Append(const wchar_t* value);
+        Bool Append(const Char8* value);
 
         // Is directory a file, checks not extension
         Bool IsFile() const;
@@ -51,10 +49,10 @@ namespace Core
 
         inline UInt GetSize() const { return size; }
 
-        inline const wchar_t* ToCString() const { return data; }
+        inline const char* ToCString() const { return data; }
 
-        inline Bool operator==(const Directory& lhs) const { return wcscmp(data, lhs.data) == 0; }
-        inline Bool operator!=(const Directory& lhs) const { return wcscmp(data, lhs.data) != 0; }
+        inline Bool operator==(const Directory& lhs) const { return strcmp(data, lhs.data) == 0; }
+        inline Bool operator!=(const Directory& lhs) const { return strcmp(data, lhs.data) != 0; }
 
         // Returns path to current executable location
         static const Directory& GetExecutablePath();
@@ -66,10 +64,11 @@ namespace Core
         static Void GetFiles(const Directory& path, List<Directory>& out);
 
     private:
+        inline Directory(const wchar_t* directory);
         inline Void RecalculateSize();
 
     private:
-        wchar_t data[260];
+        Char8 data[260];
         UInt size;
     };
 }
