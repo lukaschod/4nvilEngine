@@ -50,8 +50,8 @@ Void TransformModule::Execute(const ExecutionContext& context)
         // Check if we need to unmark changed state
         if (Enum::Contains(next->flags, TransformStateFlags::LocalObjectToWorldUnsetNextFrame))
         {
-            next->flags ^= TransformStateFlags::LocalObjectToWorldChanged;
-            next->flags ^= TransformStateFlags::LocalObjectToWorldUnsetNextFrame;
+            Enum::Remove(next->flags, TransformStateFlags::LocalObjectToWorldChanged);
+            Enum::Remove(next->flags, TransformStateFlags::LocalObjectToWorldUnsetNextFrame);
         }
 
         // Check if we need update

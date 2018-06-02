@@ -13,6 +13,11 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#define ENABLE_RESTRICT // TODO: move it compilation
+#ifdef ENABLE_RESTRICT
+#define noalias __restrict // We use lower case as we will treat as special keyword
+#endif
+
 #include <Core/Tools/Types.hpp>
 #include <Core/Tools/Testing.hpp>
 

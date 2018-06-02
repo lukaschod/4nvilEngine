@@ -118,8 +118,9 @@ namespace Core::Math
         return w;
     }
 
+    // Note: Do not use the same matrix as we use restrict in return we get lots of speed up
     template<class T>
-    inline Matrix4x4<T> Matrix4x4<T>::Multiply(const Matrix4x4<T>& m)
+    inline Matrix4x4<T> Matrix4x4<T>::Multiply(const Matrix4x4<T>& noalias m)
     {
         // Pack the operations for SIMD optimization
         Matrix4x4<T> out;

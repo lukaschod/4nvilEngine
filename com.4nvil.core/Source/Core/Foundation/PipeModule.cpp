@@ -94,7 +94,7 @@ Void PipeModule::Execute(const ExecutionContext& context)
             buffer.executingModule = context.executingModule;
 
             // Execute each command one by one
-            for (int i = 0; i < buffer.commandCount; i++)
+            for (UInt i = 0; i < buffer.commandCount; i++)
             {
                 auto& commandCode = stream.FastRead<CommandCode>();
                 ASSERT(ExecuteCommand(context, stream, commandCode));
