@@ -15,7 +15,9 @@
 
 #define ENABLE_RESTRICT // TODO: move it compilation
 #ifdef ENABLE_RESTRICT
-#define noalias __restrict // We use lower case as we will treat as special keyword
+#   define noalias __restrict // We use lower case as we will treat as special keyword
+#else
+#   define noalias
 #endif
 
 #include <Core/Tools/Types.hpp>

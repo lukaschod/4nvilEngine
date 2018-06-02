@@ -456,7 +456,8 @@ float4 FragMain(VertData i) : SV_TARGET
         shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterType::ConstantBuffer));
         shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterType::ConstantBuffer));
 
-        auto shader = shaderModule->RecCreateShader(context);
+        auto shader = shaderModule->AllocateShader();
+        shaderModule->RecCreateShader(context, shader);
         shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
         return shader;
     }
@@ -500,7 +501,8 @@ float4 FragMain(VertData i) : SV_TARGET
         VertexLayout vertexLayout;
         vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
-        auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
+        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        meshModule->RecCreateMesh(context, mesh);
         meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
         return mesh;
@@ -660,7 +662,8 @@ float4 FragMain(VertData i) : SV_TARGET
         shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterType::ConstantBuffer));
         shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterType::ConstantBuffer));
 
-        auto shader = shaderModule->RecCreateShader(context);
+        auto shader = shaderModule->AllocateShader();
+        shaderModule->RecCreateShader(context, shader);
         shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
         return shader;
     }
@@ -709,7 +712,8 @@ float4 FragMain(VertData i) : SV_TARGET
         VertexLayout vertexLayout;
         vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
 
-        auto mesh = meshModule->RecCreateMesh(context, vertexLayout);
+        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        meshModule->RecCreateMesh(context, mesh);
         meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
         return mesh;

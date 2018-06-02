@@ -28,19 +28,7 @@ const Mesh* MeshModule::AllocateMesh(const Graphics::VertexLayout& vertexLayout)
     return new Mesh(vertexLayout);
 }
 
-DECLARE_COMMAND_CODE(CreateMesh);
-const Mesh* MeshModule::RecCreateMesh(const ExecutionContext& context, const VertexLayout& vertexLayout)
-{
-    auto buffer = GetRecordingBuffer(context);
-    auto& stream = buffer->stream;
-    auto target = new Mesh(vertexLayout);
-    stream.Write(TO_COMMAND_CODE(CreateMesh));
-    stream.Write(target);
-    stream.Align();
-    buffer->commandCount++;
-    return target;
-}
-
+SERIALIZE_METHOD_ARG1(MeshModule, CreateMesh, const Mesh*);
 SERIALIZE_METHOD_ARG2(MeshModule, SetVertices, const Mesh*, const Range<UInt8>&);
 SERIALIZE_METHOD_ARG3(MeshModule, SetSubMesh, const Mesh*, UInt32, const SubMesh&);
 

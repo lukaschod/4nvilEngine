@@ -21,7 +21,12 @@ Void ShaderModule::SetupExecuteOrder(ModuleManager* moduleManager)
     graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
 }
 
-SERIALIZE_METHOD_CREATE(ShaderModule, Shader);
+const Shader* ShaderModule::AllocateShader() const
+{
+    return new Shader();
+}
+
+SERIALIZE_METHOD_ARG1(ShaderModule, CreateShader, const Shader*);
 SERIALIZE_METHOD_ARG3(ShaderModule, SetShaderPipeline, const Shader*, UInt32, const ShaderPipelineDesc*);
 
 Bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)

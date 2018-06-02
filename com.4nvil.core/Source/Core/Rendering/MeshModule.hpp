@@ -64,7 +64,7 @@ namespace Core
         const Mesh* AllocateMesh(const Graphics::VertexLayout& vertexLayout) const;
 
     public:
-        const Mesh* RecCreateMesh(const ExecutionContext& context, const Graphics::VertexLayout& vertexLayout);
+        Void RecCreateMesh(const ExecutionContext& context, const Mesh* target);
         Void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<UInt8>& vertices);
         Void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, UInt32 index, const SubMesh& submesh);
 
