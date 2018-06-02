@@ -168,7 +168,7 @@ namespace Core::Math
     }
 
     template<class T>
-    Bool Matrix4x4<T>::IsValid() const
+    inline Bool Matrix4x4<T>::IsValid() const
     {
         return x.IsValid() && y.IsValid() && z.IsValid() && w.IsValid();
     }

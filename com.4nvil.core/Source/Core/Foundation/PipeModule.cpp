@@ -97,7 +97,7 @@ Void PipeModule::Execute(const ExecutionContext& context)
             for (UInt i = 0; i < buffer.commandCount; i++)
             {
                 auto& commandCode = stream.FastRead<CommandCode>();
-                ASSERT(ExecuteCommand(context, stream, commandCode));
+                CHECK(ExecuteCommand(context, stream, commandCode));
                 stream.Align();
             }
 

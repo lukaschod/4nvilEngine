@@ -84,7 +84,7 @@ Void GraphicsPlannerModule::Execute(const ExecutionContext& context)
         for (int i = 0; i < buffer->commandCount; i++)
         {
             auto& commandCode = stream.FastRead<CommandCode>();
-            ASSERT(ExecuteCommand(context, buffer, commandCode));
+            CHECK(ExecuteCommand(context, buffer, commandCode));
             stream.Align();
         }
 

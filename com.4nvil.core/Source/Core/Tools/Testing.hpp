@@ -60,13 +60,14 @@
         Core::Console::Write("\n"); \
     }
 
+#define CHECK(isFalse) RELEASE_ASSERT(isFalse)
 #ifdef ENABLED_ASSERT
 #    define ASSERT(isFalse) RELEASE_ASSERT(isFalse)
 #    define ASSERT_MSG(isFalse, ...) RELEASE_ASSERT_MSG(isFalse, __VA_ARGS__)
 #    define ERROR(...) RELEASE_ERROR(__VA_ARGS__)
 #else
-#    define ASSERT(isFalse) (Void)(isFalse)
-#    define ASSERT_MSG(isFalse, ...) (Void)(isFalse)
+#    define ASSERT(isFalse) (Void)0
+#    define ASSERT_MSG(isFalse, ...) (Void)0
 #    define ERROR(...) (Void)0
 #endif
 
