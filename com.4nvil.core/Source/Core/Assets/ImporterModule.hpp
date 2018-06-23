@@ -11,46 +11,32 @@
 
 #pragma once
 
-#include <Core/Foundation/UnitModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/IO/Directory.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Assets/IImporterSupportModule.hpp>
 
 namespace Core
 {
-    struct Transform;
-    class TransformModule;
-}
-
-namespace Core
-{
-    struct Scene
-    {
-        Scene() 
-            : unit(nullptr)
-            , transform(nullptr)
-            , created(false)
-        {}
-        const Unit* unit;
-        const Transform* transform;
-        Bool created;
-    };
-
-    class SceneModule : public PipeModule
+    class ImporterModule : public PipeModule
     {
     public:
         BASE_IS(PipeModule);
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Scene* AllocateScene();
+        Bool IsSupported(const Directory& directory) const;
 
     public:
-        Void RecCreateScene(const ExecutionContext& context, const Scene* target);
-        Void RecSetEnable(const ExecutionContext& context, const Scene* target, Bool enable);
-        Void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
+        Void RecImport(const ExecutionContext& context, const Directory& directory);
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        TransformModule* transformModule;
-        UnitModule* unitModule;
+        IImporterSupportModule* TryGetImporter(const Directory& directory) const;
+        Void Import(const ExecutionContext& context, const Directory& directory);
+
+    private:
+        List<IImporterSupportModule*> importerSupportModules;
     };
 }

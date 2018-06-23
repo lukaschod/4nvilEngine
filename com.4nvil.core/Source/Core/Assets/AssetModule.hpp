@@ -8,18 +8,76 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *
 */
-
+/*
 #pragma once
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Guid.hpp>
+#include <Core/Tools/Collections/FixedBlockHeap.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Foundation/PipeModule.hpp>
-#include <Core/Assets/Importers/IImporterModule.hpp>
+#include <Core/Assets/Importers/IImporterSupportModule.hpp>
 
 namespace Core
 {
+    struct ItemId
+    {
+        Directory directory;
+    };
+
+    enum class ItemType
+    {
+        Internal,
+        External,
+    };
+
+    struct ItemExternal
+    {
+        Crate* crate;
+    };
+
+    struct ItemInternal
+    {
+        UInt8* offset;
+        UInt size;
+    };
+
+    struct Item
+    {
+        ItemId id;
+        ItemType type;
+        union
+        {
+            ItemExternal external;
+            ItemInternal internal;
+        };
+    };
+
+    struct Crate
+    {
+        Directory directory;
+        List<Item> items;
+    };
+    
+    class CrateModule : public PipeModule
+    {
+    public:
+        BASE_IS(PipeModule);
+
+        const Crate* AllocateCrate();
+
+    public:
+        Void RecCreateCrate(const ExecutionContext& context, const Crate* crate, const Directory& directory, List<const Transferable*>& assets, List<Crate*>& includes);
+        Void RecSaveCrate(const ExecutionContext& context, const Crate* crate);
+        Void RecLoadCrate(const ExecutionContext& context, const Directory& directory);
+
+        const Transferable* RecGetAsset(const ExecutionContext& context, const Directory& directory);
+
+    private:
+        List<Crate*> crates;
+    };
+
     class AssetModule : public PipeModule
     {
     public:
@@ -35,7 +93,7 @@ namespace Core
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        IImporterModule* TryGetImporter(const Directory& directory) const;
+        IImporterSupportModule* TryGetImporter(const Directory& directory) const;
         Void Import(const ExecutionContext& context, const Directory& directory, const Guid& guid);
 
     private:
@@ -46,6 +104,6 @@ namespace Core
             const Transferable* asset;
         };
         List<DirectoryToAsset> directoryToAsset;
-        List<IImporterModule*> importerModules;
+        List<IImporterSupportModule*> importerModules;
     };
-}
+}*/

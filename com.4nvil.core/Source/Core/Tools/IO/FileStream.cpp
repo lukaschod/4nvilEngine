@@ -37,6 +37,7 @@ Void FileStream::Close()
 {
     ASSERT(isOpened);
     fclose(file);
+    isOpened = false;
 }
 
 Void FileStream::Read(Void* data, UInt size)
@@ -73,6 +74,16 @@ Void FileStream::WriteFmt(const Char* format, va_list arguments)
 {
     ASSERT(isOpened);
     vfprintf(file, format, arguments);
+}
+
+Void FileStream::SetPosition(UInt position)
+{
+    fseek(file, position, SEEK_SET);
+}
+
+UInt FileStream::GetPosition() const
+{
+    return ftell(file);
 }
 
 Void FileStream::Flush()

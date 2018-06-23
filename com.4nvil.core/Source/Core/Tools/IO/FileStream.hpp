@@ -43,6 +43,8 @@ namespace Core::IO
         virtual Void Write(Void* data, UInt size) override;
         virtual Void WriteFmt(const Char* format, ...) override;
         virtual Void WriteFmt(const Char* format, va_list arguments) override;
+        virtual Void SetPosition(UInt position) override;
+        virtual UInt GetPosition() const override;
 
         Bool Open(const Char* path, FileMode mode, FileAccess access);
         inline Bool IsOpened() const { return isOpened; }

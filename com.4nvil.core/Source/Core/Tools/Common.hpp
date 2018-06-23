@@ -25,5 +25,7 @@
 // Our special keyword for accesing the base class
 #define BASE_IS(Class) typedef Class base;
 
+#define pure =0
+
 #include <Core/Tools/Types.hpp>
 #include <Core/Tools/Testing.hpp>

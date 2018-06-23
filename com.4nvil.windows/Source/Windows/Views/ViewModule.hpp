@@ -57,6 +57,8 @@ namespace Windows
     public:
         virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) override;
 
+        virtual Void RecDestroyIView(const ExecutionContext& context, const IView* target) override;
+
         // Set view position and size
         // Can't be called after creation of view
         virtual Void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) override;
@@ -83,7 +85,6 @@ namespace Windows
         const InputDevice* inputDevice;
         ImageModule* imageModule;
         List<View*> views;
-        const Char* defaultWindowClassName;
         HINSTANCE instanceHandle;
     };
 }

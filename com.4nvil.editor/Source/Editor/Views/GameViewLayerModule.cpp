@@ -11,10 +11,12 @@
 
 #include <Editor/Views/GameViewLayerModule.hpp>
 #include <Core/Rendering/RenderLoop/UnlitRenderLoopModule.hpp>
+#include <Core/Rendering/CameraModule.hpp>
 
 using namespace Editor;
 
 IRenderLoopModule* GameViewLayerModule::GetRenderLoop(ModuleManager * moduleManager)
 {
+    ExecuteBefore<CameraModule>(moduleManager); // TODO: Temp fix remove it
     return ExecuteBefore<UnlitRenderLoopModule>(moduleManager);
 }

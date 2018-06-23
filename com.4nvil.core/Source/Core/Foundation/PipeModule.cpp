@@ -22,6 +22,7 @@ Void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     profilerModule = ExecuteAfter<ProfilerModule>(moduleManager);
     cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
+    OnDependancyAdd(moduleManager, this, false);
 }
 
 Void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore)

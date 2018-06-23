@@ -60,6 +60,7 @@ namespace Core
 
     public:
         virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) = 0;
+        virtual Void RecDestroyIView(const ExecutionContext& context, const IView* target) = 0;
         virtual Void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) = 0;
         virtual Void RecSetName(const ExecutionContext& context, const IView* target, const Char* name) = 0;
         virtual Void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) = 0;

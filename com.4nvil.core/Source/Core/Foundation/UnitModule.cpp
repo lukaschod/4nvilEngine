@@ -17,6 +17,11 @@ using namespace Core;
 
 static const Char* memoryLabelUnit = "Core::Unit";
 
+Void Unit::Transfer(ITransfer* transfer)
+{
+
+}
+
 Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);

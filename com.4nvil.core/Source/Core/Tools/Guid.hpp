@@ -11,10 +11,23 @@
 
 #pragma once
 
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/String.hpp>
+
 namespace Core
 {
-    struct Guid
+    class Guid
     {
+    public:
+        inline Bool operator==(const Guid& rhs) const { return strcmp(data, rhs.data) == 0; }
+        inline Bool operator!=(const Guid& rhs) const { return strcmp(data, rhs.data) != 0; }
+
+        static Guid GetUnique()
+        {
+            return Guid();
+        }
+
+    public:
         char data[32];
     };
 }

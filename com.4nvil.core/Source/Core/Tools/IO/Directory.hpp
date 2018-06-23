@@ -35,6 +35,7 @@ namespace Core
     public:
         Directory() { *data = 0; size = 0; }
         Directory(const Directory& directory);
+        Directory(const Char8* path);
 
         // Append value on end of directory
         Bool Append(const Char8* value);

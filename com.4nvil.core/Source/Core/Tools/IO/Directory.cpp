@@ -24,9 +24,9 @@ Directory::Directory(const Directory& directory)
     RecalculateSize(); 
 }
 
-Directory::Directory(const wchar_t* directory)
+Directory::Directory(const Char8* path)
 {
-    wcstombs(data, directory, 260);
+    strcpy(data, path);
     RecalculateSize();
 }
 
@@ -44,8 +44,7 @@ Bool Directory::Append(const Char8* value)
 
 Bool Directory::IsFile() const
 {
-    filesystem::directory_entry temp(data);
-    return temp.status().type() == filesystem::v1::file_type::regular;
+    return filesystem::is_regular_file(data);
 }
 
 Bool Directory::GetExtension(DirectoryExtension& extension) const
@@ -73,7 +72,8 @@ const Directory& Directory::GetExecutablePath()
 
         // Add terminator
         auto last = strrchr(path.data, '\\');
-        *last = 0;
+        ASSERT(last != nullptr);
+        *(++last) = 0;
         pathValid = true;
     }
 #endif
@@ -89,7 +89,8 @@ Void Directory::GetDirectories(const Directory& path, List<Directory>& out)
     {
         //if (directory.status().type() == filesystem::v1::file_type::directory)
         {
-            Directory directory(directory.path().c_str());
+            auto utf8 = directory.path().u8string();
+            Directory directory(utf8.c_str());
             out.push_back(directory);
         }
     }
@@ -101,7 +102,8 @@ Void Directory::GetFiles(const Directory& path, List<Directory>& out)
     {
         if (directory.status().type() == filesystem::v1::file_type::regular)
         {
-            Directory directory(directory.path().c_str());
+            auto utf8 = directory.path().u8string();
+            Directory directory(utf8.c_str());
             out.push_back(directory);
         }
     }

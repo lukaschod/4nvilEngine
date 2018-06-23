@@ -8,7 +8,7 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *
 */
-
+/*
 #pragma once
 
 #include <Core/Tools/Common.hpp>
@@ -75,4 +75,4 @@ namespace Core
         AssetModule* assetModule;
         TransferModule* transferModule;
     };
-}
+}*/

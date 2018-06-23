@@ -13,7 +13,7 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Collections/List.hpp>
-#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/TransferModule.hpp>
 
 namespace Core
 {
@@ -57,23 +57,27 @@ namespace Core
     };
 
     // Container of components
-    struct Unit final
+    struct Unit final : Transferable
     {
+        IMPLEMENT_TRANSFERABLE(Unit);
+
         Unit()
             : enabled(true)
             , activated(enabled)
             , relation(nullptr)
         {}
+
         List<const Component*> components;
         const Transform* relation;
         Bool enabled;
         Bool activated;
     };
 
-    class UnitModule final : public PipeModule
+    class UnitModule final : public TransfererModule
     {
     public:
-        BASE_IS(PipeModule);
+        IMPLEMENT_TRANSFERER(Unit);
+        BASE_IS(TransfererModule);
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         const Unit* AllocateUnit() const;

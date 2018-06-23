@@ -19,6 +19,7 @@ namespace Core
     {
         Render,
         Resize,
+        Destroy,
     };
 
     struct ViewInputResizeDesc

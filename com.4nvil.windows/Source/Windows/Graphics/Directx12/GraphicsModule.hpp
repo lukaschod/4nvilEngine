@@ -367,5 +367,7 @@ namespace Windows::Directx12
         D3D12_FEATURE_DATA_ROOT_SIGNATURE rootSignatureFeatures;
 
         MemoryModule* memoryModule;
+
+        BlitCopyDesc* blitCopy;
     };
 }

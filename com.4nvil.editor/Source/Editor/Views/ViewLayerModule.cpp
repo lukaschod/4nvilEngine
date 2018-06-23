@@ -122,6 +122,13 @@ Void ViewLayerModule::Execute(const ExecutionContext& context)
             break;
         }
 
+        case ViewInputType::Destroy:
+        {
+            view = nullptr;
+            render = false;
+            break;
+        }
+
         default:
             ERROR("Unknown input type");
         }

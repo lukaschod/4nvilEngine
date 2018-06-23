@@ -45,7 +45,8 @@ const List<const IView*>& ViewModule::GetViews()
 Void ViewModule::CloseWindow(HWND windowHandle)
 {
     auto view = TryFindView(windowHandle);
-    ASSERT(view != nullptr);
+    if (view == nullptr)
+        return;
     views.remove(view);
     DestroyWindow(windowHandle);
 }
@@ -58,7 +59,7 @@ struct WndProcData
     const InputDevice* mouseInputDevice;
     const View* view;
 };
-static WndProcData wndProcData;
+thread_local static WndProcData wndProcData;
 
 static Void RecButtonInput(MouseButtonType type, Bool isDown)
 {
@@ -105,8 +106,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_CLOSE:
         ASSERT(wndProcData.viewModule != nullptr);
-        wndProcData.viewModule->CloseWindow(hwnd);
-        break;
+        wndProcData.viewModule->RecDestroyIView(wndProcData.context, wndProcData.view);
+        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Destroy), nullptr, 0);
+        return -1; // Do not close window, we will close it in next frame
 
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -118,6 +120,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+const Char* defaultWindowClassName = nullptr;
 Bool ViewModule::RegisterDefaultWindowClass()
 {
     ASSERT(instanceHandle != nullptr);
@@ -251,6 +254,7 @@ const IView* ViewModule::AllocateView()
 }
 
 SERIALIZE_METHOD_ARG1(ViewModule, CreateIView, const IView*);
+SERIALIZE_METHOD_ARG1(ViewModule, DestroyIView, const IView*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetRect, const IView*, const Rectf&);
 SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const Char*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetParent, const IView*, const IView*);
@@ -270,6 +274,11 @@ Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         target->viewInputDevice = inputModule->RecCreateInputDevice(context, desc);
 
         views.push_back(target);
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG1_START(DestroyIView, View*, target);
+        views.remove(target);
+        DestroyWindow(target->windowHandle);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetRect, View*, target, const Rectf, rect);

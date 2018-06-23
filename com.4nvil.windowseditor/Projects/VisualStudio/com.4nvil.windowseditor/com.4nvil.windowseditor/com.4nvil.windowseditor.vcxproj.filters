@@ -67,20 +67,14 @@
     <Filter Include="Core\Assets">
       <UniqueIdentifier>{2409a26b-541d-4191-b823-0e09c7748469}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Assets\Importer">
-      <UniqueIdentifier>{a8fc421a-c1d1-4ab3-8336-509268e014f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Project">
       <UniqueIdentifier>{5c5e7c9f-2188-4c8d-93cf-98d44adfbc8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Assets\ImporterSupport">
+      <UniqueIdentifier>{08b206c6-dcbc-4de0-bb7c-d3b73045872e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\IImporterModule.hpp">
-      <Filter>Core\Assets\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.hpp">
-      <Filter>Core\Assets\Importer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp">
       <Filter>Core\Assets</Filter>
     </ClInclude>
@@ -345,6 +339,21 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\IImporterSupportModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\UnitImporterSupportModule.hpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Guid.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">
@@ -467,9 +476,6 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp">
       <Filter>Editor\Views</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\Importers\PngImporterModule.cpp">
-      <Filter>Core\Assets\Importer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp">
       <Filter>Editor\Project</Filter>
     </ClCompile>
@@ -487,6 +493,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.cpp">
       <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\UnitImporterSupportModule.cpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.cpp">
+      <Filter>Core\Assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

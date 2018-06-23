@@ -9,14 +9,14 @@
 *
 */
 
-#include <Core/Assets/AssetModule.hpp>
+/*#include <Core/Assets/AssetModule.hpp>
 
 using namespace Core;
 
 Void AssetModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
-    ExecuteBefore<IImporterModule>(moduleManager, importerModules);
+    ExecuteBefore<IImporterSupportModule>(moduleManager, importerModules);
 }
 
 Bool AssetModule::IsSupported(const Directory& directory) const
@@ -37,7 +37,7 @@ Bool AssetModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
     return false;
 }
 
-IImporterModule* AssetModule::TryGetImporter(const Directory& directory) const
+IImporterSupportModule* AssetModule::TryGetImporter(const Directory& directory) const
 {
     DirectoryExtension extension;
     ASSERT(directory.GetExtension(extension));
@@ -60,3 +60,4 @@ Void AssetModule::Import(const ExecutionContext& context, const Directory& direc
     d2a.directory = directory;
     d2a.guid = guid;
 }
+*/

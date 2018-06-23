@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <cmath>
 #include <Core/Tools/Common.hpp>
+#include <cmath>
 
 namespace Core
 {

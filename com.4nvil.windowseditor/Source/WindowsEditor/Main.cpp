@@ -9,6 +9,7 @@
 *
 */
 
+#include <Core/Tools/Common.hpp>
 #include <Core/Tools/Math/Vector.hpp>
 #include <Core/Tools/Math/Matrix.hpp>
 #include <Core/Tools/StopWatch.hpp>
@@ -33,6 +34,10 @@
 #include <Core/Rendering/SamplerModule.hpp>
 #include <Core/Input/InputModule.hpp>
 #include <Core/Input/MouseModule.hpp>
+#include <Core/Assets/ImporterModule.hpp>
+#include <Core/Assets/PackageModule.hpp>
+#include <Core/Assets/CrateModule.hpp>
+#include <Core/Assets/ImporterSupport/UnitImporterSupportModule.hpp>
 #include <Windows/Graphics/Directx12/GraphicsModule.hpp>
 #include <Windows/Views/ViewModule.hpp>
 #include <Editor/Views/GameViewLayerModule.hpp>
@@ -380,6 +385,18 @@ private:
     UInt64 passedFrameCount;
 };
 
+class TestViewLayerModule : public ViewLayerModule
+{
+public:
+    BASE_IS(ViewLayerModule);
+protected:
+    virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) override
+    {
+        ExecuteBefore<CameraModule>(moduleManager); // TODO: Temp fix remove it
+        return ExecuteBefore<UnlitRenderLoopModule>(moduleManager);
+    }
+};
+
 class TestModule : public ComputeModule
 {
 public:
@@ -401,7 +418,7 @@ public:
         unitModule = ExecuteBefore<UnitModule>(moduleManager);
         transformModuke = ExecuteBefore<TransformModule>(moduleManager);
         logModule = ExecuteBefore<LogModule>(moduleManager);
-        gameViewLayerModule = ExecuteBefore<GameViewLayerModule>(moduleManager);
+        gameViewLayerModule = ExecuteBefore<TestViewLayerModule>(moduleManager);
     }
 
     const Shader* CreateShader(const ExecutionContext& context)
@@ -540,7 +557,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
             // Create transform
             auto transform = transformModuke->AllocateTransform();
-            transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
+            transformModuke->RecSetPosition(context, transform, Vector3f(0 + 1000, 0, -400));
             transformModuke->RecCreateTransform(context, transform);
             unitModule->RecAddComponent(context, mainCamera, transform);
 
@@ -557,7 +574,7 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             for (int j = 0; j < count; j++)
             {
-                CreateQuad(context, testShader, mesh, Vector3f(i*2.0f - offset, j*2.0f - offset, 0.0f));
+                CreateQuad(context, testShader, mesh, Vector3f(i*2.0f - offset + 1000, j*2.0f - offset, 0.0f));
             }
         }
     }
@@ -569,7 +586,7 @@ float4 FragMain(VertData i) : SV_TARGET
     }
 
     UnitModule* unitModule;
-    GameViewLayerModule* gameViewLayerModule;
+    TestViewLayerModule* gameViewLayerModule;
     TransformModule* transformModuke;
     IViewModule* viewModule;
     MaterialModule* materialModule;
@@ -799,6 +816,218 @@ float4 FragMain(VertData i) : SV_TARGET
     UInt32 frame;
 };
 
+class HelloWorldModule : public ComputeModule
+{
+public:
+    BASE_IS(ComputeModule);
+
+    HelloWorldModule() : initialized(false) {}
+
+    virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override
+    {
+        base::SetupExecuteOrder(moduleManager);
+        viewModule = ExecuteBefore<IViewModule>(moduleManager);
+        materialModule = ExecuteBefore<MaterialModule>(moduleManager);
+        shaderModule = ExecuteBefore<ShaderModule>(moduleManager);
+        meshRendererModule = ExecuteBefore<MeshRendererModule>(moduleManager);
+        meshModule = ExecuteBefore<MeshModule>(moduleManager);
+        cameraModule = ExecuteBefore<CameraModule>(moduleManager);
+        surfaceModule = ExecuteBefore<SurfaceModule>(moduleManager);
+        graphicsModule = ExecuteBefore<IGraphicsModule>(moduleManager);
+        unitModule = ExecuteBefore<UnitModule>(moduleManager);
+        transformModuke = ExecuteBefore<TransformModule>(moduleManager);
+        logModule = ExecuteBefore<LogModule>(moduleManager);
+        gameViewLayerModule = ExecuteBefore<GameViewLayerModule>(moduleManager);
+        sceneModule = ExecuteBefore<SceneModule>(moduleManager);
+        packageModule = ExecuteBefore<PackageModule>(moduleManager);
+        crateModule = ExecuteBefore<CrateModule>(moduleManager);
+    }
+
+    const Shader* CreateShader(const ExecutionContext& context)
+    {
+        auto source =
+            R"(
+
+cbuffer _perCameraData : register(b0)
+{
+    float4x4 _worldToCamera;
+};
+
+cbuffer _perMeshData : register(b1)
+{
+    float4x4 _objectToWorld;
+};
+
+struct AppData
+{
+    float4 position : POSITION;
+    float4 color : TEXCOORD0;
+};
+
+struct VertData
+{
+    float4 position : SV_POSITION;
+    float4 color : TEXCOORD0;
+};
+
+VertData VertMain(AppData i)
+{
+    VertData o;
+    o.position = i.position;
+    o.color = i.color;
+    return o;
+}
+
+float4 FragMain(VertData i) : SV_TARGET
+{
+    return i.color;
+}
+            )";
+
+        VertexLayout vertexLayout;
+        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
+        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::TexCoord0, ColorFormat::RGBA32));
+
+        auto shaderDesc = new ShaderPipelineDesc();
+        shaderDesc->name = "Test";
+        shaderDesc->source = (const UInt8*) source;
+        shaderDesc->sourceSize = strlen(source);
+        shaderDesc->states.zTest = ZTest::LEqual;
+        shaderDesc->states.zWrite = ZWrite::On;
+        shaderDesc->varation = 0;
+        shaderDesc->vertexLayout = vertexLayout;
+        shaderDesc->parameters.push_back(ShaderParameter("_perCameraData", ShaderParameterType::ConstantBuffer));
+        shaderDesc->parameters.push_back(ShaderParameter("_perMeshData", ShaderParameterType::ConstantBuffer));
+
+        auto shader = shaderModule->AllocateShader();
+        shaderModule->RecCreateShader(context, shader);
+        shaderModule->RecSetShaderPipeline(context, shader, 0, shaderDesc);
+        return shader;
+    }
+
+    const Unit* CreateQuad(const ExecutionContext& context, const Scene* scene, const Shader* shader, const Mesh* mesh, Vector3f position)
+    {
+        auto triangle = unitModule->AllocateUnit();
+        unitModule->RecCreateUnit(context, triangle);
+
+        // Create transform
+        auto transform = transformModuke->AllocateTransform();
+        transformModuke->RecSetPosition(context, transform, position);
+        transformModuke->RecCreateTransform(context, transform);
+        unitModule->RecAddComponent(context, triangle, transform);
+
+        auto material = materialModule->AllocateMaterial();
+        materialModule->RecCreateMaterial(context, material);
+        materialModule->RecSetShader(context, material, shader);
+
+        auto meshRenderer = meshRendererModule->AllocateMeshRenderer();
+        meshRendererModule->RecSetMaterial(context, meshRenderer, material);
+        meshRendererModule->RecSetMesh(context, meshRenderer, mesh);
+        meshRendererModule->RecCreateMeshRenderer(context, meshRenderer);
+        unitModule->RecAddComponent(context, triangle, meshRenderer);
+
+        sceneModule->RecAddUnit(context, scene, transform);
+
+        return triangle;
+    }
+
+    const Mesh* CreateMesh(const ExecutionContext& context)
+    {
+        volatile static Float vertices[] = {
+            -0.5f, -0.5f, 0, 1,    1, 0, 0, 0,
+            -0.5f, 0.5f, 0, 1,     0, 1, 0, 0,
+            0.5f, -0.5f, 0, 1,     0, 0, 1, 0,
+        };
+
+        VertexLayout vertexLayout;
+        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
+
+        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        meshModule->RecCreateMesh(context, mesh);
+        meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
+        meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(3));
+        return mesh;
+    }
+
+    Void Initialize(const ExecutionContext& context)
+    {
+        MARK_FUNCTION; // Profile method
+
+        logModule->RecWriteFmt(context, "Initializing test scene %d\n", 1);
+
+        // Create current scene and the one used for loading
+        auto loadScene = sceneModule->AllocateScene();
+        sceneModule->RecCreateScene(context, loadScene);
+        sceneModule->RecSetEnable(context, loadScene, false);
+        auto currentScene = sceneModule->AllocateScene();
+        sceneModule->RecCreateScene(context, currentScene);
+
+        // Create OS window
+        auto view = viewModule->AllocateView();
+        viewModule->RecSetName(context, view, "Hello World!");
+        viewModule->RecCreateIView(context, view);
+        gameViewLayerModule->RecShow(context, view);
+
+        // Create camera that will render in OS window
+        auto mainCamera = unitModule->AllocateUnit();
+        unitModule->RecCreateUnit(context, mainCamera);
+        // Create transform
+        auto transform = transformModuke->AllocateTransform();
+        transformModuke->RecSetPosition(context, transform, Vector3f(0, 0, -400));
+        transformModuke->RecCreateTransform(context, transform);
+        unitModule->RecAddComponent(context, mainCamera, transform);
+        // Create camera with window as target
+        auto camera = cameraModule->AllocateCamera();
+        cameraModule->RecCreateCamera(context, camera);
+        cameraModule->RecSetSurface(context, camera, gameViewLayerModule->GetSurface());
+        unitModule->RecAddComponent(context, mainCamera, camera);
+
+        // Create our hello world triangle
+        auto testShader = CreateShader(context);
+        auto mesh = CreateMesh(context);
+        auto helloWorldTriangle = CreateQuad(context, currentScene, testShader, mesh, Vector3f());
+
+        auto directory = Directory::GetExecutablePath();
+        directory.Append("TestPackage/");
+        auto package = packageModule->AllocatePackage();
+        packageModule->RecCreatePackage(context, package, directory);
+        packageModule->RecSyncPackage(context, package);
+
+        auto crate = crateModule->AllocateCrate();
+        crateModule->RecAddTransferable(context, crate, Directory("HelloWorldTriangle"), helloWorldTriangle);
+
+        auto crateDirectory = Directory::GetExecutablePath();
+        crateDirectory.Append("TestPackage/HelloWorldTriangle.crate");
+        crateModule->RecSave(context, crateDirectory, crate);
+    }
+
+    virtual Void Execute(const ExecutionContext& context) override
+    {
+        if (!initialized)
+        {
+            Initialize(context);
+            initialized = true;
+        }
+    }
+
+    UnitModule* unitModule;
+    TransformModule* transformModuke;
+    IViewModule* viewModule;
+    GameViewLayerModule* gameViewLayerModule;
+    MaterialModule* materialModule;
+    ShaderModule* shaderModule;
+    MeshRendererModule* meshRendererModule;
+    MeshModule* meshModule;
+    CameraModule* cameraModule;
+    SurfaceModule* surfaceModule;
+    IGraphicsModule* graphicsModule;
+    LogModule* logModule;
+    SceneModule* sceneModule;
+    PackageModule* packageModule;
+    CrateModule* crateModule;
+    Bool initialized;
+};
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
     auto planner = new StaticModulePlanner();
@@ -826,6 +1055,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new MouseModule());
     moduleManager->AddModule(new SceneModule());
 
+    // Assets
+    moduleManager->AddModule(new PackageModule());
+    moduleManager->AddModule(new ImporterModule());
+    moduleManager->AddModule(new CrateModule());
+    moduleManager->AddModule(new UnitImporterSupportModule());
+
     // Editor
     moduleManager->AddModule(new Editor::GameViewLayerModule());
 
@@ -833,10 +1068,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-    // Test project 1
+    /*// Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
     moduleManager->AddModule(new ShutdownModule(moduleManager));
+    moduleManager->AddModule(new TestViewLayerModule());*/
 
     /*// Test project 2
     moduleManager->AddModule(new AgentModule());
@@ -845,6 +1081,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Test2Module());
     moduleManager->AddModule(new FpsLoggerModule());
     moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+
+    // Hello World
+    moduleManager->AddModule(new HelloWorldModule());
+    moduleManager->AddModule(new ShutdownModule(moduleManager));
 
     moduleManager->Start();
     while (moduleManager->IsRunning())

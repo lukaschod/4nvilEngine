@@ -11,12 +11,13 @@
 
 #pragma once
 
-#include <queue>
+
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Enum.hpp>
 #include <Core/Tools/Math/Matrix.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Foundation/UnitModule.hpp>
+#include <queue>
 
 namespace Core
 {

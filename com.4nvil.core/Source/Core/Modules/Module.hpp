@@ -70,7 +70,6 @@ namespace Core
             {
                 module->dependencies.safe_push_back(this);
                 module->OnDependancyAdd(moduleManager, this, true);
-                modules.push_back((T*) module);
             }
         }
 
@@ -100,7 +99,6 @@ namespace Core
             {
                 dependencies.safe_push_back(module);
                 module->OnDependancyAdd(moduleManager, this, false);
-                modules.push_back((T*) module);
             }
         }
 

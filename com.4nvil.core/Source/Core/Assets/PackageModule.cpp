@@ -10,37 +10,32 @@
 */
 
 #include <Core/Assets/PackageModule.hpp>
-#include <Core/Assets/LibraryModule.hpp>
+#include <Core/Assets/ImporterModule.hpp>
 
 using namespace Core;
 
 Void PackageModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
-    libraryModule = ExecuteBefore<LibraryModule>(moduleManager);
+    importerModule = ExecuteBefore<ImporterModule>(moduleManager);
 }
 
 const Package* PackageModule::AllocatePackage()
 {
     auto package = new Package();
-    package->library = libraryModule->AllocateLibrary();
     return package;
 }
 
-SERIALIZE_METHOD_ARG1(PackageModule, CreatePackage, const Package*);
+SERIALIZE_METHOD_ARG2(PackageModule, CreatePackage, const Package*, const Directory&);
 SERIALIZE_METHOD_ARG1(PackageModule, SyncPackage, const Package*);
 
 Bool PackageModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
-    DESERIALIZE_METHOD_ARG1_START(CreatePackage, Package*, target);
-    libraryModule->RecCreateLibrary(context, target->library);
+    DESERIALIZE_METHOD_ARG2_START(CreatePackage, Package*, target, const Directory, directory);
+    target->directory = directory;
     packages.push_back(target);
-
-    // Lets create default directory for library
-    target->libraryDirectory = target->directory;
-    target->libraryDirectory.Append("Library.library");
     DESERIALIZE_METHOD_END;
 
     DESERIALIZE_METHOD_ARG1_START(SyncPackage, Package*, package);
@@ -52,9 +47,7 @@ Bool PackageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 
 Void PackageModule::SyncPackage(const ExecutionContext& context, Package* package)
 {
-    LoadLibrary(context, package, package->directory);
     SyncPackageDirectory(context, package, package->directory);
-    SaveLibrary(context, package);
 }
 
 Void PackageModule::SyncPackageDirectory(const ExecutionContext& context, Package* package, const Directory& directory)
@@ -65,35 +58,8 @@ Void PackageModule::SyncPackageDirectory(const ExecutionContext& context, Packag
     for (auto directory : directories)
     {
         if (directory.IsFile())
-            libraryModule->RecTrack(context, package->library, directory);
+            importerModule->RecImport(context, directory);
         else
             SyncPackageDirectory(context, package, directory);
     }
-}
-
-Void PackageModule::LoadLibrary(const ExecutionContext& context, Package* package, const Directory& directory)
-{
-    List<Directory> directories; // reuse it
-    Directory::GetDirectories(directory, directories);
-
-    for (auto directory : directories)
-    {
-        if (directory.IsFile())
-        {
-            DirectoryExtension extension;
-            ASSERT(directory.GetExtension(extension));
-            if (extension == DirectoryExtension(".library"))
-            {
-                libraryModule->RecLoadLibrary(context, package->library, directory);
-                package->libraryDirectory = directory;
-            }
-        }
-        else
-            SyncPackageDirectory(context, package, directory);
-    }
-}
-
-Void PackageModule::SaveLibrary(const ExecutionContext& context, Package* package)
-{
-    libraryModule->RecSaveLibrary(context, package->library, package->libraryDirectory);
 }

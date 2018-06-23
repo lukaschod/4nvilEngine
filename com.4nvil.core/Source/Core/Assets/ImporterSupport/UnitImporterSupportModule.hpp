@@ -11,46 +11,33 @@
 
 #pragma once
 
-#include <Core/Foundation/UnitModule.hpp>
+#include <Core/Tools/Common.hpp>
+#include <Core/Assets/IImporterSupportModule.hpp>
 
 namespace Core
 {
-    struct Transform;
-    class TransformModule;
+    struct Transferable;
+    class CrateModule;
 }
 
 namespace Core
 {
-    struct Scene
-    {
-        Scene() 
-            : unit(nullptr)
-            , transform(nullptr)
-            , created(false)
-        {}
-        const Unit* unit;
-        const Transform* transform;
-        Bool created;
-    };
-
-    class SceneModule : public PipeModule
+    class UnitImporterSupportModule : public IImporterSupportModule
     {
     public:
-        BASE_IS(PipeModule);
+        BASE_IS(IImporterSupportModule);
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Scene* AllocateScene();
+        virtual Bool IsSupported(const DirectoryExtension& extension) override;
 
     public:
-        Void RecCreateScene(const ExecutionContext& context, const Scene* target);
-        Void RecSetEnable(const ExecutionContext& context, const Scene* target, Bool enable);
-        Void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
+        virtual Void RecImport(const ExecutionContext& context, const Directory& directory) override;
+        virtual Void RecExport(const ExecutionContext& context, const Directory& directory, const Transferable* target);
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        TransformModule* transformModule;
-        UnitModule* unitModule;
+        CrateModule* crateModule;
     };
 }

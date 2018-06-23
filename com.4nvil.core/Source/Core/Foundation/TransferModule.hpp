@@ -12,17 +12,86 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
-#include <Core/Tools/Guid.hpp>
+#include <Core/Tools/IO/Directory.hpp>
 #include <Core/Tools/IO/Stream.hpp>
-#include <Core/Foundation/ComputeModule.hpp>
+#include <Core/Foundation/PipeModule.hpp>
+
+#define IMPLEMENT_TRANSFERABLE(Name) \
+    virtual TransfererId& GetTransfererId() const override { static TransfererId id("Core::UnitModule"); return id; } \
+    virtual Void Transfer(ITransfer* transfer) override;
+
+#define IMPLEMENT_TRANSFERER(Name) \
+    virtual const Transferable* AllocateTransferable() const override { return Allocate##Name(); } \
+    virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) override { RecCreate##Name(context, (const Name*) target); } \
+    virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) override { RecDestroy(context, (const Name*) target); } \
+    virtual TransfererId& GetTransfererId() const override { static TransfererId id("Core::UnitModule"); return id; }
 
 namespace Core
 {
+    struct Transferable;
+
     class ITransfer
     {
     public:
         virtual Void Transfer(UInt8* data, UInt size) = 0;
+        virtual Void TransferPointer(Transferable*& transferable) = 0;
         virtual Bool IsReading() const = 0;
+    };
+
+    struct TransferableId
+    {
+        Bool operator==(const TransferableId& rhs) const { return directory == rhs.directory; }
+        Bool operator!=(const TransferableId& rhs) const { return directory != rhs.directory; }
+
+        Directory directory;
+    };
+
+    struct TransfererId
+    {
+        TransfererId() { *data = 0; }
+        TransfererId(const Char* name) { strcpy(data, name); }
+        Bool operator==(const TransfererId& rhs) const { return strcmp(data, rhs.data) == 0; }
+        Bool operator!=(const TransfererId& rhs) const { return strcmp(data, rhs.data) != 0; }
+
+        Char data[20];
+    };
+
+    struct Transferable
+    {
+        TransferableId* id = nullptr;
+        virtual TransfererId& GetTransfererId() const pure;
+        virtual Void Transfer(ITransfer* transfer) pure;
+    };
+
+    class TransfererModule : public PipeModule
+    {
+    public:
+        virtual const Transferable* AllocateTransferable() const pure;
+        virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) pure;
+        virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) pure;
+        virtual TransfererId& GetTransfererId() const pure;
+    };
+}
+
+// TODO: Move it somewhere
+namespace Core
+{
+    class TransferFindSize : public ITransfer
+    {
+    public:
+        TransferFindSize() : size(0) {}
+        virtual Void Transfer(UInt8* data, UInt size) override
+        {
+            this->size += size;
+        }
+        virtual Void TransferPointer(Transferable*& transferable)
+        {
+            transferable->Transfer(this);
+        }
+        virtual Bool IsReading() const override { return true; }
+
+    public:
+        UInt size;
     };
 
     class TransferBinaryReader : public ITransfer
@@ -31,6 +100,7 @@ namespace Core
         TransferBinaryReader(IO::Stream* stream) : stream(stream) {}
 
         virtual Void Transfer(UInt8* data, UInt size) override { stream->Read(data, size); }
+        virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
         virtual Bool IsReading() const override { return true; }
 
     private:
@@ -43,31 +113,10 @@ namespace Core
         TransferBinaryWritter(IO::Stream* stream) : stream(stream) {}
 
         virtual Void Transfer(UInt8* data, UInt size) override { stream->Write(data, size); }
+        virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
         virtual Bool IsReading() const override { return false; }
 
     private:
         IO::Stream* stream;
-    };
-
-    struct Transferable
-    {
-        virtual Void Transfer(ITransfer* transfer) = 0;
-        Guid guid;
-    };
-
-    class TransferModule : public ComputeModule
-    {
-    public:
-        Void Read(IO::Stream* stream, Transferable* value)
-        {
-            TransferBinaryReader transfer(stream);
-            value->Transfer(&transfer);
-        }
-
-        Void Write(IO::Stream* stream, Transferable* value)
-        {
-            TransferBinaryWritter transfer(stream);
-            value->Transfer(&transfer);
-        }
     };
 }

@@ -23,6 +23,7 @@ GraphicsModule::GraphicsModule()
     : device(nullptr)
     , factory(nullptr)
     , resourceCounter(0)
+    , blitCopy(nullptr)
 {}
 
 Void GraphicsModule::Execute(const ExecutionContext& context)
@@ -562,7 +563,6 @@ Void GraphicsModule::SetName(ID3D12Object* object, const wchar_t* format, ...)
 Void GraphicsModule::BlitCopy(const ExecutionContext& context, Texture* src, Texture* dest)
 {
     // TODO: Make it cleaner, maybe move blit to abstraction if possible
-    static BlitCopyDesc* blitCopy = nullptr;
     if (blitCopy == nullptr)
     {
         blitCopy = new BlitCopyDesc();
