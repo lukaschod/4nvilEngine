@@ -59,7 +59,7 @@ namespace Core
     // Container of components
     struct Unit final : Transferable
     {
-        IMPLEMENT_TRANSFERABLE(Unit);
+        IMPLEMENT_TRANSFERABLE(Core, Unit);
 
         Unit()
             : enabled(true)
@@ -76,7 +76,7 @@ namespace Core
     class UnitModule final : public TransfererModule
     {
     public:
-        IMPLEMENT_TRANSFERER(Unit);
+        IMPLEMENT_TRANSFERER(Core, Unit);
         BASE_IS(TransfererModule);
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;

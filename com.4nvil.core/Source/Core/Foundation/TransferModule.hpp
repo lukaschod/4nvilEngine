@@ -16,15 +16,15 @@
 #include <Core/Tools/IO/Stream.hpp>
 #include <Core/Foundation/PipeModule.hpp>
 
-#define IMPLEMENT_TRANSFERABLE(Name) \
-    virtual TransfererId& GetTransfererId() const override { static TransfererId id("Core::UnitModule"); return id; } \
+#define IMPLEMENT_TRANSFERABLE(NameSpace, Name) \
+    virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; } \
     virtual Void Transfer(ITransfer* transfer) override;
 
-#define IMPLEMENT_TRANSFERER(Name) \
+#define IMPLEMENT_TRANSFERER(NameSpace, Name) \
     virtual const Transferable* AllocateTransferable() const override { return Allocate##Name(); } \
     virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) override { RecCreate##Name(context, (const Name*) target); } \
     virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) override { RecDestroy(context, (const Name*) target); } \
-    virtual TransfererId& GetTransfererId() const override { static TransfererId id("Core::UnitModule"); return id; }
+    virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; }
 
 namespace Core
 {
@@ -33,9 +33,9 @@ namespace Core
     class ITransfer
     {
     public:
-        virtual Void Transfer(UInt8* data, UInt size) = 0;
-        virtual Void TransferPointer(Transferable*& transferable) = 0;
-        virtual Bool IsReading() const = 0;
+        virtual Void Transfer(UInt8* data, UInt size) pure;
+        virtual Void TransferPointer(Transferable*& transferable) pure;
+        virtual Bool IsReading() const pure;
     };
 
     struct TransferableId

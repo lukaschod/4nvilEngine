@@ -38,18 +38,18 @@ namespace Core
     {
     public:
         // Recreates the Modules execution plan
-        virtual Void Recreate(List<Module*>& modules) = 0;
+        virtual Void Recreate(List<Module*>& modules) pure;
 
         // Prepares for new frame
-        virtual Void Reset() = 0;
+        virtual Void Reset() pure;
 
         // Pulls next executable job, if no job is available nullptr will be returned in Module field
         // Thread-safe
-        virtual ModuleJob TryGetNext() = 0;
+        virtual ModuleJob TryGetNext() pure;
 
         // Marks the job as finished
         // Thread-safe
-        virtual Void SetFinished(const ModuleJob& job) = 0;
+        virtual Void SetFinished(const ModuleJob& job) pure;
 
         // Set callback for job finish
         inline Void SetJobFinishCallback(std::function<Void(UInt)> callback) { jobFinishCallback = callback; }

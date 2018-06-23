@@ -32,9 +32,9 @@ namespace Core
     public:
         // Returns extension name that is supported by this importer
         // Extension must be without dot (etc png) and lower case
-        virtual Bool IsSupported(const DirectoryExtension& extension) = 0;
+        virtual Bool IsSupported(const DirectoryExtension& extension) pure;
 
     public:
-        virtual Void RecImport(const ExecutionContext& context, const Directory& directory) = 0;
+        virtual Void RecImport(const ExecutionContext& context, const Directory& directory) pure;
     };
 }

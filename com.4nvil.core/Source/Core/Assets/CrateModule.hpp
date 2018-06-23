@@ -50,7 +50,7 @@ namespace Core
 
     struct Crate : public Transferable
     {
-        IMPLEMENT_TRANSFERABLE(Crate);
+        IMPLEMENT_TRANSFERABLE(Core, Crate);
 
         Guid guid;
         Directory directory;

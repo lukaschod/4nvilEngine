@@ -73,7 +73,7 @@ const Directory& Directory::GetExecutablePath()
         // Add terminator
         auto last = strrchr(path.data, '\\');
         ASSERT(last != nullptr);
-        *(++last) = 0;
+        *(++last) pure;
         pathValid = true;
     }
 #endif

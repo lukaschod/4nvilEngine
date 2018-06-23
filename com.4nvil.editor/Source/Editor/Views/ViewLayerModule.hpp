@@ -47,7 +47,7 @@ namespace Editor
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
-        virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) = 0;
+        virtual IRenderLoopModule* GetRenderLoop(ModuleManager* moduleManager) pure;
         virtual Void Render(const ExecutionContext& context);
 
     protected:

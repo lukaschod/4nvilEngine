@@ -16,7 +16,7 @@ namespace Core
     class IHeap
     {
     public:
-        virtual Void* Allocate() = 0;
-        virtual Void Deallocate(Void* pointer) = 0;
+        virtual Void* Allocate() pure;
+        virtual Void Deallocate(Void* pointer) pure;
     };
 }

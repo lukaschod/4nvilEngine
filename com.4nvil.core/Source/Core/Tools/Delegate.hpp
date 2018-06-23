@@ -23,8 +23,8 @@ namespace Core
     private:
         struct Callable
         {
-            virtual ReturnType Call(ArgumentTypes... arguments) = 0;
-            virtual Bool IsSame(Callable* other) = 0;
+            virtual ReturnType Call(ArgumentTypes... arguments) pure;
+            virtual Bool IsSame(Callable* other) pure;
         };
 
         struct Function : public Callable

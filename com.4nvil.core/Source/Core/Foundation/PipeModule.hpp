@@ -54,7 +54,7 @@ namespace Core
 
     protected:
         // This is where each PipeModule implementation will add its commands
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) = 0;
+        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) pure;
         virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) override;
 
         // Sort the pipes according the order of Module execution, deducted from the dependancy tree
