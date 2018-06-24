@@ -19,7 +19,8 @@ static const Char* memoryLabelUnit = "Core::Unit";
 
 Void Unit::Transfer(ITransfer* transfer)
 {
-
+    TRANSFER(relation);
+    TRANSFER(components);
 }
 
 Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
@@ -35,7 +36,7 @@ Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
         ExecuteBefore(moduleManager, componentModule);
 }
 
-const Unit* UnitModule::AllocateUnit() const
+const Unit* UnitModule::AllocateUnit()
 {
     return memoryModule->New<Unit>(memoryLabelUnit);
 }

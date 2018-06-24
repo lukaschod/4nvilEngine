@@ -11,40 +11,18 @@
 
 #include <Core/Tools/IO/FileStream.hpp>
 #include <Core/Assets/CrateModule.hpp>
-#include <Core/Foundation/TransferModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
+#include <Core/Foundation/TransfererUtility.hpp>
 
 using namespace Core;
 using namespace Core::IO;
 
-template<class T> Void TransferObject(ITransfer* transfer, List<T>& list)
-{
-    auto size = list.size();
-    transfer->Transfer((UInt8*) &size, sizeof(UInt));
-    if (transfer->IsReading())
-        list.resize(size);
-    if (size != 0)
-        transfer->Transfer((UInt8*) list.data(), sizeof(T) * size);
-}
-
-Void TransferObject(ITransfer* transfer, Directory& directory)
-{
-    auto size = directory.GetSize();
-    transfer->Transfer((UInt8*) &size, sizeof(UInt));
-    if (size != 0)
-        transfer->Transfer((UInt8*) &directory, sizeof(UInt8) * size);
-}
-
-Void TransferObject(ITransfer* transfer, Guid& Guid)
-{
-    transfer->Transfer((UInt8*) &Guid, sizeof(Guid));
-}
-
 Void Crate::Transfer(ITransfer* transfer)
 {
-    TransferObject(transfer, guid);
-    TransferObject(transfer, externs);
-    TransferObject(transfer, locals);
-    TransferObject(transfer, globals);
+    TRANSFER(guid);
+    TRANSFER(externs);
+    TRANSFER(locals);
+    TRANSFER(globals);
 }
 
 enum class ResourceType : UInt32
@@ -221,7 +199,7 @@ Void CrateModule::Save(Crate* crate)
                 Transfer((UInt8*) &id, sizeof(id));
             }
         }
-        virtual Bool IsReading() const override { return false; }
+        virtual Bool IsWritting() const override { return true; }
 
     public:
         IO::Stream* stream;
@@ -312,14 +290,14 @@ const Transferable* CrateModule::LoadLocalResource(Crate* crate, UInt localIndex
             }
 
         }
-        virtual Bool IsReading() const override { return false; }
+        virtual Bool IsReading() const override { return true; }
 
         Transferable* LoadLocal(Crate* crate, UInt index)
         {
             auto& resource = crate->locals[index];
             stream.SetPosition(resource.offset);
 
-            auto transferer = crateModule->FindTransferer(resource.transfererId);
+            auto transferer = const_cast<TransfererModule*>(crateModule->FindTransferer(resource.transfererId));
             ASSERT(transferer != nullptr);
 
             auto transferable = const_cast<Transferable*>(transferer->AllocateTransferable());
@@ -356,7 +334,6 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     {
     public:
         TransferCrateHeader(Crate* crate, const List<const Crate*>& externs) : crate(crate), externs(externs) {}
-        virtual Bool IsReading() const override { return false; }
         virtual Void Transfer(UInt8* data, UInt size) override { }
         virtual Void TransferPointer(Transferable*& transferable) override
         {

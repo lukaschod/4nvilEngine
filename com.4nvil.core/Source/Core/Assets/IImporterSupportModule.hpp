@@ -15,7 +15,7 @@
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Foundation/PipeModule.hpp>
-#include <Core/Foundation/TransferModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
 
 namespace Core
 {

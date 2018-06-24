@@ -13,7 +13,7 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Collections/List.hpp>
-#include <Core/Foundation/TransferModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
 
 namespace Core
 {
@@ -26,20 +26,19 @@ namespace Core
 
 namespace Core
 {
-    struct Component
+    struct Component : Transferable
     {
         Component(ComponentModule* module)
             : module(module)
             , unit(nullptr)
         {
         }
-        virtual ~Component() {}
 
         const Unit* unit;
         ComponentModule* module;
     };
 
-    class ComponentModule : public PipeModule
+    class ComponentModule : public TransfererModule
     {
     public:
         BASE_IS(PipeModule);
@@ -80,7 +79,7 @@ namespace Core
         BASE_IS(TransfererModule);
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Unit* AllocateUnit() const;
+        const Unit* AllocateUnit();
 
         // Find component from argument component
         template<class T> const T* GetComponent(const Component* target);

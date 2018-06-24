@@ -48,8 +48,9 @@ using namespace Core::Graphics;
 using namespace Windows;
 using namespace Editor;
 
-struct Agent : public Component
+struct Agent : Component
 {
+    IMPLEMENT_TRANSFERABLE(Core, Agent);
     Agent(ComponentModule* module) : Component(module) {}
     const Transform* transform;
     Vector3f velocity;
@@ -60,9 +61,14 @@ struct Agent : public Component
     Float radius;
 };
 
+Void Agent::Transfer(ITransfer* transfer)
+{
+}
+
 class AgentModule : public ComponentModule
 {
 public:
+    IMPLEMENT_TRANSFERER(Core, Agent);
     BASE_IS(ComponentModule);
     DECLARE_COMMAND_CODE(CreateAgent);
     DECLARE_COMMAND_CODE(SetDestination);

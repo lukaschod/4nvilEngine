@@ -28,8 +28,10 @@ namespace Core
 
 namespace Core
 {
-    struct Camera : public Component
+    struct Camera : Component
     {
+        IMPLEMENT_TRANSFERABLE(Core, Camera);
+
         Camera(ComponentModule* module, const Storage* perCameraStorage)
             : Component(module)
             , perCameraStorage(perCameraStorage)
@@ -58,6 +60,7 @@ namespace Core
     class CameraModule : public ComponentModule
     {
     public:
+        IMPLEMENT_TRANSFERER(Core, Camera);
         BASE_IS(ComponentModule);
 
         virtual Void Execute(const ExecutionContext& context) override;

@@ -23,6 +23,10 @@ using namespace Core::Graphics;
 
 static const Char* memoryLabelMeshRenderer = "Core::MeshRenderer";
 
+Void MeshRenderer::Transfer(ITransfer* transfer)
+{
+}
+
 MeshRendererModule::MeshRendererModule()
     : perAllRendererStorage(nullptr)
 {

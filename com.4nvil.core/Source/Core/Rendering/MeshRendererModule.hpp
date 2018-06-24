@@ -29,8 +29,10 @@ namespace Core
 
 namespace Core
 {
-    struct MeshRenderer : public Component
+    struct MeshRenderer : Component
     {
+        IMPLEMENT_TRANSFERABLE(Core, MeshRenderer);
+
         MeshRenderer(ComponentModule* module)
             : Component(module)
             , mesh(nullptr)
@@ -47,6 +49,7 @@ namespace Core
     class MeshRendererModule : public ComponentModule
     {
     public:
+        IMPLEMENT_TRANSFERER(Core, MeshRenderer);
         BASE_IS(ComponentModule);
 
         MeshRendererModule();

@@ -11,6 +11,7 @@
 
 #include <Core/Graphics/IGraphicsModule.hpp>
 #include <Core/Foundation/TransformModule.hpp>
+#include <Core/Foundation/TransfererUtility.hpp>
 #include <Core/Rendering/CameraModule.hpp>
 #include <Core/Rendering/StorageModule.hpp>
 #include <Core/Rendering/SurfaceModule.hpp>
@@ -18,6 +19,10 @@
 
 using namespace Core;
 using namespace Core::Math;
+
+Void Camera::Transfer(ITransfer* transfer)
+{
+}
 
 Void CameraModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {

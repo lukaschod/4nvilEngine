@@ -336,9 +336,6 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Types.hpp">
       <Filter>Core\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.hpp">
-      <Filter>Core\Foundation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.hpp">
       <Filter>Core\Assets</Filter>
     </ClInclude>
@@ -353,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Guid.hpp">
       <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.hpp">
+      <Filter>Core\Foundation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -491,9 +494,6 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp">
       <Filter>Core\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.cpp">
-      <Filter>Core\Foundation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.cpp">
       <Filter>Core\Assets</Filter>
     </ClCompile>
@@ -502,6 +502,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.cpp">
       <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.cpp">
+      <Filter>Core\Foundation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

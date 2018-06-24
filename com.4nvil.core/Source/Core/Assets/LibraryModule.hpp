@@ -16,7 +16,7 @@
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Foundation/PipeModule.hpp>
-#include <Core/Foundation/TransferModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
 
 namespace Core
 {
@@ -73,6 +73,6 @@ namespace Core
 
     private:
         AssetModule* assetModule;
-        TransferModule* transferModule;
+        TransfererModule* transferModule;
     };
 }*/

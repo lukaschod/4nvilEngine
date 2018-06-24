@@ -34,8 +34,9 @@ namespace Core
     };
     IMPLEMENT_ENUM_FLAG(TransformStateFlags);
 
-    struct Transform : public Component
+    struct Transform : Component
     {
+        IMPLEMENT_TRANSFERABLE(Core, Transform);
         Transform(ComponentModule* module)
             : Component(module)
             , parent(nullptr)
@@ -62,6 +63,7 @@ namespace Core
     class TransformModule : public ComponentModule
     {
     public:
+        IMPLEMENT_TRANSFERER(Core, Transform);
         BASE_IS(ComponentModule);
 
         virtual Void Execute(const ExecutionContext& context) override;

@@ -16,12 +16,18 @@
 #include <Core/Tools/IO/Stream.hpp>
 #include <Core/Foundation/PipeModule.hpp>
 
+#define TRANSFER(Value) TransferValue(transfer, Value);
+
+// Special macro used for automatic declarations of transfering structure
+// Note: Add it inside the structure
 #define IMPLEMENT_TRANSFERABLE(NameSpace, Name) \
     virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; } \
     virtual Void Transfer(ITransfer* transfer) override;
 
+// Special mecro use for automatic implementations of transfering methods for module
+// Note: Add it inside the class
 #define IMPLEMENT_TRANSFERER(NameSpace, Name) \
-    virtual const Transferable* AllocateTransferable() const override { return Allocate##Name(); } \
+    virtual const Transferable* AllocateTransferable() override { return Allocate##Name(); } \
     virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) override { RecCreate##Name(context, (const Name*) target); } \
     virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) override { RecDestroy(context, (const Name*) target); } \
     virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; }
@@ -35,8 +41,11 @@ namespace Core
     public:
         virtual Void Transfer(UInt8* data, UInt size) pure;
         virtual Void TransferPointer(Transferable*& transferable) pure;
-        virtual Bool IsReading() const pure;
+        virtual Bool IsReading() const { return false; }
+        virtual Bool IsWritting() const { return false; }
     };
+
+    template<class T> Void TransferValue(ITransfer* transfer, T& value) {}
 
     struct TransferableId
     {
@@ -66,57 +75,9 @@ namespace Core
     class TransfererModule : public PipeModule
     {
     public:
-        virtual const Transferable* AllocateTransferable() const pure;
+        virtual const Transferable* AllocateTransferable() pure;
         virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) pure;
         virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) pure;
         virtual TransfererId& GetTransfererId() const pure;
-    };
-}
-
-// TODO: Move it somewhere
-namespace Core
-{
-    class TransferFindSize : public ITransfer
-    {
-    public:
-        TransferFindSize() : size(0) {}
-        virtual Void Transfer(UInt8* data, UInt size) override
-        {
-            this->size += size;
-        }
-        virtual Void TransferPointer(Transferable*& transferable)
-        {
-            transferable->Transfer(this);
-        }
-        virtual Bool IsReading() const override { return true; }
-
-    public:
-        UInt size;
-    };
-
-    class TransferBinaryReader : public ITransfer
-    {
-    public:
-        TransferBinaryReader(IO::Stream* stream) : stream(stream) {}
-
-        virtual Void Transfer(UInt8* data, UInt size) override { stream->Read(data, size); }
-        virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
-        virtual Bool IsReading() const override { return true; }
-
-    private:
-        IO::Stream* stream;
-    };
-
-    class TransferBinaryWritter : public ITransfer
-    {
-    public:
-        TransferBinaryWritter(IO::Stream* stream) : stream(stream) {}
-
-        virtual Void Transfer(UInt8* data, UInt size) override { stream->Write(data, size); }
-        virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
-        virtual Bool IsReading() const override { return false; }
-
-    private:
-        IO::Stream* stream;
     };
 }

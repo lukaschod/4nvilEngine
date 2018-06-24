@@ -26,7 +26,8 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.hpp" />
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.hpp" />
@@ -117,7 +118,8 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.cpp" />
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransferModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.cpp" />

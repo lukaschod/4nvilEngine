@@ -19,6 +19,10 @@ using namespace Core::Math;
 
 static const Char* memoryLabelTransform = "Core::Transform";
 
+Void Transform::Transfer(ITransfer* transfer)
+{
+}
+
 Void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
