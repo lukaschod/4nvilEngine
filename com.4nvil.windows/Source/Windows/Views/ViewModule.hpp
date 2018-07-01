@@ -54,9 +54,6 @@ namespace Windows
         // Handle specific windows message
         LRESULT CALLBACK HandleMessage(const ExecutionContext& context, const View* view, UINT msg, WPARAM wParam, LPARAM lParam);
 
-        // Close window by window handle
-        Void CloseWindow(HWND windowHandle);
-
     public:
         virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) override;
 
@@ -80,8 +77,7 @@ namespace Windows
     private:
         Bool RegisterDefaultWindowClass();
         Void CreateNativeWindow(const ExecutionContext& context, View* view);
-        View* TryFindView(HWND windowHandle);
-        Void RecButtonInput(const ExecutionContext& context, MouseButtonType type, Bool isDown) const;
+        Void DestroyNativeWindow(const ExecutionContext& context, View* view);
 
     private:
         Graphics::IGraphicsModule* graphicsModule;

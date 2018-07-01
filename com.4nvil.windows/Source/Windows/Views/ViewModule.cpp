@@ -42,21 +42,35 @@ const List<const IView*>& ViewModule::GetViews()
     return *data;
 }
 
-Void ViewModule::CloseWindow(HWND windowHandle)
+Void ViewModule::DestroyNativeWindow(const ExecutionContext& context, View* view)
 {
-    auto view = TryFindView(windowHandle);
-    if (view == nullptr)
-        return;
     views.remove(view);
-    DestroyWindow(windowHandle);
+    DestroyWindow(view->windowHandle);
 }
 
-Void ViewModule::RecButtonInput(const ExecutionContext& context, MouseButtonType type, Bool isDown) const
+Void RecButtonInput(const ExecutionContext& context, InputModule* inputModule, const InputDevice* inputDevice, MouseButtonType type, Bool isDown)
 {
     MouseButtonDesc desc;
     desc.isDown = isDown;
     desc.type = type;
     inputModule->RecInput(context, inputDevice, Enum::ToUnderlying(MouseInputType::Button), (UInt8*) &desc, sizeof(desc));
+}
+
+struct WndProcData
+{
+    ExecutionContext context;
+    ViewModule* viewModule;
+    const View* view;
+};
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    auto data = (WndProcData*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+    if (data == nullptr)
+        return DefWindowProc(hwnd, msg, wParam, lParam);
+
+    return data->viewModule->HandleMessage(data->context, data->view, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK ViewModule::HandleMessage(const ExecutionContext& context, const View* view, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -84,12 +98,12 @@ LRESULT CALLBACK ViewModule::HandleMessage(const ExecutionContext& context, cons
         break;
     }
 
-    case WM_LBUTTONUP: RecButtonInput(context, MouseButtonType::Left, false); break;
-    case WM_LBUTTONDOWN: RecButtonInput(context, MouseButtonType::Left, true); break;
-    case WM_RBUTTONUP: RecButtonInput(context, MouseButtonType::Right, false); break;
-    case WM_RBUTTONDOWN: RecButtonInput(context, MouseButtonType::Right, true); break;
-    case WM_MBUTTONUP: RecButtonInput(context, MouseButtonType::Center, false); break;
-    case WM_MBUTTONDOWN: RecButtonInput(context, MouseButtonType::Center, true); break;
+    case WM_LBUTTONUP: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Left, false); break;
+    case WM_LBUTTONDOWN: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Left, true); break;
+    case WM_RBUTTONUP: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Right, false); break;
+    case WM_RBUTTONDOWN: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Right, true); break;
+    case WM_MBUTTONUP: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Center, false); break;
+    case WM_MBUTTONDOWN: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Center, true); break;
 
     case WM_CLOSE:
         RecDestroyIView(context, view);
@@ -104,77 +118,6 @@ LRESULT CALLBACK ViewModule::HandleMessage(const ExecutionContext& context, cons
         return DefWindowProc(view->windowHandle, msg, wParam, lParam);
     }
     return 0;
-}
-
-struct WndProcData
-{
-    ExecutionContext context;
-    ViewModule* viewModule;
-    InputModule* inputModule;
-    const InputDevice* mouseInputDevice;
-    const View* view;
-};
-//thread_local static WndProcData wndProcData;
-
-static Void RecButtonInput(const WndProcData& wndProcData, MouseButtonType type, Bool isDown)
-{
-    MouseButtonDesc desc;
-    desc.isDown = isDown;
-    desc.type = type;
-    wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Button), (UInt8*) &desc, sizeof(desc));
-}
-
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    auto data = (WndProcData*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
-    return data->viewModule->HandleMessage(data->context, data->view, msg, wParam, lParam);
-    /*switch (msg)
-    {
-    case WM_MOUSEMOVE:
-    {
-        auto x = GET_X_LPARAM(lParam);
-        auto y = GET_Y_LPARAM(lParam);
-
-        MousePositionDesc desc;
-        desc.position = Vector2f((Float) x, (Float) y);
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.mouseInputDevice, Enum::ToUnderlying(MouseInputType::Move), (UInt8*) &desc, sizeof(desc));
-        break;
-    }
-
-    case WM_SIZE:
-    {
-        if (wndProcData.inputModule == nullptr)
-            return 0;
-
-        ViewInputResizeDesc desc;
-        desc.width = (UInt32) lParam;
-        desc.height = (UInt32) (lParam << 32);
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Resize), (UInt8*) &desc, sizeof(desc));
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Render), (UInt8*) nullptr, 0);
-        break;
-    }
-
-    case WM_LBUTTONUP: RecButtonInput(wndProcData, MouseButtonType::Left, false); break;
-    case WM_LBUTTONDOWN: RecButtonInput(wndProcData, MouseButtonType::Left, true); break;
-    case WM_RBUTTONUP: RecButtonInput(wndProcData, MouseButtonType::Right, false); break;
-    case WM_RBUTTONDOWN: RecButtonInput(wndProcData, MouseButtonType::Right, true); break;
-    case WM_MBUTTONUP: RecButtonInput(wndProcData, MouseButtonType::Center, false); break;
-    case WM_MBUTTONDOWN: RecButtonInput(wndProcData, MouseButtonType::Center, true); break;
-
-    case WM_CLOSE:
-        ASSERT(wndProcData.viewModule != nullptr);
-        wndProcData.viewModule->RecDestroyIView(wndProcData.context, wndProcData.view);
-        wndProcData.inputModule->RecInput(wndProcData.context, wndProcData.view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Destroy), nullptr, 0);
-        return -1; // Do not close window, we will close it in next frame
-
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-
-    default:
-        return DefWindowProc(hwnd, msg, wParam, lParam);
-    }
-    return 0;*/
 }
 
 // We must create it as static, because windows class is treated globaly in process
@@ -216,12 +159,6 @@ Void ViewModule::CreateNativeWindow(const ExecutionContext& context, View* view)
         inputDevice = inputModule->RecCreateInputDevice(context, desc);
     }
 
-    WndProcData wndProcData;
-    wndProcData.viewModule = this;
-    wndProcData.context = context;
-    wndProcData.inputModule = inputModule;
-    wndProcData.mouseInputDevice = inputDevice;
-
     // TODO: Fix this normally to respect to actual current screen
     /*HDC screen = GetDC(0);
     Float dpiX = static_cast<FLOAT>(GetDeviceCaps(screen, LOGPIXELSX));
@@ -257,7 +194,7 @@ Void ViewModule::CreateNativeWindow(const ExecutionContext& context, View* view)
         ERROR("Unknow window type");
     }
 
-    CHECK(view->windowHandle = CreateWindowEx(
+    view->windowHandle = CreateWindowEx(
         extendedStyle,
         defaultWindowClassName,
         view->name,
@@ -269,7 +206,9 @@ Void ViewModule::CreateNativeWindow(const ExecutionContext& context, View* view)
         parentHWND,
         NULL, 
         instanceHandle, 
-        NULL));
+        NULL);
+
+    CHECK(view->windowHandle != nullptr);
 
     // We have to add user data, because after UpdateWindow might some events be sent
     WndProcData wndProcData;
@@ -280,16 +219,6 @@ Void ViewModule::CreateNativeWindow(const ExecutionContext& context, View* view)
 
     ShowWindow(view->windowHandle, true);
     UpdateWindow(view->windowHandle);
-}
-
-View* ViewModule::TryFindView(HWND windowHandle)
-{
-    for (auto view : views)
-    {
-        if (view->windowHandle == windowHandle)
-            return view;
-    }
-    return nullptr;
 }
 
 Void ViewModule::Execute(const ExecutionContext& context)
@@ -330,20 +259,21 @@ Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
     {
         DESERIALIZE_METHOD_ARG1_START(CreateIView, View*, target);
         target->created = true;
-        CreateNativeWindow(context, target);
-        ASSERT(target->windowHandle != nullptr);
 
         // Create input device, for tracking all events like size change...
         InputDeviceDesc desc;
         desc.typeName = "View";
         target->viewInputDevice = inputModule->RecCreateInputDevice(context, desc);
 
+        CreateNativeWindow(context, target);
+        ASSERT(target->windowHandle != nullptr);
+
         views.push_back(target);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(DestroyIView, View*, target);
         views.remove(target);
-        DestroyWindow(target->windowHandle);
+        DestroyNativeWindow(context, target);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetRect, View*, target, const Rectf, rect);
