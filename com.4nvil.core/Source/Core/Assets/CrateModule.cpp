@@ -78,7 +78,7 @@ Void CrateModule::SetupExecuteOrder(ModuleManager* moduleManager)
     ExecuteBefore<TransfererModule>(moduleManager, transferers);
 }
 
-const Transferable* CrateModule::FindResource(const TransferableId* id)
+const Transferable* CrateModule::RecFindResource(const ExecutionContext& context, const TransferableId* id)
 {
     // TODO: Lock
 
@@ -90,7 +90,7 @@ const Transferable* CrateModule::FindResource(const TransferableId* id)
             {
                 auto& resourceLocal = crate->locals[resource.localIndex];
                 if (resourceLocal.cachedTransferable == nullptr)
-                    resourceLocal.cachedTransferable = LoadLocalResource(crate, resource.localIndex);
+                    resourceLocal.cachedTransferable = LoadLocalResource(context, crate, resource.localIndex);
                 return resourceLocal.cachedTransferable;
             }
         }
@@ -129,7 +129,7 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         }
         else
         {
-            // TODO: Destroy
+            delete crate; // TODO
         }
         DESERIALIZE_METHOD_END;
     }
@@ -212,13 +212,15 @@ Void CrateModule::Save(Crate* crate)
     for (auto it = resources.rbegin(); it != resources.rend(); ++it) // Lets iterate from back, as this how it most like will be read
     {
         auto& resource = *it;
-        dataWritter.TransferPointer((Transferable*&) resource.cachedTransferable);
+        auto transferable = const_cast<Transferable*>(resource.cachedTransferable);
+        ASSERT(transferable != nullptr);
+        transferable->Transfer(&dataWritter);
         resource.offset = stream.GetPosition();
     }
 
     // Header
     stream.SetPosition(0);
-    TransferBinaryWritter headerWritter(&stream);
+    TransferJSONWritter headerWritter(&stream);
     headerWritter.TransferPointer((Transferable*&) crate);
 
     stream.Close();
@@ -229,7 +231,7 @@ Bool CrateModule::Load(Crate* crate)
     FileStream stream;
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
 
-    TransferBinaryReader reader(&stream);
+    TransferJSONReader reader(&stream);
     reader.TransferPointer((Transferable*&) crate);
 
     stream.Close();
@@ -254,7 +256,7 @@ Bool CrateModule::Load(Crate* crate)
     return true;
 }
 
-const Transferable* CrateModule::LoadLocalResource(Crate* crate, UInt localIndex)
+const Transferable* CrateModule::LoadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex)
 {
     FileStream stream;
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
@@ -262,8 +264,9 @@ const Transferable* CrateModule::LoadLocalResource(Crate* crate, UInt localIndex
     class TransferCrateDataReader : public ITransfer
     {
     public:
-        TransferCrateDataReader(IO::Stream& stream, CrateModule* crateModule, Crate* crate) 
-            : stream(stream), 
+        TransferCrateDataReader(const ExecutionContext& context, IO::Stream& stream, CrateModule* crateModule, Crate* crate)
+            : context(context),
+            stream(stream), 
             crateModule(crateModule), 
             crate(crate) 
         {}
@@ -297,12 +300,17 @@ const Transferable* CrateModule::LoadLocalResource(Crate* crate, UInt localIndex
             auto& resource = crate->locals[index];
             stream.SetPosition(resource.offset);
 
+            // Find the transferer by id
             auto transferer = const_cast<TransfererModule*>(crateModule->FindTransferer(resource.transfererId));
             ASSERT(transferer != nullptr);
 
             auto transferable = const_cast<Transferable*>(transferer->AllocateTransferable());
 
+            // Transfer its data
             TransferPointer(transferable);
+
+            // Issue the create request
+            transferer->RecCreateTransferable(context, transferable);
 
             return transferable;
         }
@@ -312,15 +320,16 @@ const Transferable* CrateModule::LoadLocalResource(Crate* crate, UInt localIndex
             auto& resource = crate->externs[index];
             ASSERT(resource.cachedCrate != nullptr);
             return LoadLocal(const_cast<Crate*>(resource.cachedCrate), resource.index);
-        }
+        };
 
     public:
+        const ExecutionContext& context;
         IO::Stream& stream;
         CrateModule* crateModule;
         Crate* crate;
     };
 
-    TransferCrateDataReader dataReader(stream, this, crate);
+    TransferCrateDataReader dataReader(context, stream, this, crate);
     auto transferable = dataReader.LoadLocal(crate, localIndex);
 
     stream.Close();
@@ -337,6 +346,9 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
         virtual Void Transfer(UInt8* data, UInt size) override { }
         virtual Void TransferPointer(Transferable*& transferable) override
         {
+            if (transferable == nullptr)
+                return;
+
             if (AddExternResource(transferable))
             {
                 transferable->Transfer(this);

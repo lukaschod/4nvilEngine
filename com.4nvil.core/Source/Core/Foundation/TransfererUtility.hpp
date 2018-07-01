@@ -17,11 +17,10 @@
 
 namespace Core
 {
-    template<> Void TransferValue(ITransfer* transfer, Transferable*& value) { transfer->TransferPointer(value); }
-    template<> Void TransferValue(ITransfer* transfer, Guid& value) { transfer->Transfer((UInt8*) &value, sizeof(Guid)); }
-    template<> Void TransferValue(ITransfer* transfer, Directory& value) { transfer->Transfer((UInt8*) &value, sizeof(Directory)); }
+    template<> inline Void TransferValue(ITransfer* transfer, Guid& value) { transfer->Transfer((UInt8*) &value, sizeof(Guid)); }
+    template<> inline Void TransferValue(ITransfer* transfer, Directory& value) { transfer->Transfer((UInt8*) &value, sizeof(Directory)); }
 
-    template<class T> Void TransferValue(ITransfer* transfer, const char*& value)
+    template<class T> inline Void TransferValue(ITransfer* transfer, List<T>& value)
     {
         auto size = value.size();
         transfer->Transfer((UInt8*) &size, sizeof(UInt));
@@ -32,24 +31,10 @@ namespace Core
             value.resize(size);
 
         if (size != 0)
-            transfer->Transfer((UInt8*) list.data(), sizeof(UInt) * size);
+            transfer->Transfer((UInt8*) value.data(), sizeof(T) * size);
     }
 
-    template<class T> Void TransferValue(ITransfer* transfer, List<T>& value)
-    {
-        auto size = value.size();
-        transfer->Transfer((UInt8*) &size, sizeof(UInt));
-
-        // Reserve data
-        // TODO: We can push optimization with removed constructor
-        if (transfer->IsReading())
-            value.resize(size);
-
-        if (size != 0)
-            transfer->Transfer((UInt8*) value.data(), sizeof(UInt) * size);
-    }
-
-    template<> Void TransferValue(ITransfer* transfer, List<Transferable*>& value)
+    template<> inline Void TransferValue(ITransfer* transfer, List<Transferable*>& value)
     {
         auto size = value.size();
         transfer->Transfer((UInt8*) &size, sizeof(UInt));
@@ -80,7 +65,6 @@ namespace Core
         {
             transferable->Transfer(this);
         }
-        virtual Bool IsReading() const override { return true; }
 
     public:
         UInt size;
@@ -108,9 +92,94 @@ namespace Core
 
         virtual Void Transfer(UInt8* data, UInt size) override { stream->Write(data, size); }
         virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
-        virtual Bool IsReading() const override { return false; }
+        virtual Bool IsWritting() const override { return false; }
 
     private:
         IO::Stream* stream;
+    };
+
+    class TransferJSONReader : public ITransfer
+    {
+    public:
+        TransferJSONReader(IO::Stream* stream) : stream(stream), level(0) {}
+
+        virtual Void Transfer(UInt8* data, UInt size) override 
+        { 
+            ReadLevel();
+            Read("\"value\": ");
+            stream->Read(data, size);
+            Read(",\n");
+        }
+
+        virtual Void TransferPointer(Transferable*& transferable) override 
+        { 
+            ReadLevel();
+            level++;
+            Read("{\n");
+            transferable->Transfer(this);
+            Read("},\n");
+            level--;
+        }
+
+        virtual Bool IsReading() const override { return true; }
+
+        Void ReadLevel()
+        {
+            for (UInt16 i = 0; i < level; i++)
+                Read("    ");
+        }
+
+        Void Read(const Char* value)
+        {
+            Char temp[20];
+            auto size = strlen(value);
+            stream->Read(temp, size);
+            ASSERT(memcmp(temp, value, size) == 0); // Check if it is expected text
+        }
+
+    private:
+        IO::Stream* stream;
+        UInt16 level;
+    };
+
+    class TransferJSONWritter : public ITransfer
+    {
+    public:
+        TransferJSONWritter(IO::Stream* stream) : stream(stream), level(0) {}
+
+        virtual Void Transfer(UInt8* data, UInt size) override 
+        {
+            WriteLevel();
+            Write("\"value\": ");
+            stream->Write(data, size);
+            Write(",\n");
+        }
+
+        virtual Void TransferPointer(Transferable*& transferable) override 
+        {
+            WriteLevel();
+            level++;
+            Write("{\n");
+            transferable->Transfer(this);
+            Write("},\n");
+            level--;
+        }
+
+        virtual Bool IsWritting() const override { return false; }
+
+        Void WriteLevel()
+        {
+            for (UInt16 i = 0; i < level; i++)
+                Write("    ");
+        }
+
+        Void Write(const Char* value)
+        {
+            stream->Write(value, strlen(value));
+        }
+
+    private:
+        IO::Stream* stream;
+        UInt16 level;
     };
 }

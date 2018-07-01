@@ -991,24 +991,28 @@ float4 FragMain(VertData i) : SV_TARGET
         // Create our hello world triangle
         auto testShader = CreateShader(context);
         auto mesh = CreateMesh(context);
-        auto helloWorldTriangle = CreateQuad(context, currentScene, testShader, mesh, Vector3f());
-
-        auto directory = Directory::GetExecutablePath();
-        directory.Append("TestPackage/");
-        auto package = packageModule->AllocatePackage();
-        packageModule->RecCreatePackage(context, package, directory);
-        packageModule->RecSyncPackage(context, package);
-
-        auto crate = crateModule->AllocateCrate();
-        crateModule->RecAddTransferable(context, crate, Directory("HelloWorldTriangle"), helloWorldTriangle);
-
-        auto crateDirectory = Directory::GetExecutablePath();
-        crateDirectory.Append("TestPackage/HelloWorldTriangle.crate");
-        crateModule->RecSave(context, crateDirectory, crate);
+        helloWorldTriangle = CreateQuad(context, currentScene, testShader, mesh, Vector3f());
     }
 
     virtual Void Execute(const ExecutionContext& context) override
     {
+        if (initialized && !initalizedCrate)
+        {
+            auto directory = Directory::GetExecutablePath();
+            directory.Append("TestPackage/");
+            auto package = packageModule->AllocatePackage();
+            packageModule->RecCreatePackage(context, package, directory);
+            packageModule->RecSyncPackage(context, package);
+
+            auto crate = crateModule->AllocateCrate();
+            crateModule->RecAddTransferable(context, crate, Directory("HelloWorldTriangle"), helloWorldTriangle);
+
+            auto crateDirectory = Directory::GetExecutablePath();
+            crateDirectory.Append("TestPackage/HelloWorldTriangle.crate");
+            crateModule->RecSave(context, crateDirectory, crate);
+            initalizedCrate = true;
+        }
+
         if (!initialized)
         {
             Initialize(context);
@@ -1032,6 +1036,9 @@ float4 FragMain(VertData i) : SV_TARGET
     PackageModule* packageModule;
     CrateModule* crateModule;
     Bool initialized;
+
+    const Unit* helloWorldTriangle;
+    Bool initalizedCrate = false;
 };
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
@@ -1074,7 +1081,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-    /*// Test project 1
+   /* // Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
     moduleManager->AddModule(new ShutdownModule(moduleManager));

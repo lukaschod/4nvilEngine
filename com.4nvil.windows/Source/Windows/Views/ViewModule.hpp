@@ -51,6 +51,9 @@ namespace Windows
         // Returns all views that are currently allocated
         virtual const List<const IView*>& GetViews() override;
 
+        // Handle specific windows message
+        LRESULT CALLBACK HandleMessage(const ExecutionContext& context, const View* view, UINT msg, WPARAM wParam, LPARAM lParam);
+
         // Close window by window handle
         Void CloseWindow(HWND windowHandle);
 
@@ -76,8 +79,9 @@ namespace Windows
 
     private:
         Bool RegisterDefaultWindowClass();
-        HWND TryCreateWindow(const IView* view);
+        Void CreateNativeWindow(const ExecutionContext& context, View* view);
         View* TryFindView(HWND windowHandle);
+        Void RecButtonInput(const ExecutionContext& context, MouseButtonType type, Bool isDown) const;
 
     private:
         Graphics::IGraphicsModule* graphicsModule;

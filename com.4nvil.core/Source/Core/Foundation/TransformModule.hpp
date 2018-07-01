@@ -49,13 +49,14 @@ namespace Core
 
         List<Transform*> childs;
         Transform* parent;
+		Math::Vector3f localPosition;
+		Math::Quaternionf localRotation;
+		Math::Vector3f localScale;
+
+		Math::Vector3f position;
         Math::Matrix4x4f objectToWorld;
         Math::Matrix4x4f worldToView;
         Math::Matrix4x4f localObjectToWorld;
-        Math::Vector3f localPosition;
-        Math::Quaternionf localRotation;
-        Math::Vector3f localScale;
-        Math::Vector3f position;
         TransformStateFlags flags;
         Bool created;
     };

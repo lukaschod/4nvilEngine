@@ -40,7 +40,7 @@ namespace Core::IO
         virtual Void Close() override;
         virtual Void Read(Void* data, UInt size) override;
         virtual Void ReadFmt(const Char* format, ...) override;
-        virtual Void Write(Void* data, UInt size) override;
+        virtual Void Write(const Void* data, UInt size) override;
         virtual Void WriteFmt(const Char* format, ...) override;
         virtual Void WriteFmt(const Char* format, va_list arguments) override;
         virtual Void SetPosition(UInt position) override;

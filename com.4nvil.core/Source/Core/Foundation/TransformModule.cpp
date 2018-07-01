@@ -21,6 +21,16 @@ static const Char* memoryLabelTransform = "Core::Transform";
 
 Void Transform::Transfer(ITransfer* transfer)
 {
+	TRANSFER(childs);
+	TRANSFER_PTR(parent);
+	TRANSFER(localPosition);
+	TRANSFER(localRotation);
+	TRANSFER(localScale);
+	if (transfer->IsReading())
+	{
+		flags = TransformStateFlags::LocalObjectToWorldChanged;
+		created = false;
+	}
 }
 
 Void TransformModule::SetupExecuteOrder(ModuleManager* moduleManager)

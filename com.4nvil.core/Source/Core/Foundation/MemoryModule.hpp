@@ -18,6 +18,7 @@
 
 namespace Core
 {
+	// TODO: memorytype needs actual type
     class MemoryModule : public Module
     {
     public:
@@ -33,6 +34,7 @@ namespace Core
             return target;
         }
 
+		// TODO: Probably we should change this to automatic allocator creator, to avoid pointer passing that could be destroyed externaly
         Void SetAllocator(const Char* memoryType, IHeap* allocator)
         {
             auto allocatorDup = allocators.find(memoryType);

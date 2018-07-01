@@ -46,7 +46,7 @@ Void FileStream::Read(Void* data, UInt size)
     fread(data, sizeof(UInt8), size, file);
 }
 
-Void FileStream::Write(Void* data, UInt size)
+Void FileStream::Write(const Void* data, UInt size)
 {
     ASSERT(isOpened);
     fwrite(data, sizeof(UInt8), size, file);

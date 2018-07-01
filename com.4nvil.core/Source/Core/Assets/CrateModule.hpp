@@ -48,7 +48,7 @@ namespace Core
         UInt localIndex;
     };
 
-    struct Crate : public Transferable
+    struct Crate : Transferable
     {
         IMPLEMENT_TRANSFERABLE(Core, Crate);
 
@@ -69,7 +69,6 @@ namespace Core
 
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
-        const Transferable* FindResource(const TransferableId* id);
         const TransfererModule* FindTransferer(const TransfererId& id) const;
         const Crate* FindCrate(const Guid& guid) const;
 
@@ -86,6 +85,9 @@ namespace Core
         // Deserializes crate from directory
         Void RecLoad(const ExecutionContext& context, const Directory& directory);
 
+        // Find resource from the loaded crates, it might cause resource loading
+        const Transferable* RecFindResource(const ExecutionContext& context, const TransferableId* id);
+
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
@@ -93,7 +95,7 @@ namespace Core
         Void Save(Crate* crate);
         Bool Load(Crate* crate);
         Void AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable);
-        const Transferable* LoadLocalResource(Crate* crate, UInt localIndex);
+        const Transferable* LoadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex);
 
     private:
         List<Crate*> crates;

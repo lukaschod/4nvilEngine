@@ -12,6 +12,7 @@
 #include <Core/Foundation/UnitModule.hpp>
 #include <Core/Foundation/MemoryModule.hpp>
 #include <Core/Foundation/TransformModule.hpp>
+#include <Core/Foundation/TransfererUtility.hpp>
 
 using namespace Core;
 
@@ -19,7 +20,7 @@ static const Char* memoryLabelUnit = "Core::Unit";
 
 Void Unit::Transfer(ITransfer* transfer)
 {
-    TRANSFER(relation);
+    TRANSFER_PTR(relation);
     TRANSFER(components);
 }
 
