@@ -553,7 +553,7 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             auto view = viewModule->AllocateView();
             viewModule->RecSetName(context, view, "4nvilTest40k");
-            viewModule->RecCreateIView(context, view);
+            viewModule->RecCreateView(context, view);
 
             gameViewLayerModule->RecShow(context, view);
 
@@ -767,7 +767,7 @@ float4 FragMain(VertData i) : SV_TARGET
         for (int i = 0; i < 1; i++)
         {
             auto view = viewModule->AllocateView();
-            viewModule->RecCreateIView(context, view);
+            viewModule->RecCreateView(context, view);
 
             gameViewLayerModule->RecShow(context, view);
 
@@ -971,7 +971,7 @@ float4 FragMain(VertData i) : SV_TARGET
         // Create OS window
         auto view = viewModule->AllocateView();
         viewModule->RecSetName(context, view, "Hello World!");
-        viewModule->RecCreateIView(context, view);
+        viewModule->RecCreateView(context, view);
         gameViewLayerModule->RecShow(context, view);
 
         // Create camera that will render in OS window

@@ -106,7 +106,7 @@ LRESULT CALLBACK ViewModule::HandleMessage(const ExecutionContext& context, cons
     case WM_MBUTTONDOWN: RecButtonInput(context, inputModule, inputDevice, MouseButtonType::Center, true); break;
 
     case WM_CLOSE:
-        RecDestroyIView(context, view);
+        RecDestroyView(context, view);
         inputModule->RecInput(context, view->viewInputDevice, Enum::ToUnderlying(ViewInputType::Destroy), nullptr, 0);
         return -1; // Do not close window, we will close it in next frame
 
@@ -247,8 +247,8 @@ const IView* ViewModule::AllocateView()
     return new View();
 }
 
-SERIALIZE_METHOD_ARG1(ViewModule, CreateIView, const IView*);
-SERIALIZE_METHOD_ARG1(ViewModule, DestroyIView, const IView*);
+SERIALIZE_METHOD_ARG1(ViewModule, CreateView, const IView*);
+SERIALIZE_METHOD_ARG1(ViewModule, DestroyView, const IView*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetRect, const IView*, const Rectf&);
 SERIALIZE_METHOD_ARG2(ViewModule, SetName, const IView*, const Char*);
 SERIALIZE_METHOD_ARG2(ViewModule, SetParent, const IView*, const IView*);
@@ -257,7 +257,7 @@ Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
 {
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG1_START(CreateIView, View*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateView, View*, target);
         target->created = true;
 
         // Create input device, for tracking all events like size change...
@@ -271,7 +271,7 @@ Bool ViewModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         views.push_back(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(DestroyIView, View*, target);
+        DESERIALIZE_METHOD_ARG1_START(DestroyView, View*, target);
         views.remove(target);
         DestroyNativeWindow(context, target);
         DESERIALIZE_METHOD_END;

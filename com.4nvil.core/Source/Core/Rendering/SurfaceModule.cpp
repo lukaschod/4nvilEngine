@@ -41,7 +41,7 @@ Bool SurfaceModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
     {
         DESERIALIZE_METHOD_ARG1_START(CreateSurface, Surface*, target);
         target->created = true;
-        graphicsModule->RecCreateIRenderPass(context, target->renderPass);
+        graphicsModule->RecCreateRenderPass(context, target->renderPass);
         surfaces.push_back(target);
         DESERIALIZE_METHOD_END;
 

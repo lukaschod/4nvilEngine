@@ -55,9 +55,9 @@ namespace Windows
         LRESULT CALLBACK HandleMessage(const ExecutionContext& context, const View* view, UINT msg, WPARAM wParam, LPARAM lParam);
 
     public:
-        virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) override;
+        virtual Void RecCreateView(const ExecutionContext& context, const IView* target) override;
 
-        virtual Void RecDestroyIView(const ExecutionContext& context, const IView* target) override;
+        virtual Void RecDestroyView(const ExecutionContext& context, const IView* target) override;
 
         // Set view position and size
         // Can't be called after creation of view

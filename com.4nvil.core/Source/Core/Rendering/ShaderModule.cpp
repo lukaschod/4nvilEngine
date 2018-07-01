@@ -38,7 +38,8 @@ Bool ShaderModule::ExecuteCommand(const ExecutionContext& context, CommandStream
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG3_START(SetShaderPipeline, Shader*, target, UInt32, index, const ShaderPipelineDesc*, desc);
-        auto pipeline = graphicsModule->RecCreateIShaderPipeline(context, desc);
+        auto pipeline = graphicsModule->AllocateShaderPipeline(desc);
+        graphicsModule->RecCreateShaderPipeline(context, pipeline);
         target->pipelines.push_back(pipeline);
         DESERIALIZE_METHOD_END;
     }

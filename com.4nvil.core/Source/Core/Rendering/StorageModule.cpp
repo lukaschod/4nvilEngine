@@ -39,7 +39,7 @@ Bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(CreateStorage, Storage*, target);
-        graphicsModule->RecCreateIBuffer(context, target->buffer);
+        graphicsModule->RecCreateBuffer(context, target->buffer);
         storages.push_back(target);
         DESERIALIZE_METHOD_END;
 

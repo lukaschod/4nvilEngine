@@ -59,7 +59,7 @@ Bool ViewLayerModule::ExecuteCommand(const ExecutionContext& context, CommandStr
 
         // Create swapchain that will be used with view
         swapChain = graphicsModule->AllocateSwapChain(target);
-        graphicsModule->RecCreateISwapChain(context, swapChain);
+        graphicsModule->RecCreateSwapChain(context, swapChain);
 
         // Created offscreen render target
         renderTarget = imageModule->AllocateImage(view->width, view->height);

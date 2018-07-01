@@ -37,7 +37,7 @@ Bool ImageModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(CreateImage, Image*, target);
-        graphicsModule->RecCreateITexture(context, target->texture);
+        graphicsModule->RecCreateTexture(context, target->texture);
         images.push_back(target);
         DESERIALIZE_METHOD_END;
 

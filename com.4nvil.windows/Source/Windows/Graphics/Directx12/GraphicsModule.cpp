@@ -84,26 +84,37 @@ const IRenderPass* GraphicsModule::AllocateRenderPass()
     return new RenderPass();
 }
 
+const IShaderPipeline* GraphicsModule::AllocateShaderPipeline(const ShaderPipelineDesc* desc)
+{
+    return new ShaderPipeline(desc);
+}
+
+const IShaderArguments* GraphicsModule::AllocateShaderArguments(const IShaderPipeline* pipeline)
+{
+    return memoryModule->New<ShaderArguments>(memoryLabelShaderArguments, pipeline);
+}
+
 const IFilter* GraphicsModule::AllocateFilter()
 {
     return new Filter();
 }
 
-SERIALIZE_METHOD_ARG1(GraphicsModule, CreateITexture, const ITexture*);
-SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIFilter, const IFilter*);
-SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIRenderPass, const IRenderPass*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateTexture, const ITexture*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateFilter, const IFilter*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateRenderPass, const IRenderPass*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetColorAttachment, const IRenderPass*, UInt32, const ColorAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetDepthAttachment, const IRenderPass*, const DepthAttachment&);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetViewport, const IRenderPass*, const Viewport&);
 SERIALIZE_METHOD_ARG1(GraphicsModule, SetRenderPass, const IRenderPass*);
-SERIALIZE_METHOD_CREATEGEN_ARG1(GraphicsModule, IShaderPipeline, ShaderPipeline, const ShaderPipelineDesc*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateShaderPipeline, const IShaderPipeline*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateShaderArguments, const IShaderArguments*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetBuffer, const IShaderArguments*, const Char*, const IBuffer*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetTexture, const IShaderArguments*, const Char*, const ITexture*);
 SERIALIZE_METHOD_ARG3(GraphicsModule, SetFilter, const IShaderArguments*, const Char*, const IFilter*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, Present, const ISwapChain*, const ITexture*);
-SERIALIZE_METHOD_ARG1(GraphicsModule, CreateISwapChain, const ISwapChain*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateSwapChain, const ISwapChain*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, FinalBlit, const ISwapChain*, const ITexture*);
-SERIALIZE_METHOD_ARG1(GraphicsModule, CreateIBuffer, const IBuffer*);
+SERIALIZE_METHOD_ARG1(GraphicsModule, CreateBuffer, const IBuffer*);
 SERIALIZE_METHOD_ARG2(GraphicsModule, SetBufferUsage, const IBuffer*, BufferUsageFlags);
 SERIALIZE_METHOD_ARG3(GraphicsModule, UpdateBuffer, const IBuffer*, Void*, UInt);
 SERIALIZE_METHOD_ARG3(GraphicsModule, CopyBuffer, const IBuffer*, const IBuffer*, UInt);
@@ -111,32 +122,19 @@ SERIALIZE_METHOD_ARG1(GraphicsModule, PushDebug, const Char*);
 SERIALIZE_METHOD(GraphicsModule, PopDebug);
 SERIALIZE_METHOD_ARG1(GraphicsModule, Draw, const DrawDesc&);
 
-DECLARE_COMMAND_CODE(CreateIShaderArguments);
-const IShaderArguments* GraphicsModule::RecCreateIShaderArguments(const ExecutionContext& context, const IShaderPipeline* pipeline)
-{
-    auto buffer = GetRecordingBuffer(context);
-    auto& stream = buffer->stream;
-    auto target = memoryModule->New<ShaderArguments>(memoryLabelShaderArguments, pipeline);
-    stream.Write(TO_COMMAND_CODE(CreateIShaderArguments));
-    stream.Write(target);
-    stream.Align();
-    buffer->commandCount++;
-    return target;
-}
-
 Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG1_START(CreateITexture, Texture*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateTexture, Texture*, target);
         InitializeTexture(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateIFilter, Filter*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateFilter, Filter*, target);
         InitializeFilter(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateIRenderPass, RenderPass*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateRenderPass, RenderPass*, target);
         InitializeRenderPass(target);
         DESERIALIZE_METHOD_END;
 
@@ -156,11 +154,11 @@ Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         SetRenderPass(context, target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateIShaderPipeline, ShaderPipeline*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateShaderPipeline, ShaderPipeline*, target);
         InitializePipeline(target);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateIShaderArguments, ShaderArguments*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateShaderArguments, ShaderArguments*, target);
         InitializeProperties(target);
         DESERIALIZE_METHOD_END;
 
@@ -176,7 +174,7 @@ Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         SetBuffer(target, name, buffer);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateISwapChain, SwapChain*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateSwapChain, SwapChain*, target);
         InitializeSwapCain(target);
         DESERIALIZE_METHOD_END;
 
@@ -195,7 +193,7 @@ Bool GraphicsModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         SetTextureState(context, bacBuffer, D3D12_RESOURCE_STATE_PRESENT);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(CreateIBuffer, Buffer*, target);
+        DESERIALIZE_METHOD_ARG1_START(CreateBuffer, Buffer*, target);
         InitializeBuffer(target);
         DESERIALIZE_METHOD_END;
 

@@ -46,7 +46,7 @@ Bool MeshModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         target->vertices = vertices;
 
         target->vertexBuffer = graphicsModule->AllocateBuffer(vertices.size);
-        graphicsModule->RecCreateIBuffer(context, target->vertexBuffer);
+        graphicsModule->RecCreateBuffer(context, target->vertexBuffer);
         graphicsModule->RecUpdateBuffer(context, target->vertexBuffer, (Void*) target->vertices.pointer, target->vertices.size);
         DESERIALIZE_METHOD_END;
 

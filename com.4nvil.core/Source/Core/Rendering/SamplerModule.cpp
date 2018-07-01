@@ -36,7 +36,7 @@ Bool SamplerModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
     {
         DESERIALIZE_METHOD_ARG1_START(CreateSampler, Sampler*, target);
         target->created = true;
-        graphicsModule->RecCreateIFilter(context, target->filter);
+        graphicsModule->RecCreateFilter(context, target->filter);
         samplers.push_back(target);
         DESERIALIZE_METHOD_END
     }

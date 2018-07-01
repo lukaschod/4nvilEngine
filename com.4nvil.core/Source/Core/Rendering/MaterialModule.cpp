@@ -65,7 +65,8 @@ Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         material->shader = shader;
         for (auto shaderPipeline : shader->pipelines)
         {
-            auto properties = graphicsModule->RecCreateIShaderArguments(context, shaderPipeline);
+            auto properties = graphicsModule->AllocateShaderArguments(shaderPipeline);
+            graphicsModule->RecCreateShaderArguments(context, properties);
             auto pipeline = new MaterialPipeline(shaderPipeline, properties);
             material->pipelines.push_back(pipeline);
         }

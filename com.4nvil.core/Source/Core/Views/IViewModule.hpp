@@ -59,8 +59,8 @@ namespace Core
         virtual const List<const IView*>& GetViews() pure;
 
     public:
-        virtual Void RecCreateIView(const ExecutionContext& context, const IView* target) pure;
-        virtual Void RecDestroyIView(const ExecutionContext& context, const IView* target) pure;
+        virtual Void RecCreateView(const ExecutionContext& context, const IView* target) pure;
+        virtual Void RecDestroyView(const ExecutionContext& context, const IView* target) pure;
         virtual Void RecSetRect(const ExecutionContext& context, const IView* target, const Math::Rectf& rect) pure;
         virtual Void RecSetName(const ExecutionContext& context, const IView* target, const Char* name) pure;
         virtual Void RecSetParent(const ExecutionContext& context, const IView* target, const IView* parent) pure;
