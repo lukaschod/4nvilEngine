@@ -50,7 +50,8 @@ Void MeshRendererModule::Execute(const ExecutionContext& context)
 
     if (perAllRendererStorage == nullptr)
     {
-        perAllRendererStorage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
+        perAllRendererStorage = storageModule->AllocateStorage();
+        storageModule->RecSetSize(context, perAllRendererStorage, sizeof(Matrix4x4f));
         storageModule->RecSetUsage(context, perAllRendererStorage, BufferUsageFlags::Shader | BufferUsageFlags::GpuOnly); // Only updated by cameras
         storageModule->RecCreateStorage(context, perAllRendererStorage);
     }
@@ -68,7 +69,7 @@ Void MeshRendererModule::Execute(const ExecutionContext& context)
 const MeshRenderer* MeshRendererModule::AllocateMeshRenderer()
 {
     auto target = memoryModule->New<MeshRenderer>(memoryLabelMeshRenderer, this);
-    target->perMeshStorage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
+    target->perMeshStorage = storageModule->AllocateStorage();
     return target;
 }
 
@@ -85,7 +86,9 @@ Bool MeshRendererModule::ExecuteCommand(const ExecutionContext& context, Command
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(CreateMeshRenderer, MeshRenderer*, target);
+        ASSERT(!target->created);
         target->created = true;
+        storageModule->RecSetSize(context, target->perMeshStorage, sizeof(Matrix4x4f));
         storageModule->RecCreateStorage(context, target->perMeshStorage);
         meshRenderers.push_back(target);
         DESERIALIZE_METHOD_END;

@@ -52,7 +52,7 @@ const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
 
 const Camera* CameraModule::AllocateCamera()
 {
-    auto storage = storageModule->AllocateStorage(sizeof(Matrix4x4f));
+    auto storage = storageModule->AllocateStorage();
     return new Camera(this, storage);
 }
 
@@ -93,6 +93,7 @@ Bool CameraModule::ExecuteCommand(const ExecutionContext& context, CommandStream
     {
         DESERIALIZE_METHOD_ARG1_START(CreateCamera, Camera*, target);
         target->created = true;
+        storageModule->RecSetSize(context, target->perCameraStorage, sizeof(Matrix4x4f));
         storageModule->RecCreateStorage(context, target->perCameraStorage);
         cameras.push_back(target);
         DESERIALIZE_METHOD_END;

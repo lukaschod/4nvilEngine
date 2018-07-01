@@ -411,7 +411,7 @@ Bool GraphicsPlannerModule::ExecuteCommand(const ExecutionContext& context, Dire
             auto vertexBufferView = pipeline->vertexBuffer;
             auto vertexBuffer = (const Buffer*) target.vertexBuffer;
             vertexBufferView.BufferLocation = vertexBuffer->cachedResourceGpuVirtualAddress;
-            vertexBufferView.SizeInBytes = (UINT) vertexBuffer->data.size;
+            vertexBufferView.SizeInBytes = (UINT) vertexBuffer->GetSize();
             ASSERT(vertexBufferView.SizeInBytes % vertexBufferView.StrideInBytes == 0);
             commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             commandList->IASetVertexBuffers(0, 1, &vertexBufferView);

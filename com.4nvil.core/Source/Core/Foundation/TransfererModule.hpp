@@ -40,6 +40,7 @@ namespace Core
     class ITransfer
     {
     public:
+        virtual Void Transfer(const Char* format, ...) {}
         virtual Void Transfer(UInt8* data, UInt size) pure;
         virtual Void TransferPointer(Transferable*& transferable) pure;
         virtual Bool IsReading() const { return false; }
@@ -69,9 +70,9 @@ namespace Core
 
     struct Transferable
     {
-        TransferableId* id = nullptr;
         virtual TransfererId& GetTransfererId() const pure;
         virtual Void Transfer(ITransfer* transfer) pure;
+        TransferableId* id = nullptr;
     };
 
     class TransfererModule : public PipeModule

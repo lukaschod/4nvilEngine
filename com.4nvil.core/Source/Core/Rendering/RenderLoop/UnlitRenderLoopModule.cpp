@@ -68,7 +68,6 @@ Void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
 
         graphicsModule->RecPushDebug(context, "Camera::Render");
         graphicsModule->RecCopyBuffer(context, camera->perCameraStorage->buffer, perAllRendererStorage->buffer, camera->perCameraStorage->size);
-       // storageModule->RecCopyStorage(context, camera->perCameraStorage, perAllRendererStorage, camera->perCameraStorage->size);
         graphicsModule->RecSetRenderPass(context, surface->renderPass);
 
         for (auto meshRenderer : meshRenderers)

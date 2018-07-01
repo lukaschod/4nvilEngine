@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include <map>
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Collections/FixedBlockHeap.hpp>
 #include <Core/Modules/Module.hpp>
+#include <map>
 
 namespace Core
 {
