@@ -9,25 +9,14 @@
 *
 */
 
-#pragma once
+#include <Core/Tools/Guid.hpp>
+#include <Core/Tools/Windows/Common.hpp>
 
-#include <Core/Tools/Common.hpp>
-#include <Core/Tools/String.hpp>
+using namespace Core;
 
-namespace Core
+Guid Guid::GetUnique()
 {
-    class Guid
-    {
-    public:
-        inline Bool operator==(const Guid& rhs) const { return memcmp(this, &rhs, 128) == 0; }
-        inline Bool operator!=(const Guid& rhs) const { return memcmp(this, &rhs, 128) != 0; }
-
-        static Guid GetUnique();
-
-    public:
-        UInt32 data1;
-        UInt16 data2;
-        UInt16 data3;
-        UInt8 data4[8];
-    };
+    Guid guid;
+    ASSERT_SUCCEEDED(CoCreateGuid((GUID*)&guid));
+    return guid;
 }

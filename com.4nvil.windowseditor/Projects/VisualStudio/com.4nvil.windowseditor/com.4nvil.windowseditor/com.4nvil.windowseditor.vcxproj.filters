@@ -73,11 +73,11 @@
     <Filter Include="Core\Assets\ImporterSupport">
       <UniqueIdentifier>{08b206c6-dcbc-4de0-bb7c-d3b73045872e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Tools\Windows\IO">
+      <UniqueIdentifier>{106d906f-e349-4623-9bbe-953415a6568e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp">
-      <Filter>Core\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
@@ -324,9 +324,6 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp">
       <Filter>Core\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.hpp">
-      <Filter>Core\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Stream.hpp">
       <Filter>Core\Tools\IO</Filter>
     </ClInclude>
@@ -356,6 +353,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.hpp">
       <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Dictonary.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Set.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateSolvers.h">
+      <Filter>Core\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -482,14 +488,8 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp">
       <Filter>Editor\Project</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp">
-      <Filter>Core\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.cpp">
       <Filter>Core\Foundation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.cpp">
-      <Filter>Core\Assets</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp">
       <Filter>Core\Assets</Filter>
@@ -508,6 +508,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.cpp">
       <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Guid.cpp">
+      <Filter>Core\Tools\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\IO\WinDirectory.cpp">
+      <Filter>Core\Tools\Windows\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

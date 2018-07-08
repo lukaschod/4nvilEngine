@@ -29,15 +29,28 @@ namespace Core
     {
         TransferableId id;
         Guid guid;
-        UInt index;
+        UInt globalIndex;
 
         const Crate* cachedCrate;
+    };
+
+    enum class ResourceType : UInt32
+    {
+        Local,
+        Extern,
+    };
+
+    struct ResourceDependancy
+    {
+        ResourceType type;
+        UInt index;
     };
 
     struct ResourceLocal
     {
         TransfererId transfererId;
         UInt offset;
+        List<ResourceDependancy> dependencies;
 
         const Transferable* cachedTransferable;
     };
@@ -86,7 +99,7 @@ namespace Core
         Void RecLoad(const ExecutionContext& context, const Directory& directory);
 
         // Find resource from the loaded crates, it might cause resource loading
-        const Transferable* RecFindResource(const ExecutionContext& context, const TransferableId* id);
+        Void RecLoadResource(const ExecutionContext& context, const TransferableId* id);
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
@@ -95,7 +108,8 @@ namespace Core
         Void Save(Crate* crate);
         Bool Load(Crate* crate);
         Void AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable);
-        const Transferable* LoadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex);
+        Void LoadResource(const ExecutionContext& context, Crate* crate, UInt globalIndex);
+        Void LoadResource(const ExecutionContext& context, const TransferableId* id);
 
     private:
         List<Crate*> crates;

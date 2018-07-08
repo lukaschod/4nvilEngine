@@ -12,6 +12,7 @@
 #include <Core/Tools/Math/Math.hpp>
 #include <Core/Tools/Collections/FixedBlockHeap.hpp>
 #include <Core/Foundation/TransformModule.hpp>
+#include <Core/Foundation/TransfererUtility.hpp>
 #include <Core/Foundation/MemoryModule.hpp>
 
 using namespace Core;
@@ -21,15 +22,19 @@ static const Char* memoryLabelTransform = "Core::Transform";
 
 Void Transform::Transfer(ITransfer* transfer)
 {
-	TRANSFER(childs);
-	TRANSFER_PTR(parent);
-	TRANSFER(localPosition);
-	TRANSFER(localRotation);
-	TRANSFER(localScale);
-	if (transfer->IsReading())
-	{
-		flags = TransformStateFlags::LocalObjectToWorldChanged;
-		created = false;
+    TRANSFER(unit);
+    TRANSFER(childs);
+    TRANSFER(localPosition);
+    TRANSFER(localRotation);
+    TRANSFER(localScale);
+    if (transfer->IsReading())
+    {
+        flags = TransformStateFlags::LocalObjectToWorldChanged;
+        created = false;
+
+        parent = nullptr;
+        for (auto child : childs)
+            child->parent = this;
 	}
 }
 
@@ -94,7 +99,6 @@ Void TransformModule::Execute(const ExecutionContext& context)
 const Transform* TransformModule::AllocateTransform()
 {
     auto transform = memoryModule->New<Transform>(memoryLabelTransform, this);
-    transform->parent = root;
     transform->flags = TransformStateFlags::LocalObjectToWorldChanged;
     return transform;
 }
@@ -113,6 +117,8 @@ Bool TransformModule::ExecuteCommand(const ExecutionContext& context, CommandStr
     {
         DESERIALIZE_METHOD_ARG1_START(CreateTransform, Transform*, target);
         target->created = true;
+        if (target->parent == nullptr)
+            target->parent = root;
         auto parent = target->parent;
         parent->childs.push_back(target);
         target->parent = parent;

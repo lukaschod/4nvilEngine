@@ -20,7 +20,7 @@ static const Char* memoryLabelUnit = "Core::Unit";
 
 Void Unit::Transfer(ITransfer* transfer)
 {
-    TRANSFER_PTR(relation);
+    TRANSFER(relation);
     TRANSFER(components);
 }
 

@@ -13,13 +13,13 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Collections/List.hpp>
-#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
 #include <Core/Graphics/VertexLayout.hpp>
 
-namespace Core::Graphics
+namespace Core
 {
-    struct IBuffer;
-    class IGraphicsModule;
+    struct Storage;
+    class StorageModule;
 }
 
 namespace Core
@@ -39,32 +39,32 @@ namespace Core
         MeshTopology topology;
     };
 
-    struct Mesh
+    struct Mesh : Transferable
     {
-        Mesh(const Graphics::VertexLayout& vertexLayout)
-            : vertexLayout(vertexLayout)
-            , vertexBuffer(nullptr)
+        IMPLEMENT_TRANSFERABLE(Core, Mesh);
+        Mesh()
+            : vertexBuffer(nullptr)
             , created(false)
         {
         }
-        const Graphics::VertexLayout vertexLayout;
-        const Graphics::IBuffer* vertexBuffer;
+        const Storage* vertexBuffer;
         List<SubMesh> subMeshes;
-        Range<UInt8> vertices;
         Bool created;
     };
 
-    class MeshModule : public PipeModule
+    class MeshModule : public TransfererModule
     {
     public:
+        IMPLEMENT_TRANSFERER(Core, Mesh);
         BASE_IS(PipeModule);
 
         virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Mesh* AllocateMesh(const Graphics::VertexLayout& vertexLayout) const;
+        const Mesh* AllocateMesh() const;
 
     public:
         Void RecCreateMesh(const ExecutionContext& context, const Mesh* target);
+        Void RecDestroy(const ExecutionContext& context, const Mesh* target);
         Void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<UInt8>& vertices);
         Void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, UInt32 index, const SubMesh& submesh);
 
@@ -73,6 +73,6 @@ namespace Core
 
     private:
         List<Mesh*> meshes;
-        Graphics::IGraphicsModule* graphicsModule;
+        StorageModule* storageModule;
     };
 }

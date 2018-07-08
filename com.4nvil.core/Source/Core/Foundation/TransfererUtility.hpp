@@ -17,27 +17,13 @@
 
 namespace Core
 {
-    template<> inline Void TransferValue(ITransfer* transfer, Guid& value) { transfer->Transfer((UInt8*) &value, sizeof(Guid)); }
-    template<> inline Void TransferValue(ITransfer* transfer, Directory& value) { transfer->Transfer((UInt8*) &value, sizeof(Directory)); }
+    template<> inline Void TransferValue(ITransfer* transfer, Guid& value) { transfer->Transfer(&value, sizeof(Guid)); }
+    template<> inline Void TransferValue(ITransfer* transfer, Directory& value) { transfer->Transfer(&value, sizeof(Directory)); }
 
     template<class T> inline Void TransferValue(ITransfer* transfer, List<T>& value)
     {
         auto size = value.size();
-        transfer->Transfer((UInt8*) &size, sizeof(UInt));
-
-        // Reserve data
-        // TODO: We can push optimization with removed constructor
-        if (transfer->IsReading())
-            value.resize(size);
-
-        if (size != 0)
-            transfer->Transfer((UInt8*) value.data(), sizeof(T) * size);
-    }
-
-    template<> inline Void TransferValue(ITransfer* transfer, List<Transferable*>& value)
-    {
-        auto size = value.size();
-        transfer->Transfer((UInt8*) &size, sizeof(UInt));
+        transfer->Transfer(&size, sizeof(UInt));
 
         // Reserve data
         // TODO: We can push optimization with removed constructor
@@ -57,7 +43,7 @@ namespace Core
     {
     public:
         TransferFindSize() : size(0) {}
-        virtual Void Transfer(UInt8* data, UInt size) override
+        virtual Void Transfer(Void* data, UInt size) override
         {
             this->size += size;
         }
@@ -76,7 +62,7 @@ namespace Core
     public:
         TransferBinaryReader(IO::Stream* stream) : stream(stream) {}
 
-        virtual Void Transfer(UInt8* data, UInt size) override { stream->Read(data, size); }
+        virtual Void Transfer(Void* data, UInt size) override { stream->Read(data, size); }
         virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
         virtual Bool IsReading() const override { return true; }
 
@@ -90,7 +76,7 @@ namespace Core
     public:
         TransferBinaryWritter(IO::Stream* stream) : stream(stream) {}
 
-        virtual Void Transfer(UInt8* data, UInt size) override { stream->Write(data, size); }
+        virtual Void Transfer(Void* data, UInt size) override { stream->Write(data, size); }
         virtual Void TransferPointer(Transferable*& transferable) override { transferable->Transfer(this); }
         virtual Bool IsWritting() const override { return false; }
 
@@ -103,7 +89,7 @@ namespace Core
     public:
         TransferJSONReader(IO::Stream* stream) : stream(stream), level(0) {}
 
-        virtual Void Transfer(UInt8* data, UInt size) override 
+        virtual Void Transfer(Void* data, UInt size) override
         { 
             ReadLevel();
             Read("\"value\": ");
@@ -147,7 +133,7 @@ namespace Core
     public:
         TransferJSONWritter(IO::Stream* stream) : stream(stream), level(0) {}
 
-        virtual Void Transfer(UInt8* data, UInt size) override 
+        virtual Void Transfer(Void* data, UInt size) override
         {
             WriteLevel();
             Write("\"value\": ");

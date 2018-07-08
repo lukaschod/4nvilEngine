@@ -11,23 +11,14 @@
 
 #pragma once
 
-#include <Core/Tools/Common.hpp>
-#include <Core/Tools/String.hpp>
+#include <Core/Tools/Collections/Set.hpp>
+#include <set>
 
 namespace Core
 {
-    class Guid
+    template<class T>
+    class Set : public std::set<T> // TODO: Extend
     {
-    public:
-        inline Bool operator==(const Guid& rhs) const { return memcmp(this, &rhs, 128) == 0; }
-        inline Bool operator!=(const Guid& rhs) const { return memcmp(this, &rhs, 128) != 0; }
 
-        static Guid GetUnique();
-
-    public:
-        UInt32 data1;
-        UInt16 data2;
-        UInt16 data3;
-        UInt8 data4[8];
     };
 }

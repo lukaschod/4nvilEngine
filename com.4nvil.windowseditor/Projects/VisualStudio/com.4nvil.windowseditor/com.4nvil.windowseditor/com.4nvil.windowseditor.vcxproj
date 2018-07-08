@@ -11,12 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateSolvers.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\IImporterSupportModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\UnitImporterSupportModule.hpp" />
-    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp" />
@@ -60,10 +59,12 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Dictonary.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\IHeap.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\LinkedList.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\List.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Set.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\StringBuilder.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Common.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.hpp" />
@@ -107,11 +108,9 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\AssetModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\UnitImporterSupportModule.cpp" />
-    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\LibraryModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp" />
@@ -144,6 +143,8 @@
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Guid.cpp" />
+    <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\IO\WinDirectory.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.cpp" />
     <ClCompile Include="..\..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp" />

@@ -21,6 +21,8 @@ Void Storage::Transfer(ITransfer* transfer)
 {
     TRANSFER(usage);
     TRANSFER(size);
+    if (transfer->IsReading())
+        data = new UInt8[size];
     transfer->Transfer(data, size);
 }
 
@@ -50,6 +52,8 @@ Bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
         DESERIALIZE_METHOD_ARG1_START(CreateStorage, Storage*, target);
         ASSERT(!target->created);
         ASSERT(target->size != 0);
+        if (target->data == nullptr)
+            target->data = new UInt8[target->size];
         target->buffer = graphicsModule->AllocateBuffer(target->size);
         graphicsModule->RecSetBufferUsage(context, target->buffer, target->usage);
         graphicsModule->RecCreateBuffer(context, target->buffer);
@@ -73,11 +77,13 @@ Bool StorageModule::ExecuteCommand(const ExecutionContext& context, CommandStrea
 
         DESERIALIZE_METHOD_ARG3_START(UpdateStorage, Storage*, target, UInt32, targetOffset, Range<Void>, data);
         ASSERT(target->created);
+        memcpy(target->data, data.pointer, data.size);
         graphicsModule->RecUpdateBuffer(context, target->buffer, (Void*)data.pointer, data.size);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG3_START(CopyStorage, Storage*, src, Storage*, dst, UInt, size);
         ASSERT(src->created && dst->created);
+        memcpy(dst->data, src->data, size);
         graphicsModule->RecCopyBuffer(context, src->buffer, dst->buffer, size);
         DESERIALIZE_METHOD_END;
     }

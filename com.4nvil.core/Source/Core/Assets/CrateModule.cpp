@@ -11,11 +11,41 @@
 
 #include <Core/Tools/IO/FileStream.hpp>
 #include <Core/Assets/CrateModule.hpp>
+#include <Core/Assets/CrateSolvers.h>
 #include <Core/Foundation/TransfererModule.hpp>
 #include <Core/Foundation/TransfererUtility.hpp>
 
 using namespace Core;
 using namespace Core::IO;
+
+namespace Core
+{
+    template<> inline Void TransferValue(ITransfer* transfer, ResourceExtern& value)
+    {
+        TRANSFER(value.id);
+        TRANSFER(value.guid);
+        TRANSFER(value.globalIndex);
+    }
+
+    template<> inline Void TransferValue(ITransfer* transfer, ResourceDependancy& value)
+    {
+        TRANSFER(value.type);
+        TRANSFER(value.index);
+    }
+
+    template<> inline Void TransferValue(ITransfer* transfer, ResourceLocal& value)
+    {
+        TRANSFER(value.transfererId);
+        TRANSFER(value.offset);
+        TRANSFER(value.dependencies);
+    }
+
+    template<> inline Void TransferValue(ITransfer* transfer, ResourceGlobal& value)
+    {
+        TRANSFER(value.id);
+        TRANSFER(value.localIndex);
+    }
+}
 
 Void Crate::Transfer(ITransfer* transfer)
 {
@@ -24,12 +54,6 @@ Void Crate::Transfer(ITransfer* transfer)
     TRANSFER(locals);
     TRANSFER(globals);
 }
-
-enum class ResourceType : UInt32
-{
-    Local,
-    Extern,
-};
 
 static List<ResourceExtern>::const_iterator FindExtern(const List<ResourceExtern>& resources, const Transferable* transferable)
 {
@@ -78,30 +102,11 @@ Void CrateModule::SetupExecuteOrder(ModuleManager* moduleManager)
     ExecuteBefore<TransfererModule>(moduleManager, transferers);
 }
 
-const Transferable* CrateModule::RecFindResource(const ExecutionContext& context, const TransferableId* id)
-{
-    // TODO: Lock
-
-    for (auto crate : crates)
-    {
-        for (auto& resource : crate->globals)
-        {
-            if (resource.id == *id)
-            {
-                auto& resourceLocal = crate->locals[resource.localIndex];
-                if (resourceLocal.cachedTransferable == nullptr)
-                    resourceLocal.cachedTransferable = LoadLocalResource(context, crate, resource.localIndex);
-                return resourceLocal.cachedTransferable;
-            }
-        }
-    }
-    return nullptr;
-}
-
 SERIALIZE_METHOD_ARG2(CrateModule, Link, const Crate*, const Crate*);
 SERIALIZE_METHOD_ARG3(CrateModule, AddTransferable, const Crate*, const Directory&, const Transferable*);
 SERIALIZE_METHOD_ARG2(CrateModule, Save, const Directory&, const Crate*);
-SERIALIZE_METHOD_ARG1(CrateModule, Load,  const Directory&);
+SERIALIZE_METHOD_ARG1(CrateModule, Load, const Directory&);
+SERIALIZE_METHOD_ARG1(CrateModule, LoadResource, const TransferableId*);
 
 Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
@@ -132,8 +137,33 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
             delete crate; // TODO
         }
         DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG1_START(LoadResource, const TransferableId*, id);
+        LoadResource(context, id);
+        DESERIALIZE_METHOD_END;
     }
     return false;
+}
+
+Void CrateModule::LoadResource(const ExecutionContext& context, const TransferableId* id)
+{
+    for (auto crate : crates)
+    {
+        for (UInt i = 0; i < crate->globals.size(); i++)
+        {
+            auto& resource = crate->globals[i];
+
+            // Early out if it is already loaded
+            if (resource.id == *id)
+            {
+                auto& resourceLocal = crate->locals[resource.localIndex];
+                if (resourceLocal.cachedTransferable)
+                    return;
+            }
+
+            LoadResource(context, crate, i);
+        }
+    }
 }
 
 const Crate* CrateModule::FindCrate(const Guid& guid) const
@@ -169,58 +199,59 @@ Void CrateModule::Save(Crate* crate)
     class TransferCrateWritter : public ITransfer
     {
     public:
-        TransferCrateWritter(IO::Stream* stream, Crate* crate) : stream(stream), crate(crate) {}
-        virtual Void Transfer(UInt8* data, UInt size) override { stream->Write(data, size); }
+        TransferCrateWritter(IO::Stream& stream, Crate* crate) : stream(stream), crate(crate) {}
+        virtual Void Transfer(Void* data, UInt size) override { stream.Write(data, size); }
         virtual Void TransferPointer(Transferable*& transferable) override
         {
             auto external = FindExtern(crate->externs, transferable);
             if (external != crate->externs.cend())
             {
-                auto type = ResourceType::Extern;
-                Transfer((UInt8*) &type, sizeof(type));
+                ResourceDependancy dependancy;
+                dependancy.type = ResourceType::Extern;
+                dependancy.index = external - crate->externs.cbegin();
+                currentResource->dependencies.push_back(dependancy);
 
-                auto index = external - crate->externs.cbegin();
-                Transfer((UInt8*) &index, sizeof(index));
-
-                auto& id = transferable->GetTransfererId();
-                Transfer((UInt8*) &id, sizeof(id));
+                Transfer(&dependancy, sizeof(dependancy));
             }
 
             auto local = FindLocal(crate->locals, transferable);
             if (local != crate->locals.cend())
             {
-                auto type = ResourceType::Local;
-                Transfer((UInt8*) &type, sizeof(type));
+                ResourceDependancy dependancy;
+                dependancy.type = ResourceType::Local;
+                dependancy.index = local - crate->locals.cbegin();
+                currentResource->dependencies.push_back(dependancy);
 
-                auto index = local - crate->locals.cbegin();
-                Transfer((UInt8*) &index, sizeof(index));
-
-                auto& id = transferable->GetTransfererId();
-                Transfer((UInt8*) &id, sizeof(id));
+                Transfer(&dependancy, sizeof(dependancy));
             }
         }
         virtual Bool IsWritting() const override { return true; }
 
+        Void Transfer(ResourceLocal& resource)
+        {
+            currentResource = &resource;
+            resource.offset = stream.GetPosition();
+
+            auto transferable = const_cast<Transferable*>(resource.cachedTransferable);
+            ASSERT(transferable != nullptr);
+            transferable->Transfer(this);
+        }
+
     public:
-        IO::Stream* stream;
+        IO::Stream& stream;
         Crate* crate;
+        ResourceLocal* currentResource;
     };
 
     // Data
-    TransferCrateWritter dataWritter(&stream, crate);
+    TransferCrateWritter dataWritter(stream, crate);
     auto& resources = crate->locals;
-    for (auto it = resources.rbegin(); it != resources.rend(); ++it) // Lets iterate from back, as this how it most like will be read
-    {
-        auto& resource = *it;
-        auto transferable = const_cast<Transferable*>(resource.cachedTransferable);
-        ASSERT(transferable != nullptr);
-        transferable->Transfer(&dataWritter);
-        resource.offset = stream.GetPosition();
-    }
+    for (auto& resource : resources)
+        dataWritter.Transfer(resource);
 
     // Header
     stream.SetPosition(0);
-    TransferJSONWritter headerWritter(&stream);
+    TransferBinaryWritter headerWritter(&stream);
     headerWritter.TransferPointer((Transferable*&) crate);
 
     stream.Close();
@@ -231,7 +262,7 @@ Bool CrateModule::Load(Crate* crate)
     FileStream stream;
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
 
-    TransferJSONReader reader(&stream);
+    TransferBinaryReader reader(&stream);
     reader.TransferPointer((Transferable*&) crate);
 
     stream.Close();
@@ -256,85 +287,82 @@ Bool CrateModule::Load(Crate* crate)
     return true;
 }
 
-const Transferable* CrateModule::LoadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex)
+Void CrateModule::LoadResource(const ExecutionContext& context, Crate* crate, UInt globalIndex)
 {
-    FileStream stream;
-    CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
+    // Find resources that will be used for transfering
+    CrateResourceSolver resourceSolver;
+    resourceSolver.Solve(crate, globalIndex);
 
     class TransferCrateDataReader : public ITransfer
     {
     public:
-        TransferCrateDataReader(const ExecutionContext& context, IO::Stream& stream, CrateModule* crateModule, Crate* crate)
-            : context(context),
-            stream(stream), 
-            crateModule(crateModule), 
-            crate(crate) 
+        TransferCrateDataReader(const ExecutionContext& context, CrateDependancySolver& dependancySolver, CrateModule* crateModule)
+            : context(context)
+            , crateModule(crateModule)
+            , dependancySolver(dependancySolver)
         {}
-        virtual Void Transfer(UInt8* data, UInt size) override { stream.Write(data, size); }
+        virtual Void Transfer(Void* data, UInt size) override { cachedStream.Read(data, size); }
         virtual Void TransferPointer(Transferable*& transferable) override
         {
-            ResourceType type;
-            Transfer((UInt8*) &type, sizeof(type));
+            ResourceDependancy resource;
+            Transfer(&resource, sizeof(resource));
 
-            UInt index;
-            Transfer((UInt8*) &index, sizeof(index));
-
-            switch (type)
-            {
-            case ResourceType::Local:
-                transferable = LoadLocal(crate, index);
-                break;
-            case ResourceType::Extern:
-                transferable = LoadExtern(crate, index);
-                break;
-            default:
-                ERROR("Unknown resource type with index %i", type);
-                break;
-            }
-
+            // Store dependancy, we will resolve it later on, once all the transferables are loaded
+            dependancySolver.Add(cachedCrate, (const Transferable*&)transferable, resource);
         }
         virtual Bool IsReading() const override { return true; }
 
-        Transferable* LoadLocal(Crate* crate, UInt index)
+        Void Read(Crate* crate, UInt localIndex)
         {
-            auto& resource = crate->locals[index];
-            stream.SetPosition(resource.offset);
+            if (crate != cachedCrate)
+            {
+                Close(); // Close last stream
+                cachedCrate = crate;
+                CHECK(cachedStream.Open(cachedCrate->directory.ToCString(), FileMode::Open, FileAccess::Read));
+            }
 
-            // Find the transferer by id
+            auto& resource = cachedCrate->locals[localIndex];
+
+            // Allocate transferable
             auto transferer = const_cast<TransfererModule*>(crateModule->FindTransferer(resource.transfererId));
             ASSERT(transferer != nullptr);
-
             auto transferable = const_cast<Transferable*>(transferer->AllocateTransferable());
 
+            // Cache it
+            resource.cachedTransferable = transferable;
+
             // Transfer its data
-            TransferPointer(transferable);
+            cachedStream.SetPosition(resource.offset);
+            transferable->Transfer(this);
 
             // Issue the create request
             transferer->RecCreateTransferable(context, transferable);
-
-            return transferable;
         }
 
-        Transferable* LoadExtern(Crate* crate, UInt index)
+        Void Close()
         {
-            auto& resource = crate->externs[index];
-            ASSERT(resource.cachedCrate != nullptr);
-            return LoadLocal(const_cast<Crate*>(resource.cachedCrate), resource.index);
-        };
+            if (cachedStream.IsOpened())
+                cachedStream.Close();
+        }
 
     public:
         const ExecutionContext& context;
-        IO::Stream& stream;
         CrateModule* crateModule;
-        Crate* crate;
+        CrateDependancySolver& dependancySolver;
+        FileStream cachedStream;
+        Crate* cachedCrate;
     };
 
-    TransferCrateDataReader dataReader(context, stream, this, crate);
-    auto transferable = dataReader.LoadLocal(crate, localIndex);
+    // TODO: multi-thread it will be easy, as all of them can be executed concurrently
+    // Read each transferable one by one
+    CrateDependancySolver dependancySolver;
+    TransferCrateDataReader dataReader(context, dependancySolver, this);
+    for (auto& resource : resourceSolver.resources)
+        dataReader.Read(const_cast<Crate*>(resource.crate), resource.localIndex);
+    dataReader.Close();
 
-    stream.Close();
-
-    return transferable;
+    // Update the pointers to actual transferables
+    dependancySolver.Solve();
 }
 
 Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable)
@@ -343,7 +371,7 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     {
     public:
         TransferCrateHeader(Crate* crate, const List<const Crate*>& externs) : crate(crate), externs(externs) {}
-        virtual Void Transfer(UInt8* data, UInt size) override { }
+        virtual Void Transfer(Void* data, UInt size) override { }
         virtual Void TransferPointer(Transferable*& transferable) override
         {
             if (transferable == nullptr)
@@ -383,7 +411,7 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
                     ResourceExtern resource;
                     resource.id = *id;
                     resource.cachedCrate = external;
-                    resource.index = globalTransferable - external->globals.begin();
+                    resource.globalIndex = globalTransferable - external->globals.begin();
                     crate->externs.push_back(resource);
                     return true;
                 }

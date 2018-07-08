@@ -17,7 +17,6 @@
 #include <Core/Foundation/PipeModule.hpp>
 
 #define TRANSFER(Value) TransferValue(transfer, Value);
-#define TRANSFER_PTR(Value) TransferValue(transfer, (Transferable*&) Value);
 
 // Special macro used for automatic declarations of transfering structure
 // Note: Add it inside the structure
@@ -41,14 +40,14 @@ namespace Core
     {
     public:
         virtual Void Transfer(const Char* format, ...) {}
-        virtual Void Transfer(UInt8* data, UInt size) pure;
+        virtual Void Transfer(Void* data, UInt size) pure;
         virtual Void TransferPointer(Transferable*& transferable) pure;
         virtual Bool IsReading() const { return false; }
         virtual Bool IsWritting() const { return false; }
     };
 
-    template<class T> Void TransferValue(ITransfer* transfer, T& value) { transfer->Transfer((UInt8*) &value, sizeof(value)); }
-    template<> inline Void TransferValue(ITransfer* transfer, Transferable*& value) { transfer->TransferPointer(value); }
+    template<class T> inline Void TransferValue(ITransfer* transfer, T& value) { transfer->Transfer(&value, sizeof(value)); }
+    template<class T> inline Void TransferValue(ITransfer* transfer, T*& value) { transfer->TransferPointer((Transferable*&) value); }
 
     struct TransferableId
     {

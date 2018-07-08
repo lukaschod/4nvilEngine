@@ -86,7 +86,7 @@ Void UnlitRenderLoopModule::Render(const ExecutionContext& context, const ISwapC
                 DrawDesc draw;
                 draw.pipeline = pipeline->pipeline;
                 draw.properties = pipeline->properties;
-                draw.vertexBuffer = mesh->vertexBuffer;
+                draw.vertexBuffer = mesh->vertexBuffer->buffer;
 
                 for (auto& subMesh : mesh->subMeshes)
                 {

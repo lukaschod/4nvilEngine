@@ -25,6 +25,10 @@ static const Char* memoryLabelMeshRenderer = "Core::MeshRenderer";
 
 Void MeshRenderer::Transfer(ITransfer* transfer)
 {
+    TRANSFER(unit);
+    TRANSFER(mesh);
+    if (transfer->IsReading())
+        created = false;
 }
 
 MeshRendererModule::MeshRendererModule()

@@ -10,9 +10,9 @@
 */
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/IO/Directory.hpp>
-#if ENABLED_WINDOWS
+/*#if ENABLED_WINDOWS
 #   include <Core/Tools/Windows/Common.hpp>
-#endif
+#endif*/
 #include <filesystem>
 
 using namespace Core;
@@ -57,7 +57,7 @@ Bool Directory::GetExtension(DirectoryExtension& extension) const
     return true;
 }
 
-const Directory& Directory::GetExecutablePath()
+/*const Directory& Directory::GetExecutablePath()
 {
     static Directory path;
     static Bool pathValid = false;
@@ -81,7 +81,7 @@ const Directory& Directory::GetExecutablePath()
     ASSERT(pathValid);
 
     return path;
-}
+}*/
 
 Void Directory::GetDirectories(const Directory& path, List<Directory>& out)
 {

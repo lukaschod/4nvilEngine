@@ -521,10 +521,7 @@ float4 FragMain(VertData i) : SV_TARGET
             0.5f, -0.5f, 0, 1,
         };
 
-        VertexLayout vertexLayout;
-        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
-
-        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        auto mesh = meshModule->AllocateMesh();
         meshModule->RecCreateMesh(context, mesh);
         meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
@@ -732,10 +729,7 @@ float4 FragMain(VertData i) : SV_TARGET
             0.5f, -0.5f, 0, 1,
         };
 
-        VertexLayout vertexLayout;
-        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
-
-        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        auto mesh = meshModule->AllocateMesh();
         meshModule->RecCreateMesh(context, mesh);
         meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(6));
@@ -945,10 +939,7 @@ float4 FragMain(VertData i) : SV_TARGET
             0.5f, -0.5f, 0, 1,     0, 0, 1, 0,
         };
 
-        VertexLayout vertexLayout;
-        vertexLayout.attributes.push_back(VertexAttributeLayout(VertexAttributeType::Position, ColorFormat::RGBA32));
-
-        auto mesh = meshModule->AllocateMesh(vertexLayout);
+        auto mesh = meshModule->AllocateMesh();
         meshModule->RecCreateMesh(context, mesh);
         meshModule->RecSetVertices(context, mesh, Range<UInt8>((UInt8*) vertices, sizeof(vertices)));
         meshModule->RecSetSubMesh(context, mesh, 0, SubMesh(3));
@@ -996,6 +987,13 @@ float4 FragMain(VertData i) : SV_TARGET
 
     virtual Void Execute(const ExecutionContext& context) override
     {
+        if (initialized && initalizedCrate && !loadedTriangle)
+        {
+            auto id = TransferableId();
+            id.directory = "HelloWorldTriangle";
+            crateModule->RecLoadResource(context, &id);
+        }
+
         if (initialized && !initalizedCrate)
         {
             auto directory = Directory::GetExecutablePath();
@@ -1039,6 +1037,7 @@ float4 FragMain(VertData i) : SV_TARGET
 
     const Unit* helloWorldTriangle;
     Bool initalizedCrate = false;
+    Bool loadedTriangle = false;
 };
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
@@ -1087,17 +1086,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new ShutdownModule(moduleManager));
     moduleManager->AddModule(new TestViewLayerModule());*/
 
-    // Test project 2
+    /*// Test project 2
     moduleManager->AddModule(new AgentModule());
     moduleManager->AddModule(new AgentForceModule());
     moduleManager->AddModule(new AgentDistModule());
     moduleManager->AddModule(new Test2Module());
     moduleManager->AddModule(new FpsLoggerModule());
-    moduleManager->AddModule(new ShutdownModule(moduleManager));
-
-    /*// Hello World
-    moduleManager->AddModule(new HelloWorldModule());
     moduleManager->AddModule(new ShutdownModule(moduleManager));*/
+
+    // Hello World
+    moduleManager->AddModule(new HelloWorldModule());
+    moduleManager->AddModule(new ShutdownModule(moduleManager));
 
     moduleManager->Start();
     while (moduleManager->IsRunning())
