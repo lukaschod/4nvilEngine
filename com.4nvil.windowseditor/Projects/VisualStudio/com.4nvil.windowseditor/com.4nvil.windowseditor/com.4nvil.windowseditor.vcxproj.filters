@@ -363,6 +363,15 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateSolvers.h">
       <Filter>Core\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\DummyStream.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateBinary.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateJSON.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">

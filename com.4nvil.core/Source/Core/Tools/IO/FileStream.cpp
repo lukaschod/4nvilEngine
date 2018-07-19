@@ -70,7 +70,7 @@ Void FileStream::WriteFmt(const Char* format, ...)
     va_end(ap);
 }
 
-Void FileStream::WriteFmt(const Char* format, va_list arguments)
+Void FileStream::Write(const Char* format, va_list arguments)
 {
     ASSERT(isOpened);
     vfprintf(file, format, arguments);

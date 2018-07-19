@@ -60,7 +60,6 @@
         Core::Console::Write("\n"); \
     }
 
-#define CHECK(isFalse) RELEASE_ASSERT(isFalse)
 #ifdef ENABLED_ASSERT
 #    define ASSERT(isFalse) RELEASE_ASSERT(isFalse)
 #    define ASSERT_MSG(isFalse, ...) RELEASE_ASSERT_MSG(isFalse, __VA_ARGS__)
@@ -71,4 +70,5 @@
 #    define ERROR(...) (Void)0
 #endif
 
+#define CHECK(isFalse) RELEASE_ASSERT(isFalse)
 #define NOT_IMPLEMENTED() ERROR("Not Implemented");

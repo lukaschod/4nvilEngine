@@ -32,9 +32,8 @@ namespace Core
     {
         IMPLEMENT_TRANSFERABLE(Core, Camera);
 
-        Camera(ComponentModule* module, const Storage* perCameraStorage)
-            : Component(module)
-            , perCameraStorage(perCameraStorage)
+        Camera(const Storage* perCameraStorage)
+            : perCameraStorage(perCameraStorage)
             , surface(nullptr)
             , aspect(1)
             , nearClipPlane(0.3f)

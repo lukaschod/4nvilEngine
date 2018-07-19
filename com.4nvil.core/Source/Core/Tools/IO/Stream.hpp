@@ -25,9 +25,8 @@ namespace Core::IO
         virtual Void ReadFmt(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
         virtual Void Write(const Void* data, UInt size) pure;
         virtual Void WriteFmt(const Char* format, ...) { NOT_IMPLEMENTED(); };
-        virtual Void WriteFmt(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
+        virtual Void Write(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
         virtual Void SetPosition(UInt position) { NOT_IMPLEMENTED(); }
-        virtual UInt GetPosition() const { return 0; NOT_IMPLEMENTED();
-        }
+        virtual UInt GetPosition() const { return 0; NOT_IMPLEMENTED(); }
     };
 }

@@ -10,9 +10,6 @@
 */
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/IO/Directory.hpp>
-/*#if ENABLED_WINDOWS
-#   include <Core/Tools/Windows/Common.hpp>
-#endif*/
 #include <filesystem>
 
 using namespace Core;
@@ -56,32 +53,6 @@ Bool Directory::GetExtension(DirectoryExtension& extension) const
     extension = last;
     return true;
 }
-
-/*const Directory& Directory::GetExecutablePath()
-{
-    static Directory path;
-    static Bool pathValid = false;
-
-    // Store executable path on demand
-#if ENABLED_WINDOWS
-    if (!pathValid)
-    {
-        // Get the actual directory
-        auto hModule = GetModuleHandleW(NULL);
-        GetModuleFileName(hModule, path.data, (DWORD) path.GetCapacity());
-
-        // Add terminator
-        auto last = strrchr(path.data, '\\');
-        ASSERT(last != nullptr);
-        *(++last) pure;
-        pathValid = true;
-    }
-#endif
-
-    ASSERT(pathValid);
-
-    return path;
-}*/
 
 Void Directory::GetDirectories(const Directory& path, List<Directory>& out)
 {

@@ -28,14 +28,9 @@ namespace Core
 {
     struct Component : Transferable
     {
-        Component(ComponentModule* module)
-            : module(module)
-            , unit(nullptr)
-        {
-        }
+        Component() : unit(nullptr) {}
 
         const Unit* unit;
-        ComponentModule* module;
     };
 
     class ComponentModule : public TransfererModule
@@ -103,6 +98,7 @@ namespace Core
 
     private:
         Void UpdateActive(const ExecutionContext& context, Unit* unit);
+        ComponentModule* TryGetModule(const TransfererId& id);
 
     private:
         MemoryModule* memoryModule;

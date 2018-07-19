@@ -72,7 +72,7 @@ Void MeshRendererModule::Execute(const ExecutionContext& context)
 
 const MeshRenderer* MeshRendererModule::AllocateMeshRenderer()
 {
-    auto target = memoryModule->New<MeshRenderer>(memoryLabelMeshRenderer, this);
+    auto target = memoryModule->New<MeshRenderer>(memoryLabelMeshRenderer);
     target->perMeshStorage = storageModule->AllocateStorage();
     return target;
 }

@@ -59,7 +59,11 @@ Bool UnitModule::ExecuteCommand(const ExecutionContext& context, CommandStream& 
         DESERIALIZE_METHOD_ARG1_START(Destroy, Unit*, unit);
         units.remove(unit);
         for (auto component : unit->components)
-            component->module->RecDestroy(context, component); // We can access module here as all of them depend on unitmodule
+        {
+            auto module = TryGetModule(component->GetTransfererId());
+            ASSERT(module != nullptr);
+            module->RecDestroy(context, component);
+        }
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetEnable, Unit*, unit, Bool, enable);
@@ -106,4 +110,16 @@ Void UnitModule::UpdateActive(const ExecutionContext& context, Unit* unit)
         for (auto child : relation->childs)
             UpdateActive(context, (Unit*)child->unit);
     }
+}
+
+ComponentModule* UnitModule::TryGetModule(const TransfererId& id)
+{
+    for (auto module : componentModules)
+    {
+        if (module->GetTransfererId() == id)
+        {
+            return module;
+        }
+    }
+    return nullptr;
 }

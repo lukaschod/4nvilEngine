@@ -37,6 +37,15 @@ namespace Core
 
 namespace Core
 {
+    class StreamTransfer : public ITransfer
+    {
+    public:
+        virtual Void Open(IO::Stream* stream) { this->stream = stream; }
+
+    private:
+        IO::Stream* stream;
+    };
+
     // Finds the total size of transfered data
     // Note: It does not write or read anything
     class TransferFindSize : public ITransfer

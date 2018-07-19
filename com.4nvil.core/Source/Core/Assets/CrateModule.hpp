@@ -14,6 +14,7 @@
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Guid.hpp>
 #include <Core/Tools/Collections/List.hpp>
+#include <Core/Tools/Collections/Dictonary.hpp>
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Foundation/PipeModule.hpp>
 #include <Core/Foundation/TransfererModule.hpp>
@@ -21,6 +22,8 @@
 namespace Core
 {
     struct Crate;
+    class TransferCrateBinaryReader;
+    class TransferCrateBinaryWritter;
 }
 
 namespace Core
@@ -42,6 +45,8 @@ namespace Core
 
     struct ResourceDependancy
     {
+        ResourceDependancy() {}
+        ResourceDependancy(ResourceType type, UInt index) : type(type), index(index) {}
         ResourceType type;
         UInt index;
     };
@@ -61,10 +66,8 @@ namespace Core
         UInt localIndex;
     };
 
-    struct Crate : Transferable
+    struct Crate
     {
-        IMPLEMENT_TRANSFERABLE(Core, Crate);
-
         Guid guid;
         Directory directory;
         List<ResourceExtern> externs;
@@ -99,7 +102,7 @@ namespace Core
         Void RecLoad(const ExecutionContext& context, const Directory& directory);
 
         // Find resource from the loaded crates, it might cause resource loading
-        Void RecLoadResource(const ExecutionContext& context, const TransferableId* id);
+        Void RecLoadResource(const ExecutionContext& context, const TransferableId& id);
 
     protected:
         virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
@@ -109,7 +112,9 @@ namespace Core
         Bool Load(Crate* crate);
         Void AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable);
         Void LoadResource(const ExecutionContext& context, Crate* crate, UInt globalIndex);
-        Void LoadResource(const ExecutionContext& context, const TransferableId* id);
+        Void LoadResource(const ExecutionContext& context, const TransferableId& id);
+        TransferCrateBinaryWritter* TryGetWritter(const Char* name);
+        TransferCrateBinaryReader* TryGetReader(const Char* name);
 
     private:
         List<Crate*> crates;

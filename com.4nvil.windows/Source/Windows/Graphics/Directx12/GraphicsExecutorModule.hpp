@@ -30,7 +30,7 @@ namespace Windows::Directx12
         GraphicsExecutorModule();
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         virtual Void Execute(const ExecutionContext& context) override;
-        virtual const Char* GetName() override { return "GraphicsExecutorModule"; }
+        virtual const Char* GetName() const override { return "GraphicsExecutorModule"; }
         inline UInt64 GetCompletedBufferIndex() const { return completedBufferIndex; }
 
         Void RecCmdBuffer(const ExecutionContext& context, const Directx12::CmdBuffer* buffer);

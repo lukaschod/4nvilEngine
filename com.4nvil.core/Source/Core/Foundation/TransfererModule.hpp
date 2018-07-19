@@ -30,7 +30,8 @@
     virtual const Transferable* AllocateTransferable() override { return Allocate##Name(); } \
     virtual Void RecCreateTransferable(const ExecutionContext& context, const Transferable* target) override { RecCreate##Name(context, (const Name*) target); } \
     virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) override { RecDestroy(context, (const Name*) target); } \
-    virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; }
+    virtual TransfererId& GetTransfererId() const override { static TransfererId id(#NameSpace "::" #Name); return id; } \
+    virtual const Char* GetName() const override { return #NameSpace "::" #Name; }
 
 namespace Core
 {

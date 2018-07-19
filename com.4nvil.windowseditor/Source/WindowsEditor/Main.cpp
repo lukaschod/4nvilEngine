@@ -51,7 +51,6 @@ using namespace Editor;
 struct Agent : Component
 {
     IMPLEMENT_TRANSFERABLE(Core, Agent);
-    Agent(ComponentModule* module) : Component(module) {}
     const Transform* transform;
     Vector3f velocity;
     Vector3f destination;
@@ -75,7 +74,7 @@ public:
 
     const Agent* AllocateAgent()
     {
-        return memoryModule->New<Agent>("AgentModule", this);
+        return memoryModule->New<Agent>("AgentModule");
     }
 
     const Agent* RecCreateAgent(const ExecutionContext& context, const Agent* target = nullptr)
@@ -991,7 +990,7 @@ float4 FragMain(VertData i) : SV_TARGET
         {
             auto id = TransferableId();
             id.directory = "HelloWorldTriangle";
-            crateModule->RecLoadResource(context, &id);
+            crateModule->RecLoadResource(context, id);
         }
 
         if (initialized && !initalizedCrate)

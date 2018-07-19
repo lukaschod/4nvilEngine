@@ -98,7 +98,7 @@ Void TransformModule::Execute(const ExecutionContext& context)
 
 const Transform* TransformModule::AllocateTransform()
 {
-    auto transform = memoryModule->New<Transform>(memoryLabelTransform, this);
+    auto transform = memoryModule->New<Transform>(memoryLabelTransform);
     transform->flags = TransformStateFlags::LocalObjectToWorldChanged;
     return transform;
 }

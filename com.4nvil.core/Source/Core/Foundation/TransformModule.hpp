@@ -37,9 +37,8 @@ namespace Core
     struct Transform : Component
     {
         IMPLEMENT_TRANSFERABLE(Core, Transform);
-        Transform(ComponentModule* module)
-            : Component(module)
-            , parent(nullptr)
+        Transform()
+            : parent(nullptr)
             , localPosition(0, 0, 0)
             , localRotation(0, 0, 0, 1)
             , localScale(1, 1, 1)

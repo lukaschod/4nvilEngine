@@ -17,6 +17,8 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\UnitImporterSupportModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateBinary.h" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateJSON.h" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.hpp" />
@@ -74,6 +76,7 @@
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Guid.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\Hash.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.hpp" />
+    <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\DummyStream.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.hpp" />
     <ClInclude Include="..\..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Stream.hpp" />

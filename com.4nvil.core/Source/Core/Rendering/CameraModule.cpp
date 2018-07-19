@@ -53,7 +53,7 @@ const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
 const Camera* CameraModule::AllocateCamera()
 {
     auto storage = storageModule->AllocateStorage();
-    return new Camera(this, storage);
+    return new Camera(storage);
 }
 
 Vector3f CameraModule::ScreenToWorld(const Camera* camera, const Vector3f& position)

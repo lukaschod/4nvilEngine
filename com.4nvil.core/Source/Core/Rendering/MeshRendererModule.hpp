@@ -33,9 +33,8 @@ namespace Core
     {
         IMPLEMENT_TRANSFERABLE(Core, MeshRenderer);
 
-        MeshRenderer(ComponentModule* module)
-            : Component(module)
-            , mesh(nullptr)
+        MeshRenderer()
+            : mesh(nullptr)
             , material(nullptr)
             , created(false)
         {

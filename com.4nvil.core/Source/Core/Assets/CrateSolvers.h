@@ -42,6 +42,13 @@ namespace Core
         Void SolveRecusriveForLocal(const Crate* crate, UInt localIndex)
         {
             auto& resource = crate->locals[localIndex];
+
+            Resource target;
+            target.crate = crate;
+            target.localIndex = localIndex;
+            if (!resources.insert(target).second)
+                return;
+
             for (auto& dependacy : resource.dependencies)
             {
                 switch (dependacy.type)
@@ -51,14 +58,7 @@ namespace Core
                     auto& resourceLocal = crate->locals[dependacy.index];
                     if (resourceLocal.cachedTransferable != nullptr)
                         continue;
-
-                    Resource target;
-                    target.crate = crate;
-                    target.localIndex = dependacy.index;
-                    if (resources.insert(target).second)
-                    {
-                        SolveRecusriveForLocal(crate, target.localIndex);
-                    }
+                    SolveRecusriveForLocal(crate, dependacy.index);
                     break;
                 }
 
@@ -76,12 +76,12 @@ namespace Core
     public:
         struct Resource
         {
-            inline Bool operator<(const Resource& rhs) const 
+            inline Bool operator<(const Resource& rhs) const
             { 
                 return 
-                    (crate < rhs.crate) || 
-                    ((crate == rhs.crate) && (localIndex < rhs.localIndex));
-            } // We do not really care about order we want grouping
+                    (crate < rhs.crate) || // Order by crate
+                    ((crate == rhs.crate) && (localIndex < rhs.localIndex)); // If crates are same, eventually order by index
+            } // We do not really care about order, we only want grouping
             const Crate* crate;
             UInt localIndex;
         };
