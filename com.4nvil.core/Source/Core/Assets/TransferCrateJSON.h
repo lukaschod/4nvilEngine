@@ -20,21 +20,72 @@ namespace Core
     public:
         BASE_IS(TransferCrateBinaryWritter);
 
-        virtual Void Transfer(Void* data, UInt size) override
+        virtual Void Transfer(const Char* name, Transferable* value) override
         {
-            WriteLevel();
-            WriteExpected("\"value\": ");
-            base::Transfer(data, size);
-            WriteExpected(",\n");
+            Level();
+            Expected(name);
+            Expected(":\n");
+            level++;
+            value->Transfer(this);
+            level--;
         }
 
-        virtual Void TransferPointer(Transferable*& transferable) override
+        virtual Void Transfer(const Char* name, Guid* value) override
         {
-            WriteLevel();
+            Char guidText[37];
+            value->ToString(guidText);
+
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->Write(guidText, 36);
+            Expected("\n");
+        }
+
+        virtual Void Transfer(const Char* name, UInt64* value) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->WriteFmt("%lld", *value);
+            Expected("\n");
+        }
+
+        virtual Void Transfer(const Char* name, UInt32* value) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->WriteFmt("%ld", *value);
+            Expected("\n");
+        }
+
+        virtual Void Transfer(const Char* name, Char* value) override
+        {
+            Level();
+            Expected(name);
+            UInt size = strlen(value);
+            stream->WriteFmt(": [%lld]\"", size);
+            stream->Write(value, size);
+            Expected("\"\n");
+        }
+
+        virtual Void Transfer(const Char* name, Void* data, UInt size) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->Write(data, size);
+            Expected("\n");
+        }
+
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
+        {
+            Level();
             level++;
-            WriteExpected("{\n");
-            base::TransferPointer(transferable);
-            WriteExpected("},\n");
+            Expected(name);
+            Expected(":\n");
+            base::TransferPointer(name, transferable);
             level--;
         }
 
@@ -47,15 +98,24 @@ namespace Core
             level = 0;
         }
 
-        Void WriteLevel()
+        /*virtual Void WriteLocalResource(Crate* crate, UInt localIndex) override
+        {
+            WriteExpected(crate->locals[localIndex].transfererId.data);
+            WriteExpected(": \n");
+            level++;
+            base::WriteLocalResource(crate, localIndex);
+            level--;
+        }*/
+
+        Void Level()
         {
             for (UInt16 i = 0; i < level; i++)
-                WriteExpected("    ");
+                Expected("    ");
         }
 
-        Void WriteExpected(const Char* value)
+        Void Expected(const Char* value)
         {
-            base::Transfer((Void*) value, strlen(value));
+            stream->Write((Void*) value, strlen(value));
         }
 
     private:
@@ -67,21 +127,72 @@ namespace Core
     public:
         BASE_IS(TransferCrateBinaryReader);
 
-        virtual Void Transfer(Void* data, UInt size) override
+        virtual Void Transfer(const Char* name, Transferable* value) override
         {
-            ReadLevel();
-            ReadExpected("\"value\": ");
-            base::Transfer(data, size);
-            ReadExpected(",\n");
+            Level();
+            Expected(name);
+            Expected(":\n");
+            level++;
+            value->Transfer(this);
+            level--;
         }
 
-        virtual Void TransferPointer(Transferable*& transferable) override
+        virtual Void Transfer(const Char* name, Guid* value) override
         {
-            ReadLevel();
+            Char guidText[37];
+
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->Read(guidText, 36);
+            Expected("\n");
+
+            CHECK(value->TryParse(guidText, *value));
+        }
+
+        virtual Void Transfer(const Char* name, UInt64* value) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->ReadFmt("%lld", value);
+            Expected("\n");
+        }
+
+        virtual Void Transfer(const Char* name, UInt32* value) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->ReadFmt("%ld", value);
+            Expected("\n");
+        }
+
+        virtual Void Transfer(const Char* name, Char* value) override
+        {
+            UInt size;
+            Expected(name);
+            stream->ReadFmt(": [%lld]\"", &size);
+            stream->Read(value, size);
+            Expected("\"\n");
+        }
+
+        virtual Void Transfer(const Char* name, Void* data, UInt size) override
+        {
+            Level();
+            Expected(name);
+            Expected(": ");
+            stream->Read(data, size);
+            Expected("\n");
+        }
+
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
+        {
+            Level();
             level++;
-            ReadExpected("{\n");
-            base::TransferPointer(transferable);
-            ReadExpected("},\n");
+            Expected(name);
+            Expected(":\n");
+            base::TransferPointer(name, transferable);
             level--;
         }
 
@@ -93,17 +204,26 @@ namespace Core
             base::Reset(stream, dependancySolver, crateModule);
         }
 
-        Void ReadLevel()
+        /*virtual Void ReadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex) override
+        {
+            Expected(crate->locals[localIndex].transfererId.data);
+            Expected(": \n");
+            level++;
+            base::ReadLocalResource(context, crate, localIndex);
+            level--;
+        }*/
+
+        Void Level()
         {
             for (UInt16 i = 0; i < level; i++)
-                ReadExpected("    ");
+                Expected("    ");
         }
 
-        Void ReadExpected(const Char* value)
+        Void Expected(const Char* value)
         {
-            Char temp[20];
+            Char temp[128];
             auto size = strlen(value);
-            base::Transfer(temp, size);
+            stream->Read(temp, size);
             ASSERT(memcmp(temp, value, size) == 0); // Check if it is expected text
         }
 

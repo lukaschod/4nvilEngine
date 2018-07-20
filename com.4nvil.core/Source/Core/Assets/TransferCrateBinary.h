@@ -17,14 +17,32 @@
 
 namespace Core
 {
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, ResourceDependancy& value)
+    {
+        TRANSFER(value.type);
+        TRANSFER(value.index);
+    }
+
     class TransferCrateBinaryWritter : public ITransfer
     {
     public:
-        virtual Void Transfer(Void* data, UInt size) override { stream->Write(data, size); }
-        virtual Void TransferPointer(Transferable*& transferable) override
+        BASE_IS(ITransfer);
+
+        virtual Void Transfer(const Char* name, Transferable* value) override { value->Transfer(this); }
+        virtual Void Transfer(const Char* name, Guid* value) override { stream->Write(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, UInt64* value) override { stream->Write(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, UInt32* value) override { stream->Write(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, Char* value) override
+        { 
+            UInt size = strlen(value);
+            stream->Write(&size, sizeof(size));
+            stream->Write(value, size);
+        }
+        virtual Void Transfer(const Char* name, Void* data, UInt size) override { stream->Write(data, size); }
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
         {
             auto& resource = currentResource->dependencies[currentDependancyIndex++];
-            Transfer(&resource, sizeof(resource));
+            TransferValue(this, name, resource);
         }
         virtual Bool IsWritting() const override { return true; }
         virtual Char* GetName() const { return "binary.1"; }
@@ -34,7 +52,7 @@ namespace Core
             this->stream = stream;
         }
 
-        Void WriteLocalResource(Crate* crate, UInt localIndex)
+        virtual Void WriteLocalResource(Crate* crate, UInt localIndex)
         {
             this->stream = stream;
             currentResource = &crate->locals[localIndex];
@@ -43,10 +61,8 @@ namespace Core
 
             auto transferable = const_cast<Transferable*>(currentResource->cachedTransferable);
             ASSERT(transferable != nullptr);
-            transferable->Transfer(this);
+            Transfer(transferable->GetTransfererId().data, transferable);
         }
-
-        
 
     protected:
         IO::Stream* stream;
@@ -57,11 +73,23 @@ namespace Core
     class TransferCrateBinaryReader : public ITransfer
     {
     public:
-        virtual Void Transfer(Void* data, UInt size) override { stream->Read(data, size); }
-        virtual Void TransferPointer(Transferable*& transferable) override
+        BASE_IS(ITransfer);
+
+        virtual Void Transfer(const Char* name, Transferable* value) override { value->Transfer(this); }
+        virtual Void Transfer(const Char* name, Guid* value) override { stream->Read(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, UInt64* value) override { stream->Read(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, UInt32* value) override { stream->Read(value, sizeof(value)); }
+        virtual Void Transfer(const Char* name, Char* value) override
+        {
+            UInt size;
+            stream->Read(&size, sizeof(size));
+            stream->Read(value, size);
+        }
+        virtual Void Transfer(const Char* name, Void* data, UInt size) override { stream->Read(data, size); }
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
         {
             ResourceDependancy resource;
-            Transfer(&resource, sizeof(resource));
+            TransferValue(this, name, resource);
 
             // Store dependancy, we will resolve it later on, once all the transferables are loaded
             dependancySolver->Add(cachedCrate, (const Transferable*&) transferable, resource);
@@ -76,7 +104,7 @@ namespace Core
             this->crateModule = crateModule;
         }
 
-        Void ReadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex)
+        virtual Void ReadLocalResource(const ExecutionContext& context, Crate* crate, UInt localIndex)
         {
             cachedCrate = crate;
             auto& resource = cachedCrate->locals[localIndex];
@@ -91,7 +119,7 @@ namespace Core
 
             // Transfer its data
             stream->SetPosition(resource.offset);
-            transferable->Transfer(this);
+            Transfer(transferable->GetTransfererId().data, transferable);
 
             // Issue the create request
             transferer->RecCreateTransferable(context, transferable);

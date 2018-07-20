@@ -21,33 +21,27 @@ using namespace Core::IO;
 
 namespace Core
 {
-    template<> inline Void TransferValue(ITransfer* transfer, ResourceExtern& value)
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, ResourceExtern& value)
     {
         TRANSFER(value.id);
         TRANSFER(value.guid);
         TRANSFER(value.globalIndex);
     }
 
-    template<> inline Void TransferValue(ITransfer* transfer, ResourceDependancy& value)
-    {
-        TRANSFER(value.type);
-        TRANSFER(value.index);
-    }
-
-    template<> inline Void TransferValue(ITransfer* transfer, ResourceLocal& value)
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, ResourceLocal& value)
     {
         TRANSFER(value.transfererId);
-        TRANSFER(value.offset);
+        transfer->Transfer("offset", &value.offset, sizeof(value.offset));
         TRANSFER(value.dependencies);
     }
 
-    template<> inline Void TransferValue(ITransfer* transfer, ResourceGlobal& value)
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, ResourceGlobal& value)
     {
         TRANSFER(value.id);
         TRANSFER(value.localIndex);
     }
 
-    template<> inline Void TransferValue(ITransfer* transfer, Crate*& value)
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, Crate*& value)
     {
         TRANSFER(value->guid);
         TRANSFER(value->externs);
@@ -123,20 +117,23 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
 
         DESERIALIZE_METHOD_ARG2_START(Save, const Directory, directory, Crate*, crate);
         crate->directory = directory;
-        crate->guid = Guid::GetUnique();
+        crate->guid = Guid::Generate();
         Save(crate);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG1_START(Load, const Directory, directory);
-        auto crate = const_cast<Crate*>(AllocateCrate()); // TODO: make it re-usable
-        crate->directory = directory;
-        if (Load(crate))
+        if (FindCrate(directory) == nullptr)
         {
-            crates.push_back(crate);
-        }
-        else
-        {
-            delete crate; // TODO
+            auto crate = const_cast<Crate*>(AllocateCrate()); // TODO: make it re-usable
+            crate->directory = directory;
+            if (Load(crate))
+            {
+                crates.push_back(crate);
+            }
+            else
+            {
+                delete crate; // TODO
+            }
         }
         DESERIALIZE_METHOD_END;
 
@@ -210,6 +207,14 @@ const Crate* CrateModule::FindCrate(const Guid& guid) const
     return nullptr;
 }
 
+const Crate* CrateModule::FindCrate(const Directory& directory) const
+{
+    for (auto crate : crates)
+        if (crate->directory == directory)
+            return crate;
+    return nullptr;
+}
+
 const TransfererModule* CrateModule::FindTransferer(const TransfererId& id) const
 {
     for (auto transferer : transferers)
@@ -228,11 +233,13 @@ Void CrateModule::Save(Crate* crate)
     transfer->Reset(&stream);
 
     ASSERT(strlen(transfer->GetName()) < 128);
-    stream.WriteFmt("\#crate\.%s\n", transfer->GetName());
+    stream.WriteFmt("#crate.%s\n", transfer->GetName());
     auto headerOffset = stream.GetPosition();
 
     // Write fake one, just to offset to correct point
-    TransferValue(transfer, crate);
+    TransferValue(transfer, "header", crate);
+
+    auto localResourcesOffset = stream.GetPosition();
 
     auto& resources = crate->locals;
     for (UInt i = 0; i < resources.size(); i++)
@@ -240,9 +247,18 @@ Void CrateModule::Save(Crate* crate)
 
     // As now all offset values are correct, we write correct header now
     stream.SetPosition(headerOffset);
-    TransferValue(transfer, crate);
+    TransferValue(transfer, "header", crate);
+
+    ASSERT(localResourcesOffset == stream.GetPosition());
 
     stream.Close();
+
+    // Assign to all global resources their ids
+    for (auto& global : crate->globals)
+    {
+        auto transferable = const_cast<Transferable*>(crate->locals[global.localIndex].cachedTransferable);
+        transferable->id = &global.id;
+    }
 }
 
 Bool CrateModule::Load(Crate* crate)
@@ -251,7 +267,7 @@ Bool CrateModule::Load(Crate* crate)
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
 
     Char name[128];
-    stream.ReadFmt("\#crate\.%128s\n", name);
+    stream.ReadFmt("#crate.%128s\n", name);
 
     auto transfer = TryGetReader(name);
     if (transfer == nullptr)
@@ -261,7 +277,7 @@ Bool CrateModule::Load(Crate* crate)
     }
     transfer->Reset(&stream, nullptr, this);
 
-    TransferValue(transfer, crate);
+    TransferValue(transfer, "header", crate);
 
     stream.Close();
 
@@ -311,7 +327,7 @@ Void CrateModule::LoadResource(const ExecutionContext& context, Crate* crate, UI
 
             // Check which transfer was used to write
             Char name[20];
-            cachedStream.ReadFmt("\#crate\.%s\n", name);
+            cachedStream.ReadFmt("#crate.%s\n", name);
 
             cachedTransfer = TryGetReader(name);
             CHECK(cachedTransfer != nullptr);
@@ -335,15 +351,13 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     {
     public:
         TransferCrateHeader(Crate* crate, const List<const Crate*>& externs) : crate(crate), externs(externs), currentLocalResourceIndex(-1) {}
-        virtual Void Transfer(Void* data, UInt size) override { }
-        virtual Void TransferPointer(Transferable*& transferable) override
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
         {
             if (transferable == nullptr)
                 return;
 
             if (AddExternResource(transferable))
             {
-                transferable->Transfer(this);
                 return;
             }
             if (AddLocalResource(transferable))
@@ -383,8 +397,9 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
 
                     ResourceExtern resource;
                     resource.id = *id;
-                    resource.cachedCrate = external;
+                    resource.guid = external->guid;
                     resource.globalIndex = globalTransferable - external->globals.begin();
+                    resource.cachedCrate = external;
                     externResources.push_back(resource);
 
                     return true;
@@ -429,7 +444,7 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     };
 
     TransferCrateHeader header(crate, crate->externalCrates);
-    header.TransferPointer(const_cast<Transferable*&>(transferable)); // We can remove here safely as there will be no write
+    header.TransferPointer("", const_cast<Transferable*&>(transferable)); // We can remove here safely as there will be no write
 
     // Add main transferable as global
     if (FindGlobal(crate->globals, transferable) == crate->globals.end())

@@ -23,7 +23,7 @@ Void Storage::Transfer(ITransfer* transfer)
     TRANSFER(size);
     if (transfer->IsReading())
         data = new UInt8[size];
-    transfer->Transfer(data, size);
+    transfer->Transfer("data", data, size);
 }
 
 Void StorageModule::SetupExecuteOrder(ModuleManager* moduleManager)

@@ -79,5 +79,3 @@ Void Directory::GetFiles(const Directory& path, List<Directory>& out)
         }
     }
 }
-
-Void Directory::RecalculateSize() { size = strlen(data); }

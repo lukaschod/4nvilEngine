@@ -55,6 +55,8 @@ namespace Core
         inline Bool operator==(const Directory& lhs) const { return strcmp(data, lhs.data) == 0; }
         inline Bool operator!=(const Directory& lhs) const { return strcmp(data, lhs.data) != 0; }
 
+        inline Void RecalculateSize() { size = strlen(data); }
+
         // Returns path to current executable location
         static const Directory& GetExecutablePath();
 
@@ -66,7 +68,6 @@ namespace Core
 
     private:
         inline Directory(const wchar_t* directory);
-        inline Void RecalculateSize();
 
     private:
         Char8 data[260];

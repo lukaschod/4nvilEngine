@@ -980,20 +980,13 @@ float4 FragMain(VertData i) : SV_TARGET
 
         // Create our hello world triangle
         auto testShader = CreateShader(context);
-        auto mesh = CreateMesh(context);
-        helloWorldTriangle = CreateQuad(context, currentScene, testShader, mesh, Vector3f());
+        mesh = CreateMesh(context);
+        helloWorldTriangle = CreateQuad(context, currentScene, testShader, mesh, Vector3f(0, 0, 0));
     }
 
     virtual Void Execute(const ExecutionContext& context) override
     {
         if (initialized && initalizedCrate && !loadedTriangle)
-        {
-            auto id = TransferableId();
-            id.directory = "HelloWorldTriangle";
-            crateModule->RecLoadResource(context, id);
-        }
-
-        if (initialized && !initalizedCrate)
         {
             auto directory = Directory::GetExecutablePath();
             directory.Append("TestPackage/");
@@ -1001,7 +994,22 @@ float4 FragMain(VertData i) : SV_TARGET
             packageModule->RecCreatePackage(context, package, directory);
             packageModule->RecSyncPackage(context, package);
 
+            auto id = TransferableId();
+            id.directory = "HelloWorldTriangle";
+            crateModule->RecLoadResource(context, id);
+        }
+
+        if (initialized && !initalizedCrate)
+        {
+            auto crate2 = crateModule->AllocateCrate();
+            crateModule->RecAddTransferable(context, crate2, Directory("Meshui"), mesh);
+
+            auto crateDirectory2 = Directory::GetExecutablePath();
+            crateDirectory2.Append("TestPackage/Meshui.crate");
+            crateModule->RecSave(context, crateDirectory2, crate2);
+
             auto crate = crateModule->AllocateCrate();
+            crateModule->RecLink(context, crate, crate2);
             crateModule->RecAddTransferable(context, crate, Directory("HelloWorldTriangle"), helloWorldTriangle);
 
             auto crateDirectory = Directory::GetExecutablePath();
@@ -1034,6 +1042,7 @@ float4 FragMain(VertData i) : SV_TARGET
     CrateModule* crateModule;
     Bool initialized;
 
+    const Mesh* mesh;
     const Unit* helloWorldTriangle;
     Bool initalizedCrate = false;
     Bool loadedTriangle = false;

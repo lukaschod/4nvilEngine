@@ -13,10 +13,11 @@
 
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/IO/Directory.hpp>
+#include <Core/Tools/Guid.hpp>
 #include <Core/Tools/IO/Stream.hpp>
 #include <Core/Foundation/PipeModule.hpp>
 
-#define TRANSFER(Value) TransferValue(transfer, Value);
+#define TRANSFER(Value) TransferValue(transfer, #Value, Value);
 
 // Special macro used for automatic declarations of transfering structure
 // Note: Add it inside the structure
@@ -40,15 +41,16 @@ namespace Core
     class ITransfer
     {
     public:
-        virtual Void Transfer(const Char* format, ...) {}
-        virtual Void Transfer(Void* data, UInt size) pure;
-        virtual Void TransferPointer(Transferable*& transferable) pure;
+        virtual Void Transfer(const Char* name, Transferable* value) {}
+        virtual Void Transfer(const Char* name, Guid* value) {}
+        virtual Void Transfer(const Char* name, UInt64* value) {}
+        virtual Void Transfer(const Char* name, UInt32* value) {}
+        virtual Void Transfer(const Char* name, Char* value) {}
+        virtual Void Transfer(const Char* name, Void* data, UInt size) {}
+        virtual Void TransferPointer(const Char* name, Transferable*& transferable) pure;
         virtual Bool IsReading() const { return false; }
         virtual Bool IsWritting() const { return false; }
     };
-
-    template<class T> inline Void TransferValue(ITransfer* transfer, T& value) { transfer->Transfer(&value, sizeof(value)); }
-    template<class T> inline Void TransferValue(ITransfer* transfer, T*& value) { transfer->TransferPointer((Transferable*&) value); }
 
     struct TransferableId
     {
@@ -64,6 +66,7 @@ namespace Core
         TransfererId(const Char* name) { strcpy(data, name); }
         Bool operator==(const TransfererId& rhs) const { return strcmp(data, rhs.data) == 0; }
         Bool operator!=(const TransfererId& rhs) const { return strcmp(data, rhs.data) != 0; }
+        UInt GetCapacity() const { return 20; }
 
         Char data[20];
     };
@@ -83,4 +86,37 @@ namespace Core
         virtual Void RecDestroyTransferable(const ExecutionContext& context, const Transferable* target) pure;
         virtual TransfererId& GetTransfererId() const pure;
     };
+}
+
+namespace Core
+{
+    template<class T> inline Void TransferValue(ITransfer* transfer, const Char* name, T& value) { transfer->Transfer(name, &value, sizeof(value)); }
+    template<class T> inline Void TransferValue(ITransfer* transfer, const Char* name, T*& value) { transfer->TransferPointer(name, (Transferable*&) value); }
+
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, UInt64& value) { transfer->Transfer(name, &value); }
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, UInt32& value) { transfer->Transfer(name, &value); }
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, Guid& value) { transfer->Transfer(name, &value); }
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, Directory& value)
+    {
+        transfer->Transfer(name, (Char*) value.ToCString());
+
+        if (transfer->IsReading())
+            value.RecalculateSize();
+    }
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, TransferableId& value) { TransferValue(transfer, name, value.directory); }
+    template<> inline Void TransferValue(ITransfer* transfer, const Char* name, TransfererId& value) { transfer->Transfer(name, value.data); }
+
+    template<class T> inline Void TransferValue(ITransfer* transfer, const Char* name, List<T>& value)
+    {
+        auto size = value.size();
+        TransferValue(transfer, "size", size);
+
+        // Reserve data
+        // TODO: We can push optimization with removed constructor
+        if (transfer->IsReading())
+            value.resize(size);
+
+        for (UInt i = 0; i < size; i++)
+            TransferValue(transfer, "item", value[i]);
+    }
 }

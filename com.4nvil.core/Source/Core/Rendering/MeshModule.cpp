@@ -18,7 +18,7 @@ using namespace Core;
 using namespace Core::Math;
 using namespace Core::Graphics;
 
-template<> inline Void Core::TransferValue(ITransfer* transfer, Graphics::VertexLayout*& vertexLayout)
+template<> inline Void Core::TransferValue(ITransfer* transfer, const Char* name, Graphics::VertexLayout*& vertexLayout)
 {
     TRANSFER(vertexLayout->attributes);
     TRANSFER(vertexLayout->stride);

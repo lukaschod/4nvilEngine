@@ -21,11 +21,13 @@ namespace Core::IO
     public:
         virtual Void Close() pure;
         virtual Void Read(Void* data, UInt size) pure;
+        virtual Void ReadString(Char* value, UInt capacity) { NOT_IMPLEMENTED(); };
+        virtual Void Read(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
         virtual Void ReadFmt(const Char* format, ...) { NOT_IMPLEMENTED(); };
-        virtual Void ReadFmt(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
         virtual Void Write(const Void* data, UInt size) pure;
-        virtual Void WriteFmt(const Char* format, ...) { NOT_IMPLEMENTED(); };
+        virtual Void WriteString(const Char* value) { NOT_IMPLEMENTED(); };
         virtual Void Write(const Char* format, va_list arguments) { NOT_IMPLEMENTED(); };
+        virtual Void WriteFmt(const Char* format, ...) { NOT_IMPLEMENTED(); };
         virtual Void SetPosition(UInt position) { NOT_IMPLEMENTED(); }
         virtual UInt GetPosition() const { return 0; NOT_IMPLEMENTED(); }
     };

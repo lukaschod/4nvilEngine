@@ -87,6 +87,7 @@ namespace Core
 
         const TransfererModule* FindTransferer(const TransfererId& id) const;
         const Crate* FindCrate(const Guid& guid) const;
+        const Crate* FindCrate(const Directory& directory) const;
 
     public:
         // Adds include to the crate that will be used for resolving already serialized transferables

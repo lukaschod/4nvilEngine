@@ -14,7 +14,23 @@
 
 using namespace Core;
 
-Guid Guid::GetUnique()
+Void Guid::ToString(Char* value)
+{
+    sprintf(value, "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+        data1, data2, data3,
+        data4[0], data4[1], data4[2], data4[3],
+        data4[4], data4[5], data4[6], data4[7]);
+}
+
+Bool Guid::TryParse(const Char* value, Guid& guid)
+{
+    return sscanf(value, "%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+        &guid.data1, &guid.data2, &guid.data3,
+        &guid.data4[0], &guid.data4[1], &guid.data4[2], &guid.data4[3],
+        &guid.data4[4], &guid.data4[5], &guid.data4[6], &guid.data4[7]) == 11;
+}
+
+Guid Guid::Generate()
 {
     Guid guid;
     ASSERT_SUCCEEDED(CoCreateGuid((GUID*)&guid));
