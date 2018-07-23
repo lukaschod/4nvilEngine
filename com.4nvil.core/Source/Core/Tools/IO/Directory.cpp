@@ -30,7 +30,7 @@ Directory::Directory(const Char8* path)
 Bool Directory::Append(const Char8* value)
 {
     // Check if it will not exceed the capacity
-    auto sizeOfValue = strlen(value);
+    auto sizeOfValue = Character::Length(value);
     if (GetSize() + sizeOfValue > GetCapacity())
         return false;
 

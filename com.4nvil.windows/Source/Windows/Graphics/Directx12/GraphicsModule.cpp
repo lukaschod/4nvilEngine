@@ -9,6 +9,7 @@
 *
 */
 
+#include <Core/Tools/Character.hpp>
 #include <Windows/Graphics/Directx12/GraphicsModule.hpp>
 #include <Windows/Graphics/Directx12/GraphicsPlannerModule.hpp>
 #include <Windows/Graphics/Directx12/GraphicsExecutorModule.hpp>
@@ -268,7 +269,7 @@ Void GraphicsModule::SetBuffer(ShaderArguments* target, const Char* name, const 
             for (UInt j = 0; j < rootParameter.supParameters.size(); j++)
             {
                 auto& rootSubParameter = rootParameter.supParameters[j];
-                if (strcmp(rootSubParameter.name, name) != 0)
+                if (Character::NotEquals(rootSubParameter.name, name))
                     continue;
 
                 if (rootArguments[i].subData[j] == (UInt64) buffer)
@@ -294,7 +295,7 @@ Void GraphicsModule::SetBuffer(ShaderArguments* target, const Char* name, const 
         case RootParamterType::ConstantBuffer:
         {
             auto& rootSubParameter = rootParameter.supParameters[0];
-            if (strcmp(rootSubParameter.name, name) != 0)
+            if (Character::NotEquals(rootSubParameter.name, name))
                 continue;
 
             // TODO: Check if we can really cache the gpu virtual address safely
@@ -324,7 +325,7 @@ Void GraphicsModule::SetTexture(ShaderArguments* target, const Char* name, const
             {
                 // Find argument that we want to change
                 auto& rootSubParameter = rootParameter.supParameters[j];
-                if (strcmp(rootSubParameter.name, name) != 0)
+                if (Character::NotEquals(rootSubParameter.name, name))
                     continue;
 
                 // Don't update if the argument didn't changed
@@ -386,7 +387,7 @@ Void GraphicsModule::SetFilter(ShaderArguments* target, const Char* name, const 
             {
                 // Find argument that we want to change
                 auto& rootSubParameter = rootParameter.supParameters[j];
-                if (strcmp(rootSubParameter.name, name) != 0)
+                if (Character::NotEquals(rootSubParameter.name, name))
                     continue;
 
                 // Don't update if the argument didn't changed
@@ -1070,7 +1071,7 @@ float4 FragMain(VertData i) : SV_TARGET
     auto shaderDesc = new ShaderPipelineDesc();
     shaderDesc->name = "Test";
     shaderDesc->source = (const UInt8*) source;
-    shaderDesc->sourceSize = strlen(source);
+    shaderDesc->sourceSize = Character::Length(source);
     shaderDesc->states.zTest = ZTest::LEqual;
     shaderDesc->states.zWrite = ZWrite::On;
     shaderDesc->varation = 0;

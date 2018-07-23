@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Core/Tools/Common.hpp>
+#include <Core/Tools/Character.hpp>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstdarg>
@@ -37,7 +39,7 @@ namespace Core
         inline Void Append(const Char* value)
         {
             ASSERT(current < end);
-            auto size = strlen(value);
+            auto size = Character::Length(value);
             memcpy(current, value, size);
             current += size;
         }

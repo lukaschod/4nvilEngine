@@ -9,6 +9,7 @@
 *
 */
 
+#include <Core/Tools/Character.hpp>
 #include <Core/Tools/IO/FileStream.hpp>
 #include <Core/Assets/CrateModule.hpp>
 #include <Core/Assets/TransferCrateBinary.h>
@@ -167,13 +168,13 @@ Void CrateModule::LoadResource(const ExecutionContext& context, const Transferab
 
 TransferCrateBinaryWritter* CrateModule::TryGetWritter(const Char* name)
 {
-    if (strcmp(name, "binary.1") == 0)
+    if (Character::Equals(name, "binary.1"))
     {
         static TransferCrateBinaryWritter transfer;
         return &transfer;
     }
 
-    if (strcmp(name, "json.1") == 0)
+    if (Character::Equals(name, "json.1"))
     {
         static TransferCrateJSONWritter transfer;
         return &transfer;
@@ -184,13 +185,13 @@ TransferCrateBinaryWritter* CrateModule::TryGetWritter(const Char* name)
 
 TransferCrateBinaryReader* CrateModule::TryGetReader(const Char* name)
 {
-    if (strcmp(name, "binary.1") == 0)
+    if (Character::Equals(name, "binary.1"))
     {
         static TransferCrateBinaryReader transfer;
         return &transfer;
     }
 
-    if (strcmp(name, "json.1") == 0)
+    if (Character::Equals(name, "json.1"))
     {
         static TransferCrateJSONReader transfer;
         return &transfer;
@@ -232,7 +233,7 @@ Void CrateModule::Save(Crate* crate)
     CHECK(transfer != nullptr);
     transfer->Reset(&stream);
 
-    ASSERT(strlen(transfer->GetName()) < 128);
+    ASSERT(Character::Length(transfer->GetName()) < 128);
     stream.WriteFmt("#crate.%s\n", transfer->GetName());
     auto headerOffset = stream.GetPosition();
 

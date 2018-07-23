@@ -64,7 +64,7 @@ namespace Core
         {
             Level();
             Expected(name);
-            UInt size = strlen(value);
+            UInt size = Character::Length(value);
             stream->WriteFmt(": [%lld]\"", size);
             stream->Write(value, size);
             Expected("\"\n");
@@ -115,7 +115,7 @@ namespace Core
 
         Void Expected(const Char* value)
         {
-            stream->Write((Void*) value, strlen(value));
+            stream->Write((Void*) value, Character::Length(value));
         }
 
     private:
@@ -222,7 +222,7 @@ namespace Core
         Void Expected(const Char* value)
         {
             Char temp[128];
-            auto size = strlen(value);
+            auto size = Character::Length(value);
             stream->Read(temp, size);
             ASSERT(memcmp(temp, value, size) == 0); // Check if it is expected text
         }

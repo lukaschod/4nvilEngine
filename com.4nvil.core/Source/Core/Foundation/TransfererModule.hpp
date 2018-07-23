@@ -12,6 +12,7 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
+#include <Core/Tools/Character.hpp>
 #include <Core/Tools/IO/Directory.hpp>
 #include <Core/Tools/Guid.hpp>
 #include <Core/Tools/IO/Stream.hpp>
@@ -64,8 +65,8 @@ namespace Core
     {
         TransfererId() { *data = 0; }
         TransfererId(const Char* name) { strcpy(data, name); }
-        Bool operator==(const TransfererId& rhs) const { return strcmp(data, rhs.data) == 0; }
-        Bool operator!=(const TransfererId& rhs) const { return strcmp(data, rhs.data) != 0; }
+        Bool operator==(const TransfererId& rhs) const { return Character::Equals(data, rhs.data); }
+        Bool operator!=(const TransfererId& rhs) const { return Character::NotEquals(data, rhs.data); }
         UInt GetCapacity() const { return 20; }
 
         Char data[20];

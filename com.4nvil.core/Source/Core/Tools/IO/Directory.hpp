@@ -12,7 +12,7 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
-#include <Core/Tools/String.hpp>
+#include <Core/Tools/Character.hpp>
 #include <Core/Tools/Collections/List.hpp>
 
 namespace Core
@@ -23,8 +23,8 @@ namespace Core
         DirectoryExtension() { data = nullptr; }
         DirectoryExtension(const Char8* extension) { data = extension; }
 
-        Bool operator==(const DirectoryExtension& lhs) const { return strcmp(data, lhs.data) == 0; }
-        Bool operator!=(const DirectoryExtension& lhs) const { return strcmp(data, lhs.data) != 0; }
+        Bool operator==(const DirectoryExtension& lhs) const { return Character::Equals(data, lhs.data); }
+        Bool operator!=(const DirectoryExtension& lhs) const { return Character::NotEquals(data, lhs.data); }
 
     private:
         const Char* data;
@@ -52,10 +52,10 @@ namespace Core
 
         inline const Char* ToCString() const { return data; }
 
-        inline Bool operator==(const Directory& lhs) const { return strcmp(data, lhs.data) == 0; }
-        inline Bool operator!=(const Directory& lhs) const { return strcmp(data, lhs.data) != 0; }
+        inline Bool operator==(const Directory& lhs) const { return Character::Equals(data, lhs.data); }
+        inline Bool operator!=(const Directory& lhs) const { return Character::NotEquals(data, lhs.data); }
 
-        inline Void RecalculateSize() { size = strlen(data); }
+        inline Void RecalculateSize() { size = Character::Length(data); }
 
         // Returns path to current executable location
         static const Directory& GetExecutablePath();

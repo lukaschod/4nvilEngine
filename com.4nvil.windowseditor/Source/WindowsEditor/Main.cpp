@@ -470,7 +470,7 @@ float4 FragMain(VertData i) : SV_TARGET
         auto shaderDesc = new ShaderPipelineDesc();
         shaderDesc->name = "Test";
         shaderDesc->source = (const UInt8*) source;
-        shaderDesc->sourceSize = strlen(source);
+        shaderDesc->sourceSize = Character::Length(source);
         shaderDesc->states.zTest = ZTest::LEqual;
         shaderDesc->states.zWrite = ZWrite::On;
         shaderDesc->varation = 0;
@@ -673,7 +673,7 @@ float4 FragMain(VertData i) : SV_TARGET
         auto shaderDesc = new ShaderPipelineDesc();
         shaderDesc->name = "Test";
         shaderDesc->source = (const UInt8*) source;
-        shaderDesc->sourceSize = strlen(source);
+        shaderDesc->sourceSize = Character::Length(source);
         shaderDesc->states.zTest = ZTest::LEqual;
         shaderDesc->states.zWrite = ZWrite::On;
         shaderDesc->varation = 0;
@@ -890,7 +890,7 @@ float4 FragMain(VertData i) : SV_TARGET
         auto shaderDesc = new ShaderPipelineDesc();
         shaderDesc->name = "Test";
         shaderDesc->source = (const UInt8*) source;
-        shaderDesc->sourceSize = strlen(source);
+        shaderDesc->sourceSize = Character::Length(source);
         shaderDesc->states.zTest = ZTest::LEqual;
         shaderDesc->states.zWrite = ZWrite::On;
         shaderDesc->varation = 0;

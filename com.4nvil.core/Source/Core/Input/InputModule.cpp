@@ -9,6 +9,7 @@
 *
 */
 
+#include <Core/Tools/Character.hpp>
 #include <Core/Input/InputModule.hpp>
 
 using namespace Core;
@@ -23,7 +24,7 @@ Void InputModule::Execute(const ExecutionContext& context)
 const InputDevice* InputModule::TryFindInputDevice(const Char* typeName) const
 {
     for (auto device : devices)
-        if (strcmp(device->desc.typeName, typeName) == 0)
+        if (Character::Equals(device->desc.typeName, typeName))
             return device;
     return nullptr;
 }
