@@ -190,7 +190,7 @@ Void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
     node->concunrency = 0;
 
     auto jobSize = node->module->GetExecutionSize();
-    if (jobSize == 0)
+    if (jobSize == 0 || node->module->IsSplittable())
     {
         ModuleJob childJob;
         childJob.module = node->module;
@@ -202,10 +202,11 @@ Void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
         return;
     }
 
+    auto splitSize = node->module->GetSplitExecutionSize();
     auto offset = 0;
     while (jobSize != 0)
     {
-        auto split = node->module->GetSplitExecutionSize();
+        auto split = splitSize;
         split = Math::Clamp(split, (UInt) 1, jobSize);
 
         ModuleJob childJob;

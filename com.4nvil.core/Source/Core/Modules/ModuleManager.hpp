@@ -49,14 +49,15 @@ namespace Core
         // Find module with specified type
         template<class T> T* GetModule();
 
-        // Find module with specified type
-        Module* GetModule(const std::type_info& type);
-
         // Find modules with specified type
         template<class T> Void GetModules(List<T*>& out);
 
         inline const List<Module*>& GetModules() const { return modules; }
         inline UInt32 GetWorkerCount() const { return executor->GetWorkerCount(); }
+
+    public:
+        //Void RecAddModule(const ExecutionContext& context, Module* module);
+        //Void RecStop(const ExecutionContext& context);
 
     private:
         List<Module*> modules; // Modules contained by the manager

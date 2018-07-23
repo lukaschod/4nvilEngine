@@ -167,6 +167,7 @@ public:
         agents = agentModule->GetAgents();
     }
 
+    virtual Bool IsSplittable() const override { return true; }
     virtual UInt GetExecutionSize() override { return agents->size(); }
     virtual UInt GetSplitExecutionSize() override { return Math::SplitJobs(GetExecutionSize(), 4, 10); }
 
@@ -1088,7 +1089,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     moduleManager->AddModule(new Windows::ViewModule(hInst));
     moduleManager->AddModule(new Windows::Directx12::GraphicsModule());
 
-   /* // Test project 1
+    /*// Test project 1
     moduleManager->AddModule(new TestModule());
     moduleManager->AddModule(new FpsLoggerModule());
     moduleManager->AddModule(new ShutdownModule(moduleManager));

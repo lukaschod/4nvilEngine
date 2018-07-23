@@ -29,7 +29,7 @@ Void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, B
 {
     ASSERT(pipeMap.find(module) == pipeMap.end());
     // Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
-    auto pipe = new Pipe(module, moduleManager->GetWorkerCount());
+    auto pipe = new Pipe(module, module->IsSplittable() ? 1 : moduleManager->GetWorkerCount());
     pipes.push_back(pipe);
     pipeMap[module] = pipe;
 }
@@ -64,7 +64,7 @@ CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
     // If cache miss happens, we should find the Pipe corresponding to the executing Module
     auto pipe = pipeMap.find(context.executingModule);
     ASSERT(pipe != pipeMap.end());
-    auto buffer = &pipe->second->buffers[context.workerIndex];
+    auto buffer = &pipe->second->buffers[context.executingModule->IsSplittable() ? 0 : context.workerIndex];
 
     // Update cache with new executing module
     cachedCmdBuffer.source = context.executingModule;

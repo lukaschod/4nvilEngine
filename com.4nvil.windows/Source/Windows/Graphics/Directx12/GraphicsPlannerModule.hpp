@@ -43,6 +43,7 @@ namespace Windows::Directx12
         GraphicsPlannerModule(ID3D12Device* device);
         virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
         virtual Void Execute(const ExecutionContext& context) override;
+        virtual Bool IsSplittable() const override { return true; }
         virtual UInt GetExecutionSize() override;
         virtual UInt GetSplitExecutionSize() override;
         virtual const Char* GetName() { return "GraphicsPlannerModule"; }

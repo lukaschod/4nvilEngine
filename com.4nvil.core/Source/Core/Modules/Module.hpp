@@ -46,8 +46,9 @@ namespace Core
         // This is where each Module job will be done, context contains additional information about execution
         virtual Void Execute(const ExecutionContext& context) {}
 
+        virtual Bool IsSplittable() const { return true; }
         virtual UInt GetExecutionSize() { return 1; }
-        virtual UInt GetSplitExecutionSize() { return 1; }
+        virtual UInt GetSplitExecutionSize() { return 0; }
         virtual const Char* GetName() const { return "Unamed"; }
         inline const List<Module*>& GetDependencies() const { return dependencies; }
 
