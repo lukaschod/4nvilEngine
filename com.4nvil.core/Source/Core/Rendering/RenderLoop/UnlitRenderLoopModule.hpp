@@ -36,14 +36,14 @@ namespace Core
     public:
         BASE_IS(IRenderLoopModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual Void Execute(const ExecutionContext& context);
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context);
 
     public:
-        virtual Void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) override;
+        CORE_API virtual Void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) override;
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
         Void Render(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget);
 
     private:

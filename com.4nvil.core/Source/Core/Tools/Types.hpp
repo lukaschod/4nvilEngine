@@ -11,6 +11,16 @@
 
 #pragma once
 
+#ifndef DISABLED_CORE
+#ifdef ENABLED_CORE
+#define CORE_API __declspec(dllexport)
+#else
+#define CORE_API __declspec(dllimport)
+#endif
+#else
+#define CORE_API
+#endif
+
 typedef signed char         Int8;
 typedef short               Int16;
 typedef int                 Int32;

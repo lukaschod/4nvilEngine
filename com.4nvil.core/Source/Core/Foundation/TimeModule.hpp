@@ -22,9 +22,8 @@ namespace Core
     public:
         BASE_IS(ComputeModule);
 
-        TimeModule();
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
         inline UInt64 GetDeltaTimeMs() const { return deltaTimeMs; }
         inline Float GetDeltaTime() const { return deltaTime; }
 

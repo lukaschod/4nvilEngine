@@ -17,6 +17,21 @@ namespace Core
 {
     class Module;
 
+    struct ExecutionContext
+    {
+        // Index of worker in current execution
+        UInt32 workerIndex;
+
+        // Start of job offset index
+        UInt32 start;
+
+        // End of job offset index
+        UInt32 end;
+
+        // Module that is currently executed
+        Module* executingModule;
+    };
+
     class IModuleExecutor
     {
     public:

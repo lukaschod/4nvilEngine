@@ -34,25 +34,26 @@ namespace Core::IO
     class FileStream : public Stream
     {
     public:
-        FileStream();
-        ~FileStream();
+        CORE_API FileStream();
+        CORE_API ~FileStream();
 
-        virtual Void Close() override;
-        virtual Void Read(Void* data, UInt size) override;
-        virtual Void ReadString(Char* value, UInt capacity) override;
-        virtual Void ReadFmt(const Char* format, ...) override;
-        virtual Void Write(const Void* data, UInt size) override;
-        virtual Void WriteString(const Char* value) override;
-        virtual Void Write(const Char* format, va_list arguments) override;
-        virtual Void WriteFmt(const Char* format, ...) override;
-        virtual Void SetPosition(UInt position) override;
-        virtual UInt GetPosition() const override;
+        CORE_API virtual Void Close() override;
+        CORE_API virtual Void Read(Void* data, UInt size) override;
+        CORE_API virtual Void ReadString(Char* value, UInt capacity) override;
+        CORE_API virtual Void ReadFmt(const Char* format, ...) override;
+        CORE_API virtual Void Write(const Void* data, UInt size) override;
+        CORE_API virtual Void WriteString(const Char* value) override;
+        CORE_API virtual Void Write(const Char* format, va_list arguments) override;
+        CORE_API virtual Void WriteFmt(const Char* format, ...) override;
+        CORE_API virtual Void SetPosition(UInt position) override;
+        CORE_API virtual UInt GetPosition() const override;
 
-        Bool Open(const Char* path, FileMode mode, FileAccess access);
+        CORE_API Bool Open(const Char* path, FileMode mode, FileAccess access);
+
         inline Bool IsOpened() const { return isOpened; }
 
         // Forces all unwritten data to be written to the file
-        Void Flush();
+        CORE_API Void Flush();
 
     private:
         const Char* TryGetMode(FileMode mode, FileAccess access);

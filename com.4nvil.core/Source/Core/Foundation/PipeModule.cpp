@@ -16,20 +16,22 @@
 
 using namespace Core;
 
-PipeModule::PipeModule() : isPipesSorted(false) {}
-
 Void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     profilerModule = ExecuteAfter<ProfilerModule>(moduleManager);
     cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
     OnDependancyAdd(moduleManager, this, false);
+    isPipesSorted = false;
 }
 
 Void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore)
 {
-    ASSERT(pipeMap.find(module) == pipeMap.end());
+    // It is possible it might try to add duplicate
+    if (pipeMap.find(module) != pipeMap.end())
+        return;
+
     // Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
-    auto pipe = new Pipe(module, module->IsSplittable() ? 1 : moduleManager->GetWorkerCount());
+    auto pipe = new Pipe(module, module->IsSplittable() ? moduleManager->GetWorkerCount() : 1);
     pipes.push_back(pipe);
     pipeMap[module] = pipe;
 }
@@ -54,7 +56,7 @@ Void PipeModule::SortPipes()
     isPipesSorted = true;
 }
 
-CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
+/*CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
 {
     // As long as for the worker executing Module doesn't change, we can actaully cache Pipe for faster access
     auto& cachedCmdBuffer = cachedCmdBuffers[context.workerIndex];
@@ -71,7 +73,7 @@ CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)
     cachedCmdBuffer.currentBuffer = buffer;
 
     return buffer;
-}
+}*/
 
 Void PipeModule::Execute(const ExecutionContext& context)
 {
@@ -85,7 +87,6 @@ Void PipeModule::Execute(const ExecutionContext& context)
     {
         for (auto& buffer : pipe->buffers)
         {
-            // TODO: Investigate is it worth creating buffer to execute
             if (buffer.commandCount == 0)
                 continue;
 

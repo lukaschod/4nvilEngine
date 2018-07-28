@@ -14,8 +14,6 @@
 
 using namespace Core;
 
-TimeModule::TimeModule() {}
-
 Void TimeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);

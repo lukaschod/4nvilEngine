@@ -14,9 +14,11 @@
 
 using namespace Core;
 
-MouseModule::MouseModule() 
-    : device(nullptr)
+Void MouseModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
+    base::SetupExecuteOrder(moduleManager);
+    inputModule = ExecuteAfter<InputModule>(moduleManager);
+    device = nullptr;
 }
 
 Void MouseModule::Execute(const ExecutionContext& context)
@@ -67,10 +69,4 @@ Void MouseModule::Execute(const ExecutionContext& context)
             ERROR("Unknown input type");
         }
     }
-}
-
-Void MouseModule::SetupExecuteOrder(ModuleManager* moduleManager)
-{
-    base::SetupExecuteOrder(moduleManager);
-    inputModule = ExecuteAfter<InputModule>(moduleManager);
 }

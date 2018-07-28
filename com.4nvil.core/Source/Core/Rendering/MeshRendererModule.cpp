@@ -31,11 +31,6 @@ Void MeshRenderer::Transfer(ITransfer* transfer)
         created = false;
 }
 
-MeshRendererModule::MeshRendererModule()
-    : perAllRendererStorage(nullptr)
-{
-}
-
 Void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
@@ -46,6 +41,7 @@ Void MeshRendererModule::SetupExecuteOrder(ModuleManager* moduleManager)
     memoryModule = ExecuteAfter<MemoryModule>(moduleManager);
     memoryModule->SetAllocator(memoryLabelMeshRenderer, new FixedBlockHeap(sizeof(MeshRenderer)));
     ExecuteBefore<IGraphicsModule>(moduleManager);
+    perAllRendererStorage = nullptr;
 }
 
 Void MeshRendererModule::Execute(const ExecutionContext& context)
@@ -76,9 +72,6 @@ const MeshRenderer* MeshRendererModule::AllocateMeshRenderer()
     target->perMeshStorage = storageModule->AllocateStorage();
     return target;
 }
-
-const List<MeshRenderer*>& MeshRendererModule::GetMeshRenderers() const { return meshRenderers; }
-const Storage* MeshRendererModule::GetPerAllRendererStorage() const { return perAllRendererStorage; }
 
 SERIALIZE_METHOD_ARG1(MeshRendererModule, Destroy, const Component*);
 SERIALIZE_METHOD_ARG2(MeshRendererModule, SetMesh, const MeshRenderer*, const Mesh*);

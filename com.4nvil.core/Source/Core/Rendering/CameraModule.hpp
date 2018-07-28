@@ -62,28 +62,28 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, Camera);
         BASE_IS(ComponentModule);
 
-        virtual Void Execute(const ExecutionContext& context) override;
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-
-        // Returns all cameras
-        const List<Camera*>& GetCameras() const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
         // Allocates memory for camera, creation is still needed
-        const Camera* AllocateCamera();
+        CORE_API const Camera* AllocateCamera();
 
         // Convert screen space position into world space position
-        Math::Vector3f ScreenToWorld(const Camera* camera, const Math::Vector3f& position);
+        CORE_API Math::Vector3f ScreenToWorld(const Camera* camera, const Math::Vector3f& position);
 
         // Convert screen space position into viewport space position
-        Math::Vector3f ScreenToViewport(const Camera* camera, const Math::Vector3f& position);
+        CORE_API Math::Vector3f ScreenToViewport(const Camera* camera, const Math::Vector3f& position);
+
+        // Returns all cameras
+        const List<Camera*>& GetCameras() const { return cameras; }
 
     public:
-        Void RecCreateCamera(const ExecutionContext& context, const Camera* target);
-        virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
-        Void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
+        CORE_API Void RecCreateCamera(const ExecutionContext& context, const Camera* target);
+        CORE_API virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
+        CORE_API Void RecSetSurface(const ExecutionContext& context, const Camera* camera, const Surface* surface);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Camera*> cameras;

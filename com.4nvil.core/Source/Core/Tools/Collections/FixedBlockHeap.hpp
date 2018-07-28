@@ -21,10 +21,10 @@ namespace Core
     class FixedBlockHeap : public IHeap
     {
     public:
-        FixedBlockHeap(UInt elementSize);
+        CORE_API FixedBlockHeap(UInt elementSize);
 
-        virtual Void* Allocate() override;
-        virtual Void Deallocate(Void* pointer) override;
+        CORE_API virtual Void* Allocate() override;
+        CORE_API virtual Void Deallocate(Void* pointer) override;
 
     private:
         struct BlockHeader

@@ -27,24 +27,23 @@ namespace Core
     public:
         BASE_IS(ComputeModule);
 
-        MouseModule();
-        virtual Void Execute(const ExecutionContext& context) override;
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+
+        // Returns the specific button state
+        CORE_API Bool GetButton(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].click; }
+
+        // Returns the specific button state
+        CORE_API Bool GetButtonUp(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].up; }
+
+        // Returns the specific button state
+        CORE_API Bool GetButtonDown(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].down; }
 
         // Checks if mouse is detected
-        Bool IsPresent() const { return device != nullptr; }
-
-        // Returns the specific button state
-        Bool GetButton(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].click; }
-
-        // Returns the specific button state
-        Bool GetButtonUp(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].up; }
-
-        // Returns the specific button state
-        Bool GetButtonDown(MouseButtonType type) const { return buttonsState[Enum::ToUnderlying(type)].down; }
+        inline Bool IsPresent() const { return device != nullptr; }
 
         // Returns mouse position in screen space
-        Math::Vector2f GetPosition() const { return position; }
+        inline Math::Vector2f GetPosition() const { return position; }
 
     private:
         InputModule* inputModule;

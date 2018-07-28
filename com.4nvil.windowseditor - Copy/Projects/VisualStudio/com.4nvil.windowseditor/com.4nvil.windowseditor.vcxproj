@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\Common.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.hpp" />
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.cpp" />
+    <ClCompile Include="..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor\Main.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0BE41D22-3E35-4D35-A139-5A7A4DB0FD13}</ProjectGuid>
+    <RootNamespace>com4nvilwindowseditor</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)..\..\..\Builds\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>..\..\..\..\com.4nvil.windows\External\D3DX12;..\..\..\..\com.4nvil.core\Source;..\..\..\..\com.4nvil.editor\Source;..\..\..\..\com.4nvil.windows\Source;..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\com.4nvil.core\Builds\Debug\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)..\..\..\Builds\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>..\..\..\..\com.4nvil.windows\External\D3DX12;..\..\..\..\com.4nvil.core\Source;..\..\..\..\com.4nvil.editor\Source;..\..\..\..\com.4nvil.windows\Source;..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\com.4nvil.core\Builds\Release\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <PreprocessorDefinitions>ENABLED_DEBUG;ENABLED_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
+    <Link>
+      <AdditionalDependencies>com.4nvil.core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.dll" "$(TargetDir)" 
+xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.pdb" "$(TargetDir)" </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ENABLED_WINDOWS;ENABLE_RESTRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>com.4nvil.core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
+    <PreBuildEvent>
+      <Command>xcopy /d /i /y "..\..\..\..\com.4nvil.core\Builds\Release\com.4nvil.core.dll" "$(TargetDir)" 
+xcopy /d /i /y "..\..\..\..\com.4nvil.core\Builds\Release\com.4nvil.core.pdb" "$(TargetDir)" </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

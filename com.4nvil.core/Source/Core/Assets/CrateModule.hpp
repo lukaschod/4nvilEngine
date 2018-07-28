@@ -16,7 +16,7 @@
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Tools/Collections/Dictonary.hpp>
 #include <Core/Tools/IO/Directory.hpp>
-#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/CallbackModule.hpp>
 #include <Core/Foundation/TransfererModule.hpp>
 
 namespace Core
@@ -70,6 +70,7 @@ namespace Core
     {
         Guid guid;
         Directory directory;
+        DateTime createTime;
         List<ResourceExtern> externs;
         List<ResourceLocal> locals;
         List<ResourceGlobal> globals;
@@ -81,44 +82,48 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        const Crate* AllocateCrate();
+        CORE_API const Crate* AllocateCrate();
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
-        const TransfererModule* FindTransferer(const TransfererId& id) const;
-        const Crate* FindCrate(const Guid& guid) const;
-        const Crate* FindCrate(const Directory& directory) const;
+        // Find transferer from id
+        CORE_API const TransfererModule* FindTransferer(const TransfererId& id) const;
 
     public:
         // Adds include to the crate that will be used for resolving already serialized transferables
-        Void RecLink(const ExecutionContext& context, const Crate* crate, const Crate* externalCrate);
+        CORE_API Void RecLink(const ExecutionContext& context, const Crate* crate, const Crate* externalCrate);
 
         // Adds transferable to crate
-        Void RecAddTransferable(const ExecutionContext& context, const Crate* crate, const Directory& transferableDirectory, const Transferable* transferable);
+        CORE_API Void RecAddTransferable(const ExecutionContext& context, const Crate* crate, const Directory& transferableDirectory, const Transferable* transferable);
 
         // Serializes crate into directory
-        Void RecSave(const ExecutionContext& context, const Directory& directory, const Crate* crate);
+        CORE_API Void RecSave(const ExecutionContext& context, const Directory& directory, const Crate* crate);
 
         // Deserializes crate from directory
-        Void RecLoad(const ExecutionContext& context, const Directory& directory);
+        CORE_API Void RecLoad(const ExecutionContext& context, const Directory& directory, AsyncCallback<const Crate*>& callback = AsyncCallback<const Crate*>());
 
         // Find resource from the loaded crates, it might cause resource loading
-        Void RecLoadResource(const ExecutionContext& context, const TransferableId& id);
+        CORE_API Void RecLoadResource(const ExecutionContext& context, const TransferableId& id);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         Void Save(Crate* crate);
         Bool Load(Crate* crate);
+        Bool CanLoad(const Directory& directory);
         Void AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable);
         Void LoadResource(const ExecutionContext& context, Crate* crate, UInt globalIndex);
         Void LoadResource(const ExecutionContext& context, const TransferableId& id);
         TransferCrateBinaryWritter* TryGetWritter(const Char* name);
         TransferCrateBinaryReader* TryGetReader(const Char* name);
 
+        const Crate* FindCrate(const Guid& guid) const;
+        const Crate* FindCrate(const Directory& directory) const;
+
     private:
         List<Crate*> crates;
         List<TransfererModule*> transferers;
+        Crate* cachedLoadCrate;
     };
 }

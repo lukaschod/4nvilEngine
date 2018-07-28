@@ -24,27 +24,23 @@ namespace Core
     class ModuleManager
     {
     public:
-        ModuleManager(IModulePlanner* planner, IModuleExecutor* executor);
-        ~ModuleManager();
+        CORE_API ModuleManager(IModulePlanner* planner, IModuleExecutor* executor);
+        CORE_API ~ModuleManager();
 
         // Initializes the ModuleManager and other Modules
-        Void Start();
+        CORE_API Void Start();
 
         // Finalizes ModuleManager and other Modules
-        Void Stop();
+        CORE_API Void Stop();
 
         // Begins new iteration of frame, where all modules will be re-executed at given time
-        Void NewFrame();
+        CORE_API Bool NewFrame();
 
         // Waits until the current frame finishes
-        Void WaitForFrame();
+        CORE_API Void WaitForFrame();
 
         // Adds module to manager, which later on will be used for planning and execution
-        Void AddModule(Module* module);
-
-        // Request module manager to stop working, request will be handled before next frame
-        Void RequestStop() { requestedStop = true; }
-        Bool IsRunning() { return !requestedStop; }
+        CORE_API Void AddModule(Module* module);
 
         // Find module with specified type
         template<class T> T* GetModule();
@@ -56,15 +52,20 @@ namespace Core
         inline UInt32 GetWorkerCount() const { return executor->GetWorkerCount(); }
 
     public:
-        //Void RecAddModule(const ExecutionContext& context, Module* module);
-        //Void RecStop(const ExecutionContext& context);
+        // Request to add new module during runtime
+        CORE_API Void RecAddModule(const ExecutionContext& context, Module* module);
+
+        // Request to stop
+        CORE_API Void RecStop(const ExecutionContext& context);
 
     private:
         List<Module*> modules; // Modules contained by the manager
         IModulePlanner* planner; // Planner that will be used for planning Module execution
-        IModuleExecutor* executor; // Executor that will be sued for Module execution
+        IModuleExecutor* executor; // Executor that will be used for Module execution
         Threading::AutoResetEvent sleepEvent;
+
         Bool requestedStop;
+        List<Module*> requestedAddModules;
     };
 
     template<class T> 

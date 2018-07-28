@@ -16,28 +16,21 @@
 
 namespace Core
 {
-    struct Transferable;
-    class CrateModule;
-}
-
-namespace Core
-{
-    class UnitImporterSupportModule : public IImporterSupportModule
+    class DllImporterSupportModule : public IImporterSupportModule
     {
     public:
         BASE_IS(IImporterSupportModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual Bool IsSupported(const DirectoryExtension& extension) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Bool IsSupported(const DirectoryExtension& extension) override;
 
     public:
-        virtual Void RecImport(const ExecutionContext& context, const Directory& directory) override;
-        virtual Void RecExport(const ExecutionContext& context, const Directory& directory, const Transferable* target);
+        CORE_API virtual Void RecImport(const ExecutionContext& context, const Directory& directory) override;
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
-        CrateModule* crateModule;
+        ModuleManager* moduleManager;
     };
 }

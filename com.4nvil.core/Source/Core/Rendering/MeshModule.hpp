@@ -58,18 +58,18 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, Mesh);
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Mesh* AllocateMesh() const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Mesh* AllocateMesh() const;
 
     public:
-        Void RecCreateMesh(const ExecutionContext& context, const Mesh* target);
-        Void RecDestroy(const ExecutionContext& context, const Mesh* target);
-        Void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<UInt8>& vertices);
-        Void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, UInt32 index, const SubMesh& submesh);
+        CORE_API Void RecCreateMesh(const ExecutionContext& context, const Mesh* target);
+        CORE_API Void RecDestroy(const ExecutionContext& context, const Mesh* target);
+        CORE_API Void RecSetVertices(const ExecutionContext& context, const Mesh* target, const Range<UInt8>& vertices);
+        CORE_API Void RecSetSubMesh(const ExecutionContext& context, const Mesh* target, UInt32 index, const SubMesh& submesh);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Mesh*> meshes;

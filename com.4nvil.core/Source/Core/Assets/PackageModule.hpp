@@ -33,16 +33,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
-        const Package* AllocatePackage();
+        CORE_API const Package* AllocatePackage();
 
     public:
-        Void RecCreatePackage(const ExecutionContext& context, const Package* target, const Directory& directory);
-        Void RecSyncPackage(const ExecutionContext& context, const Package* target);
+        CORE_API Void RecCreatePackage(const ExecutionContext& context, const Package* target, const Directory& directory);
+        CORE_API Void RecSyncPackage(const ExecutionContext& context, const Package* target);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         Void SyncPackage(const ExecutionContext& context, Package* package);

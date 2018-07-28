@@ -23,10 +23,7 @@ ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
     ASSERT(planner != nullptr);
     ASSERT(executor != nullptr);
 
-    planner->SetFinishCallback([this]()
-    {
-        sleepEvent.Set();
-    });
+    planner->SetFinishCallback([this]() { sleepEvent.Set(); });
 }
 
 ModuleManager::~ModuleManager()
@@ -48,10 +45,27 @@ Void ModuleManager::Stop()
     executor->Stop();
 }
 
-Void ModuleManager::NewFrame()
+Bool ModuleManager::NewFrame()
 {
+    // TODO
+    if (requestedStop)
+        return false;
+
+    // TODO
+    for (auto module : requestedAddModules)
+    {
+        module->SetupExecuteOrder(this);
+        modules.push_back(module);
+    }
+    if (!requestedAddModules.empty())
+    {
+        planner->Recreate(modules);
+        requestedAddModules.clear();
+    }
+
     planner->Reset();
     executor->Reset();
+    return true;
 }
 
 Void ModuleManager::WaitForFrame()
@@ -61,5 +75,16 @@ Void ModuleManager::WaitForFrame()
 
 Void ModuleManager::AddModule(Module* module)
 {
+    ASSERT(!executor->IsRunning());
     modules.push_back(module);
+}
+
+Void ModuleManager::RecAddModule(const ExecutionContext& context, Module* module)
+{
+    requestedAddModules.push_back(module);
+}
+
+Void ModuleManager::RecStop(const ExecutionContext& context)
+{
+    requestedStop = true;
 }

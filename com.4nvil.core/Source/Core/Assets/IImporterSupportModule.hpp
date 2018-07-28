@@ -14,27 +14,32 @@
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/String.hpp>
 #include <Core/Tools/IO/Directory.hpp>
-#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/CallbackModule.hpp>
 #include <Core/Foundation/TransfererModule.hpp>
 
 namespace Core
 {
     struct Transferable;
+    class ImporterModule;
 }
 
 namespace Core
 {
-    class IImporterSupportModule : public PipeModule
+    class IImporterSupportModule : public CallbackModule
     {
     public:
         BASE_IS(PipeModule);
 
-    public:
-        // Returns extension name that is supported by this importer
-        // Extension must be without dot (etc png) and lower case
-        virtual Bool IsSupported(const DirectoryExtension& extension) pure;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+
+        // Checks if extension is supported by this importer
+        // Extension must be with dot (etc .png) and lower case
+        CORE_API virtual Bool IsSupported(const DirectoryExtension& extension) pure;
 
     public:
-        virtual Void RecImport(const ExecutionContext& context, const Directory& directory) pure;
+        CORE_API virtual Void RecImport(const ExecutionContext& context, const Directory& directory) pure;
+
+    protected:
+        ImporterModule* importerModule;
     };
 }

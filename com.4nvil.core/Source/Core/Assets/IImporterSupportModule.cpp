@@ -1,4 +1,3 @@
-﻿extensions: .cpp .hpp
 /*
 * Copyright (c) Lukas Chodosevicius
 *
@@ -9,3 +8,14 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *
 */
+
+#include <Core/Assets/IImporterSupportModule.hpp>
+#include <Core/Assets/ImporterModule.hpp>
+
+using namespace Core;
+
+Void IImporterSupportModule::SetupExecuteOrder(ModuleManager* moduleManager)
+{
+    base::SetupExecuteOrder(moduleManager);
+    importerModule = ExecuteAfter<ImporterModule>(moduleManager);
+}

@@ -51,30 +51,29 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, MeshRenderer);
         BASE_IS(ComponentModule);
 
-        MeshRendererModule();
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual Void Execute(const ExecutionContext& context) override;
-        const MeshRenderer* AllocateMeshRenderer();
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API const MeshRenderer* AllocateMeshRenderer();
 
         // Returns all mesh renderers that currently allocated
-        const List<MeshRenderer*>& GetMeshRenderers() const;
+        inline const List<MeshRenderer*>& GetMeshRenderers() const { return meshRenderers; }
 
         // Returns storage that will have camera data
-        const Storage* GetPerAllRendererStorage() const;
+        inline const Storage* GetPerAllRendererStorage() const { return perAllRendererStorage; }
 
     public:
-        virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
+        CORE_API virtual Void RecDestroy(const ExecutionContext& context, const Component* target) override;
 
-        Void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
+        CORE_API Void RecCreateMeshRenderer(const ExecutionContext& context, const MeshRenderer*);
 
         // Set mesh that will be used for rendering
-        Void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
+        CORE_API Void RecSetMesh(const ExecutionContext& context, const MeshRenderer* target, const Mesh* mesh);
 
         // Set material that will be used for rendering
-        Void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
+        CORE_API Void RecSetMaterial(const ExecutionContext& context, const MeshRenderer* target, const Material* material);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<MeshRenderer*> meshRenderers;

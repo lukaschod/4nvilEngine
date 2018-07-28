@@ -51,23 +51,6 @@
 #define SERIALIZE_METHOD_ARG4(Module, Name, ArgumentType1, ArgumentType2, ArgumentType3, ArgumentType4) \
     SERIALIZE_METHOD_TEMPLATE(Module, Name, Void, DECLARE_ARG4(ArgumentType1, ArgumentType2, ArgumentType3, ArgumentType4), WRITE_ARG3, NOARG, NOARG)
 
-#define WRITE_TARGET stream.Write(target);
-#define RETURN_TARGET return target;
-
-#define SERIALIZE_METHOD_CREATEGEN(Module, Name, CreateType) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, NOARG, WRITE_TARGET, auto target = new CreateType();, RETURN_TARGET)
-#define SERIALIZE_METHOD_CREATEGEN_ARG1(Module, Name, CreateType, ArgumentType1) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, DECLARE_ARG1(ArgumentType1), WRITE_TARGET, auto target = new CreateType(argument1);, RETURN_TARGET)
-#define SERIALIZE_METHOD_CREATEGEN_ARG2(Module, Name, CreateType, ArgumentType1, ArgumentType2) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, DECLARE_ARG2(ArgumentType1, ArgumentType2), WRITE_TARGET, auto target = new CreateType(argument1, argument2);, RETURN_TARGET)
-
-#define SERIALIZE_METHOD_CREATE(Module, Name) SERIALIZE_METHOD_CREATEGEN(Module, Name, Name)
-#define SERIALIZE_METHOD_CREATE_ARG1(Module, Name, ArgumentType1) SERIALIZE_METHOD_CREATEGEN_ARG1(Module, Name, Name, ArgumentType1)
-#define SERIALIZE_METHOD_CREATE_ARG2(Module, Name, ArgumentType1, ArgumentType2) SERIALIZE_METHOD_CREATEGEN_ARG2(Module, Name, Name, ArgumentType1, ArgumentType2)
-
-#define SERIALIZE_METHOD_CREATECMP(Module, Name) \
-    SERIALIZE_METHOD_TEMPLATE(Module, Create##Name, const Name*, NOARG, WRITE_TARGET, auto target = new Name(this);, RETURN_TARGET)
-
 #define DESERIALIZE_METHOD_START(Name) \
     case CommandCode##Name: { 
 
@@ -94,3 +77,30 @@
     ArgumentType4& ArgumentName4 = stream.FastRead<ArgumentType4>(); 
 
 #define DESERIALIZE_METHOD_END return true; }
+
+#define SERIALIZE_METHOD_HEADER(Module, Name, ReturnType) ReturnType Module::Rec##Name
+
+#define SERIALIZE_METHOD_BODY_HEADER(Name) \
+{ \
+    auto buffer = GetRecordingBuffer(context); \
+    auto& stream = buffer->stream; \
+    stream.Write(TO_COMMAND_CODE(Name));
+
+#define SERIALIZE_METHOD_BODY_FOOTER \
+    stream.Align(); \
+    buffer->commandCount++; \
+}
+
+#define SERIALIZE_METHOD_BODY_FOOTER_RET(ReturnType) \
+    ReturnType& ret = *(ReturnType*)stream.data; \
+    stream.Write(ReturnType()); \
+    stream.Align(); \
+    buffer->commandCount++; \
+    return ret; \
+}
+
+#define SERIALIZE_METHOD_ARG1_RET(Module, Name, ArgumentName1, ReturnType) \
+    ReturnType& Module::Rec##Name(const ExecutionContext& context, ArgumentType1 argument1) \
+    SERIALIZE_METHOD_BODY_HEADER(Name) \
+    stream.Write(argument1); \
+    SERIALIZE_METHOD_BODY_FOOTER_RET(ReturnType)

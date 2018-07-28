@@ -20,11 +20,11 @@ namespace Core::Threading
     class AutoResetEvent
     {
     public:
-        explicit AutoResetEvent(Bool initial = false);
+        CORE_API explicit AutoResetEvent(Bool initial = false);
 
-        Void Set();
-        Void Reset();
-        Bool WaitOne();
+        CORE_API Void Set();
+        CORE_API Void Reset();
+        CORE_API Bool WaitOne();
 
     private:
         AutoResetEvent(const AutoResetEvent&);

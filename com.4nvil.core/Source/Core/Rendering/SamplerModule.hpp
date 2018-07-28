@@ -37,17 +37,17 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Sampler* AllocateSampler() const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Sampler* AllocateSampler() const;
 
         inline const Sampler* GetDefaultSampler() const { return samplers[0]; }
 
     public:
-        Void RecCreateSampler(const ExecutionContext& context, const Sampler* target);
+        CORE_API Void RecCreateSampler(const ExecutionContext& context, const Sampler* target);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Sampler*> samplers;

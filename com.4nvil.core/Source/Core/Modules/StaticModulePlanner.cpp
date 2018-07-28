@@ -190,7 +190,9 @@ Void StaticModulePlanner::AddJob(StaticModulePlanNode* node)
     node->concunrency = 0;
 
     auto jobSize = node->module->GetExecutionSize();
-    if (jobSize == 0 || node->module->IsSplittable())
+
+    // Early out if job cannot be splitted
+    if (jobSize != 0 && !node->module->IsSplittable())
     {
         ModuleJob childJob;
         childJob.module = node->module;

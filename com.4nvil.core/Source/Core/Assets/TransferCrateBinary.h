@@ -34,7 +34,7 @@ namespace Core
         virtual Void Transfer(const Char* name, UInt32* value) override { stream->Write(value, sizeof(value)); }
         virtual Void Transfer(const Char* name, Char* value) override
         { 
-            UInt size = Character::Length(value);
+            UInt size = Character::Length(value) + 1;
             stream->Write(&size, sizeof(size));
             stream->Write(value, size);
         }

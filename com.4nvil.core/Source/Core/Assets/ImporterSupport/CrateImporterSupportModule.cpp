@@ -9,36 +9,36 @@
 *
 */
 
-#include <Core/Tools/IO/FileStream.hpp>
 #include <Core/Assets/CrateModule.hpp>
-#include <Core/Assets/ImporterSupport/UnitImporterSupportModule.hpp>
+#include <Core/Assets/ImporterSupport/CrateImporterSupportModule.hpp>
 
 using namespace Core;
 using namespace Core::IO;
 
-Void UnitImporterSupportModule::SetupExecuteOrder(ModuleManager* moduleManager)
+Void CrateImporterSupportModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     crateModule = ExecuteBefore<CrateModule>(moduleManager);
 }
 
-Bool UnitImporterSupportModule::IsSupported(const DirectoryExtension& extension)
+Bool CrateImporterSupportModule::IsSupported(const DirectoryExtension& extension)
 {
     return extension == ".crate";
 }
 
-SERIALIZE_METHOD_ARG1(UnitImporterSupportModule, Import, const Directory&);
-SERIALIZE_METHOD_ARG2(UnitImporterSupportModule, Export, const Directory&, const Transferable*);
+SERIALIZE_METHOD_ARG1(CrateImporterSupportModule, Import, const Directory&);
+DECLARE_COMMAND_CODE(OnImport);
 
-Bool UnitImporterSupportModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
+Bool CrateImporterSupportModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
         DESERIALIZE_METHOD_ARG1_START(Import, const Directory, directory);
-        crateModule->RecLoad(context, directory);
+        crateModule->RecLoad(context, directory, AsyncCallback<const Crate*>(this, TO_COMMAND_CODE(OnImport)));
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG2_START(Export, const Directory, directory, Transferable*, target);
+        DESERIALIZE_METHOD_ARG1_START(OnImport, const Crate*, callback);
+        TRACE("Very first callback 2 ptr=%d", callback);
         DESERIALIZE_METHOD_END;
     }
     return false;

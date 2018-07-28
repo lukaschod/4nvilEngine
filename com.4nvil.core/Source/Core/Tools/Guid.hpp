@@ -23,13 +23,13 @@ namespace Core
         inline Bool operator!=(const Guid& rhs) const { return memcmp(this, &rhs, sizeof(Guid)) != 0; }
 
         // Convert Guid to 32 digits separated by hyphens
-        Void ToString(Char* value);
+        CORE_API Void ToString(Char* value);
 
         // Convert 32 digits seperated by hyphens into Guid
-        static Bool TryParse(const Char* value, Guid& guid);
+        CORE_API static Bool TryParse(const Char* value, Guid& guid);
 
         // Generate new unique Guid
-        static Guid Generate();
+        CORE_API static Guid Generate();
 
     public:
         UInt32 data1;

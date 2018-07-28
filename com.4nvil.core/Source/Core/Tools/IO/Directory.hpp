@@ -12,6 +12,7 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
+#include <Core/Tools/DateTime.hpp>
 #include <Core/Tools/Character.hpp>
 #include <Core/Tools/Collections/List.hpp>
 
@@ -20,11 +21,11 @@ namespace Core
     class DirectoryExtension
     {
     public:
-        DirectoryExtension() { data = nullptr; }
-        DirectoryExtension(const Char8* extension) { data = extension; }
+        inline DirectoryExtension() { data = nullptr; }
+        inline DirectoryExtension(const Char8* extension) { data = extension; }
 
-        Bool operator==(const DirectoryExtension& lhs) const { return Character::Equals(data, lhs.data); }
-        Bool operator!=(const DirectoryExtension& lhs) const { return Character::NotEquals(data, lhs.data); }
+        inline Bool operator==(const DirectoryExtension& lhs) const { return Character::Equals(data, lhs.data); }
+        inline Bool operator!=(const DirectoryExtension& lhs) const { return Character::NotEquals(data, lhs.data); }
 
     private:
         const Char* data;
@@ -33,18 +34,21 @@ namespace Core
     class Directory 
     {
     public:
-        Directory() { *data = 0; size = 0; }
-        Directory(const Directory& directory);
-        Directory(const Char8* path);
+        inline Directory() { *data = 0; size = 0; }
+        CORE_API Directory(const Directory& directory);
+        CORE_API Directory(const Char8* path);
 
         // Append value on end of directory
-        Bool Append(const Char8* value);
+        CORE_API Bool Append(const Char8* value);
 
         // Is directory a file, checks not extension
-        Bool IsFile() const;
+        CORE_API Bool IsFile() const;
 
         // Returns extension of directory
-        Bool GetExtension(DirectoryExtension& extension) const;
+        CORE_API Bool GetExtension(DirectoryExtension& extension) const;
+
+        CORE_API Bool GetWriteTime(DateTime& date) const;
+        CORE_API Bool SetWriteTime(const DateTime& date) const;
 
         inline UInt GetCapacity() const { return 260; }
 
@@ -58,13 +62,13 @@ namespace Core
         inline Void RecalculateSize() { size = Character::Length(data); }
 
         // Returns path to current executable location
-        static const Directory& GetExecutablePath();
+        CORE_API static const Directory& GetExecutablePath();
 
         // Returns the names of subdirectories (including their paths) in the specified directory
-        static Void GetDirectories(const Directory& path, List<Directory>& out);
+        CORE_API static Void GetDirectories(const Directory& path, List<Directory>& out);
 
         // Returns the names of files (including their paths) in the specified directory
-        static Void GetFiles(const Directory& path, List<Directory>& out);
+        CORE_API static Void GetFiles(const Directory& path, List<Directory>& out);
 
     private:
         inline Directory(const wchar_t* directory);

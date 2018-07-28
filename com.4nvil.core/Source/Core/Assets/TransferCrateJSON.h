@@ -174,6 +174,7 @@ namespace Core
             Expected(name);
             stream->ReadFmt(": [%lld]\"", &size);
             stream->Read(value, size);
+            value[size] = 0; // We need null terminator
             Expected("\"\n");
         }
 

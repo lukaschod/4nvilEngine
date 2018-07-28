@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{c98be759-9b4d-4dd8-97d3-628527bfa9d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{41276220-136a-4876-a230-1429dbf91faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowsEditor">
+      <UniqueIdentifier>{993fbbf7-eca0-421c-8b76-8e670e2d5e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Views">
+      <UniqueIdentifier>{b87c9e57-5c0d-4139-baea-9599e20275ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Graphics">
+      <UniqueIdentifier>{e35c724a-7252-44ef-9fa2-3b3760cc613e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Views">
+      <UniqueIdentifier>{23608bcd-60a5-414e-8279-85ad3a1d2da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Graphics\Directx12">
+      <UniqueIdentifier>{c9e1be19-919a-4527-a0de-700a435c3ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Project">
+      <UniqueIdentifier>{5c5e7c9f-2188-4c8d-93cf-98d44adfbc8c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.hpp">
+      <Filter>Editor\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.hpp">
+      <Filter>Editor\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\Common.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.hpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.hpp">
+      <Filter>Windows\Views</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Views\ViewModule.cpp">
+      <Filter>Windows\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\BufferHeap.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdAllocatorPool.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\CmdQueue.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\DescriptorHeap.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsExecutorModule.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsModule.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windows\Source\Windows\Graphics\Directx12\GraphicsPlannerModule.cpp">
+      <Filter>Windows\Graphics\Directx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor\Main.cpp">
+      <Filter>WindowsEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\ViewLayerModule.cpp">
+      <Filter>Editor\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\GameViewLayerModule.cpp">
+      <Filter>Editor\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Views\InspectorViewLayerModule.cpp">
+      <Filter>Editor\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.editor\Source\Editor\Project\ProjectAssetsModule.cpp">
+      <Filter>Editor\Project</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

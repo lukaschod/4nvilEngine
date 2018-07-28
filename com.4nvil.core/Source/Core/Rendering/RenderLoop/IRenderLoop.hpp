@@ -25,6 +25,6 @@ namespace Core
     class IRenderLoopModule : public PipeModule 
     {
     public:
-        virtual Void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) pure;
+        CORE_API virtual Void RecRender(const ExecutionContext& context, const Graphics::ISwapChain* swapChain, const Graphics::ITexture* renderTarget) pure;
     };
 }

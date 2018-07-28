@@ -73,8 +73,8 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, Unit);
         BASE_IS(TransfererModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Unit* AllocateUnit();
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Unit* AllocateUnit();
 
         // Find component from argument component
         template<class T> const T* GetComponent(const Component* target);
@@ -83,18 +83,18 @@ namespace Core
         template<class T> const T* GetComponent(const Unit* target);
 
     public:
-        Void RecCreateUnit(const ExecutionContext& context, const Unit* target);
-        Void RecDestroy(const ExecutionContext& context, const Unit* target);
+        CORE_API Void RecCreateUnit(const ExecutionContext& context, const Unit* target);
+        CORE_API Void RecDestroy(const ExecutionContext& context, const Unit* target);
 
         // Add component to unit container
-        Void RecAddComponent(const ExecutionContext& context, const Unit* target, const Component* component);
+        CORE_API Void RecAddComponent(const ExecutionContext& context, const Unit* target, const Component* component);
 
-        Void RecSetEnable(const ExecutionContext& context, const Unit* target, Bool enable);
+        CORE_API Void RecSetEnable(const ExecutionContext& context, const Unit* target, Bool enable);
 
-        Void RecUpdateActive(const ExecutionContext& context, const Unit* target);
+        CORE_API Void RecUpdateActive(const ExecutionContext& context, const Unit* target);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         Void UpdateActive(const ExecutionContext& context, Unit* unit);

@@ -38,16 +38,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Scene* AllocateScene();
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Scene* AllocateScene();
 
     public:
-        Void RecCreateScene(const ExecutionContext& context, const Scene* target);
-        Void RecSetEnable(const ExecutionContext& context, const Scene* target, Bool enable);
-        Void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
+        CORE_API Void RecCreateScene(const ExecutionContext& context, const Scene* target);
+        CORE_API Void RecSetEnable(const ExecutionContext& context, const Scene* target, Bool enable);
+        CORE_API Void RecAddUnit(const ExecutionContext& context, const Scene* target, const Transform* transform);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         TransformModule* transformModule;

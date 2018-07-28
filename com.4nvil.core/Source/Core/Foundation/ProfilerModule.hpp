@@ -52,14 +52,14 @@ namespace Core
     public:
         BASE_IS(Module);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
 
-        Void TraceFunctions();
+        CORE_API Void TraceFunctions();
 
     public:
-        Void RecPushFunction(const ExecutionContext& context, const Char* name);
-        Void RecPopFunction(const ExecutionContext& context);
+        CORE_API Void RecPushFunction(const ExecutionContext& context, const Char* name);
+        CORE_API Void RecPopFunction(const ExecutionContext& context);
 
     private:
         LogModule* logModule;

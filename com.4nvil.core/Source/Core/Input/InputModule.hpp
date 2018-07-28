@@ -38,23 +38,23 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
 
         // Find input devices by the type name
-        const InputDevice* TryFindInputDevice(const Char* typeName) const;
+        CORE_API const InputDevice* TryFindInputDevice(const Char* typeName) const;
 
         // Record abstract input
-        Void RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, UInt8* data, UInt size);
+        CORE_API Void RecInput(const ExecutionContext& context, const InputDevice* device, InputType inputType, UInt8* data, UInt size);
 
         // Create new input device, type name must be unique
-        const InputDevice* RecCreateInputDevice(const ExecutionContext& context, const InputDeviceDesc& desc);
+        CORE_API const InputDevice* RecCreateInputDevice(const ExecutionContext& context, const InputDeviceDesc& desc);
+
+    protected:
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         // Remove all previous inputs
         Void Reset();
-
-    protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<InputDevice*> devices;

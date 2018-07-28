@@ -96,12 +96,13 @@ Void CrateModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
     ExecuteBefore<TransfererModule>(moduleManager, transferers);
+    cachedLoadCrate = nullptr;
 }
 
 SERIALIZE_METHOD_ARG2(CrateModule, Link, const Crate*, const Crate*);
 SERIALIZE_METHOD_ARG3(CrateModule, AddTransferable, const Crate*, const Directory&, const Transferable*);
 SERIALIZE_METHOD_ARG2(CrateModule, Save, const Directory&, const Crate*);
-SERIALIZE_METHOD_ARG1(CrateModule, Load, const Directory&);
+SERIALIZE_METHOD_ARG2(CrateModule, Load, const Directory&, AsyncCallback<const Crate*>&);
 SERIALIZE_METHOD_ARG1(CrateModule, LoadResource, const TransferableId&);
 
 Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
@@ -119,22 +120,28 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         DESERIALIZE_METHOD_ARG2_START(Save, const Directory, directory, Crate*, crate);
         crate->directory = directory;
         crate->guid = Guid::Generate();
+        crate->createTime = DateTime::Now();
         Save(crate);
         DESERIALIZE_METHOD_END;
 
-        DESERIALIZE_METHOD_ARG1_START(Load, const Directory, directory);
-        if (FindCrate(directory) == nullptr)
+        DESERIALIZE_METHOD_ARG2_START(Load, const Directory, directory, AsyncCallback<const Crate*>, callback);
+        if (CanLoad(directory))
         {
-            auto crate = const_cast<Crate*>(AllocateCrate()); // TODO: make it re-usable
-            crate->directory = directory;
-            if (Load(crate))
+            // Cache load crate as it might fail so there is no point to always allocate new one
+            if (cachedLoadCrate == nullptr)
+                cachedLoadCrate = const_cast<Crate*>(AllocateCrate());;
+            cachedLoadCrate->directory = directory;
+            CHECK(directory.GetWriteTime(cachedLoadCrate->createTime));
+
+            // Try load, it might fail because of dependencies
+            if (Load(cachedLoadCrate))
             {
-                crates.push_back(crate);
+                crates.push_back(cachedLoadCrate);
+                callback.IssueCallback(context, (const Crate*) cachedLoadCrate);
+                cachedLoadCrate = nullptr;
             }
             else
-            {
-                delete crate; // TODO
-            }
+                callback.IssueCallback(context, (const Crate*) nullptr);
         }
         DESERIALIZE_METHOD_END;
 
@@ -147,6 +154,7 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
 
 Void CrateModule::LoadResource(const ExecutionContext& context, const TransferableId& id)
 {
+    // TODO: Directory
     for (auto crate : crates)
     {
         for (UInt i = 0; i < crate->globals.size(); i++)
@@ -250,7 +258,7 @@ Void CrateModule::Save(Crate* crate)
     stream.SetPosition(headerOffset);
     TransferValue(transfer, "header", crate);
 
-    ASSERT(localResourcesOffset == stream.GetPosition());
+    ASSERT_MSG(localResourcesOffset == stream.GetPosition(), "Incorrect header size");
 
     stream.Close();
 
@@ -260,6 +268,25 @@ Void CrateModule::Save(Crate* crate)
         auto transferable = const_cast<Transferable*>(crate->locals[global.localIndex].cachedTransferable);
         transferable->id = &global.id;
     }
+}
+
+Bool CrateModule::CanLoad(const Directory& directory)
+{
+    auto crate = FindCrate(directory);
+    if (crate != nullptr)
+    {
+        DateTime createTime;
+        directory.GetWriteTime(createTime);
+        if (crate->createTime < createTime)
+        {
+            // TODO: Unload
+            NOT_IMPLEMENTED();
+            return true;
+        }
+
+        return false;
+    }
+    return true;
 }
 
 Bool CrateModule::Load(Crate* crate)
@@ -290,9 +317,16 @@ Bool CrateModule::Load(Crate* crate)
             return false;
     }
 
-    // Clear cached transferables as they will be filled during the FindResource
     for (auto& resource : crate->locals)
+    {
+        // Clear cached transferables as they will be filled during the FindResource
         resource.cachedTransferable = nullptr;
+
+        // Check if all transferers available
+        auto transferer = FindTransferer(resource.transfererId);
+        if (transferer == nullptr)
+            return false;
+    }
 
     for (auto& resource : crate->globals); // TODO: Add globals to map
 

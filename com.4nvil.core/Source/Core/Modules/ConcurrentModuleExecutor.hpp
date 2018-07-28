@@ -51,8 +51,8 @@ namespace Core
     class ConcurrentModuleExecutor : public IModuleExecutor
     {
     public:
-        ConcurrentModuleExecutor(IModulePlanner* planner, UInt32 workerCount = 1);
-        ~ConcurrentModuleExecutor();
+        CORE_API ConcurrentModuleExecutor(IModulePlanner* planner, UInt32 workerCount = 1);
+        CORE_API ~ConcurrentModuleExecutor();
         virtual Void Reset() override;
         virtual Void Start() override;
         virtual Void Stop() override;

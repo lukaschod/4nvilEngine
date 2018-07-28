@@ -48,8 +48,8 @@ namespace Core
     class StaticModulePlanner : public IModulePlanner
     {
     public:
-        StaticModulePlanner();
-        ~StaticModulePlanner();
+        CORE_API StaticModulePlanner();
+        CORE_API ~StaticModulePlanner();
         virtual Void Recreate(List<Module*>& modules) override;
         virtual Void Reset() override;
         virtual ModuleJob TryGetNext() override;

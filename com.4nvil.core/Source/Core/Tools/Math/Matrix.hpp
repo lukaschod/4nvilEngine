@@ -63,9 +63,9 @@ namespace Core::Math
     typedef Matrix4x4<Float> Matrix4x4f;
     typedef Matrix4x4<Float> Float4x4;
 
-    Float MatrixGetDeterminant(const Float* in);
-    Bool MatrixInvertGeneral3D(const Float* in, Float* out);
-    Bool MatrixInvertFull(const Float* m, Float* out);
+    CORE_API Float MatrixGetDeterminant(const Float* in);
+    CORE_API Bool MatrixInvertGeneral3D(const Float* in, Float* out);
+    CORE_API Bool MatrixInvertFull(const Float* m, Float* out);
 
     template<class T>
     inline Matrix4x4<T>::Matrix4x4(const Vector4<T>& x, const Vector4<T>& y, const Vector4<T>& z, const Vector4<T>& w)

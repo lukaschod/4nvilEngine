@@ -48,8 +48,6 @@ Void CameraModule::Execute(const ExecutionContext& context)
     }
 }
 
-const List<Camera*>& CameraModule::GetCameras() const { return cameras; }
-
 const Camera* CameraModule::AllocateCamera()
 {
     auto storage = storageModule->AllocateStorage();

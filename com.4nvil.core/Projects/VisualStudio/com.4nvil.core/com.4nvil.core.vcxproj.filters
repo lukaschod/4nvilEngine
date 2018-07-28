@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c8224ca0-23f7-4229-b794-ffafbbecc0e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Foundation">
+      <UniqueIdentifier>{08bba07d-9e7f-4402-8060-1cc0e72d82cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Modules">
+      <UniqueIdentifier>{62a5f758-7b4a-4e7a-a040-2faa7cc7a885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools">
+      <UniqueIdentifier>{999d1f2d-462e-404e-a58e-4e376fae6bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Views">
+      <UniqueIdentifier>{41f1a51f-b8d4-4f4a-bcce-f3c1c2fdabd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics">
+      <UniqueIdentifier>{393d4822-d9f3-486e-99a4-668fcdbb2b19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Rendering">
+      <UniqueIdentifier>{00ff4079-2816-46de-a70b-22f3ff49bb2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{b1bae63c-9406-4473-b063-6d34ad89f993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Rendering\RenderLoop">
+      <UniqueIdentifier>{4ba02be7-8732-4a8b-aabc-1fc8aed77fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Collections">
+      <UniqueIdentifier>{ed510373-9942-457b-828a-e55fe2b4ac3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\IO">
+      <UniqueIdentifier>{ad1dbc32-3774-4a39-919d-0ae0cf2b8f0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Math">
+      <UniqueIdentifier>{0383cf5d-04cd-4d7e-ac54-f0c452cf1dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Threading">
+      <UniqueIdentifier>{e5628441-0be4-4cb4-876f-3cec41eabe9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Windows">
+      <UniqueIdentifier>{60fdfdc1-4869-46a3-9765-eb83b618e17f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Assets">
+      <UniqueIdentifier>{2409a26b-541d-4191-b823-0e09c7748469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Assets\ImporterSupport">
+      <UniqueIdentifier>{08b206c6-dcbc-4de0-bb7c-d3b73045872e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Windows\IO">
+      <UniqueIdentifier>{106d906f-e349-4623-9bbe-953415a6568e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\ComputeModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\MemoryModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModuleHelper.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\IBuffer.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\IFilter.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\IGraphicsModule.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\IRenderPass.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\ISwapChain.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\ITexture.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\Shader.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Graphics\VertexLayout.hpp">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Input\MouseInputs.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Input\ViewInputs.hpp">
+      <Filter>Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\IModuleExecutor.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\IModulePlanner.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\Module.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.hpp">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\IRenderLoop.hpp">
+      <Filter>Core\Rendering\RenderLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.hpp">
+      <Filter>Core\Rendering\RenderLoop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.hpp">
+      <Filter>Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\IHeap.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\List.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\LinkedList.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\StringBuilder.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\MemoryStream.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Color.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Math.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Quaternion.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Rect.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector2.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector3.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Vector4.hpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.hpp">
+      <Filter>Core\Tools\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.hpp">
+      <Filter>Core\Tools\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Common.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Delegate.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Enum.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\StopWatch.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\String.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Testing.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.hpp">
+      <Filter>Core\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Stream.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Types.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\IImporterSupportModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Guid.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Dictonary.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\Set.hpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateSolvers.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\DummyStream.hpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateBinary.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\TransferCrateJSON.h">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Character.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\CrateImporterSupportModule.hpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\DllImporterSupportModule.hpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Source\Core\Tools\DateTime.hpp">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Core\Foundation\CallbackModule.hpp">
+      <Filter>Core\Foundation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\PipeModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\ProfilerModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TimeModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransformModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\UnitModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\ConcurrentModuleExecutor.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\ModuleManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Modules\StaticModulePlanner.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\CameraModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\ImageModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MaterialModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\MeshRendererModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\SamplerModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\ShaderModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\StorageModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\SurfaceModule.cpp">
+      <Filter>Core\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Console.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\BuddyHeapManager.cpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Collections\FixedBlockHeap.cpp">
+      <Filter>Core\Tools\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\Directory.cpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\IO\FileStream.cpp">
+      <Filter>Core\Tools\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Math\Matrix.cpp">
+      <Filter>Core\Tools\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Threading\AutoResetEvent.cpp">
+      <Filter>Core\Tools\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Input\InputModule.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Input\MouseModule.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Rendering\RenderLoop\UnlitRenderLoopModule.cpp">
+      <Filter>Core\Rendering\RenderLoop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\SceneModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\PackageModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\CrateModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererModule.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\TransfererUtility.cpp">
+      <Filter>Core\Foundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Guid.cpp">
+      <Filter>Core\Tools\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\IO\WinDirectory.cpp">
+      <Filter>Core\Tools\Windows\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\CrateImporterSupportModule.cpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Assets\ImporterSupport\DllImporterSupportModule.cpp">
+      <Filter>Core\Assets\ImporterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Core\Assets\IImporterSupportModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

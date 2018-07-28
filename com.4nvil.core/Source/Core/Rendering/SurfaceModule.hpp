@@ -74,18 +74,18 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Surface* AllocateSurface();
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Surface* AllocateSurface();
 
     public:
-        Void RecCreateSurface(const ExecutionContext& context, const Surface* surface);
-        Void RecSetColor(const ExecutionContext& context, const Surface* target, UInt32 index, const SurfaceColor& color);
-        Void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
-        Void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);
+        CORE_API Void RecCreateSurface(const ExecutionContext& context, const Surface* surface);
+        CORE_API Void RecSetColor(const ExecutionContext& context, const Surface* target, UInt32 index, const SurfaceColor& color);
+        CORE_API Void RecSetDepth(const ExecutionContext& context, const Surface* target, const SurfaceDepth& depth);
+        CORE_API Void RecSetViewport(const ExecutionContext& context, const Surface* target, const Graphics::Viewport& viewport);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Surface*> surfaces;

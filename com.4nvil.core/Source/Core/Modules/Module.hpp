@@ -11,30 +11,12 @@
 
 #pragma once
 
-#include <typeinfo>
 #include <Core/Tools/Common.hpp>
 #include <Core/Tools/Collections/List.hpp>
 #include <Core/Modules/ModuleManager.hpp>
 
 namespace Core
 {
-    class Module;
-
-    struct ExecutionContext
-    {
-        // Index of worker in current execution
-        UInt32 workerIndex;
-
-        // Start of job offset index
-        UInt32 start;
-
-        // End of job offset index
-        UInt32 end;
-
-        // Module that is currently executed
-        Module* executingModule;
-    };
-
     class Module
     {
     public:
@@ -46,9 +28,9 @@ namespace Core
         // This is where each Module job will be done, context contains additional information about execution
         virtual Void Execute(const ExecutionContext& context) {}
 
-        virtual Bool IsSplittable() const { return true; }
+        virtual Bool IsSplittable() const { return false; }
         virtual UInt GetExecutionSize() { return 1; }
-        virtual UInt GetSplitExecutionSize() { return 0; }
+        virtual UInt GetSplitExecutionSize() { return 1; }
         virtual const Char* GetName() const { return "Unamed"; }
         inline const List<Module*>& GetDependencies() const { return dependencies; }
 
@@ -56,11 +38,12 @@ namespace Core
         virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
 
         // Marks that calling module must be executed before the Module. It is used by IModulePlanner to solve dependency trees
-        Void ExecuteBefore(ModuleManager* moduleManager, Module* module)
+        virtual Void ExecuteBefore(ModuleManager* moduleManager, Module* module)
         {
             ASSERT(moduleManager != nullptr && module != nullptr);
             module->dependencies.safe_push_back(this);
             module->OnDependancyAdd(moduleManager, this, true);
+            OnDependancyAdd(moduleManager, module, true);
         }
 
         template<class T> Void ExecuteBefore(ModuleManager* moduleManager, List<T*>& modules)
@@ -71,6 +54,7 @@ namespace Core
             {
                 module->dependencies.safe_push_back(this);
                 module->OnDependancyAdd(moduleManager, this, true);
+                OnDependancyAdd(moduleManager, module, true);
             }
         }
 
@@ -81,6 +65,7 @@ namespace Core
             auto module = (Module*) moduleManager->GetModule<T>();
             module->dependencies.safe_push_back(this);
             module->OnDependancyAdd(moduleManager, this, true);
+            OnDependancyAdd(moduleManager, module, true);
             return (T*) module;
         }
 
@@ -90,6 +75,7 @@ namespace Core
             ASSERT(moduleManager != nullptr && module != nullptr);
             dependencies.safe_push_back(module);
             module->OnDependancyAdd(moduleManager, this, false);
+            OnDependancyAdd(moduleManager, module, false);
         }
 
         template<class T> Void ExecuteAfter(ModuleManager* moduleManager, List<T*>& modules)
@@ -100,6 +86,7 @@ namespace Core
             {
                 dependencies.safe_push_back(module);
                 module->OnDependancyAdd(moduleManager, this, false);
+                OnDependancyAdd(moduleManager, module, false);
             }
         }
 
@@ -110,6 +97,7 @@ namespace Core
             auto module = (Module*) moduleManager->GetModule<T>();
             dependencies.safe_push_back(module);
             module->OnDependancyAdd(moduleManager, this, false);
+            OnDependancyAdd(moduleManager, module, false);
             return (T*) module;
         }
 

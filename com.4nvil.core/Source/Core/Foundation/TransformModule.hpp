@@ -66,23 +66,23 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, Transform);
         BASE_IS(ComponentModule);
 
-        virtual Void Execute(const ExecutionContext& context) override;
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Transform* AllocateTransform();
+        CORE_API virtual Void Execute(const ExecutionContext& context) override;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Transform* AllocateTransform();
 
     public:
-        Void RecCreateTransform(const ExecutionContext& context, const Transform* target);
-        virtual Void RecDestroy(const ExecutionContext& context, const Component* unit) override;
-        Void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
-        Void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
-        Void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
-        Void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
+        CORE_API Void RecCreateTransform(const ExecutionContext& context, const Transform* target);
+        CORE_API virtual Void RecDestroy(const ExecutionContext& context, const Component* unit) override;
+        CORE_API Void RecSetParent(const ExecutionContext& context, const Transform* target, const Transform* parent);
+        CORE_API Void RecSetPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
+        CORE_API Void RecAddPosition(const ExecutionContext& context, const Transform* target, const Math::Vector3f& position);
+        CORE_API Void RecSetRotation(const ExecutionContext& context, const Transform* target, const Math::Vector3f& rotation);
 
         // Recalculate worldToView matrix for transform
-        Void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
+        CORE_API Void RecCalculateWorldToView(const ExecutionContext& context, const Transform* target);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         Void SetParent(const ExecutionContext& context, Transform* target, Transform* parent);

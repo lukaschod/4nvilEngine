@@ -16,7 +16,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 // Our special keyword for restrict specifing
-#ifdef ENABLE_RESTRICT
+#ifdef ENABLED_RESTRICT
 #   define noalias __restrict // We use lower case as we will treat as special keyword
 #else
 #   define noalias

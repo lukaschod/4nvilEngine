@@ -41,12 +41,12 @@ namespace Core
     class BuddyHeapManager
     {
     public:
-        BuddyHeapManager(const HeapMemory& bounds);
+        CORE_API BuddyHeapManager(const HeapMemory& bounds);
 
-        HeapMemory Allocate(UInt size);
-        Bool Deallocate(const HeapMemory& memory);
-        Bool Contains(const HeapMemory& memory);
-        const HeapMemory& GetBounds() const { return bounds; }
+        CORE_API HeapMemory Allocate(UInt size);
+        CORE_API Bool Deallocate(const HeapMemory& memory);
+        CORE_API Bool Contains(const HeapMemory& memory);
+        CORE_API const HeapMemory& GetBounds() const { return bounds; }
 
     private:
         LinkedList<HeapMemory>::Iterator TryFindFreeBlock(UInt size);

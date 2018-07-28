@@ -52,16 +52,16 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Image* AllocateImage(UInt32 width, UInt32 height) const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Image* AllocateImage(UInt32 width, UInt32 height) const;
 
     public:
-        Void RecCreateImage(const ExecutionContext& context, const Image* target);
-        Void RecSetSampler(const ExecutionContext& context, const Image* target, const Sampler* sampler);
+        CORE_API Void RecCreateImage(const ExecutionContext& context, const Image* target);
+        CORE_API Void RecSetSampler(const ExecutionContext& context, const Image* target, const Sampler* sampler);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Image*> images;

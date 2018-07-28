@@ -83,17 +83,17 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Material* AllocateMaterial() const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Material* AllocateMaterial() const;
 
     public:
-        Void RecCreateMaterial(const ExecutionContext& context, const Material* material);
-        Void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
-        Void RecSetStorage(const ExecutionContext& context, const Material* target, const Char* name, const Storage* storage);
+        CORE_API Void RecCreateMaterial(const ExecutionContext& context, const Material* material);
+        CORE_API Void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
+        CORE_API Void RecSetStorage(const ExecutionContext& context, const Material* target, const Char* name, const Storage* storage);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         inline Void SetProperty(MaterialProperties* properties, const Char* name, MaterialPropertyType type, Void* value);

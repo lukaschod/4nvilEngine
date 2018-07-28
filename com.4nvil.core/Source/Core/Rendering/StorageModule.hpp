@@ -46,20 +46,20 @@ namespace Core
         IMPLEMENT_TRANSFERER(Core, Storage);
         BASE_IS(PipeModule);
 
-        virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        const Storage* AllocateStorage() const;
+        CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API const Storage* AllocateStorage() const;
 
     public:
-        Void RecCreateStorage(const ExecutionContext& context, const Storage* storage);
-        Void RecDestroy(const ExecutionContext& context, const Storage* storage);
-        Void RecSetSize(const ExecutionContext& context, const Storage* target, UInt size);
-        Void RecSetUsage(const ExecutionContext& context, const Storage* target, Graphics::BufferUsageFlags usage);
-        Void RecUpdateStorage(const ExecutionContext& context, const Storage* target, UInt32 targetOffset, Range<Void>& data);
-        Void RecCopyStorage(const ExecutionContext& context, const Storage* src, const Storage* dst, UInt size);
+        CORE_API Void RecCreateStorage(const ExecutionContext& context, const Storage* storage);
+        CORE_API Void RecDestroy(const ExecutionContext& context, const Storage* storage);
+        CORE_API Void RecSetSize(const ExecutionContext& context, const Storage* target, UInt size);
+        CORE_API Void RecSetUsage(const ExecutionContext& context, const Storage* target, Graphics::BufferUsageFlags usage);
+        CORE_API Void RecUpdateStorage(const ExecutionContext& context, const Storage* target, UInt32 targetOffset, Range<Void>& data);
+        CORE_API Void RecCopyStorage(const ExecutionContext& context, const Storage* src, const Storage* dst, UInt size);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         List<Storage*> storages;

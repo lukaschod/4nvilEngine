@@ -23,14 +23,14 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
-        virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
-        Bool IsSupported(const Directory& directory) const;
+        CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
+        CORE_API Bool IsSupported(const Directory& directory) const;
 
     public:
-        Void RecImport(const ExecutionContext& context, const Directory& directory);
+        CORE_API Void RecImport(const ExecutionContext& context, const Directory& directory);
 
     protected:
-        virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
+        CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         IImporterSupportModule* TryGetImporter(const Directory& directory) const;
