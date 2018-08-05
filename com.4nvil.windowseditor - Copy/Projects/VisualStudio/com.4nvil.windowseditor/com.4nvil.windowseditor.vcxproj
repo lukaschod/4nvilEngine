@@ -95,6 +95,7 @@
     <IntDir>$(Configuration)\</IntDir>
     <IncludePath>..\..\..\..\com.4nvil.windows\External\D3DX12;..\..\..\..\com.4nvil.core\Source;..\..\..\..\com.4nvil.editor\Source;..\..\..\..\com.4nvil.windows\Source;..\..\..\..\com.4nvil.windowseditor\Source\WindowsEditor;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\..\com.4nvil.core\Builds\Debug\;$(LibraryPath)</LibraryPath>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)..\..\..\Builds\$(Configuration)\</OutDir>
@@ -128,6 +129,14 @@
       <Command>xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.dll" "$(TargetDir)" 
 xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.pdb" "$(TargetDir)" </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.dll" "$(TargetDir)" 
+xcopy /D /Y "..\..\..\..\com.4nvil.core\Builds\Debug\com.4nvil.core.pdb" "$(TargetDir)" </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

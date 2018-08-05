@@ -20,20 +20,14 @@ Void PipeModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     profilerModule = ExecuteAfter<ProfilerModule>(moduleManager);
     cachedCmdBuffers.resize(moduleManager->GetWorkerCount());
-    OnDependancyAdd(moduleManager, this, false);
+    AddPipe(moduleManager, this); // Allow adding commends on itself
     isPipesSorted = false;
 }
 
-Void PipeModule::OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore)
+Void PipeModule::Connect(ModuleManager* moduleManager, Module* module)
 {
-    // It is possible it might try to add duplicate
-    if (pipeMap.find(module) != pipeMap.end())
-        return;
-
-    // Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
-    auto pipe = new Pipe(module, module->IsSplittable() ? moduleManager->GetWorkerCount() : 1);
-    pipes.push_back(pipe);
-    pipeMap[module] = pipe;
+    base::Connect(moduleManager, module);
+    AddPipe(moduleManager, module);
 }
 
 Void PipeModule::SortPipes()
@@ -54,6 +48,19 @@ Void PipeModule::SortPipes()
     std::sort(pipes.begin(), pipes.end(),
         [&recusrive](Pipe* first, Pipe* second) { return !recusrive(first->source, second->source); });
     isPipesSorted = true;
+}
+
+Void PipeModule::AddPipe(ModuleManager* moduleManager, Module* module)
+{
+    // It is possible it might try to add duplicate
+    if (pipeMap.find(module) != pipeMap.end())
+        return;
+
+    // Once dependancy is added, we should create corresponding Pipe for it, where all communication will be stored
+    auto pipe = new Pipe(module, module->IsSplittable() ? moduleManager->GetWorkerCount() : 1);
+    pipes.push_back(pipe);
+    pipeMap[module] = pipe;
+    isPipesSorted = false;
 }
 
 /*CmdBuffer* PipeModule::GetRecordingBuffer(const ExecutionContext& context)

@@ -28,8 +28,6 @@ ModuleManager::ModuleManager(IModulePlanner* planner, IModuleExecutor* executor)
 
 ModuleManager::~ModuleManager()
 {
-    for (auto module : modules)
-        delete module;
 }
 
 Void ModuleManager::Start()
@@ -47,20 +45,23 @@ Void ModuleManager::Stop()
 
 Bool ModuleManager::NewFrame()
 {
-    // TODO
+    // TODO: Fix all this mess, currently only made for testing
     if (requestedStop)
         return false;
-
-    // TODO
     for (auto module : requestedAddModules)
     {
         module->SetupExecuteOrder(this);
         modules.push_back(module);
     }
-    if (!requestedAddModules.empty())
+    for (auto module : requestedAddModules)
+    {
+        RemoveModuleRecursive(module);
+    }
+    if (!requestedAddModules.empty() || !requestedRemoveModule.empty())
     {
         planner->Recreate(modules);
         requestedAddModules.clear();
+        requestedRemoveModule.clear();
     }
 
     planner->Reset();
@@ -81,10 +82,36 @@ Void ModuleManager::AddModule(Module* module)
 
 Void ModuleManager::RecAddModule(const ExecutionContext& context, Module* module)
 {
+    // TODO
     requestedAddModules.push_back(module);
+}
+
+Void ModuleManager::RecRemoveModule(const ExecutionContext& context, Module* module)
+{
+    // TODO
+    requestedRemoveModule.push_back(module);
 }
 
 Void ModuleManager::RecStop(const ExecutionContext& context)
 {
+    // TODO
     requestedStop = true;
+}
+
+Void ModuleManager::RemoveModuleRecursive(Module* module)
+{
+    if (modules.contains(module))
+        return;
+
+    for (auto other : modules)
+    {
+        if (other->GetConnections().contains(module))
+        {
+            RemoveModuleRecursive(other);
+            other->Disconnect(this, module);
+        }
+    }
+
+    modules.remove(module);
+    // TODO: Destroy callback
 }

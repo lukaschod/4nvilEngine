@@ -20,6 +20,7 @@ namespace Core
     public:
         BASE_IS(PipeModule);
 
+        // Records callback for this module
         CORE_API Void RecCallback(const ExecutionContext& context, CommandCode code, Void* data, UInt size)
         {
             auto buffer = GetRecordingBuffer(context);
@@ -28,6 +29,19 @@ namespace Core
             stream.Write(code);
             stream.Write(data, size);
             stream.Align();
+        }
+
+    protected:
+        virtual Void ExecuteBeforeModule(ModuleManager* moduleManager, Module* module) override
+        {
+            base::ExecuteBeforeModule(moduleManager, module);
+            Connect(moduleManager, module); // We want to allow module to send callbacks
+        }
+
+        virtual Void ExecuteAfterModule(ModuleManager* moduleManager, Module* module) override
+        {
+            base::ExecuteAfterModule(moduleManager, module);
+            Connect(moduleManager, module); // We want to allow module to send callbacks
         }
     };
 

@@ -51,7 +51,8 @@ namespace Core
     protected:
         // This is where each PipeModule implementation will add its commands
         CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) pure;
-        CORE_API virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) override;
+
+        CORE_API virtual Void Connect(ModuleManager* moduleManager, Module* module) override;
 
         // Returns buffer that should be used for recording the commands
         inline CmdBuffer* GetRecordingBuffer(const ExecutionContext& context);
@@ -59,6 +60,7 @@ namespace Core
     private:
         // Sort the pipes according the order of Module execution, deducted from the dependancy tree
         Void SortPipes();
+        Void AddPipe(ModuleManager* moduleManager, Module* module);
 
     protected:
         ProfilerModule* profilerModule;

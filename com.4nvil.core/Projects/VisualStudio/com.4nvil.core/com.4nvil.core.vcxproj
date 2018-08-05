@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Common.hpp" />
     <ClInclude Include="..\..\..\..\com.4nvil.core\Source\Core\Views\IViewModule.hpp" />
     <ClInclude Include="..\..\..\..\Source\Core\Tools\DateTime.hpp" />
+    <ClInclude Include="..\..\..\Source\Core\Assets\LibraryModule.hpp" />
     <ClInclude Include="..\..\..\Source\Core\Foundation\CallbackModule.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\Guid.cpp" />
     <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Tools\Windows\IO\WinDirectory.cpp" />
     <ClCompile Include="..\..\..\Source\Core\Assets\IImporterSupportModule.cpp" />
+    <ClCompile Include="..\..\..\Source\Core\Assets\LibraryModule.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0CE5A492-A334-4148-9A17-757E1D8F17C9}</ProjectGuid>

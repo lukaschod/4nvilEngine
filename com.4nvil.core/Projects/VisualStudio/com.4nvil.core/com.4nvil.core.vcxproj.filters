@@ -315,6 +315,9 @@
     <ClInclude Include="..\..\..\Source\Core\Foundation\CallbackModule.hpp">
       <Filter>Core\Foundation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Core\Assets\LibraryModule.hpp">
+      <Filter>Core\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\com.4nvil.core\Source\Core\Foundation\LogModule.cpp">
@@ -432,6 +435,9 @@
       <Filter>Core\Assets\ImporterSupport</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Core\Assets\IImporterSupportModule.cpp">
+      <Filter>Core\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Core\Assets\LibraryModule.cpp">
       <Filter>Core\Assets</Filter>
     </ClCompile>
   </ItemGroup>

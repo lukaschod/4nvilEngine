@@ -31,10 +31,7 @@ Void UnitModule::SetupExecuteOrder(ModuleManager* moduleManager)
     memoryModule->SetAllocator(memoryLabelUnit, new FixedBlockHeap(sizeof(Unit)));
 
     // As most components will be used by unit, we should prepare pipe for them too
-    List<ComponentModule*> componentModules;
-    moduleManager->GetModules<ComponentModule>(componentModules);
-    for (auto componentModule : componentModules)
-        ExecuteBefore(moduleManager, componentModule);
+    ExecuteBefore<ComponentModule>(moduleManager, componentModules);
 }
 
 const Unit* UnitModule::AllocateUnit()

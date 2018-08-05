@@ -20,6 +20,12 @@ using namespace Core::Graphics;
 
 static const Char* memoryLabelMaterial = "Core::Material";
 
+Void Material::Transfer(ITransfer* transfer)
+{
+    //TRANSFER(shader);
+    //TRANSFER(properties);
+}
+
 Void MaterialModule::SetupExecuteOrder(ModuleManager* moduleManager)
 {
     base::SetupExecuteOrder(moduleManager);
@@ -39,6 +45,7 @@ const Material* MaterialModule::AllocateMaterial() const
 }
 
 SERIALIZE_METHOD_ARG1(MaterialModule, CreateMaterial, const Material*);
+SERIALIZE_METHOD_ARG1(MaterialModule, Destroy, const Material*);
 SERIALIZE_METHOD_ARG2(MaterialModule, SetShader, const Material*, const Shader*);
 SERIALIZE_METHOD_ARG3(MaterialModule, SetStorage, const Material*, const Char*, const Storage*);
 
@@ -50,6 +57,10 @@ Bool MaterialModule::ExecuteCommand(const ExecutionContext& context, CommandStre
         target->created = true;
         materialProperties.push_back((MaterialProperties*)target->properties);
         materials.push_back(target);
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG1_START(Destroy, Material*, target);
+        NOT_IMPLEMENTED();
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(SetShader, Material*, material, const Shader*, shader);

@@ -56,8 +56,8 @@ namespace Core
         virtual Void Reset() override;
         virtual Void Start() override;
         virtual Void Stop() override;
-        virtual Bool IsRunning() { return isRunning; };
-        virtual UInt32 GetWorkerCount() override { return (UInt32) workers.size(); }
+        virtual Bool IsRunning() const override { return isRunning; };
+        virtual UInt32 GetWorkerCount() const override { return (UInt32) workers.size(); }
 
     private:
         List<ConcurrentModuleWorker*> workers;

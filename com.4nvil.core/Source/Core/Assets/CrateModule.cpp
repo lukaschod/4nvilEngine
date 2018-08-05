@@ -104,13 +104,14 @@ SERIALIZE_METHOD_ARG3(CrateModule, AddTransferable, const Crate*, const Director
 SERIALIZE_METHOD_ARG2(CrateModule, Save, const Directory&, const Crate*);
 SERIALIZE_METHOD_ARG2(CrateModule, Load, const Directory&, AsyncCallback<const Crate*>&);
 SERIALIZE_METHOD_ARG1(CrateModule, LoadResource, const TransferableId&);
+SERIALIZE_METHOD_ARG1(CrateModule, Destroy, const Crate*);
 
 Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode)
 {
     switch (commandCode)
     {
-        DESERIALIZE_METHOD_ARG2_START(Link, Crate*, crate, const Crate*, externalCrate);
-        crate->externalCrates.push_back(externalCrate);
+        DESERIALIZE_METHOD_ARG2_START(Link, Crate*, crate, Crate*, externalCrate);
+        crate->dependencies.push_back(externalCrate);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG3_START(AddTransferable, Crate*, crate, const Directory, transferableDirectory, const Transferable*, transferable);
@@ -121,11 +122,12 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
         crate->directory = directory;
         crate->guid = Guid::Generate();
         crate->createTime = DateTime::Now();
+        strcpy(crate->transferName, "json.1");
         Save(crate);
         DESERIALIZE_METHOD_END;
 
         DESERIALIZE_METHOD_ARG2_START(Load, const Directory, directory, AsyncCallback<const Crate*>, callback);
-        if (CanLoad(directory))
+        if (CanLoad(context, directory))
         {
             // Cache load crate as it might fail so there is no point to always allocate new one
             if (cachedLoadCrate == nullptr)
@@ -147,6 +149,10 @@ Bool CrateModule::ExecuteCommand(const ExecutionContext& context, CommandStream&
 
         DESERIALIZE_METHOD_ARG1_START(LoadResource, const TransferableId, id);
         LoadResource(context, id);
+        DESERIALIZE_METHOD_END;
+
+        DESERIALIZE_METHOD_ARG1_START(Destroy, const Crate*, crate);
+        
         DESERIALIZE_METHOD_END;
     }
     return false;
@@ -208,6 +214,34 @@ TransferCrateBinaryReader* CrateModule::TryGetReader(const Char* name)
     return nullptr;
 }
 
+Void CrateModule::Destroy(const ExecutionContext& context, Crate* crate)
+{
+    // Destroy all crates that depends on it
+    for (auto other : crates)
+    {
+        if (IsConnected(other, crate))
+            Destroy(context, other);
+    }
+
+    // TODO: Destroy all depending transferables
+    for (auto& resource : crate->globals)
+    {
+        auto transferable = const_cast<Transferable*>(crate->locals[resource.localIndex].cachedTransferable);
+        transferable->id = nullptr;
+    }
+
+    crates.remove(crate);
+    delete crate;
+}
+
+Bool CrateModule::IsConnected(Crate* source, Crate* destination)
+{
+    for (auto& resource : source->externs)
+        if (resource.cachedCrate == destination)
+            return true;
+    return false;
+}
+
 const Crate* CrateModule::FindCrate(const Guid& guid) const
 {
     for (auto crate : crates)
@@ -224,7 +258,7 @@ const Crate* CrateModule::FindCrate(const Directory& directory) const
     return nullptr;
 }
 
-const TransfererModule* CrateModule::FindTransferer(const TransfererId& id) const
+TransfererModule* CrateModule::FindTransferer(const TransfererId& id) const
 {
     for (auto transferer : transferers)
         if (transferer->GetTransfererId() == id)
@@ -237,12 +271,11 @@ Void CrateModule::Save(Crate* crate)
     FileStream stream;
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Create, FileAccess::Write));
 
-    auto transfer = TryGetWritter("json.1");
+    auto transfer = TryGetWritter(crate->transferName);
     CHECK(transfer != nullptr);
     transfer->Reset(&stream);
 
-    ASSERT(Character::Length(transfer->GetName()) < 128);
-    stream.WriteFmt("#crate.%s\n", transfer->GetName());
+    stream.WriteFmt("#crate.%20s\n", transfer->GetName());
     auto headerOffset = stream.GetPosition();
 
     // Write fake one, just to offset to correct point
@@ -270,17 +303,16 @@ Void CrateModule::Save(Crate* crate)
     }
 }
 
-Bool CrateModule::CanLoad(const Directory& directory)
+Bool CrateModule::CanLoad(const ExecutionContext& context, const Directory& directory)
 {
-    auto crate = FindCrate(directory);
+    auto crate = const_cast<Crate*>(FindCrate(directory));
     if (crate != nullptr)
     {
         DateTime createTime;
         directory.GetWriteTime(createTime);
         if (crate->createTime < createTime)
         {
-            // TODO: Unload
-            NOT_IMPLEMENTED();
+            Destroy(context, crate);
             return true;
         }
 
@@ -294,10 +326,9 @@ Bool CrateModule::Load(Crate* crate)
     FileStream stream;
     CHECK(stream.Open(crate->directory.ToCString(), FileMode::Open, FileAccess::Read));
 
-    Char name[128];
-    stream.ReadFmt("#crate.%128s\n", name);
+    stream.ReadFmt("#crate.%20s\n", crate->transferName);
 
-    auto transfer = TryGetReader(name);
+    auto transfer = TryGetReader(crate->transferName);
     if (transfer == nullptr)
     {
         ERROR("Can not find transfer");
@@ -360,11 +391,7 @@ Void CrateModule::LoadResource(const ExecutionContext& context, Crate* crate, UI
                 cachedStream.Close();
             CHECK(cachedStream.Open(cachedCrate->directory.ToCString(), FileMode::Open, FileAccess::Read));
 
-            // Check which transfer was used to write
-            Char name[20];
-            cachedStream.ReadFmt("#crate.%s\n", name);
-
-            cachedTransfer = TryGetReader(name);
+            cachedTransfer = TryGetReader(cachedCrate->transferName);
             CHECK(cachedTransfer != nullptr);
             cachedTransfer->Reset(&cachedStream, &dependancySolver, this);
         }
@@ -385,7 +412,7 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     class TransferCrateHeader : public ITransfer
     {
     public:
-        TransferCrateHeader(Crate* crate, const List<const Crate*>& externs) : crate(crate), externs(externs), currentLocalResourceIndex(-1) {}
+        TransferCrateHeader(Crate* crate, const List<Crate*>& externs) : crate(crate), externs(externs), currentLocalResourceIndex(-1) {}
         virtual Void TransferPointer(const Char* name, Transferable*& transferable) override
         {
             if (transferable == nullptr)
@@ -475,10 +502,10 @@ Void CrateModule::AddTransferable(Crate* crate, const Directory& directory, cons
     public:
         Crate* crate;
         UInt currentLocalResourceIndex;
-        const List<const Crate*>& externs;
+        const List<Crate*>& externs;
     };
 
-    TransferCrateHeader header(crate, crate->externalCrates);
+    TransferCrateHeader header(crate, crate->dependencies);
     header.TransferPointer("", const_cast<Transferable*&>(transferable)); // We can remove here safely as there will be no write
 
     // Add main transferable as global

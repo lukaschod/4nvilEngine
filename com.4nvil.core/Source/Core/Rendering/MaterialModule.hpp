@@ -12,7 +12,7 @@
 #pragma once
 
 #include <Core/Tools/Common.hpp>
-#include <Core/Foundation/PipeModule.hpp>
+#include <Core/Foundation/TransfererModule.hpp>
 #include <Core/Graphics/Shader.hpp>
 
 namespace Core
@@ -64,8 +64,9 @@ namespace Core
         const Graphics::IShaderArguments* const properties;
     };
 
-    struct Material
+    struct Material : Transferable
     {
+        IMPLEMENT_TRANSFERABLE(Core, Metarial);
         Material(const MaterialProperties* properties) 
             : shader(nullptr)
             , properties(properties)
@@ -78,10 +79,11 @@ namespace Core
         Bool created;
     };
 
-    class MaterialModule : public PipeModule
+    class MaterialModule : public TransfererModule
     {
     public:
         BASE_IS(PipeModule);
+        IMPLEMENT_TRANSFERER(Core, Material);
 
         CORE_API virtual Void Execute(const ExecutionContext& context) override { MARK_FUNCTION; base::Execute(context); }
         CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
@@ -89,6 +91,7 @@ namespace Core
 
     public:
         CORE_API Void RecCreateMaterial(const ExecutionContext& context, const Material* material);
+        CORE_API Void RecDestroy(const ExecutionContext& context, const Material* target);
         CORE_API Void RecSetShader(const ExecutionContext& context, const Material* target, const Shader* shader);
         CORE_API Void RecSetStorage(const ExecutionContext& context, const Material* target, const Char* name, const Storage* storage);
 

@@ -33,17 +33,18 @@ namespace Core
         virtual UInt GetSplitExecutionSize() { return 1; }
         virtual const Char* GetName() const { return "Unamed"; }
         inline const List<Module*>& GetDependencies() const { return dependencies; }
+        inline const List<Module*>& GetConnections() const { return connections; }
+
+        virtual Void Connect(ModuleManager* moduleManager, Module* module) { connections.push_back(module); }
+        virtual Void Disconnect(ModuleManager* moduleManager, Module* module) { connections.remove(module); }
 
     protected:
-        virtual Void OnDependancyAdd(ModuleManager* moduleManager, Module* module, Bool executeBefore) {}
-
         // Marks that calling module must be executed before the Module. It is used by IModulePlanner to solve dependency trees
-        virtual Void ExecuteBefore(ModuleManager* moduleManager, Module* module)
+        virtual Void ExecuteBeforeModule(ModuleManager* moduleManager, Module* module)
         {
             ASSERT(moduleManager != nullptr && module != nullptr);
             module->dependencies.safe_push_back(this);
-            module->OnDependancyAdd(moduleManager, this, true);
-            OnDependancyAdd(moduleManager, module, true);
+            module->Connect(moduleManager, this);
         }
 
         template<class T> Void ExecuteBefore(ModuleManager* moduleManager, List<T*>& modules)
@@ -51,11 +52,7 @@ namespace Core
             ASSERT(moduleManager != nullptr);
             moduleManager->GetModules<T>(modules);
             for (Module* module : modules)
-            {
-                module->dependencies.safe_push_back(this);
-                module->OnDependancyAdd(moduleManager, this, true);
-                OnDependancyAdd(moduleManager, module, true);
-            }
+                ExecuteBeforeModule(moduleManager, module);
         }
 
         // Marks that calling module must be executed before the Module of Type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees
@@ -63,19 +60,16 @@ namespace Core
         {
             ASSERT(moduleManager != nullptr);
             auto module = (Module*) moduleManager->GetModule<T>();
-            module->dependencies.safe_push_back(this);
-            module->OnDependancyAdd(moduleManager, this, true);
-            OnDependancyAdd(moduleManager, module, true);
+            ExecuteBeforeModule(moduleManager, module);
             return (T*) module;
         }
 
         // Marks that calling module must be executed after the Module. It is used by IModulePlanner to solve dependency trees
-        Void ExecuteAfter(ModuleManager* moduleManager, Module* module)
+        virtual Void ExecuteAfterModule(ModuleManager* moduleManager, Module* module)
         {
             ASSERT(moduleManager != nullptr && module != nullptr);
             dependencies.safe_push_back(module);
-            module->OnDependancyAdd(moduleManager, this, false);
-            OnDependancyAdd(moduleManager, module, false);
+            module->Connect(moduleManager, this);
         }
 
         template<class T> Void ExecuteAfter(ModuleManager* moduleManager, List<T*>& modules)
@@ -83,11 +77,7 @@ namespace Core
             ASSERT(moduleManager != nullptr);
             moduleManager->GetModules<T>(modules);
             for (Module* module : modules)
-            {
-                dependencies.safe_push_back(module);
-                module->OnDependancyAdd(moduleManager, this, false);
-                OnDependancyAdd(moduleManager, module, false);
-            }
+                ExecuteAfterModule(moduleManager, module);
         }
 
         // Marks that calling module must be executed after the Module of type T and returns pointer to it. It is used by IModulePlanner to solve dependency trees
@@ -95,13 +85,15 @@ namespace Core
         {
             ASSERT(moduleManager != nullptr);
             auto module = (Module*) moduleManager->GetModule<T>();
-            dependencies.safe_push_back(module);
-            module->OnDependancyAdd(moduleManager, this, false);
-            OnDependancyAdd(moduleManager, module, false);
+            ExecuteAfterModule(moduleManager, module);
             return (T*) module;
         }
 
     private:
-        List<Module*> dependencies; // Modules that this current Module depends on
+        // Execution order dependancies
+        List<Module*> dependencies;
+
+        // Existance dependencies
+        List<Module*> connections;
     };
 }

@@ -218,7 +218,7 @@ namespace Core
             *target = item;
         }
 
-        int find(T item)
+        Int32 find(T item) const
         {
             for (int i = 0; i < size(); i++)
             {
@@ -228,18 +228,21 @@ namespace Core
             return -1;
         }
 
-        Bool safe_push_back(T item)
+        Bool contains(T item) const
         {
-            auto index = find(item);
-            if (index == -1)
-            {
-                push_back(item);
-                return true;
-            }
-            return false;
+            return find(item) != -1;
         }
 
-        Void push_back_list(List<T>& list)
+        Bool safe_push_back(T item)
+        {
+            if (contains(item))
+                return false;
+
+            push_back(item);
+            return true;
+        }
+
+        Void push_back_list(const List<T>& list)
         {
             auto startSize = size();
             this->resize(size() + list.size());

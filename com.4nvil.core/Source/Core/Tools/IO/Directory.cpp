@@ -60,7 +60,7 @@ Bool Directory::GetWriteTime(DateTime& date) const
     auto time = filesystem::last_write_time(data, error);
     auto cftime = filesystem::file_time_type::clock::to_time_t(time);
     date = DateTime(cftime);
-    return (Bool)error;
+    return (Bool)error == false;
 }
 
 Bool Directory::SetWriteTime(const DateTime& date) const
@@ -68,7 +68,7 @@ Bool Directory::SetWriteTime(const DateTime& date) const
     auto time = filesystem::file_time_type::clock::from_time_t(date.GetTicks());
     std::error_code error;
     filesystem::last_write_time(data, time, error);
-    return (Bool)error;
+    return (Bool)error == false;
 }
 
 Void Directory::GetDirectories(const Directory& path, List<Directory>& out)

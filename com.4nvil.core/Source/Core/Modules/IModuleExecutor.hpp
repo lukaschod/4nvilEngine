@@ -45,9 +45,9 @@ namespace Core
         virtual Void Stop() pure;
 
         // Returns if the executor is still running
-        virtual Bool IsRunning() pure;
+        virtual Bool IsRunning() const pure;
 
         // Returs the number of total workers
-        virtual UInt32 GetWorkerCount() pure;
+        virtual UInt32 GetWorkerCount() const pure;
     };
 }

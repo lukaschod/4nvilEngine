@@ -28,7 +28,7 @@ namespace Core
     class IImporterSupportModule : public CallbackModule
     {
     public:
-        BASE_IS(PipeModule);
+        BASE_IS(CallbackModule);
 
         CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 

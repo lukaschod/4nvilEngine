@@ -71,10 +71,11 @@ namespace Core
         Guid guid;
         Directory directory;
         DateTime createTime;
+        Char transferName[20];
         List<ResourceExtern> externs;
         List<ResourceLocal> locals;
         List<ResourceGlobal> globals;
-        List<const Crate*> externalCrates;
+        List<Crate*> dependencies;
     };
 
     class CrateModule : public PipeModule
@@ -87,7 +88,7 @@ namespace Core
         CORE_API virtual Void SetupExecuteOrder(ModuleManager* moduleManager) override;
 
         // Find transferer from id
-        CORE_API const TransfererModule* FindTransferer(const TransfererId& id) const;
+        CORE_API TransfererModule* FindTransferer(const TransfererId& id) const;
 
     public:
         // Adds include to the crate that will be used for resolving already serialized transferables
@@ -105,18 +106,26 @@ namespace Core
         // Find resource from the loaded crates, it might cause resource loading
         CORE_API Void RecLoadResource(const ExecutionContext& context, const TransferableId& id);
 
+        CORE_API Void RecDestroy(const ExecutionContext& context, const Crate* crate);
+
+        inline const List<const Crate*>& GetCrates() const { return (List<const Crate*>&)crates; }
+
     protected:
         CORE_API virtual Bool ExecuteCommand(const ExecutionContext& context, CommandStream& stream, CommandCode commandCode) override;
 
     private:
         Void Save(Crate* crate);
         Bool Load(Crate* crate);
-        Bool CanLoad(const Directory& directory);
+        Bool CanLoad(const ExecutionContext& context, const Directory& directory);
         Void AddTransferable(Crate* crate, const Directory& directory, const Transferable* transferable);
         Void LoadResource(const ExecutionContext& context, Crate* crate, UInt globalIndex);
         Void LoadResource(const ExecutionContext& context, const TransferableId& id);
         TransferCrateBinaryWritter* TryGetWritter(const Char* name);
         TransferCrateBinaryReader* TryGetReader(const Char* name);
+        Void Destroy(const ExecutionContext& context, Crate* crate);
+
+        // Checks if source depends on destination
+        Bool IsConnected(Crate* source, Crate* destination);
 
         const Crate* FindCrate(const Guid& guid) const;
         const Crate* FindCrate(const Directory& directory) const;

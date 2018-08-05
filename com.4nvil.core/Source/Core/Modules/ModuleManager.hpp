@@ -52,11 +52,17 @@ namespace Core
         inline UInt32 GetWorkerCount() const { return executor->GetWorkerCount(); }
 
     public:
-        // Request to add new module during runtime
+        // Request to add module during runtime
         CORE_API Void RecAddModule(const ExecutionContext& context, Module* module);
+
+        // Request to remove module during runtime
+        CORE_API Void RecRemoveModule(const ExecutionContext& context, Module* module);
 
         // Request to stop
         CORE_API Void RecStop(const ExecutionContext& context);
+
+    private:
+        inline Void RemoveModuleRecursive(Module* module);
 
     private:
         List<Module*> modules; // Modules contained by the manager
@@ -64,8 +70,10 @@ namespace Core
         IModuleExecutor* executor; // Executor that will be used for Module execution
         Threading::AutoResetEvent sleepEvent;
 
+        // TODO
         Bool requestedStop;
         List<Module*> requestedAddModules;
+        List<Module*> requestedRemoveModule;
     };
 
     template<class T> 
@@ -73,7 +81,7 @@ namespace Core
     {
         for (auto module : modules)
         {
-            if (dynamic_cast<T*>(module) != 0)
+            if (dynamic_cast<T*>(module) != nullptr)
                 return (T*) module;
         }
         ERROR("Can't find specified module");
@@ -85,7 +93,7 @@ namespace Core
     {
         for (auto module : modules)
         {
-            if (dynamic_cast<T*>(module) != 0)
+            if (dynamic_cast<T*>(module) != nullptr)
                 out.push_back((T*) module);
         }
     }
